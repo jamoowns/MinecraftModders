@@ -7,13 +7,13 @@ import minecraftmodders.PlayerListener;
 
 public class MinecraftModders extends JavaPlugin {
 
-    // Fired when plugin is first enabled
+    // Fired when plug-in is first enabled
     @Override
     public void onEnable() {
    		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
     	getServer().getPluginManager().registerEvents(new MobListener(this), this);
     }
-    // Fired when plugin is disabled
+    // Fired when plug-in is disabled
     @Override
     public void onDisable() {
     	
