@@ -23,8 +23,5 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}", event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
-        
-        
-        event.getPlayer().getScoreboard().getEntries().add("Blah blah");
     }
 }
