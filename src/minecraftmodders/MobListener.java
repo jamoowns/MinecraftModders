@@ -9,12 +9,15 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Bat;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Explosive;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -105,6 +108,27 @@ public class MobListener implements Listener {
             }
             mcPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
             mcPlayer.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
+        }
+        if(event.getEntity() instanceof Creeper)
+        { 
+        	Creeper creeperEnt = (Creeper) event.getEntity();
+        	Player mcPlayer = creeperEnt.getKiller();
+            if(mcPlayer == null)
+                return;
+            Location loc = event.getEntity().getLocation().add(0,-2,0);
+            event.getEntity().getWorld().getBlockAt(loc).setType(Material.AIR);
+    		TNTPrimed tnt = event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation().add(0,1,0), TNTPrimed.class);
+    		tnt.setFuseTicks(520);
+    		Random r = new Random();
+        	int low = 0;
+        	int high = 10;
+        	int result = r.nextInt(high-low) + low;
+        	int yield = 0;
+        	if(result >7) {
+        		yield = 1;
+        	}
+    		tnt.setYield(yield);
+        	
         }
         if(event.getEntity() instanceof Spider)
         { 
