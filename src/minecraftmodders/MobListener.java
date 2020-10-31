@@ -110,10 +110,34 @@ public class MobListener implements Listener {
 	            		}else if(j==3) {
 	            			event.getEntity().getWorld().getBlockAt(loc).setType(Material.COBWEB);
 	            		}
-	            		
 			    	}
 	            }
             }
+            for(int k = 0; k < 2; k++) {
+            	int neg = 1;
+            	if(k>0) {
+            		neg = -1;
+            	}
+	            for(int i = 0; i < 3; i++) {
+	                for(int j = 0; j < 3; j++) {
+		                Location loc = event.getEntity().getLocation().add(-1+i,1*neg,-1+j);
+		            	if(event.getEntity().getWorld().getBlockAt(loc).isEmpty() 
+				    			&& !event.getEntity().getWorld().getBlockAt(loc).isLiquid()) {
+		            		if((j==0||j==2)&&i%2==0) {
+		            			event.getEntity().getWorld().getBlockAt(loc).setType(Material.COBWEB);
+		            		}else if(j==1&&i==1) {
+		            			event.getEntity().getWorld().getBlockAt(loc).setType(Material.COBWEB);
+		            		}
+				    	}
+		            }
+	            }
+	            Location loc = event.getEntity().getLocation().add(0,2*neg,0);
+	        	if(event.getEntity().getWorld().getBlockAt(loc).isEmpty() 
+		    			&& !event.getEntity().getWorld().getBlockAt(loc).isLiquid()) {
+	        		event.getEntity().getWorld().getBlockAt(loc).setType(Material.COBWEB);
+		    	}
+            }
+            
         }
     }
 }
