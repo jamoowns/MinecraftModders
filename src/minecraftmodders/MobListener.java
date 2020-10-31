@@ -3,14 +3,17 @@ package minecraftmodders;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Bat;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
@@ -21,6 +24,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import com.sun.xml.internal.stream.Entity;
 
@@ -89,7 +94,18 @@ public class MobListener implements Listener {
                 }
             }
         }
-        
+        if(event.getEntity() instanceof Skeleton)
+        { 
+        	Skeleton skeletonEnt = (Skeleton) event.getEntity();
+        	Player mcPlayer = skeletonEnt.getKiller();
+            if(mcPlayer == null)
+                return;
+            for(int i = 0; i < 3; i++) {
+                event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation().add(0,1,0), Bat.class);
+            }
+            mcPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
+            mcPlayer.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
+        }
         if(event.getEntity() instanceof Spider)
         { 
         	Spider spiderEnt = (Spider) event.getEntity();
