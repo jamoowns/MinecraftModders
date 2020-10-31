@@ -1,10 +1,13 @@
 package minecraftmodders;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -15,6 +18,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sun.xml.internal.stream.Entity;
@@ -70,18 +74,14 @@ public class MobListener implements Listener {
                 return;
             
             if(zombieEnt.isAdult()) {
-                for(int i = 0; i < 3; i++) {
+            	Random r = new Random();
+            	int low = 3;
+            	int high = 10;
+            	int result = r.nextInt(high-low) + low;
+                for(int i = 0; i < result; i++) {
                     Zombie babushka =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Zombie.class);
                     babushka.setBaby();
-                    if(i == 0) {
-                        babushka.setCustomName(" ba        ");
-                    }else if(i == 1) {
-                        babushka.setCustomName("    bush  ");
-                    }else if(i == 2) {
-                        babushka.setCustomName("          ka");
-                    }
-                    babushka.setCustomNameVisible(true);
-                    babushka.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(babushka.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * .33);
+                    babushka.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(babushka.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * 1/result);
                 }
             }
         }
