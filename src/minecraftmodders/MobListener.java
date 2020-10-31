@@ -74,11 +74,11 @@ public class MobListener implements Listener {
                     Zombie babushka =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Zombie.class);
                     babushka.setBaby();
                     if(i == 0) {
-                        babushka.setCustomName("ba      ");
+                        babushka.setCustomName(" ba        ");
                     }else if(i == 1) {
-                        babushka.setCustomName("  bush  ");
+                        babushka.setCustomName("    bush  ");
                     }else if(i == 2) {
-                        babushka.setCustomName("      ka");
+                        babushka.setCustomName("          ka");
                     }
                     babushka.setCustomNameVisible(true);
                     babushka.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(babushka.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * .33);
