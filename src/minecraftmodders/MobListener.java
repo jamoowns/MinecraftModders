@@ -11,6 +11,7 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Spider;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,8 +36,9 @@ public class MobListener implements Listener {
     @EventHandler
 	public void onPlayerMoveEvent(PlayerMoveEvent event) {
 		// TODO Auto-generated method stub
-    	if(!event.getPlayer().getLocation().add(0, -1, 0).getBlock().isEmpty()) {
-    		if(!event.getPlayer().getLocation().add(0, -1, 0).getBlock().isLiquid()) {
+    	if(!event.getPlayer().getLocation().add(0, -1, 0).getBlock().isEmpty()
+    			&& !event.getPlayer().getLocation().add(0, -1, 0).getBlock().isLiquid()) {
+    		
 		    	BlockFace facing = event.getPlayer().getFacing();
 		    	int x = 0;
 				int z = 0;
@@ -54,13 +56,15 @@ public class MobListener implements Listener {
 		    		z = 0;
 		    	}
 		    	Location loc = event.getPlayer().getLocation().add(x, -1, z);
-		    	
-		    	if(event.getPlayer().getName()=="mabmo") {
-		    		event.getPlayer().getWorld().getBlockAt(loc).setType(Material.CYAN_WOOL);
-		    	}else{
-		    		event.getPlayer().getWorld().getBlockAt(loc).setType(Material.RED_WOOL);
+		    	if(!event.getPlayer().getWorld().getBlockAt(loc).isEmpty() 
+		    			&& !event.getPlayer().getWorld().getBlockAt(loc).isLiquid()) {
+			    	if(event.getPlayer().getName()=="mabmo") {
+			    		event.getPlayer().getWorld().getBlockAt(loc).setType(Material.CYAN_WOOL);
+			    	}else{
+			    		event.getPlayer().getWorld().getBlockAt(loc).setType(Material.RED_WOOL);
+			    	}
 		    	}
-    		}
+    	
 		}
 	}
     @EventHandler
@@ -83,6 +87,32 @@ public class MobListener implements Listener {
                     babushka.setBaby();
                     babushka.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(babushka.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * 1/result);
                 }
+            }
+        }
+        
+        if(event.getEntity() instanceof Spider)
+        { 
+        	Spider spiderEnt = (Spider) event.getEntity();
+        	Player mcPlayer = spiderEnt.getKiller();
+            if(mcPlayer == null)
+                return;
+            for(int i = 0; i < 7; i++) {
+                for(int j = 0; j < 7; j++) {
+	                Location loc = event.getEntity().getLocation().add(-3+i,0,-3+j);
+	            	if(event.getEntity().getWorld().getBlockAt(loc).isEmpty() 
+			    			&& !event.getEntity().getWorld().getBlockAt(loc).isLiquid()) {
+	            		if((j==0||j==6)&&i%3==0) {
+	            			event.getEntity().getWorld().getBlockAt(loc).setType(Material.COBWEB);
+	            		}else if((j==1||j==5)&&i%2==1) {
+	            			event.getEntity().getWorld().getBlockAt(loc).setType(Material.COBWEB);
+	            		}else if((j==2||j==4)&&(i==2||i==3||i==4)) {
+	            			event.getEntity().getWorld().getBlockAt(loc).setType(Material.COBWEB);
+	            		}else if(j==3) {
+	            			event.getEntity().getWorld().getBlockAt(loc).setType(Material.COBWEB);
+	            		}
+	            		
+			    	}
+	            }
             }
         }
     }
