@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +27,14 @@ public final class PlayerListener implements Listener {
 		javaPlugin = aJavaPlugin;
 		RANDOM = new Random();
 		bucketTypes = new ArrayList<>();
+    	bucketTypes.add(Material.BUCKET);
+    	bucketTypes.add(Material.COD_BUCKET);
+    	bucketTypes.add(Material.LAVA_BUCKET);
+    	bucketTypes.add(Material.MILK_BUCKET);
+    	bucketTypes.add(Material.PUFFERFISH_BUCKET);
+    	bucketTypes.add(Material.SALMON_BUCKET);
+    	bucketTypes.add(Material.TROPICAL_FISH_BUCKET);
+    	bucketTypes.add(Material.WATER_BUCKET);
 	}
 	
     @EventHandler
@@ -35,15 +45,11 @@ public final class PlayerListener implements Listener {
     
     @EventHandler
 	public void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
-    	bucketTypes.add(Material.BUCKET);
-    	bucketTypes.add(Material.COD_BUCKET);
-    	bucketTypes.add(Material.LAVA_BUCKET);
-    	bucketTypes.add(Material.MILK_BUCKET);
-    	bucketTypes.add(Material.PUFFERFISH_BUCKET);
-    	bucketTypes.add(Material.SALMON_BUCKET);
-    	bucketTypes.add(Material.TROPICAL_FISH_BUCKET);
-    	bucketTypes.add(Material.WATER_BUCKET);
-
-    	event.getPlayer().getInventory().setItem(event.getPlayer().getInventory().getHeldItemSlot(), new ItemStack(bucketTypes.get(RANDOM.nextInt(bucketTypes.size()))));
+    	event.setItemStack(new ItemStack(bucketTypes.get(RANDOM.nextInt(bucketTypes.size()))));
+    }
+    
+    @EventHandler
+	public void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
+    	event.setHatchingType(EntityType.WITCH);
     }
 }
