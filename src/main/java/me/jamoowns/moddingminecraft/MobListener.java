@@ -107,6 +107,20 @@ public class MobListener implements Listener {
     
     @EventHandler
 	public void onEntityDeathEvent(EntityDeathEvent event) {
+    	if(event.getEntity() instanceof Player)
+        { 
+    		Player playerEnt = (Player) event.getEntity();
+        	Player mcPlayer = playerEnt.getKiller();
+            if(mcPlayer == null) {
+            	return;
+            }else {
+            	for(int i = 0;i < event.getEntity().getWorld().getPlayers().size();i++) {
+            		if(!event.getEntity().getWorld().getPlayers().get(i).getName().equalsIgnoreCase(playerEnt.getName())) {
+    		    		playerEnt.teleport(event.getEntity().getWorld().getPlayers().get(i).getLocation());
+    		    	}
+            	}
+            } 
+        }
         if(event.getEntity() instanceof Zombie)
         { 
         	Zombie zombieEnt = (Zombie) event.getEntity();
