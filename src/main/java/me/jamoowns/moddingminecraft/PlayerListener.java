@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -127,10 +128,14 @@ public final class PlayerListener implements Listener {
     
     @EventHandler
 	public void onCraftItemEvent(CraftItemEvent event) {
-    	for (int i = 0; i < RANDOM.nextInt(4); i--) {
+    	for (int i = 0; i < RANDOM.nextInt(5); i--) {
     		Enchantment enchantment = enchantments.get(i);
-    		if (enchantment.canEnchantItem(event.getCurrentItem())) {
-    			event.getCurrentItem().addEnchantment(enchantment, RANDOM.nextInt(4)+1);
+    		ItemStack result = event.getRecipe().getResult().clone();
+    		if (enchantment.canEnchantItem(result)) {
+    			ItemMeta meta = result.getItemMeta();
+    			meta.addEnchant(enchantment, RANDOM.nextInt(4)+1, false);
+    			result.setItemMeta(meta);
+    			event.getInventory().setResult(result);
     		}
     	}
     }
