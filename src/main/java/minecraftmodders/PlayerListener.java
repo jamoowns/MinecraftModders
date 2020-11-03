@@ -1,4 +1,4 @@
-package minecraftmodders;
+package main.java.minecraftmodders;
 
 import java.text.MessageFormat;
 

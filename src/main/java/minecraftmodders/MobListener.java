@@ -1,19 +1,23 @@
-package minecraftmodders;
+package main.java.minecraftmodders;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Damageable;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Explosive;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
@@ -22,30 +26,31 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import com.sun.xml.internal.stream.Entity;
 
 public class MobListener implements Listener {
 
 	private final JavaPlugin javaPlugin;
 	
+	private Map<UUID, List<Location>> trailByPlayer;
+	
 	
 	public MobListener(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
+		
+		trailByPlayer = new HashMap<>();
 	}
 
     @EventHandler
 	public void onPlayerMoveEvent(PlayerMoveEvent event) {
-		// TODO Auto-generated method stub
-    	if(!event.getPlayer().getLocation().add(0, -1, 0).getBlock().isEmpty()
-    			&& !event.getPlayer().getLocation().add(0, -1, 0).getBlock().isLiquid()) {
+    	Location belowPlayer = event.getPlayer().getLocation().add(0, -1, 0);
+    	
+    	if(!belowPlayer.getBlock().isEmpty()
+    			&& !belowPlayer.getBlock().isLiquid()) {
     		
 		    	BlockFace facing = event.getPlayer().getFacing();
 		    	int x = 0;
@@ -63,21 +68,43 @@ public class MobListener implements Listener {
 		    		x = 1;
 		    		z = 0;
 		    	}
-		    	Location loc = event.getPlayer().getLocation().add(x, -1, z);
-		    	if(!event.getPlayer().getWorld().getBlockAt(loc).isEmpty() 
-		    			&& !event.getPlayer().getWorld().getBlockAt(loc).isLiquid()) {
-			    	if(event.getPlayer().getName()=="mabmo") {
-			    		event.getPlayer().getWorld().getBlockAt(loc).setType(Material.CYAN_WOOL);
+				
+		    	Location behindPlayer = event.getPlayer().getLocation().add(x, 0, z);
+		    	Location belowBehindPlayer = event.getPlayer().getLocation().add(x, -1, z);
+		    	Block blockBehindPlayer = event.getPlayer().getWorld().getBlockAt(behindPlayer);
+		    	Block blockBelowBehindPlayer = event.getPlayer().getWorld().getBlockAt(belowBehindPlayer);
+		    	if(blockBehindPlayer.isEmpty() && 
+		    			!blockBelowBehindPlayer.isLiquid() &&
+		    			!blockBelowBehindPlayer.isEmpty()) {
+		    		List<Location> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
+	    			trail.add(behindPlayer);
+	    			if (trail.size() > 100) {
+	    				Location first = trail.remove(0);
+	    	    		event.getPlayer().getWorld().getBlockAt(first).setType(Material.AIR);
+	    			}
+	    			
+	    			trailByPlayer.put(event.getPlayer().getUniqueId(), trail);
+			    	if(event.getPlayer().getName().equalsIgnoreCase("mabmo")) {
+			    		event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(Material.CYAN_CARPET);
 			    	}else{
-			    		event.getPlayer().getWorld().getBlockAt(loc).setType(Material.RED_WOOL);
+			    		event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(Material.RED_CARPET);
 			    	}
 		    	}
     	
 		}
 	}
     @EventHandler
+	public void onPlayerQuitEvent(PlayerQuitEvent event) {
+    	List<Location> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
+    	trail.forEach(loc -> {
+    		event.getPlayer().getWorld().getBlockAt(loc).setType(Material.AIR);
+    	});
+    	trailByPlayer.remove(event.getPlayer().getUniqueId());
+    }
+    
+    
+    @EventHandler
 	public void onEntityDeathEvent(EntityDeathEvent event) {
-		// TODO Auto-generated method stub
         if(event.getEntity() instanceof Zombie)
         { 
         	Zombie zombieEnt = (Zombie) event.getEntity();
@@ -94,6 +121,7 @@ public class MobListener implements Listener {
                     Zombie babushka =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Zombie.class);
                     babushka.setBaby();
                     babushka.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(babushka.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * 1/result);
+                    babushka.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(babushka.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * 1/result);
                 }
             }
         }

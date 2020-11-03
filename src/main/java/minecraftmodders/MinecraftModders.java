@@ -1,9 +1,6 @@
-package minecraftmodders;
+package main.java.minecraftmodders;
 
 import org.bukkit.plugin.java.JavaPlugin;
-
-import minecraftmodders.MobListener;
-import minecraftmodders.PlayerListener;
 
 public class MinecraftModders extends JavaPlugin {
 
