@@ -42,7 +42,7 @@ public class MobListener implements Listener {
 	private final JavaPlugin javaPlugin;
 	
 	private Map<UUID, List<Location>> trailByPlayer;
-	sheepDeath
+	
 	private boolean playerTrail = true;
 	private boolean playerTeleDeath = true;
 	private boolean spiderWebDeath = true;
@@ -152,14 +152,7 @@ public class MobListener implements Listener {
                     return;
                 
                 if(sheepEnt.isAdult()) {
-                	Cow cowEnt = (Cow) event.getEntity();
-                	Player mcPlayer = cowEnt.getKiller();
-                    if(mcPlayer == null)
-                        return;
-                    
-                    if(cowEnt.isAdult()) {
-                    	mcPlayer.teleport(mcPlayer.getLocation().add(15,5,0));
-                    }
+                	mcPlayer.teleport(mcPlayer.getLocation().add(15,5,0));
                 }
             }
     	}
