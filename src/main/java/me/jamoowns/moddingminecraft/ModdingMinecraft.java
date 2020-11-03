@@ -1,8 +1,8 @@
-package main.java.minecraftmodders;
+package me.jamoowns.moddingminecraft;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class MinecraftModders extends JavaPlugin {
+public class ModdingMinecraft extends JavaPlugin {
 
     // Fired when plug-in is first enabled
     @Override

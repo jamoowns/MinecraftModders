@@ -1,4 +1,4 @@
-package main.java.minecraftmodders;
+package me.jamoowns.moddingminecraft;
 
 import java.text.MessageFormat;
 
