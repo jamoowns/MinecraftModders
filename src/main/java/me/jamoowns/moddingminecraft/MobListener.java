@@ -75,7 +75,7 @@ public class MobListener implements Listener {
 		    	Block blockBelowBehindPlayer = event.getPlayer().getWorld().getBlockAt(belowBehindPlayer);
 		    	if(blockBehindPlayer.isEmpty() && 
 		    			!blockBehindPlayer.isLiquid() &&
-		    			!blockBehindPlayer.getType().name().contains("CARPET") &&
+		    			!blockBelowBehindPlayer.getType().name().contains("CARPET") &&
 		    			!blockBelowBehindPlayer.isLiquid() &&
 		    			!blockBelowBehindPlayer.isEmpty()) {
 		    		List<Location> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
