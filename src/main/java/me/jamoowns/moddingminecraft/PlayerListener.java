@@ -11,6 +11,8 @@ import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -18,16 +20,19 @@ import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -75,6 +80,20 @@ public final class PlayerListener implements Listener {
 						done = true;
 						p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 1);
 						p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 15, 1);
+						
+				        Firework fw = (Firework) p.getLocation().getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
+				        FireworkMeta fwm = fw.getFireworkMeta();
+				       
+				        fwm.setPower(2);
+				        fwm.addEffect(FireworkEffect.builder().withColor(Color.LIME).flicker(true).build());
+				       
+				        fw.setFireworkMeta(fwm);
+				        fw.detonate();
+				       
+				        for(int i = 0;i<10; i++){
+				            Firework fw2 = (Firework) p.getLocation().getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
+				            fw2.setFireworkMeta(fwm);
+				        }
 						
 						p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
 						
@@ -127,7 +146,7 @@ public final class PlayerListener implements Listener {
     }
     
     @EventHandler
-	public void onCraftItemEvent(CraftItemEvent event) {
+	public void onPrepareItemCraftEvent(PrepareItemCraftEvent event) {
     	for (int i = 0; i < RANDOM.nextInt(5); i--) {
     		Enchantment enchantment = enchantments.get(i);
     		ItemStack result = event.getRecipe().getResult().clone();
