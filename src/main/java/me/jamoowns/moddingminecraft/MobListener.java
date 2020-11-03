@@ -44,7 +44,7 @@ public class MobListener implements Listener {
 	private Map<UUID, List<Location>> trailByPlayer;
 	
 	private boolean playerTrail = true;
-	private boolean playerTeleDeath = true;
+	private boolean playerDeath = true;
 	private boolean spiderWebDeath = true;
 	private boolean cowTeleDeath = true;
 	private boolean vilIronBeeDeath = true;
@@ -123,22 +123,26 @@ public class MobListener implements Listener {
     	}
     }
     
+   
     
     @EventHandler
 	public void onEntityDeathEvent(EntityDeathEvent event) {
-    	if(playerTeleDeath) {
+    	if(playerDeath) {
     		if(event.getEntity() instanceof Player)
             { 
         		Player playerEnt = (Player) event.getEntity();
             	Player mcPlayer = playerEnt.getKiller();
-                if(mcPlayer == null) {
-                	return;
-                }else {
-                	for(int i = 0;i < event.getEntity().getWorld().getPlayers().size();i++) {
-                		if(!event.getEntity().getWorld().getPlayers().get(i).getName().equalsIgnoreCase(playerEnt.getName())) {
-        		    		playerEnt.teleport(event.getEntity().getWorld().getPlayers().get(i).getLocation());
-        		    	}
-                	}
+                 {
+                	Random r = new Random();
+                	int low = 0;
+                	int high = 3;
+                	int result = r.nextInt(high-low) + low;
+                    for(int i = 0; i < result; i++) {
+                    	IronGolem ironGolem =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), IronGolem.class);
+                    	if(mcPlayer != null) {
+                    		ironGolem.setTarget(mcPlayer);
+                        }
+                    }
                 } 
             }
     	}
@@ -152,10 +156,11 @@ public class MobListener implements Listener {
                     return;
                 
                 if(sheepEnt.isAdult()) {
-                	mcPlayer.teleport(mcPlayer.getLocation().add(15,5,0));
+                	mcPlayer.sendTitle("You're about to die", "20 secs to live after this", 40, 40, 40);
                 }
             }
     	}
+    	
     	if(cowTeleDeath) {
     		if(event.getEntity() instanceof Cow)
             { 
