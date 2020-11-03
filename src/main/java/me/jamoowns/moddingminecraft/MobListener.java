@@ -18,6 +18,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
+import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.IronGolem;
@@ -33,6 +34,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -52,6 +54,7 @@ public class MobListener implements Listener {
 	private boolean skeletonVisionDeath = true;
 	private boolean zombieBabushkaDeath = true;
 	private boolean sheepDeath = true;
+	private boolean chickenDeath = true;
 	
 	public MobListener(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -133,6 +136,8 @@ public class MobListener implements Listener {
         		Player playerEnt = (Player) event.getEntity();
             	Player mcPlayer = playerEnt.getKiller();
                  {
+
+                 	mcPlayer.dropItem(false);
                 	Random r = new Random();
                 	int low = 0;
                 	int high = 3;
@@ -160,7 +165,31 @@ public class MobListener implements Listener {
                 }
             }
     	}
-    	
+    	if(chickenDeath) {
+    		if(event.getEntity() instanceof Chicken)
+            { 
+    			Chicken chickenEnt = (Chicken) event.getEntity();
+            	Player mcPlayer = chickenEnt.getKiller();
+                if(mcPlayer == null)
+                    return;
+                
+                if(chickenEnt.isAdult()) {
+                	Location loc = mcPlayer.getLocation();
+                	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.AIR);
+                	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.AIR);
+                	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.AIR);
+                	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.AIR);
+                	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.AIR);
+
+                	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.STONE);
+
+                	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,15,0)).setType(Material.ANVIL);
+                	mcPlayer.teleport(mcPlayer.getLocation().add(0,-5,0));
+                	mcPlayer.dropItem(false);
+                	event.getDrops().add(new ItemStack(Material.ENDERMAN_SPAWN_EGG, 1));
+                }
+            }
+    	}
     	if(cowTeleDeath) {
     		if(event.getEntity() instanceof Cow)
             { 
