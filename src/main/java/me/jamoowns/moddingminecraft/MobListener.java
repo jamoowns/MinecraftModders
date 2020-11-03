@@ -22,6 +22,7 @@ import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.TNTPrimed;
@@ -41,7 +42,7 @@ public class MobListener implements Listener {
 	private final JavaPlugin javaPlugin;
 	
 	private Map<UUID, List<Location>> trailByPlayer;
-
+	sheepDeath
 	private boolean playerTrail = true;
 	private boolean playerTeleDeath = true;
 	private boolean spiderWebDeath = true;
@@ -50,6 +51,7 @@ public class MobListener implements Listener {
 	private boolean creeperWaitDeath = true;
 	private boolean skeletonVisionDeath = true;
 	private boolean zombieBabushkaDeath = true;
+	private boolean sheepDeath = true;
 	
 	public MobListener(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -138,6 +140,27 @@ public class MobListener implements Listener {
         		    	}
                 	}
                 } 
+            }
+    	}
+    	if(sheepDeath) {
+    		
+            if(event.getEntity() instanceof Sheep)
+            { 
+            	Sheep sheepEnt = (Sheep) event.getEntity();
+            	Player mcPlayer = sheepEnt.getKiller();
+                if(mcPlayer == null)
+                    return;
+                
+                if(sheepEnt.isAdult()) {
+                	Cow cowEnt = (Cow) event.getEntity();
+                	Player mcPlayer = cowEnt.getKiller();
+                    if(mcPlayer == null)
+                        return;
+                    
+                    if(cowEnt.isAdult()) {
+                    	mcPlayer.teleport(mcPlayer.getLocation().add(15,5,0));
+                    }
+                }
             }
     	}
     	if(cowTeleDeath) {
@@ -290,4 +313,5 @@ public class MobListener implements Listener {
         }
         
     }
+    
 }
