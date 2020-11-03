@@ -15,18 +15,22 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Chest;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public final class PlayerListener implements Listener {
 
@@ -34,6 +38,7 @@ public final class PlayerListener implements Listener {
 	
 	private final Random RANDOM;
 	private final List<Material> bucketTypes;
+	private final List<Enchantment> enchantments;
 	
 	
 	public PlayerListener(JavaPlugin aJavaPlugin) {
@@ -49,6 +54,10 @@ public final class PlayerListener implements Listener {
     	bucketTypes.add(Material.TROPICAL_FISH_BUCKET);
     	bucketTypes.add(Material.WATER_BUCKET);
     	
+
+		enchantments = new ArrayList<>();
+		List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
+    	
     	Timer timer = new Timer();
     	timer.scheduleAtFixedRate(new TimerTask() {
 			
@@ -59,8 +68,8 @@ public final class PlayerListener implements Listener {
 				
 				int attempts = 0;
 				boolean done = false;
-				while (attempts < 10 && !done) {
-					Location chestLocation = p.getLocation().add(RANDOM.nextInt(40)-20, 3, RANDOM.nextInt(40)-20);
+				while (attempts < 30 && !done) {
+					Location chestLocation = p.getLocation().add(RANDOM.nextInt(40)-20, RANDOM.nextInt(6)-3, RANDOM.nextInt(40)-20);
 					if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
 						done = true;
 						p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 1);
@@ -108,10 +117,21 @@ public final class PlayerListener implements Listener {
 	public void onPlayerInteractEvent(PlayerInteractEvent event) {
     	if (event.getClickedBlock().getType() == Material.BELL) {
     		Player player = event.getPlayer();
-    		Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-30));
+    		Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
 
         	Zombie zombie =  player.getWorld().spawn(dundundun, Zombie.class);
         	zombie.setTarget(player);
+        	zombie.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 1));
+    	}
+    }
+    
+    @EventHandler
+	public void onCraftItemEvent(CraftItemEvent event) {
+    	for (int i = 0; i < RANDOM.nextInt(4); i--) {
+    		Enchantment enchantment = enchantments.get(i);
+    		if (enchantment.canEnchantItem(event.getCurrentItem())) {
+    			event.getCurrentItem().addEnchantment(enchantment, RANDOM.nextInt(4)+1);
+    		}
     	}
     }
 }
