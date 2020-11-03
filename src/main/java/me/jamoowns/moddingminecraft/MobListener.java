@@ -17,11 +17,14 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Bat;
+import org.bukkit.entity.Bee;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -120,6 +123,26 @@ public class MobListener implements Listener {
     		    	}
             	}
             } 
+        }
+    	if(event.getEntity() instanceof Villager)
+        { 
+    		Villager villagerEnt = (Villager) event.getEntity();
+        	Player mcPlayer = villagerEnt.getKiller();
+            if(mcPlayer == null)
+                return;
+            
+            if(villagerEnt.isAdult()) {
+            	Random r = new Random();
+            	int low = 3;
+            	int high = 10;
+            	int result = r.nextInt(high-low) + low;
+                for(int i = 0; i < result; i++) {
+                	Bee bee =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Bee.class);
+                	IronGolem ironGolem =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), IronGolem.class);
+                	bee.setAnger(high);
+                	ironGolem.setTarget(mcPlayer);
+                }
+            }
         }
         if(event.getEntity() instanceof Zombie)
         { 
