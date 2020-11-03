@@ -186,7 +186,7 @@ public class MobListener implements Listener {
                 	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,15,0)).setType(Material.ANVIL);
                 	mcPlayer.teleport(mcPlayer.getLocation().add(0,-5,0));
                 	mcPlayer.dropItem(false);
-                	event.getDrops().add(new ItemStack(Material.ENDERMAN_SPAWN_EGG, 1));
+                	event.getDrops().add(new ItemStack(Material.ENDER_PEARL, 3));
                 }
             }
     	}
