@@ -41,67 +41,67 @@ import org.bukkit.potion.PotionEffectType;
 
 public final class PlayerListener implements Listener {
 
-	private final JavaPlugin javaPlugin;
-	
-	private final Random RANDOM;
-	private final List<Material> bucketTypes;
-	private final List<Enchantment> enchantments;
-	
-	
-	public PlayerListener(JavaPlugin aJavaPlugin) {
-		javaPlugin = aJavaPlugin;
-		RANDOM = new Random();
-		bucketTypes = new ArrayList<>();
-    	bucketTypes.add(Material.BUCKET);
-    	bucketTypes.add(Material.COD_BUCKET);
-    	bucketTypes.add(Material.LAVA_BUCKET);
-    	bucketTypes.add(Material.MILK_BUCKET);
-    	bucketTypes.add(Material.PUFFERFISH_BUCKET);
-    	bucketTypes.add(Material.SALMON_BUCKET);
-    	bucketTypes.add(Material.TROPICAL_FISH_BUCKET);
-    	bucketTypes.add(Material.WATER_BUCKET);
-    	
+    private final JavaPlugin javaPlugin;
+    
+    private final Random RANDOM;
+    private final List<Material> bucketTypes;
+    private final List<Enchantment> enchantments;
+    
+    
+    public PlayerListener(JavaPlugin aJavaPlugin) {
+        javaPlugin = aJavaPlugin;
+        RANDOM = new Random();
+        bucketTypes = new ArrayList<>();
+        bucketTypes.add(Material.BUCKET);
+        bucketTypes.add(Material.COD_BUCKET);
+        bucketTypes.add(Material.LAVA_BUCKET);
+        bucketTypes.add(Material.MILK_BUCKET);
+        bucketTypes.add(Material.PUFFERFISH_BUCKET);
+        bucketTypes.add(Material.SALMON_BUCKET);
+        bucketTypes.add(Material.TROPICAL_FISH_BUCKET);
+        bucketTypes.add(Material.WATER_BUCKET);
+        
 
-		enchantments = Arrays.asList(Enchantment.values());
+        enchantments = Arrays.asList(Enchantment.values());
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-			public void run() {
-				List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
-				Player p = players.get(RANDOM.nextInt(players.size()));
-				
-				int attempts = 0;
-				boolean done = false;
-				while (attempts < 30 && !done) {
-					// Location chestLocation = p.getLocation().add(RANDOM.nextInt(40)-20, RANDOM.nextInt(6), RANDOM.nextInt(40)-20);
-	
-					Location chestLocation = p.getLocation().add(0, 3, 0);
-					if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
-						done = true;
-						p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 1);
-						p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 15, 1);
-						
-						 p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
-						
-						 Chest chest = (Chest) p.getLocation().getBlock().getState();
-						 
-						 
-						 List<Material> materials = Arrays.asList(Material.values());
-						 
-						 List<Material> itemsForChest = new ArrayList<>();
-						 
-						 for (int i = 0; i < RANDOM.nextInt(5) + 1; i++) {
-							 itemsForChest.add(materials.get(RANDOM.nextInt(materials.size())));
-						 }
-						 
-						 List<ItemStack> forChest = itemsForChest.stream().map(ItemStack::new).collect(Collectors.toList());
-						 
-						 chest.getInventory().setContents(forChest.toArray(new ItemStack[forChest.size()]));
-					}
-				}
-			}
-		}, RANDOM.nextInt(100000) + 50000);
-	}
-	
+        Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+            public void run() {
+                List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
+                Player p = players.get(RANDOM.nextInt(players.size()));
+                
+                int attempts = 0;
+                boolean done = false;
+                while (attempts < 30 && !done) {
+                    // Location chestLocation = p.getLocation().add(RANDOM.nextInt(40)-20, RANDOM.nextInt(6), RANDOM.nextInt(40)-20);
+    
+                    Location chestLocation = p.getLocation().add(0, 3, 0);
+                    if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
+                        done = true;
+                        p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 1);
+                        p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 15, 1);
+                        
+                         p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
+                        
+                         Chest chest = (Chest) p.getLocation().getBlock().getState();
+                         
+                         
+                         List<Material> materials = Arrays.asList(Material.values());
+                         
+                         List<Material> itemsForChest = new ArrayList<>();
+                         
+                         for (int i = 0; i < RANDOM.nextInt(5) + 1; i++) {
+                             itemsForChest.add(materials.get(RANDOM.nextInt(materials.size())));
+                         }
+                         
+                         List<ItemStack> forChest = itemsForChest.stream().map(ItemStack::new).collect(Collectors.toList());
+                         
+                         chest.getInventory().setContents(forChest.toArray(new ItemStack[forChest.size()]));
+                    }
+                }
+            }
+        }, RANDOM.nextInt(100000) + 50000);
+    }
+    
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
@@ -109,38 +109,42 @@ public final class PlayerListener implements Listener {
     }
     
     @EventHandler
-	public void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
-    	event.setItemStack(new ItemStack(bucketTypes.get(RANDOM.nextInt(bucketTypes.size()))));
+    public void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
+        event.setItemStack(new ItemStack(bucketTypes.get(RANDOM.nextInt(bucketTypes.size()))));
     }
     
     @EventHandler
-	public void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
-    	event.setHatchingType(EntityType.WITCH);
+    public void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
+        event.setHatchingType(EntityType.WITCH);
     }
     
     @EventHandler
-	public void onPlayerInteractEvent(PlayerInteractEvent event) {
-    	if (event.getClickedBlock().getType() == Material.BELL) {
-    		Player player = event.getPlayer();
-    		Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
+    public void onPlayerInteractEvent(PlayerInteractEvent event) {
+        if (event.getClickedBlock().getType() == Material.BELL) {
+            Player player = event.getPlayer();
+            Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
 
-        	Zombie zombie =  player.getWorld().spawn(dundundun, Zombie.class);
-        	zombie.setTarget(player);
-        	zombie.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 1));
-    	}
+            Zombie zombie =  player.getWorld().spawn(dundundun, Zombie.class);
+            zombie.setTarget(player);
+            zombie.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 1));
+        }
     }
     
     @EventHandler
-	public void onPrepareItemCraftEvent(PrepareItemCraftEvent event) {
-    	for (int i = 0; i < RANDOM.nextInt(5); i--) {
-    		Enchantment enchantment = enchantments.get(i);
-    		ItemStack result = event.getRecipe().getResult().clone();
-    		if (enchantment.canEnchantItem(result)) {
-    			ItemMeta meta = result.getItemMeta();
-    			meta.addEnchant(enchantment, RANDOM.nextInt(4)+1, false);
-    			result.setItemMeta(meta);
-    			event.getInventory().setResult(result);
-    		}
-    	}
+    public void onPrepareItemCraftEvent(PrepareItemCraftEvent event) {
+        for (int i = 0; i < RANDOM.nextInt(5); i--) {
+            Enchantment enchantment = enchantments.get(i);
+            ItemStack result = event.getRecipe().getResult().clone();
+            if (enchantment.canEnchantItem(result)) {
+                ItemMeta meta = result.getItemMeta();
+                meta.addEnchant(enchantment, RANDOM.nextInt(4)+1, false);
+                result.setItemMeta(meta);
+                event.getInventory().setResult(result);
+            }
+        }
+    }
+
+    public void cleanup() {
+        /* Empty for now. */
     }
 }
