@@ -22,7 +22,9 @@ import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Ravager;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
@@ -56,15 +58,18 @@ public class MobListener implements Listener {
     private boolean zombieBabushkaDeath = true;
     private boolean sheepDeath = true;
     private boolean chickenDeath = true;
+    private boolean demonTrap = true;
+    private boolean pigDeath = true;
     
     public MobListener(JavaPlugin aJavaPlugin) {
         javaPlugin = aJavaPlugin;
         
         trailByPlayer = new HashMap<>();
     }
-
+    
     @EventHandler
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
+    	
         if(playerTrail) {
             Location belowPlayer = event.getPlayer().getLocation().add(0, -1, 0);
             
@@ -92,6 +97,11 @@ public class MobListener implements Listener {
                     Location belowBehindPlayer = event.getPlayer().getLocation().add(x, -1, z);
                     Block blockBehindPlayer = event.getPlayer().getWorld().getBlockAt(behindPlayer);
                     Block blockBelowBehindPlayer = event.getPlayer().getWorld().getBlockAt(belowBehindPlayer);
+                    if(playerTrail) {
+                    	if(blockBehindPlayer.getType().name().contains("WIRE")) {
+                    		event.getPlayer().teleport(behindPlayer);
+                    	}
+                    }
                     if(blockBehindPlayer.isEmpty() && 
                             !blockBehindPlayer.isLiquid() &&
                             !blockBelowBehindPlayer.getType().name().contains("CARPET") &&
@@ -219,6 +229,19 @@ public class MobListener implements Listener {
                 
                 if(cowEnt.isAdult()) {
                     mcPlayer.teleport(mcPlayer.getLocation().add(0,5,0));
+                }
+            }
+        }
+        if(pigDeath) {
+            if(event.getEntity() instanceof Pig)
+            { 
+            	Pig pigEnt = (Pig) event.getEntity();
+                Player mcPlayer = pigEnt.getKiller();
+                if(mcPlayer == null)
+                    return;
+                
+                if(pigEnt.isAdult()) {
+                	Ravager ravager =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Ravager.class);
                 }
             }
         }
