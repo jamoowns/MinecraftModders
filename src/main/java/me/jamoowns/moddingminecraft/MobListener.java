@@ -171,7 +171,6 @@ public class MobListener implements Listener {
                             		crepper.setTarget(mcPlayer);
                                 }
                             }
-                			mcPlayer.sendMessage("test"); //send the message "test"
                 		}
                 		}, 180);
                 }
