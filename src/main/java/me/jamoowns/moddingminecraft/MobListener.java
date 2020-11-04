@@ -38,6 +38,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class MobListener implements Listener {
 
@@ -162,6 +163,17 @@ public class MobListener implements Listener {
                 
                 if(sheepEnt.isAdult()) {
                 	mcPlayer.sendTitle("You're about to die", "20 secs to live after this", 40, 40, 40);
+                		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+                		public void run() {
+                			for(int i = 0; i < 3; i++) {
+                            	Creeper crepper =  mcPlayer.getLocation().getWorld().spawn(mcPlayer.getLocation(), Creeper.class);
+                            	if(mcPlayer != null) {
+                            		crepper.setTarget(mcPlayer);
+                                }
+                            }
+                			mcPlayer.sendMessage("test"); //send the message "test"
+                		}
+                		}, 120);
                 }
             }
     	}
@@ -180,12 +192,15 @@ public class MobListener implements Listener {
                 	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.AIR);
                 	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.AIR);
                 	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.AIR);
-
                 	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.STONE);
-
-                	mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,15,0)).setType(Material.ANVIL);
+                	Random r = new Random();
+                	int low = 1;
+                	int high = 11;
+                	int result = r.nextInt(high-low) + low;
+                	if(result>6) {
+                		mcPlayer.getLocation().getWorld().getBlockAt(loc.add(0,15,0)).setType(Material.ANVIL);
+                	}
                 	mcPlayer.teleport(mcPlayer.getLocation().add(0,-5,0));
-                	mcPlayer.dropItem(false);
                 	event.getDrops().add(new ItemStack(Material.ENDER_PEARL, 3));
                 }
             }
@@ -217,9 +232,7 @@ public class MobListener implements Listener {
                 	int high = 10;
                 	int result = r.nextInt(high-low) + low;
                     for(int i = 0; i < result; i++) {
-                    	Bee bee =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Bee.class);
                     	IronGolem ironGolem =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), IronGolem.class);
-                    	bee.setAnger(high);
                     	ironGolem.setTarget(mcPlayer);
                     }
                 }
