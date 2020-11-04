@@ -110,10 +110,10 @@ public class MobListener implements Listener {
                         List<Block> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
                         trail.add(event.getPlayer().getWorld().getBlockAt(behindPlayer));
                         if (trail.size() > 100) {
-                        	if(trail.get(0).getType().name().contains("CARPET")) {
 
-                                Block first = trail.remove(0);
-                                first.setType(Material.AIR);
+                            Block first = trail.remove(0);
+                        	if(first.getType().name().contains("CARPET")) {
+                        		first.setType(Material.AIR);
                         	}
                         }
                         
