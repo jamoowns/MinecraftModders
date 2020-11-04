@@ -19,6 +19,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bee;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -62,11 +63,8 @@ public final class PlayerListener implements Listener {
     	
 
 		enchantments = Arrays.asList(Enchantment.values());
-    	
-    	Timer timer = new Timer();
-    	timer.scheduleAtFixedRate(new TimerTask() {
-			
-			@Override
+
+		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 			public void run() {
 				List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
 				Player p = players.get(RANDOM.nextInt(players.size()));
@@ -75,7 +73,7 @@ public final class PlayerListener implements Listener {
 				boolean done = false;
 				while (attempts < 30 && !done) {
 					// Location chestLocation = p.getLocation().add(RANDOM.nextInt(40)-20, RANDOM.nextInt(6), RANDOM.nextInt(40)-20);
-
+	
 					Location chestLocation = p.getLocation().add(0, 3, 0);
 					if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
 						done = true;
@@ -101,7 +99,7 @@ public final class PlayerListener implements Listener {
 					}
 				}
 			}
-		}, RANDOM.nextInt(100000) + 50000, RANDOM.nextInt(100000) + 50000);
+		}, RANDOM.nextInt(100000) + 50000);
 	}
 	
     @EventHandler
