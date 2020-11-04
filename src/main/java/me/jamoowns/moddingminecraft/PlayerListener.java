@@ -61,8 +61,7 @@ public final class PlayerListener implements Listener {
     	bucketTypes.add(Material.WATER_BUCKET);
     	
 
-		enchantments = new ArrayList<>();
-		List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
+		enchantments = Arrays.asList(Enchantment.values());
     	
     	Timer timer = new Timer();
     	timer.scheduleAtFixedRate(new TimerTask() {
@@ -75,27 +74,15 @@ public final class PlayerListener implements Listener {
 				int attempts = 0;
 				boolean done = false;
 				while (attempts < 30 && !done) {
-					Location chestLocation = p.getLocation().add(RANDOM.nextInt(40)-20, RANDOM.nextInt(6)-3, RANDOM.nextInt(40)-20);
+					// Location chestLocation = p.getLocation().add(RANDOM.nextInt(40)-20, RANDOM.nextInt(6), RANDOM.nextInt(40)-20);
+
+					Location chestLocation = p.getLocation().add(0, 3, 0);
 					if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
 						done = true;
 						p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 1);
 						p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 15, 1);
 						
-				        Firework fw = (Firework) p.getLocation().getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
-				        FireworkMeta fwm = fw.getFireworkMeta();
-				       
-				        fwm.setPower(2);
-				        fwm.addEffect(FireworkEffect.builder().withColor(Color.LIME).flicker(true).build());
-				       
-				        fw.setFireworkMeta(fwm);
-				        fw.detonate();
-				       
-				        for(int i = 0;i<10; i++){
-				            Firework fw2 = (Firework) p.getLocation().getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
-				            fw2.setFireworkMeta(fwm);
-				        }
-						
-						p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
+						 p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
 						
 						 Chest chest = (Chest) p.getLocation().getBlock().getState();
 						 
