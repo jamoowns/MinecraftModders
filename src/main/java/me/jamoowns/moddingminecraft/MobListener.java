@@ -173,7 +173,7 @@ public class MobListener implements Listener {
                             }
                 			mcPlayer.sendMessage("test"); //send the message "test"
                 		}
-                		}, 120);
+                		}, 180);
                 }
             }
     	}
