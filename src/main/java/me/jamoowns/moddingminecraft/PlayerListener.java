@@ -47,6 +47,9 @@ public final class PlayerListener implements Listener {
     private final List<Material> bucketTypes;
     private final List<Enchantment> enchantments;
     
+    private static final long ONE_SECOND = 20L;
+    private static final long ONE_MINUTE = ONE_SECOND * 60;
+    
     
     public PlayerListener(JavaPlugin aJavaPlugin) {
         javaPlugin = aJavaPlugin;
@@ -64,7 +67,7 @@ public final class PlayerListener implements Listener {
 
         enchantments = Arrays.asList(Enchantment.values());
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
             public void run() {
                 List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
                 Player p = players.get(RANDOM.nextInt(players.size()));
@@ -99,7 +102,7 @@ public final class PlayerListener implements Listener {
                     }
                 }
             }
-        }, RANDOM.nextInt(100000) + 50000);
+        }, RANDOM.nextInt((int) (ONE_MINUTE*2)) + ONE_MINUTE, RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE);
     }
     
     @EventHandler
