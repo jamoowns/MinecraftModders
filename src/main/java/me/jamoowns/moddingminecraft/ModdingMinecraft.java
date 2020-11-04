@@ -12,7 +12,7 @@ public class ModdingMinecraft extends JavaPlugin {
     public void onEnable() {
         playerListener = new PlayerListener(this);
         mobListener = new MobListener(this);
-           getServer().getPluginManager().registerEvents(playerListener, this);
+        getServer().getPluginManager().registerEvents(playerListener, this);
         getServer().getPluginManager().registerEvents(mobListener, this);
     }
     // Fired when plug-in is disabled
