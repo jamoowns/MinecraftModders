@@ -38,6 +38,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 
 public final class PlayerListener implements Listener {
 
@@ -75,9 +78,9 @@ public final class PlayerListener implements Listener {
                 int attempts = 0;
                 boolean done = false;
                 while (attempts < 30 && !done) {
-                    // Location chestLocation = p.getLocation().add(RANDOM.nextInt(40)-20, RANDOM.nextInt(6), RANDOM.nextInt(40)-20);
+                    Location chestLocation = p.getLocation().add(RANDOM.nextInt(40)-20, RANDOM.nextInt(6), RANDOM.nextInt(40)-20);
     
-                    Location chestLocation = p.getLocation().add(0, 3, 0);
+                    // Location chestLocation = p.getLocation().add(0, 3, 0);
                     if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
                         done = true;
                         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 1);
@@ -85,8 +88,7 @@ public final class PlayerListener implements Listener {
                         
                          p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
                         
-                         Chest chest = (Chest) p.getLocation().getBlock().getState();
-                         
+                         Chest chest = (Chest) p.getWorld().getBlockAt(chestLocation).getState();
                          
                          List<Material> materials = Arrays.asList(Material.values());
                          
@@ -123,6 +125,11 @@ public final class PlayerListener implements Listener {
     
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
+    	// ScoreboardManager manager = Bukkit.getScoreboardManager();
+    	// Scoreboard board = manager.getNewScoreboard();
+    	// Team team = board.registerNewTeam("teamname");
+    	
+    	
         if (event.getClickedBlock().getType() == Material.BELL) {
             Player player = event.getPlayer();
             Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
