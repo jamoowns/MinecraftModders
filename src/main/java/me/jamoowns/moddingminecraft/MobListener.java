@@ -63,7 +63,6 @@ public class MobListener implements Listener {
     
     public MobListener(JavaPlugin aJavaPlugin) {
         javaPlugin = aJavaPlugin;
-        
         trailByPlayer = new HashMap<>();
     }
     
@@ -231,7 +230,7 @@ public class MobListener implements Listener {
                     return;
                 
                 if(pigEnt.isAdult()) {
-                	Ravager ravager =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Ravager.class);
+                	event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Ravager.class);
                 }
             }
         }
