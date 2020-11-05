@@ -33,8 +33,12 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -64,6 +68,45 @@ public class MobListener implements Listener {
     public MobListener(JavaPlugin aJavaPlugin) {
         javaPlugin = aJavaPlugin;
         trailByPlayer = new HashMap<>();
+    }
+    
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerInteractEvent(PlayerItemConsumeEvent e){
+    	
+	    //get all the relative values for comparation
+	    final Player p = e.getPlayer();
+	    if(e.getItem().getType().equals(Material.SPIDER_EYE)){
+		    //schedule a task to see if they have eaten the cookie(maybe the time could be a little faster idk)
+	    	Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+                public void run() {
+                	p.teleport(p.getLocation().add(0,20,0));
+                }
+                }, 100L);
+		    
+	    }
+	    Location playerLoc = p.getLocation();
+	    if(playerLoc.add(0,2,0).getBlock().getType().equals(Material.AIR)) {
+	    	 if(e.getItem().getType().equals(Material.COOKED_SALMON)){
+	 		    //schedule a task to see if they have eaten the cookie(maybe the time could be a little faster idk)
+	 	    	Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+	                 public void run() {
+	                	 p.teleport(p.getLocation().add(0,800,0));
+	                 }
+	                 }, 100L);
+		 	    	Random r = new Random();
+	                int low = 300;
+	                int high = 400;
+	                int result = r.nextInt(high-low) + low;
+ 	    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+	                 public void run() {
+	                	 p.setFallDistance(0);
+	                	 p.teleport(playerLoc.add(0,-2,0));
+	                 }
+	                 }, result);
+	 	    }
+	    }
+	    
+	   
     }
     
     @EventHandler
