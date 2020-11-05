@@ -21,6 +21,7 @@ import org.bukkit.entity.Bee;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
@@ -58,7 +59,6 @@ public class MobListener implements Listener {
     private boolean zombieBabushkaDeath = true;
     private boolean sheepDeath = true;
     private boolean chickenDeath = true;
-    private boolean demonTrap = true;
     private boolean pigDeath = true;
     
     public MobListener(JavaPlugin aJavaPlugin) {
@@ -97,11 +97,7 @@ public class MobListener implements Listener {
                     Location belowBehindPlayer = event.getPlayer().getLocation().add(x, -1, z);
                     Block blockBehindPlayer = event.getPlayer().getWorld().getBlockAt(behindPlayer);
                     Block blockBelowBehindPlayer = event.getPlayer().getWorld().getBlockAt(belowBehindPlayer);
-                    if(playerTrail) {
-                    	if(blockBehindPlayer.getType().name().contains("WIRE")) {
-                    		event.getPlayer().teleport(behindPlayer);
-                    	}
-                    }
+                   
                     if(blockBehindPlayer.isEmpty() && 
                             !blockBehindPlayer.isLiquid() &&
                             !blockBelowBehindPlayer.getType().name().contains("CARPET") &&
@@ -110,13 +106,11 @@ public class MobListener implements Listener {
                         List<Block> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
                         trail.add(event.getPlayer().getWorld().getBlockAt(behindPlayer));
                         if (trail.size() > 100) {
-
                             Block first = trail.remove(0);
                         	if(first.getType().name().contains("CARPET")) {
                         		first.setType(Material.AIR);
                         	}
                         }
-                        
                         trailByPlayer.put(event.getPlayer().getUniqueId(), trail);
                         if(event.getPlayer().getName().equalsIgnoreCase("mabmo")) {
                             event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(Material.CYAN_CARPET);
@@ -124,7 +118,6 @@ public class MobListener implements Listener {
                             event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(Material.RED_CARPET);
                         }
                     }
-            
             }
         }
     }
@@ -145,8 +138,6 @@ public class MobListener implements Listener {
         trailByPlayer.remove(event.getPlayer().getUniqueId());
     }
     
-   
-    
     @EventHandler
     public void onEntityDeathEvent(EntityDeathEvent event) {
         if(playerDeath) {
@@ -154,20 +145,16 @@ public class MobListener implements Listener {
             { 
                 Player playerEnt = (Player) event.getEntity();
                 Player mcPlayer = playerEnt.getKiller();
-                 {
-
-                     mcPlayer.dropItem(false);
-                    Random r = new Random();
-                    int low = 0;
-                    int high = 3;
-                    int result = r.nextInt(high-low) + low;
-                    for(int i = 0; i < result; i++) {
-                        IronGolem ironGolem =  event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), IronGolem.class);
-                        if(mcPlayer != null) {
-                            ironGolem.setTarget(mcPlayer);
-                        }
+                Random r = new Random();
+                int low = 0;
+                int high = 3;
+                int result = r.nextInt(high-low) + low;
+                for(int i = 0; i < result; i++) {
+                    event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), IronGolem.class);
+                    if(mcPlayer != null) {
+                    	event.getEntity().getLocation().getWorld().spawnEntity(mcPlayer.getLocation(), EntityType.FIREWORK);
                     }
-                } 
+                }
             }
         }
         if(sheepDeath) {
