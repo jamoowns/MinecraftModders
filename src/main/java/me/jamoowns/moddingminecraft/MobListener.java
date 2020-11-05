@@ -157,8 +157,8 @@ public class MobListener implements Listener {
                 }
             }
         }
+        
         if(sheepDeath) {
-            
             if(event.getEntity() instanceof Sheep)
             { 
                 Sheep sheepEnt = (Sheep) event.getEntity();

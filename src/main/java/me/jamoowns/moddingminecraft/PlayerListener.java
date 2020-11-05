@@ -113,6 +113,7 @@ public final class PlayerListener implements Listener {
 	                         List<ItemStack> forChest = itemsForChest.stream().map(ItemStack::new).collect(Collectors.toList());
 	                         
 	                         chest.getInventory().setContents(forChest.toArray(new ItemStack[forChest.size()]));
+	                         p.getWorld().spawnEntity(chest.getLocation(), EntityType.FIREWORK);
 	                    }
 	                }
 	            }
