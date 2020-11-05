@@ -85,24 +85,17 @@ public class MobListener implements Listener {
 		    
 	    }
 	    Location playerLoc = p.getLocation();
+	    Location playerLoc2 = p.getLocation();
+	    playerLoc2.setY(900);
 	    if(playerLoc.add(0,2,0).getBlock().getType().equals(Material.AIR)) {
 	    	 if(e.getItem().getType().equals(Material.COOKED_SALMON)){
-	 		    //schedule a task to see if they have eaten the cookie(maybe the time could be a little faster idk)
-	 	    	Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-	                 public void run() {
-	                	 p.teleport(p.getLocation().add(0,800,0));
-	                 }
-	                 }, 100L);
-		 	    	Random r = new Random();
-	                int low = 300;
-	                int high = 400;
-	                int result = r.nextInt(high-low) + low;
- 	    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-	                 public void run() {
-	                	 p.setFallDistance(0);
-	                	 p.teleport(playerLoc.add(0,-2,0));
-	                 }
-	                 }, result);
+	    		p.teleport(playerLoc2);
+    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+                 public void run() {
+                	 p.setFallDistance(0);
+                	 p.teleport(playerLoc.add(0,-2,0));
+                 }
+                 }, 230);
 	 	    }
 	    }
 	    
