@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +21,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 public final class TaskKeeper {
 
-	private Scoreboard board;
+	private Map<UUID, Scoreboard> boardsByPlayer;
 
 	private final JavaPlugin javaPlugin;
 
@@ -30,20 +31,15 @@ public final class TaskKeeper {
 
 	private final Map<String, Task> taskByTaskName;
 
-	private final Objective objective;
-
 	public TaskKeeper(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		tasks = new ArrayList<>();
 		taskByTaskName = new HashMap<>();
 
-		ScoreboardManager manager = Bukkit.getScoreboardManager();
-		board = manager.getNewScoreboard();
-		objective = board.registerNewObjective("test", "dummy", "-- Your tasks --");
-		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		boardsByPlayer = new HashMap<>();
 
 		for (Player online : Bukkit.getOnlinePlayers()) {
-			online.setScoreboard(board);
+			online.setScoreboard(boardsByPlayer.get(online.getUniqueId()));
 		}
 
 		playerEventListener = new PlayerEventListener(this);
@@ -57,19 +53,33 @@ public final class TaskKeeper {
 	public final void addTask(String taskName, Boolean completed) {
 		Task task = new Task(taskName, completed);
 		tasks.add(task);
+		taskByTaskName.put(task.taskName, task);
 
-		Score score = objective.getScore(ChatColor.GREEN + taskName + ChatColor.YELLOW + " - " + ChatColor.AQUA
-				+ completeDescription(completed));
+		for (Player online : Bukkit.getOnlinePlayers()) {
+			Scoreboard scoreboard = boardsByPlayer.get(online.getUniqueId());
+			Score score = scoreboard.getObjective("tasks").getScore(task.describe());
+			score.setScore(tasks.indexOf(task));
+		}
+	}
+
+	public final void updateTask(UUID player, String taskName, Boolean completed) {
+		Scoreboard scoreboard = boardsByPlayer.get(player);
+		Task oldTask = taskByTaskName.get(taskName);
+
+		Task task = new Task(taskName, completed);
+		tasks.set(tasks.indexOf(oldTask), new Task(taskName, completed));
+		Score score = scoreboard.getObjective("tasks").getScore(task.describe());
+		score.getScoreboard().resetScores(oldTask.describe());
+
 		score.setScore(tasks.indexOf(task));
 	}
 
-	public final void updateTask(String taskName, Boolean completed) {
-		Task task = taskByTaskName.get(taskName);
-
-		tasks.set(tasks.indexOf(task), new Task(taskName, completed));
-	}
-
 	void register(Player player) {
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		Scoreboard board = manager.getNewScoreboard();
+		Objective objective = board.registerNewObjective("tasks", "dummy", "-- Your tasks --");
+		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
 		player.setScoreboard(board);
 	}
 
@@ -80,6 +90,11 @@ public final class TaskKeeper {
 		Task(String aTaskName, Boolean aCompleted) {
 			taskName = aTaskName;
 			completed = aCompleted;
+		}
+
+		String describe() {
+			return ChatColor.GREEN + taskName + ChatColor.YELLOW + " - " + ChatColor.AQUA
+					+ completeDescription(completed);
 		}
 	}
 

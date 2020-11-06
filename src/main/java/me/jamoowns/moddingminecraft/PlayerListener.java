@@ -119,7 +119,7 @@ public final class PlayerListener implements Listener {
 		if (event.getEntity().getType() == EntityType.PIG) {
 			Player mcPlayer = event.getEntity().getKiller();
 			if (mcPlayer != null) {
-				taskKeeper.updateTask("pig", true);
+				taskKeeper.updateTask(mcPlayer.getUniqueId(), "pig", true);
 			}
 		}
 	}
