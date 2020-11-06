@@ -22,6 +22,8 @@ import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Husk;
+import org.bukkit.entity.Illager;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
@@ -36,12 +38,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -79,6 +83,7 @@ public class MobListener implements Listener {
 		    //schedule a task to see if they have eaten the cookie(maybe the time could be a little faster idk)
 	    	Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
                 public void run() {
+               	 	p.setFallDistance(-20);
                 	p.teleport(p.getLocation().add(0,20,0));
                 }
                 }, 100L);
@@ -90,6 +95,13 @@ public class MobListener implements Listener {
 	    if(playerLoc.add(0,2,0).getBlock().getType().equals(Material.AIR)) {
 	    	 if(e.getItem().getType().equals(Material.COOKED_SALMON)){
 	    		p.teleport(playerLoc2);
+	    		Husk deadPlayer = p.getLocation().getWorld().spawn(p.getLocation(), Husk.class);
+	    	    deadPlayer.getEquipment().setArmorContents(p.getEquipment().getArmorContents());
+	    	    deadPlayer.getEquipment().setItemInMainHand(p.getEquipment().getItemInMainHand());
+	    	    deadPlayer.getEquipment().setItemInOffHand(p.getEquipment().getItemInOffHand());
+	    	    ItemStack is = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
+	    	    deadPlayer.getEquipment().setHelmet(is);
+	            
     			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
                  public void run() {
                 	 p.setFallDistance(0);
@@ -101,7 +113,6 @@ public class MobListener implements Listener {
 	    
 	   
     }
-    
     @EventHandler
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
     	
@@ -148,6 +159,7 @@ public class MobListener implements Listener {
                         }
                         trailByPlayer.put(event.getPlayer().getUniqueId(), trail);
                         if(event.getPlayer().getName().equalsIgnoreCase("mabmo")) {
+
                             event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(Material.CYAN_CARPET);
                         }else{
                             event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(Material.RED_CARPET);
@@ -174,24 +186,27 @@ public class MobListener implements Listener {
     }
     
     @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+    	 if(playerDeath) {
+    		 
+             Player playerEnt = (Player) event.getEntity();
+             Random r = new Random();
+             int low = 0;
+             int high = 3;
+             int result = r.nextInt(high-low) + low;
+             for(int i = 0; i < result; i++) {
+                 event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), IronGolem.class);
+                 if(playerEnt.getKiller() instanceof Player) {
+                	 if(playerEnt != playerEnt.getKiller())
+                		 event.getEntity().getLocation().getWorld().spawnEntity(playerEnt.getKiller().getLocation(), EntityType.FIREWORK);
+                 }
+             }
+         }
+    }
+    
+    @EventHandler
     public void onEntityDeathEvent(EntityDeathEvent event) {
-        if(playerDeath) {
-            if(event.getEntity() instanceof Player)
-            { 
-                Player playerEnt = (Player) event.getEntity();
-                Player mcPlayer = playerEnt.getKiller();
-                Random r = new Random();
-                int low = 0;
-                int high = 3;
-                int result = r.nextInt(high-low) + low;
-                for(int i = 0; i < result; i++) {
-                    event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), IronGolem.class);
-                    if(mcPlayer != null) {
-                    	event.getEntity().getLocation().getWorld().spawnEntity(mcPlayer.getLocation(), EntityType.FIREWORK);
-                    }
-                }
-            }
-        }
+       
         
         if(sheepDeath) {
             if(event.getEntity() instanceof Sheep)
