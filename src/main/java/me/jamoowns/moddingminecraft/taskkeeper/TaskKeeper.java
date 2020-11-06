@@ -39,7 +39,7 @@ public final class TaskKeeper {
 		boardsByPlayer = new HashMap<>();
 
 		for (Player online : Bukkit.getOnlinePlayers()) {
-			online.setScoreboard(boardsByPlayer.get(online.getUniqueId()));
+			register(online);
 		}
 
 		playerEventListener = new PlayerEventListener(this);
