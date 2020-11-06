@@ -51,7 +51,10 @@ public class Roominator {
 		return wall;
 	}
 
-	public static List<PlannedBlock> standardRoom(Location startLocation, int width, int length, int height) {
+	public static List<PlannedBlock> standardRoom(Location startLocation, int aWidth, int aLength, int aHeight) {
+		int width = aWidth - 1;
+		int length = aLength - 1;
+		int height = aHeight - 1;
 		List<Location> walls = Roominator.walls(startLocation, startLocation.clone().add(width, height, length));
 		List<PlannedBlock> plannedBlocks = PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE);
 

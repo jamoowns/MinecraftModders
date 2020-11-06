@@ -127,7 +127,7 @@ public final class PlayerListener implements Listener {
 
 			Location startPoint = event.getBlockAgainst().getLocation().add(0, 1, 0);
 
-			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, 4, 5, 4);
+			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, 8, 5, 5);
 
 			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
 		}
