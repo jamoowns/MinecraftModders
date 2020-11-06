@@ -10,12 +10,15 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.swing.text.html.parser.Entity;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Chicken;
@@ -27,6 +30,7 @@ import org.bukkit.entity.Illager;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Ravager;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Skeleton;
@@ -39,6 +43,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -49,6 +54,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public class MobListener implements Listener {
@@ -113,6 +120,24 @@ public class MobListener implements Listener {
 	    
 	   
     }
+
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void onProjectileHit(ProjectileHitEvent event) {
+        Projectile entity = event.getEntity();
+        if((entity instanceof Arrow)) {
+            Arrow arrow = (Arrow) entity;
+            ProjectileSource shooter = arrow.getShooter();
+            if((shooter instanceof Player)) {
+            	Player player = (Player)shooter;
+    			if(arrow.getBasePotionData().getType() == PotionType.INSTANT_DAMAGE) {
+    				player.getWorld().createExplosion(arrow.getLocation(), 5.0F);
+                    arrow.remove();
+    			}
+                
+            }
+        }
+    }
+    
     @EventHandler
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
     	
