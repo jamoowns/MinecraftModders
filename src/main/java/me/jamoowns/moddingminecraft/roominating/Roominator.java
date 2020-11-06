@@ -66,6 +66,12 @@ public class Roominator {
 		List<Location> windows = Roominator.walls(startLocation.clone().add(width, 1, ((int) length / 2)),
 				startLocation.clone().add(width, 2, ((int) length / 2)));
 
+		windows.addAll(Roominator.walls(startLocation.clone().add(0, 1, ((int) length / 2)),
+				startLocation.clone().add(0, 2, ((int) length / 2))));
+
+		windows.addAll(Roominator.walls(startLocation.clone().add(((int) width / 2), 1, length),
+				startLocation.clone().add(((int) width / 2), 2, length)));
+
 		plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
 
 		return plannedBlocks;
