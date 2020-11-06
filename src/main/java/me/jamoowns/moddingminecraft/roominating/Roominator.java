@@ -12,10 +12,9 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Door.Hinge;
 
-public class Roominator {
+public final class Roominator {
 
-	public static List<PlannedBlock> buildDoor(Location doorLocation, Material doorType, Hinge hinge,
-			BlockFace blockFace) {
+	private static List<PlannedBlock> door(Location doorLocation, Material doorType, Hinge hinge, BlockFace blockFace) {
 		Door doorBottom = (Door) Bukkit.createBlockData(doorType);
 
 		doorBottom.setHinge(hinge);
@@ -39,7 +38,7 @@ public class Roominator {
 		});
 	}
 
-	public static List<Location> wall(Location startLocation, Location endLocation) {
+	private static List<Location> wall(Location startLocation, Location endLocation) {
 		List<Location> wall = new ArrayList<>();
 		for (int x = 0; x <= endLocation.getX() - startLocation.getX(); x++) {
 			for (int y = 0; y <= endLocation.getY() - startLocation.getY(); y++) {
@@ -55,24 +54,24 @@ public class Roominator {
 		int width = aWidth - 1;
 		int length = aLength - 1;
 		int height = aHeight - 1;
-		List<Location> walls = Roominator.walls(startLocation, startLocation.clone().add(width, height, length));
+		List<Location> walls = walls(startLocation, startLocation.clone().add(width, height, length));
 		List<PlannedBlock> plannedBlocks = PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE);
 
-		List<Location> roof = Roominator.wall(startLocation.clone().add(0, height, 0),
+		List<Location> roof = wall(startLocation.clone().add(0, height, 0),
 				startLocation.clone().add(width, height, length));
 
 		plannedBlocks.addAll(PlannedBlocks.plannedBlock(roof, Material.OAK_PLANKS));
 
-		plannedBlocks.addAll(Roominator.buildDoor(startLocation.clone().add(((int) width / 2), 0, 0), Material.OAK_DOOR,
-				Hinge.RIGHT, BlockFace.SOUTH));
+		plannedBlocks.addAll(door(startLocation.clone().add(((int) width / 2), 0, 0), Material.OAK_DOOR, Hinge.RIGHT,
+				BlockFace.SOUTH));
 
-		List<Location> windows = Roominator.walls(startLocation.clone().add(width, 1, ((int) length / 2)),
+		List<Location> windows = walls(startLocation.clone().add(width, 1, ((int) length / 2)),
 				startLocation.clone().add(width, 2, ((int) length / 2)));
 
-		windows.addAll(Roominator.walls(startLocation.clone().add(0, 1, ((int) length / 2)),
+		windows.addAll(walls(startLocation.clone().add(0, 1, ((int) length / 2)),
 				startLocation.clone().add(0, 2, ((int) length / 2))));
 
-		windows.addAll(Roominator.walls(startLocation.clone().add(((int) width / 2), 1, length),
+		windows.addAll(walls(startLocation.clone().add(((int) width / 2), 1, length),
 				startLocation.clone().add(((int) width / 2), 2, length)));
 
 		plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
@@ -80,7 +79,7 @@ public class Roominator {
 		return plannedBlocks;
 	}
 
-	public static List<Location> walls(Location startLocation, Location endLocation) {
+	private static List<Location> walls(Location startLocation, Location endLocation) {
 		List<Location> room = new ArrayList<>();
 
 		double height = endLocation.getY() - startLocation.getY();

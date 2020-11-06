@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -29,6 +30,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
@@ -64,43 +70,59 @@ public final class PlayerListener implements Listener {
 		if (RANDOM_CHESTS) {
 			Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 				public void run() {
-					List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
-					Player p = players.get(RANDOM.nextInt(players.size()));
-
-					int attempts = 0;
-					boolean done = false;
-					while (attempts < 30 && !done) {
-						Location chestLocation = p.getLocation().add(RANDOM.nextInt(40) - 20, RANDOM.nextInt(6),
-								RANDOM.nextInt(40) - 20);
-
-						// Location chestLocation = p.getLocation().add(0, 3, 0);
-						if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
-							done = true;
-							p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 20, 1);
-							p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 25, 1);
-
-							p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
-
-							Chest chest = (Chest) p.getWorld().getBlockAt(chestLocation).getState();
-
-							List<Material> materials = Arrays.asList(Material.values());
-
-							List<Material> itemsForChest = new ArrayList<>();
-
-							for (int i = 0; i < RANDOM.nextInt(5) + 1; i++) {
-								itemsForChest.add(materials.get(RANDOM.nextInt(materials.size())));
-							}
-
-							List<ItemStack> forChest = itemsForChest.stream().map(ItemStack::new)
-									.collect(Collectors.toList());
-
-							chest.getInventory().setContents(forChest.toArray(new ItemStack[forChest.size()]));
-							p.getWorld().spawnEntity(chest.getLocation(), EntityType.FIREWORK);
-						}
-					}
+					randomChestSpawn();
 				}
 			}, RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE,
 					RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE);
+		}
+
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		board = manager.getNewScoreboard();
+		Objective objective = board.registerNewObjective("test", "dummy", "Welcome -- Your tasks");
+		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+		Score score = objective.getScore(ChatColor.GREEN + "Kill a pig"); // Get a fake offline player
+		score.setScore(1);
+		for (Player online : Bukkit.getOnlinePlayers()) {
+			online.setScoreboard(board);
+		}
+	}
+
+	private Scoreboard board;
+
+	private void randomChestSpawn() {
+		List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
+		Player p = players.get(RANDOM.nextInt(players.size()));
+
+		int attempts = 0;
+		boolean done = false;
+		while (attempts < 30 && !done) {
+			Location chestLocation = p.getLocation().add(RANDOM.nextInt(40) - 20, RANDOM.nextInt(6),
+					RANDOM.nextInt(40) - 20);
+
+			// Location chestLocation = p.getLocation().add(0, 3, 0);
+			if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
+				done = true;
+				p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 20, 1);
+				p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 25, 1);
+
+				p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
+
+				Chest chest = (Chest) p.getWorld().getBlockAt(chestLocation).getState();
+
+				List<Material> materials = Arrays.asList(Material.values());
+
+				List<Material> itemsForChest = new ArrayList<>();
+
+				for (int i = 0; i < RANDOM.nextInt(5) + 1; i++) {
+					itemsForChest.add(materials.get(RANDOM.nextInt(materials.size())));
+				}
+
+				List<ItemStack> forChest = itemsForChest.stream().map(ItemStack::new).collect(Collectors.toList());
+
+				chest.getInventory().setContents(forChest.toArray(new ItemStack[forChest.size()]));
+				p.getWorld().spawnEntity(chest.getLocation(), EntityType.FIREWORK);
+			}
 		}
 	}
 
@@ -108,6 +130,8 @@ public final class PlayerListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
 				event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
+
+		event.getPlayer().setScoreboard(board);
 	}
 
 	@EventHandler
@@ -135,9 +159,6 @@ public final class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent event) {
-		// ScoreboardManager manager = Bukkit.getScoreboardManager();
-		// Scoreboard board = manager.getNewScoreboard();
-		// Team team = board.registerNewTeam("teamname");
 
 		if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.BELL) {
 			Player player = event.getPlayer();
