@@ -15,6 +15,7 @@ import javax.swing.text.html.parser.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.WeatherType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -49,6 +50,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.weather.ThunderChangeEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -117,10 +120,25 @@ public class MobListener implements Listener {
                  }, 230);
 	 	    }
 	    }
-	    
-	   
     }
-
+    
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void onWeatherChange(WeatherChangeEvent event) {
+     
+        boolean rain = event.toWeatherState();
+        if(rain)
+            event.setCancelled(true);
+    }
+ 
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void onThunderChange(ThunderChangeEvent event) {
+     
+        boolean storm = event.toThunderState();
+        if(storm)
+            event.setCancelled(true);
+    }
+    
+    
     @EventHandler(priority=EventPriority.HIGHEST)
     public void onProjectileHit(ProjectileHitEvent event) {
         Projectile entity = event.getEntity();
