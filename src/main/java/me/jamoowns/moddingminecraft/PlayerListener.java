@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -20,6 +19,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -30,14 +30,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
+import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
 
 public final class PlayerListener implements Listener {
 
@@ -51,6 +47,8 @@ public final class PlayerListener implements Listener {
 
 	private static final long ONE_SECOND = 20L;
 	private static final long ONE_MINUTE = ONE_SECOND * 60;
+
+	private final TaskKeeper taskKeeper;
 
 	public PlayerListener(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -76,19 +74,9 @@ public final class PlayerListener implements Listener {
 					RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE);
 		}
 
-		ScoreboardManager manager = Bukkit.getScoreboardManager();
-		board = manager.getNewScoreboard();
-		Objective objective = board.registerNewObjective("test", "dummy", "Welcome -- Your tasks");
-		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-		Score score = objective.getScore(ChatColor.GREEN + "Kill a pig"); // Get a fake offline player
-		score.setScore(1);
-		for (Player online : Bukkit.getOnlinePlayers()) {
-			online.setScoreboard(board);
-		}
+		taskKeeper = new TaskKeeper(javaPlugin);
+		taskKeeper.addTask("pig", false);
 	}
-
-	private Scoreboard board;
 
 	private void randomChestSpawn() {
 		List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
@@ -127,11 +115,19 @@ public final class PlayerListener implements Listener {
 	}
 
 	@EventHandler
+	public void onEntityDeathEvent(EntityDeathEvent event) {
+		if (event.getEntity().getType() == EntityType.PIG) {
+			Player mcPlayer = event.getEntity().getKiller();
+			if (mcPlayer != null) {
+				taskKeeper.updateTask("pig", true);
+			}
+		}
+	}
+
+	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
 				event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
-
-		event.getPlayer().setScoreboard(board);
 	}
 
 	@EventHandler
