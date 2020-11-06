@@ -83,6 +83,12 @@ public final class TaskKeeper {
 			player.setScoreboard(board);
 
 			boardsByPlayer.put(player.getUniqueId(), board);
+
+			tasks.forEach(task -> {
+				Scoreboard scoreboard = boardsByPlayer.get(player.getUniqueId());
+				Score score = scoreboard.getObjective("tasks").getScore(task.describe());
+				score.setScore(tasks.indexOf(task));
+			});
 		}
 	}
 
