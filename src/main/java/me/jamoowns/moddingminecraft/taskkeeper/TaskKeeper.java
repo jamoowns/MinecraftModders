@@ -12,12 +12,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 
 public final class TaskKeeper {
 
@@ -75,12 +75,20 @@ public final class TaskKeeper {
 	}
 
 	void register(Player player) {
-		ScoreboardManager manager = Bukkit.getScoreboardManager();
-		Scoreboard board = manager.getNewScoreboard();
-		Objective objective = board.registerNewObjective("tasks", "dummy", "-- Your tasks --");
-		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		if (!boardsByPlayer.containsKey(player.getUniqueId())) {
+			Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+			Objective objective = board.registerNewObjective("tasks", "dummy", "-- Your tasks --");
+			objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-		player.setScoreboard(board);
+			player.setScoreboard(board);
+
+			boardsByPlayer.put(player.getUniqueId(), board);
+		}
+	}
+
+	void unregister(Player player) {
+		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+		boardsByPlayer.remove(player.getUniqueId());
 	}
 
 	private class Task {
@@ -111,5 +119,9 @@ public final class TaskKeeper {
 			taskKeeper.register(event.getPlayer());
 		}
 
+		@EventHandler
+		public void onPlayerQuit(PlayerQuitEvent event) {
+			taskKeeper.unregister(event.getPlayer());
+		}
 	}
 }
