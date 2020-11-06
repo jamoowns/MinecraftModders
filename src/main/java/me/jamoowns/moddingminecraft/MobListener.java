@@ -94,14 +94,14 @@ public class MobListener implements Listener {
 	    playerLoc2.setY(900);
 	    if(playerLoc.add(0,2,0).getBlock().getType().equals(Material.AIR)) {
 	    	 if(e.getItem().getType().equals(Material.COOKED_SALMON)){
-	    		p.teleport(playerLoc2);
 	    		Husk deadPlayer = p.getLocation().getWorld().spawn(p.getLocation(), Husk.class);
 	    	    deadPlayer.getEquipment().setArmorContents(p.getEquipment().getArmorContents());
 	    	    deadPlayer.getEquipment().setItemInMainHand(p.getEquipment().getItemInMainHand());
 	    	    deadPlayer.getEquipment().setItemInOffHand(p.getEquipment().getItemInOffHand());
 	    	    ItemStack is = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
 	    	    deadPlayer.getEquipment().setHelmet(is);
-	            
+
+	    		p.teleport(playerLoc2);
     			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
                  public void run() {
                 	 p.setFallDistance(0);
