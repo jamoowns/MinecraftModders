@@ -80,7 +80,7 @@ public class Roominator {
 
 		room.addAll(wall(startLocation, startLocation.clone().add(0, height, zLength)));
 		room.addAll(wall(startLocation.clone().add(xWidth, 0, 0), startLocation.clone().add(xWidth, height, zLength)));
-		room.addAll(wall(startLocation, startLocation.clone().add(5, height, 0)));
+		room.addAll(wall(startLocation, startLocation.clone().add(xWidth, height, 0)));
 		room.addAll(wall(startLocation.clone().add(0, 0, zLength), startLocation.clone().add(xWidth, height, zLength)));
 
 		return room;
