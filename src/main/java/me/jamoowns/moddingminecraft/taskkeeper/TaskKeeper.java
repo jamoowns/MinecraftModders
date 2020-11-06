@@ -67,7 +67,7 @@ public final class TaskKeeper {
 		Task oldTask = taskByTaskName.get(taskName);
 
 		Task task = new Task(taskName, completed);
-		tasks.set(tasks.indexOf(oldTask), new Task(taskName, completed));
+		tasks.set(tasks.indexOf(oldTask), task);
 		Score score = scoreboard.getObjective("tasks").getScore(task.describe());
 		score.getScoreboard().resetScores(oldTask.describe());
 
