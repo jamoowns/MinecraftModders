@@ -51,7 +51,27 @@ public class Roominator {
 		return wall;
 	}
 
-	public static List<Location> room(Location startLocation, Location endLocation) {
+	public static List<PlannedBlock> standardRoom(Location startLocation, int width, int length, int height) {
+		List<Location> walls = Roominator.walls(startLocation, startLocation.clone().add(width, height, length));
+		List<PlannedBlock> plannedBlocks = PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE);
+
+		List<Location> roof = Roominator.wall(startLocation.clone().add(0, height, 0),
+				startLocation.clone().add(width, height, length));
+
+		plannedBlocks.addAll(PlannedBlocks.plannedBlock(roof, Material.OAK_PLANKS));
+
+		plannedBlocks.addAll(Roominator.buildDoor(startLocation.clone().add(((int) width / 2), 0, 0), Material.OAK_DOOR,
+				Hinge.RIGHT, BlockFace.SOUTH));
+
+		List<Location> windows = Roominator.walls(startLocation.clone().add(width, 1, ((int) length / 2)),
+				startLocation.clone().add(width, 2, ((int) length / 2)));
+
+		plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
+
+		return plannedBlocks;
+	}
+
+	public static List<Location> walls(Location startLocation, Location endLocation) {
 		List<Location> room = new ArrayList<>();
 
 		double height = endLocation.getY() - startLocation.getY();
@@ -65,5 +85,4 @@ public class Roominator {
 
 		return room;
 	}
-
 }

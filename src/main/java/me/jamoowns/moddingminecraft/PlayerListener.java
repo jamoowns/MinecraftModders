@@ -11,10 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
-import org.bukkit.block.data.type.Door.Hinge;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -34,7 +31,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
-import me.jamoowns.moddingminecraft.roominating.PlannedBlocks;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
 
 public final class PlayerListener implements Listener {
@@ -131,22 +127,9 @@ public final class PlayerListener implements Listener {
 
 			Location startPoint = event.getBlockAgainst().getLocation().add(0, 1, 0);
 
-			List<Location> walls = Roominator.room(startPoint, startPoint.clone().add(5, 3, 5));
-			List<PlannedBlock> plannedBlocks = PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE);
+			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, 4, 5, 4);
 
-			List<Location> roof = Roominator.room(startPoint.clone().add(0, 4, 0), startPoint.clone().add(5, 4, 5));
-
-			plannedBlocks.addAll(PlannedBlocks.plannedBlock(roof, Material.OAK_PLANKS));
-
-			plannedBlocks.addAll(Roominator.buildDoor(startPoint.clone().add(2, 0, 0), Material.OAK_DOOR, Hinge.RIGHT,
-					BlockFace.SOUTH));
-
-			List<Location> windows = Roominator.room(startPoint.clone().add(4, 1, 0), startPoint.clone().add(4, 2, 0));
-
-			plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
-
-			World world = event.getBlockAgainst().getWorld();
-			Roominator.build(world, plannedBlocks);
+			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
 		}
 	}
 
