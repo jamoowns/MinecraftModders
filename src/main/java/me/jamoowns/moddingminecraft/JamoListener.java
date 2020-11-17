@@ -18,9 +18,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -117,8 +117,10 @@ public final class JamoListener implements Listener {
 	}
 
 	@EventHandler
-	public void onBlockDropItemEvent(BlockDropItemEvent event) {
-		event.getItems().removeIf(item -> item.getType().name().contains("CARPET"));
+	public void onEntitySpawnEvent(EntitySpawnEvent event) {
+		if (event.getEntity().getType().name().contains("CARPET")) {
+			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler
