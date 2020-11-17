@@ -15,6 +15,7 @@ import javax.swing.text.html.parser.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.TreeType;
 import org.bukkit.WeatherType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -149,6 +150,10 @@ public class MobListener implements Listener {
             	Player player = (Player)shooter;
     			if(arrow.getBasePotionData().getType() == PotionType.INSTANT_DAMAGE) {
     				player.getWorld().createExplosion(arrow.getLocation(), 5.0F);
+                    arrow.remove();
+    			}
+    			if(arrow.getBasePotionData().getType() == PotionType.LUCK) {
+    				player.getWorld().generateTree(arrow.getLocation(), TreeType.TREE);
                     arrow.remove();
     			}
                 
