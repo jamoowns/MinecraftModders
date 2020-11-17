@@ -67,26 +67,26 @@ public final class TaskKeeper {
 	}
 
 	void register(Player player) {
-		if (!boardsByPlayer.containsKey(player.getUniqueId())) {
-			Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-			Objective objective = board.registerNewObjective("tasks", "dummy", "-- Your tasks --");
-			objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+		Objective objective = board.registerNewObjective("tasks", "dummy", "-- Your tasks --");
+		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-			player.setScoreboard(board);
+		player.setScoreboard(board);
 
-			boardsByPlayer.put(player.getUniqueId(), board);
+		boardsByPlayer.put(player.getUniqueId(), board);
 
-			tasks.forEach(task -> {
-				addTask(player.getUniqueId(), task);
-			});
-		}
+		tasks.forEach(task -> {
+			addTask(player.getUniqueId(), task);
+		});
 	}
 
 	private void addTask(UUID player, Task task) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
-		task.addPlayer(player);
-		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
-		score.setScore(tasks.indexOf(task));
+		if (!task.hasPlayer(player)) {
+			task.addPlayer(player);
+			Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
+			score.setScore(tasks.indexOf(task));
+		}
 	}
 
 	private class Task {
@@ -97,6 +97,10 @@ public final class TaskKeeper {
 		Task(String aTaskName) {
 			taskName = aTaskName;
 			statusPerPlayer = new HashMap<>();
+		}
+
+		public boolean hasPlayer(UUID player) {
+			return statusPerPlayer.containsKey(player);
 		}
 
 		void addPlayer(UUID player) {
