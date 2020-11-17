@@ -84,9 +84,9 @@ public final class TaskKeeper {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
 		if (!task.hasPlayer(player)) {
 			task.addPlayer(player);
-			Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
-			score.setScore(tasks.indexOf(task));
 		}
+		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
+		score.setScore(tasks.indexOf(task));
 	}
 
 	private class Task {
