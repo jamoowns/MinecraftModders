@@ -19,6 +19,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
+import me.jamoowns.fated.Collections;
+
 public final class TaskKeeper {
 
 	private Map<UUID, Scoreboard> boardsByPlayer;
@@ -29,12 +31,9 @@ public final class TaskKeeper {
 
 	private final List<Task> tasks;
 
-	private final Map<String, Task> taskByTaskName;
-
 	public TaskKeeper(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		tasks = new ArrayList<>();
-		taskByTaskName = new HashMap<>();
 
 		boardsByPlayer = new HashMap<>();
 
@@ -46,30 +45,26 @@ public final class TaskKeeper {
 		javaPlugin.getServer().getPluginManager().registerEvents(playerEventListener, javaPlugin);
 	}
 
-	private final String completeDescription(Boolean isCompleted) {
-		return isCompleted ? "COMPLETED" : "INCOMPLETE";
-	}
-
 	public final void addTask(String taskName, Boolean completed) {
-		Task task = new Task(taskName, completed);
+		Task task = new Task(taskName);
 		tasks.add(task);
-		taskByTaskName.put(task.taskName, task);
 
 		for (Player online : Bukkit.getOnlinePlayers()) {
 			Scoreboard scoreboard = boardsByPlayer.get(online.getUniqueId());
-			Score score = scoreboard.getObjective("tasks").getScore(task.describe());
+			task.addPlayer(online.getUniqueId());
+			Score score = scoreboard.getObjective("tasks").getScore(task.describe(online.getUniqueId()));
 			score.setScore(tasks.indexOf(task));
 		}
 	}
 
 	public final void updateTask(UUID player, String taskName, Boolean completed) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
-		Task oldTask = taskByTaskName.get(taskName);
 
-		Task task = new Task(taskName, completed);
-		tasks.set(tasks.indexOf(oldTask), task);
-		Score score = scoreboard.getObjective("tasks").getScore(task.describe());
-		score.getScoreboard().resetScores(oldTask.describe());
+		Task task = Collections.find(tasks, Task::taskName, taskName).get();
+
+		task.complete(player, completed);
+		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
+		score.getScoreboard().resetScores(task.describe(player));
 
 		score.setScore(tasks.indexOf(task));
 	}
@@ -86,7 +81,8 @@ public final class TaskKeeper {
 
 			tasks.forEach(task -> {
 				Scoreboard scoreboard = boardsByPlayer.get(player.getUniqueId());
-				Score score = scoreboard.getObjective("tasks").getScore(task.describe());
+				task.addPlayer(player.getUniqueId());
+				Score score = scoreboard.getObjective("tasks").getScore(task.describe(player.getUniqueId()));
 				score.setScore(tasks.indexOf(task));
 			});
 		}
@@ -99,16 +95,33 @@ public final class TaskKeeper {
 
 	private class Task {
 		private String taskName;
-		private Boolean completed;
 
-		Task(String aTaskName, Boolean aCompleted) {
+		private Map<UUID, Boolean> statusPerPlayer;
+
+		Task(String aTaskName) {
 			taskName = aTaskName;
-			completed = aCompleted;
+			statusPerPlayer = new HashMap<>();
 		}
 
-		String describe() {
+		void addPlayer(UUID player) {
+			statusPerPlayer.put(player, false);
+		}
+
+		void complete(UUID player, Boolean completed) {
+			statusPerPlayer.put(player, completed);
+		}
+
+		String describe(UUID player) {
 			return ChatColor.GREEN + taskName + ChatColor.YELLOW + " - " + ChatColor.AQUA
-					+ completeDescription(completed);
+					+ completeDescription(statusPerPlayer.get(player));
+		}
+
+		String taskName() {
+			return taskName;
+		}
+
+		private final String completeDescription(Boolean isCompleted) {
+			return isCompleted ? "COMPLETED" : "INCOMPLETE";
 		}
 	}
 

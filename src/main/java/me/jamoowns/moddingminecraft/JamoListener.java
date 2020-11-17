@@ -35,7 +35,7 @@ import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
 import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
 
-public final class PlayerListener implements Listener {
+public final class JamoListener implements Listener {
 
 	private final JavaPlugin javaPlugin;
 
@@ -50,7 +50,7 @@ public final class PlayerListener implements Listener {
 
 	private final TaskKeeper taskKeeper;
 
-	public PlayerListener(JavaPlugin aJavaPlugin) {
+	public JamoListener(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		RANDOM = new Random();
 		bucketTypes = new ArrayList<>();
