@@ -118,9 +118,7 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onBlockDropItemEvent(BlockDropItemEvent event) {
-		if (event.getBlock().getType().name().contains("CARPET")) {
-			event.getBlock().setType(Material.AIR);
-		}
+		event.getItems().removeIf(item -> item.getType().name().contains("CARPET"));
 	}
 
 	@EventHandler
