@@ -15,6 +15,7 @@ import javax.swing.text.html.parser.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.TreeType;
 import org.bukkit.WeatherType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -151,6 +152,12 @@ public class MobListener implements Listener {
     				player.getWorld().createExplosion(arrow.getLocation(), 5.0F);
                     arrow.remove();
     			}
+    			if(arrow.getBasePotionData().getType() == PotionType.LUCK) {
+    				Location loc = arrow.getLocation();
+    				player.getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.DIRT);
+    				player.getWorld().generateTree(arrow.getLocation(), TreeType.TREE);
+                    arrow.remove();
+    			}
                 
             }
         }
@@ -191,7 +198,6 @@ public class MobListener implements Listener {
                             !blockBehindPlayer.isLiquid() &&
                             !blockBelowBehindPlayer.getType().name().contains("CARPET") &&
                             !blockBelowBehindPlayer.getType().name().contains("SNOW") &&
-                            !blockBelowBehindPlayer.getType().name().contains("GRASS") &&
                             !blockBelowBehindPlayer.isLiquid() &&
                             !blockBelowBehindPlayer.isEmpty()) {
                         List<Block> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
