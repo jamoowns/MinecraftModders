@@ -75,7 +75,8 @@ public final class JamoListener implements Listener {
 		}
 
 		taskKeeper = new TaskKeeper(javaPlugin);
-		taskKeeper.addTask("pig", false);
+		taskKeeper.addTask("pig");
+		taskKeeper.addTask("cow");
 	}
 
 	private void randomChestSpawn() {
@@ -120,6 +121,11 @@ public final class JamoListener implements Listener {
 			Player mcPlayer = event.getEntity().getKiller();
 			if (mcPlayer != null) {
 				taskKeeper.updateTask(mcPlayer.getUniqueId(), "pig", true);
+			}
+		} else if (event.getEntity().getType() == EntityType.COW) {
+			Player mcPlayer = event.getEntity().getKiller();
+			if (mcPlayer != null) {
+				taskKeeper.updateTask(mcPlayer.getUniqueId(), "cow", true);
 			}
 		}
 	}

@@ -44,7 +44,7 @@ public final class TaskKeeper {
 		javaPlugin.getServer().getPluginManager().registerEvents(playerEventListener, javaPlugin);
 	}
 
-	public final void addTask(String taskName, Boolean completed) {
+	public final void addTask(String taskName) {
 		Task task = new Task(taskName);
 		tasks.add(task);
 
