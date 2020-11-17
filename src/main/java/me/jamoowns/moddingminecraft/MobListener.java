@@ -155,7 +155,7 @@ public class MobListener implements Listener {
     			if(arrow.getBasePotionData().getType() == PotionType.LUCK) {
     				Location loc = arrow.getLocation();
     				if(!player.getWorld().getBlockAt(loc.add(0,-1,0)).getType().name().contains("LEAVES")) {
-    					player.getWorld().getBlockAt(loc.add(0,-1,0)).setType(Material.DIRT);
+    					player.getWorld().getBlockAt(loc).setType(Material.DIRT);
         				player.getWorld().generateTree(arrow.getLocation(), TreeType.TREE);
                         arrow.remove();
     				}
