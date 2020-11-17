@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -112,6 +113,13 @@ public final class JamoListener implements Listener {
 				chest.getInventory().setContents(forChest.toArray(new ItemStack[forChest.size()]));
 				p.getWorld().spawnEntity(chest.getLocation(), EntityType.FIREWORK);
 			}
+		}
+	}
+
+	@EventHandler
+	public void onEntityDropEvent(EntityDropItemEvent event) {
+		if (event.getItemDrop().getType().name().contains("CARPET")) {
+			event.setCancelled(true);
 		}
 	}
 
