@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -50,10 +49,7 @@ public final class TaskKeeper {
 		tasks.add(task);
 
 		for (Player online : Bukkit.getOnlinePlayers()) {
-			Scoreboard scoreboard = boardsByPlayer.get(online.getUniqueId());
-			task.addPlayer(online.getUniqueId());
-			Score score = scoreboard.getObjective("tasks").getScore(task.describe(online.getUniqueId()));
-			score.setScore(tasks.indexOf(task));
+			addTask(online.getUniqueId(), task);
 		}
 	}
 
@@ -81,17 +77,16 @@ public final class TaskKeeper {
 			boardsByPlayer.put(player.getUniqueId(), board);
 
 			tasks.forEach(task -> {
-				Scoreboard scoreboard = boardsByPlayer.get(player.getUniqueId());
-				task.addPlayer(player.getUniqueId());
-				Score score = scoreboard.getObjective("tasks").getScore(task.describe(player.getUniqueId()));
-				score.setScore(tasks.indexOf(task));
+				addTask(player.getUniqueId(), task);
 			});
 		}
 	}
 
-	void unregister(Player player) {
-		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-		boardsByPlayer.remove(player.getUniqueId());
+	private void addTask(UUID player, Task task) {
+		Scoreboard scoreboard = boardsByPlayer.get(player);
+		task.addPlayer(player);
+		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
+		score.setScore(tasks.indexOf(task));
 	}
 
 	private class Task {
@@ -137,11 +132,6 @@ public final class TaskKeeper {
 		@EventHandler
 		public void onPlayerJoin(PlayerJoinEvent event) {
 			taskKeeper.register(event.getPlayer());
-		}
-
-		@EventHandler
-		public void onPlayerQuit(PlayerQuitEvent event) {
-			taskKeeper.unregister(event.getPlayer());
 		}
 	}
 }
