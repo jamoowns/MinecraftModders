@@ -35,6 +35,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Ravager;
 import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.TNTPrimed;
@@ -148,6 +149,26 @@ public class MobListener implements Listener {
             ProjectileSource shooter = arrow.getShooter();
             if((shooter instanceof Player)) {
             	Player player = (Player)shooter;
+            	if(arrow.getBasePotionData().getType() == PotionType.WEAKNESS) {
+            		Random r = new Random();
+                    int low = 1;
+                    int high = 5;
+                    int result = r.nextInt(high-low) + low;
+                    for(int i = 0; i < result; i++) {
+                    	player.getWorld().spawn(arrow.getLocation(), Creeper.class);
+                    }
+                    arrow.remove();
+    			}
+            	if(arrow.getBasePotionData().getType() == PotionType.SLOWNESS) {
+            		Random r = new Random();
+                    int low = 4;
+                    int high = 10;
+                    int result = r.nextInt(high-low) + low;
+                    for(int i = 0; i < result; i++) {
+                    	player.getWorld().spawn(arrow.getLocation(), Shulker.class);
+                    }
+                    arrow.remove();
+    			}
     			if(arrow.getBasePotionData().getType() == PotionType.INSTANT_DAMAGE) {
     				player.getWorld().createExplosion(arrow.getLocation(), 5.0F);
                     arrow.remove();
