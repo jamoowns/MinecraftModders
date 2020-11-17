@@ -4,13 +4,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ModdingMinecraft extends JavaPlugin {
 
-    private PlayerListener playerListener;
+    private JamoListener playerListener;
     private MobListener mobListener;
     
     // Fired when plug-in is first enabled
     @Override
     public void onEnable() {
-        playerListener = new PlayerListener(this);
+        playerListener = new JamoListener(this);
         mobListener = new MobListener(this);
         getServer().getPluginManager().registerEvents(playerListener, this);
         getServer().getPluginManager().registerEvents(mobListener, this);

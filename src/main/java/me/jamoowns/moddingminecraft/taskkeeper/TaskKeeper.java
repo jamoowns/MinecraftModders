@@ -12,12 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+
+import me.jamoowns.fated.Collections;
 
 public final class TaskKeeper {
 
@@ -29,12 +30,9 @@ public final class TaskKeeper {
 
 	private final List<Task> tasks;
 
-	private final Map<String, Task> taskByTaskName;
-
 	public TaskKeeper(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		tasks = new ArrayList<>();
-		taskByTaskName = new HashMap<>();
 
 		boardsByPlayer = new HashMap<>();
 
@@ -46,32 +44,26 @@ public final class TaskKeeper {
 		javaPlugin.getServer().getPluginManager().registerEvents(playerEventListener, javaPlugin);
 	}
 
-	private final String completeDescription(Boolean isCompleted) {
-		return isCompleted ? "COMPLETED" : "INCOMPLETE";
-	}
-
-	public final void addTask(String taskName, Boolean completed) {
-		Task task = new Task(taskName, completed);
+	public final void addTask(String taskName) {
+		Task task = new Task(taskName);
 		tasks.add(task);
-		taskByTaskName.put(task.taskName, task);
 
 		for (Player online : Bukkit.getOnlinePlayers()) {
-			Scoreboard scoreboard = boardsByPlayer.get(online.getUniqueId());
-			Score score = scoreboard.getObjective("tasks").getScore(task.describe());
-			score.setScore(tasks.indexOf(task));
+			addTask(online.getUniqueId(), task);
 		}
 	}
 
 	public final void updateTask(UUID player, String taskName, Boolean completed) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
-		Task oldTask = taskByTaskName.get(taskName);
 
-		Task task = new Task(taskName, completed);
-		tasks.set(tasks.indexOf(oldTask), task);
-		Score score = scoreboard.getObjective("tasks").getScore(task.describe());
-		score.getScoreboard().resetScores(oldTask.describe());
+		Task task = Collections.find(tasks, Task::taskName, taskName).get();
 
-		score.setScore(tasks.indexOf(task));
+		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
+		score.getScoreboard().resetScores(task.describe(player));
+
+		task.complete(player, completed);
+		Score updatedScore = scoreboard.getObjective("tasks").getScore(task.describe(player));
+		updatedScore.setScore(tasks.indexOf(task));
 	}
 
 	void register(Player player) {
@@ -85,30 +77,47 @@ public final class TaskKeeper {
 			boardsByPlayer.put(player.getUniqueId(), board);
 
 			tasks.forEach(task -> {
-				Scoreboard scoreboard = boardsByPlayer.get(player.getUniqueId());
-				Score score = scoreboard.getObjective("tasks").getScore(task.describe());
-				score.setScore(tasks.indexOf(task));
+				addTask(player.getUniqueId(), task);
 			});
 		}
 	}
 
-	void unregister(Player player) {
-		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-		boardsByPlayer.remove(player.getUniqueId());
+	private void addTask(UUID player, Task task) {
+		Scoreboard scoreboard = boardsByPlayer.get(player);
+		task.addPlayer(player);
+		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
+		score.setScore(tasks.indexOf(task));
 	}
 
 	private class Task {
 		private String taskName;
-		private Boolean completed;
 
-		Task(String aTaskName, Boolean aCompleted) {
+		private Map<UUID, Boolean> statusPerPlayer;
+
+		Task(String aTaskName) {
 			taskName = aTaskName;
-			completed = aCompleted;
+			statusPerPlayer = new HashMap<>();
 		}
 
-		String describe() {
+		void addPlayer(UUID player) {
+			statusPerPlayer.put(player, false);
+		}
+
+		void complete(UUID player, Boolean completed) {
+			statusPerPlayer.put(player, completed);
+		}
+
+		String describe(UUID player) {
 			return ChatColor.GREEN + taskName + ChatColor.YELLOW + " - " + ChatColor.AQUA
-					+ completeDescription(completed);
+					+ completeDescription(statusPerPlayer.get(player));
+		}
+
+		String taskName() {
+			return taskName;
+		}
+
+		private final String completeDescription(Boolean isCompleted) {
+			return isCompleted ? "COMPLETED" : "INCOMPLETE";
 		}
 	}
 
@@ -123,11 +132,6 @@ public final class TaskKeeper {
 		@EventHandler
 		public void onPlayerJoin(PlayerJoinEvent event) {
 			taskKeeper.register(event.getPlayer());
-		}
-
-		@EventHandler
-		public void onPlayerQuit(PlayerQuitEvent event) {
-			taskKeeper.unregister(event.getPlayer());
 		}
 	}
 }

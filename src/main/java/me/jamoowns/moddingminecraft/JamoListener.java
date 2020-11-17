@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -35,7 +36,7 @@ import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
 import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
 
-public final class PlayerListener implements Listener {
+public final class JamoListener implements Listener {
 
 	private final JavaPlugin javaPlugin;
 
@@ -50,7 +51,7 @@ public final class PlayerListener implements Listener {
 
 	private final TaskKeeper taskKeeper;
 
-	public PlayerListener(JavaPlugin aJavaPlugin) {
+	public JamoListener(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		RANDOM = new Random();
 		bucketTypes = new ArrayList<>();
@@ -75,7 +76,8 @@ public final class PlayerListener implements Listener {
 		}
 
 		taskKeeper = new TaskKeeper(javaPlugin);
-		taskKeeper.addTask("pig", false);
+		taskKeeper.addTask("pig");
+		taskKeeper.addTask("cow");
 	}
 
 	private void randomChestSpawn() {
@@ -115,11 +117,23 @@ public final class PlayerListener implements Listener {
 	}
 
 	@EventHandler
+	public void onEntityDropEvent(EntityDropItemEvent event) {
+		if (event.getItemDrop().getType().name().contains("CARPET")) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
 	public void onEntityDeathEvent(EntityDeathEvent event) {
 		if (event.getEntity().getType() == EntityType.PIG) {
 			Player mcPlayer = event.getEntity().getKiller();
 			if (mcPlayer != null) {
 				taskKeeper.updateTask(mcPlayer.getUniqueId(), "pig", true);
+			}
+		} else if (event.getEntity().getType() == EntityType.COW) {
+			Player mcPlayer = event.getEntity().getKiller();
+			if (mcPlayer != null) {
+				taskKeeper.updateTask(mcPlayer.getUniqueId(), "cow", true);
 			}
 		}
 	}
