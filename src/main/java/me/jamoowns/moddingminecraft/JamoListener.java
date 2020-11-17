@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -117,7 +117,7 @@ public final class JamoListener implements Listener {
 	}
 
 	@EventHandler
-	public void onBlockBreakEvent(BlockBreakEvent event) {
+	public void onBlockDropItemEvent(BlockDropItemEvent event) {
 		if (event.getBlock().getType().name().contains("CARPET")) {
 			event.getBlock().setType(Material.AIR);
 		}
