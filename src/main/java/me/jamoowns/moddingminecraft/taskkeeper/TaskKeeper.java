@@ -28,11 +28,11 @@ public final class TaskKeeper {
 
 	private final PlayerEventListener playerEventListener;
 
-	private final List<Task> tasks;
+	private final List<IBoardItem> boardItems;
 
 	public TaskKeeper(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
-		tasks = new ArrayList<>();
+		boardItems = new ArrayList<>();
 
 		boardsByPlayer = new HashMap<>();
 
@@ -46,24 +46,42 @@ public final class TaskKeeper {
 
 	public final void addTask(String taskName) {
 		Task task = new Task(taskName);
-		tasks.add(task);
+		boardItems.add(task);
 
 		for (Player online : Bukkit.getOnlinePlayers()) {
 			addTask(online.getUniqueId(), task);
 		}
 	}
 
+	public final void addBoardItem(String boardItem) {
+		IBoardItem task = new BoardItem(boardItem);
+		boardItems.add(task);
+
+		for (Player online : Bukkit.getOnlinePlayers()) {
+			addTask(online.getUniqueId(), task);
+		}
+	}
+
+	public final void addBoardItem(UUID player, String boardItem) {
+		IBoardItem task = new BoardItem(boardItem);
+		boardItems.add(task);
+
+		addTask(player, task);
+	}
+
 	public final void updateTask(UUID player, String taskName, Boolean completed) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
 
-		Task task = Collections.find(tasks, Task::taskName, taskName).get();
+		IBoardItem boardItem = Collections.find(boardItems, IBoardItem::id, taskName).get();
 
-		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
-		score.getScoreboard().resetScores(task.describe(player));
+		Score score = scoreboard.getObjective("tasks").getScore(boardItem.describe(player));
+		score.getScoreboard().resetScores(boardItem.describe(player));
 
-		task.complete(player, completed);
-		Score updatedScore = scoreboard.getObjective("tasks").getScore(task.describe(player));
-		updatedScore.setScore(tasks.indexOf(task));
+		if (boardItem instanceof Task) {
+			((Task) boardItem).complete(player, completed);
+		}
+		Score updatedScore = scoreboard.getObjective("tasks").getScore(boardItem.describe(player));
+		updatedScore.setScore(boardItems.indexOf(boardItem));
 	}
 
 	void register(Player player) {
@@ -75,21 +93,59 @@ public final class TaskKeeper {
 
 		boardsByPlayer.put(player.getUniqueId(), board);
 
-		tasks.forEach(task -> {
+		boardItems.forEach(task -> {
 			addTask(player.getUniqueId(), task);
 		});
 	}
 
-	private void addTask(UUID player, Task task) {
+	private void addTask(UUID player, IBoardItem task) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
 		if (!task.hasPlayer(player)) {
 			task.addPlayer(player);
 		}
 		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
-		score.setScore(tasks.indexOf(task));
+		score.setScore(boardItems.indexOf(task));
 	}
 
-	private class Task {
+	private interface IBoardItem {
+
+		public boolean hasPlayer(UUID player);
+
+		void addPlayer(UUID player);
+
+		String describe(UUID player);
+
+		String id();
+	}
+
+	private class BoardItem implements IBoardItem {
+		private String boardItem;
+
+		private Map<UUID, Boolean> statusPerPlayer;
+
+		BoardItem(String aBoardItem) {
+			boardItem = aBoardItem;
+			statusPerPlayer = new HashMap<>();
+		}
+
+		public String id() {
+			return boardItem;
+		}
+
+		public boolean hasPlayer(UUID player) {
+			return statusPerPlayer.containsKey(player);
+		}
+
+		public void addPlayer(UUID player) {
+			statusPerPlayer.put(player, false);
+		}
+
+		public String describe(UUID player) {
+			return ChatColor.YELLOW + boardItem;
+		}
+	}
+
+	private class Task implements IBoardItem {
 		private String taskName;
 
 		private Map<UUID, Boolean> statusPerPlayer;
@@ -103,20 +159,20 @@ public final class TaskKeeper {
 			return statusPerPlayer.containsKey(player);
 		}
 
-		void addPlayer(UUID player) {
+		public void addPlayer(UUID player) {
 			statusPerPlayer.put(player, false);
 		}
 
-		void complete(UUID player, Boolean completed) {
+		public void complete(UUID player, Boolean completed) {
 			statusPerPlayer.put(player, completed);
 		}
 
-		String describe(UUID player) {
+		public String describe(UUID player) {
 			return ChatColor.GREEN + taskName + ChatColor.YELLOW + " - " + ChatColor.AQUA
 					+ completeDescription(statusPerPlayer.get(player));
 		}
 
-		String taskName() {
+		public String id() {
 			return taskName;
 		}
 

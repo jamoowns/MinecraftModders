@@ -78,6 +78,7 @@ public final class JamoListener implements Listener {
 		taskKeeper = new TaskKeeper(javaPlugin);
 		taskKeeper.addTask("pig");
 		taskKeeper.addTask("cow");
+		taskKeeper.addBoardItem("Hello and ready for the party");
 	}
 
 	private void randomChestSpawn() {
