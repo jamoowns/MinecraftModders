@@ -164,7 +164,7 @@ public final class JamoListener implements Listener {
 
 			Location startPoint = event.getBlockAgainst().getLocation().add(0, 1, 0);
 
-			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, 8, 4, 5,
+			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, 4, 8, 5,
 					linearFace(event.getPlayer().getLocation().getYaw()));
 
 			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
