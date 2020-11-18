@@ -181,6 +181,24 @@ public class MobListener implements Listener {
                         arrow.remove();
     				}
     			}
+    			if(arrow.getBasePotionData().getType() == PotionType.STRENGTH) {
+    				for(int i = 0; i < 9; i++) {
+						if(arrow.getLocation().getY()+i<63) {
+							for(int j = 0; j < 9; j++) {
+    							for(int k = 0; k < 9; k++) {
+        		    				Location loc = arrow.getLocation();
+        		    				loc.add(k-4,i,j-4);
+        		    				if(loc.getY() < 59) {
+            		    				player.getWorld().getBlockAt(loc).setType(Material.STONE);
+        		    				}else {
+            		    				player.getWorld().getBlockAt(loc).setType(Material.DIRT);
+        		    				}
+                                }
+                            }
+						}
+                    }
+                    arrow.remove();
+    			}
                 
             }
         }
