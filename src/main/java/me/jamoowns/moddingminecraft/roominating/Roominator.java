@@ -58,13 +58,15 @@ public final class Roominator {
 		case NORTH:
 			width = aWidth;
 			length = aLength * -1;
+			break;
 		case EAST:
 			width = aLength * -1;
 			length = aWidth * -1;
-			//
+			break;
 		case WEST:
 			width = aLength;
 			length = aWidth;
+			break;
 		case SOUTH:
 		default:
 			width = aWidth;
