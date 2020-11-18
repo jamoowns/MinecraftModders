@@ -246,25 +246,28 @@ public class MobListener implements Listener {
     			}
     			if(arrow.getBasePotionData().getType() == PotionType.INVISIBILITY) {
     				
-    				Material[][] multi = new Material[21][21];
-    				
-					for(int j = 0; j < 21; j++) {
-						for(int k = 0; k < 21; k++) {
-		    				Location loc = arrow.getLocation();
-		    				loc.add(k-10,0,j-10);
-		    				multi[j][k] = player.getWorld().getBlockAt(loc).getType();
+    				for(int i = 0;i<10;i++) {
+    					Material[][] multi = new Material[21][21];
+        				
+    					for(int j = 0; j < 21; j++) {
+    						for(int k = 0; k < 21; k++) {
+    		    				Location loc = arrow.getLocation();
+    		    				loc.add(k-10,i,j-10);
+    		    				multi[j][k] = player.getWorld().getBlockAt(loc).getType();
+                            }
                         }
-                    }
-    				
-    				multi = RotateShapeSquareGrid(multi, 90);
-    				
-					for(int j = 0; j < 21; j++) {
-						for(int k = 0; k < 21; k++) {
-		    				Location loc = arrow.getLocation();
-		    				loc.add(k-10,0,j-10);
-		    				player.getWorld().getBlockAt(loc).setType(multi[j][k]);
+        				
+        				multi = RotateShapeSquareGrid(multi, 90);
+        				
+    					for(int j = 0; j < 21; j++) {
+    						for(int k = 0; k < 21; k++) {
+    		    				Location loc = arrow.getLocation();
+    		    				loc.add(k-10,i,j-10);
+    		    				player.getWorld().getBlockAt(loc).setType(multi[j][k]);
+                            }
                         }
-                    }
+    				}
+    				
     				
                     arrow.remove();
     			}
