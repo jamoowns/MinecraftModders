@@ -44,7 +44,7 @@ public final class Roominator {
 		for (int x = 0; x <= Math.abs(endLocation.getX() - startLocation.getX()); x++) {
 			for (int y = 0; y <= Math.abs(endLocation.getY() - startLocation.getY()); y++) {
 				for (int z = 0; z <= Math.abs(endLocation.getZ() - startLocation.getZ()); z++) {
-					wall.add(startLocation.clone().add(endLocation).subtract(x, y, z));
+					wall.add(startLocation.clone().add(endLocation.clone().subtract(startLocation).subtract(x, y, z)));
 				}
 			}
 		}
