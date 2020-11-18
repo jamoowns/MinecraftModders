@@ -164,7 +164,7 @@ public final class JamoListener implements Listener {
 
 			Location startPoint = event.getBlockAgainst().getLocation().add(0, 1, 0);
 
-			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, 8, 5, 5,
+			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, 8, 4, 5,
 					linearFace(event.getPlayer().getLocation().getYaw()));
 
 			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
@@ -178,15 +178,15 @@ public final class JamoListener implements Listener {
 		}
 
 		if (0 <= rotation && rotation < 67.5 || 337.5 <= rotation && rotation < 360.0) {
-			return BlockFace.NORTH;
-		} else if (67.5 <= rotation && rotation < 157.5) {
-			return BlockFace.EAST;
-		} else if (157.5 <= rotation && rotation < 247.5) {
-			return BlockFace.SOUTH;
-		} else if (247.5 <= rotation && rotation < 337.5) {
 			return BlockFace.WEST;
-		} else {
+		} else if (67.5 <= rotation && rotation < 157.5) {
 			return BlockFace.NORTH;
+		} else if (157.5 <= rotation && rotation < 247.5) {
+			return BlockFace.EAST;
+		} else if (247.5 <= rotation && rotation < 337.5) {
+			return BlockFace.SOUTH;
+		} else {
+			return BlockFace.WEST;
 		}
 	}
 
