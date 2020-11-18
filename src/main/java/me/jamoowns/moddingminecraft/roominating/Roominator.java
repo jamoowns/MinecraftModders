@@ -70,6 +70,7 @@ public final class Roominator {
 			width = aWidth;
 			length = aLength;
 		}
+		Bukkit.broadcastMessage(direction.toString());
 		return standardRoom(startLocation, width, length, aHeight);
 	}
 
