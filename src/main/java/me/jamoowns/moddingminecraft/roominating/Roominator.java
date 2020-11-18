@@ -76,13 +76,10 @@ public final class Roominator {
 				width = aWidth;
 				length = aLength;
 		}
-		Bukkit.broadcastMessage(direction.toString());
 		return standardRoom(startLocation, width, length, aHeight);
 	}
 
 	private static List<PlannedBlock> standardRoom(Location startLocation, int width, int length, int height) {
-		Bukkit.broadcastMessage("Width: " + String.valueOf(width));
-		Bukkit.broadcastMessage("length: " + String.valueOf(length));
 		List<Location> walls = walls(startLocation, startLocation.clone().add(width, height, length));
 		List<PlannedBlock> plannedBlocks = PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE);
 
