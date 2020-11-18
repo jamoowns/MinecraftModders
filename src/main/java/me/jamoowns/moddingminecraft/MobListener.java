@@ -245,7 +245,10 @@ public class MobListener implements Listener {
                     arrow.remove();
     			}
     			if(arrow.getBasePotionData().getType() == PotionType.INVISIBILITY) {
-    				
+    				Random r = new Random();
+                    int low = 1;
+                    int high = 4;
+                    int result = r.nextInt(high-low) + low;
     				for(int i = 0;i<10;i++) {
     					Material[][] multi = new Material[21][21];
         				
@@ -257,7 +260,7 @@ public class MobListener implements Listener {
                             }
                         }
         				
-        				multi = RotateShapeSquareGrid(multi, 90);
+        				multi = RotateShapeSquareGrid(multi, 90*result);
         				
     					for(int j = 0; j < 21; j++) {
     						for(int k = 0; k < 21; k++) {
