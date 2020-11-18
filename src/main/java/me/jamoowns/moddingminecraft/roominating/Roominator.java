@@ -44,7 +44,10 @@ public final class Roominator {
 		for (int x = 0; x <= Math.abs(endLocation.getX() - startLocation.getX()); x++) {
 			for (int y = 0; y <= Math.abs(endLocation.getY() - startLocation.getY()); y++) {
 				for (int z = 0; z <= Math.abs(endLocation.getZ() - startLocation.getZ()); z++) {
-					wall.add(startLocation.clone().add(endLocation.clone().subtract(startLocation).subtract(x, y, z)));
+					int theX = endLocation.getX() < startLocation.getX() ? x : x * -1;
+					int theY = endLocation.getY() < startLocation.getY() ? y : y * -1;
+					int theZ = endLocation.getZ() < startLocation.getZ() ? z : z * -1;
+					wall.add(startLocation.clone().add(theX, theY, theZ));
 				}
 			}
 		}
@@ -56,22 +59,22 @@ public final class Roominator {
 		int width;
 		int length;
 		switch (direction) {
-		case NORTH:
-			width = aWidth;
-			length = aLength * -1;
-			break;
-		case EAST:
-			width = aLength;
-			length = aWidth;
-			break;
-		case WEST:
-			width = aLength * -1;
-			length = aWidth * -1;
-			break;
-		case SOUTH:
-		default:
-			width = aWidth;
-			length = aLength;
+			case NORTH:
+				width = aWidth;
+				length = aLength * -1;
+				break;
+			case EAST:
+				width = aLength;
+				length = aWidth;
+				break;
+			case WEST:
+				width = aLength * -1;
+				length = aWidth * -1;
+				break;
+			case SOUTH:
+			default:
+				width = aWidth;
+				length = aLength;
 		}
 		Bukkit.broadcastMessage(direction.toString());
 		return standardRoom(startLocation, width, length, aHeight);
