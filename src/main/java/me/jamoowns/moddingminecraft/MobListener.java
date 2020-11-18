@@ -246,7 +246,7 @@ public class MobListener implements Listener {
     			}
     			if(arrow.getBasePotionData().getType() == PotionType.INVISIBILITY) {
     				Random r = new Random();
-                    int low = 0;
+                    int low = 1;
                     int high = 4;
                     int result = r.nextInt(high-low) + low;
     				for(int i = 0;i<10;i++) {
