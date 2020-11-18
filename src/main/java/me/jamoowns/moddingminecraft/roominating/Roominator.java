@@ -40,9 +40,9 @@ public final class Roominator {
 
 	private static List<Location> wall(Location startLocation, Location endLocation) {
 		List<Location> wall = new ArrayList<>();
-		for (int x = 0; x <= endLocation.getX() - startLocation.getX(); x++) {
-			for (int y = 0; y <= endLocation.getY() - startLocation.getY(); y++) {
-				for (int z = 0; z <= endLocation.getZ() - startLocation.getZ(); z++) {
+		for (int x = 0; x <= Math.abs(endLocation.getX() - startLocation.getX()); x++) {
+			for (int y = 0; y <= Math.abs(endLocation.getY() - startLocation.getY()); y++) {
+				for (int z = 0; z <= Math.abs(endLocation.getZ() - startLocation.getZ()); z++) {
 					wall.add(startLocation.clone().add(x, y, z));
 				}
 			}
