@@ -20,6 +20,7 @@ import org.bukkit.WeatherType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
@@ -192,7 +193,7 @@ public class MobListener implements Listener {
         if((entity instanceof Arrow)) {
             Arrow arrow = (Arrow) entity;
             ProjectileSource shooter = arrow.getShooter();
-            if((shooter instanceof Player)) {
+            if((shooter instanceof Player)||(shooter instanceof Dispenser)) {
             	Player player = (Player)shooter;
             	if(arrow.getBasePotionData().getType() == PotionType.WEAKNESS) {
             		Random r = new Random();
