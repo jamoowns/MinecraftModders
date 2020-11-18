@@ -142,6 +142,54 @@ public class MobListener implements Listener {
             event.setCancelled(true);
     }
     
+    public Material[][][] Shape2dRotate3dGrid(Material[][][] shape, int rotate)
+    {
+        if (rotate == 90)
+        {
+        	Material[][][] newShape = new Material[shape[0].length][shape[2].length][ shape[1].length];
+
+            for (int layer = 0; layer < shape[0].length; layer++)
+            {
+                for (int r = 0; r < shape[1].length; r++)
+                {
+                    for (int c = 0; c < shape[2].length; c++)
+                    {
+                        int newR = newShape[2].length - r - 1;
+                        int newC = newShape[1].length - c - 1;
+                        newShape[layer][newC][newR] = shape[layer][r][c];
+                    }
+                }
+            }
+
+
+            return newShape;
+        }
+        else if (rotate == 180)
+        {
+        	Material[][][] newShape = new Material[shape[0].length][shape[2].length][ shape[1].length];
+
+            for (int layer = 0; layer < shape[0].length; layer++)
+            {
+                for (int r = 0; r < shape[1].length; r++)
+                {
+                    for (int c = 0; c < shape[2].length; c++)
+                    {
+                        int newR = newShape[1].length - r - 1;
+                        int newC = newShape[2].length - c - 1;
+                        newShape[layer][newR][newC] = shape[layer][r][c];
+                    }
+                }
+            }
+
+            return newShape;
+        }
+        else if (rotate == 270)
+        {
+            return Shape2dRotate3dGrid(Shape2dRotate3dGrid(shape, 90), 180);
+        }
+
+        return shape;
+    }
     
     @EventHandler(priority=EventPriority.HIGHEST)
     public void onProjectileHit(ProjectileHitEvent event) {
@@ -199,6 +247,31 @@ public class MobListener implements Listener {
                             }
 						}
                     }
+                    arrow.remove();
+    			}
+    			if(arrow.getBasePotionData().getType() == PotionType.INVISIBILITY) {
+    				Material[][][] multi = new Material[4][21][21];
+    				for(int i = 0; i < 4; i++) {
+						for(int j = 0; j < 21; j++) {
+							for(int k = 0; k < 21; k++) {
+    		    				Location loc = arrow.getLocation();
+    		    				loc.add(k-10,i,j-10);
+    		    				multi[i][j][k] = player.getWorld().getBlockAt(loc).getType();
+                            }
+                        }
+                    }
+    				
+    				multi = Shape2dRotate3dGrid(multi, 90);
+    				for(int i = 0; i < 4; i++) {
+						for(int j = 0; j < 21; j++) {
+							for(int k = 0; k < 21; k++) {
+    		    				Location loc = arrow.getLocation();
+    		    				loc.add(k-10,i,j-10);
+    		    				player.getWorld().getBlockAt(loc).setType(multi[i][j][k]);
+                            }
+                        }
+                    }
+    				
                     arrow.remove();
     			}
                 
