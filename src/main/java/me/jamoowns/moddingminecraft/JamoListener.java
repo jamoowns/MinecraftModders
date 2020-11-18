@@ -120,6 +120,7 @@ public final class JamoListener implements Listener {
 	@EventHandler
 	public void onEntityPickupItemEvent(EntityPickupItemEvent event) {
 		if (event.getItem().getType().name().contains("CARPET")) {
+			event.setCancelled(true);
 			event.getItem().remove();
 		}
 	}
