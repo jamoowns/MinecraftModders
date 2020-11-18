@@ -50,7 +50,30 @@ public final class Roominator {
 		return wall;
 	}
 
-	public static List<PlannedBlock> standardRoom(Location startLocation, int aWidth, int aLength, int aHeight) {
+	public static List<PlannedBlock> standardRoom(Location startLocation, int aWidth, int aLength, int aHeight,
+			BlockFace direction) {
+		int width;
+		int length;
+		switch (direction) {
+		case NORTH:
+			width = aWidth;
+			length = aLength * -1;
+		case EAST:
+			width = aLength * -1;
+			length = aWidth * -1;
+			//
+		case WEST:
+			width = aLength;
+			length = aWidth;
+		case SOUTH:
+		default:
+			width = aWidth;
+			length = aLength;
+		}
+		return standardRoom(startLocation, width, length, aHeight);
+	}
+
+	private static List<PlannedBlock> standardRoom(Location startLocation, int aWidth, int aLength, int aHeight) {
 		int width = aWidth - 1;
 		int length = aLength - 1;
 		int height = aHeight - 1;
