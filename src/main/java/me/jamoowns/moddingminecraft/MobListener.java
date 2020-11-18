@@ -26,6 +26,7 @@ import org.bukkit.entity.Bee;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Husk;
 import org.bukkit.entity.Illager;
@@ -80,6 +81,7 @@ public class MobListener implements Listener {
     private boolean sheepDeath = true;
     private boolean chickenDeath = true;
     private boolean pigDeath = true;
+    private boolean beeDeath = true;
     
     public MobListener(JavaPlugin aJavaPlugin) {
         javaPlugin = aJavaPlugin;
@@ -349,6 +351,16 @@ public class MobListener implements Listener {
                     mcPlayer.teleport(mcPlayer.getLocation().add(0,-5,0));
                     event.getDrops().add(new ItemStack(Material.ENDER_PEARL, 3));
                 }
+            }
+        }
+        if(beeDeath) {
+            if(event.getEntity() instanceof Bee)
+            { 
+            	Bee BeeEnt = (Bee) event.getEntity();
+                Player mcPlayer = BeeEnt.getKiller();
+                if(mcPlayer == null)
+                    return;
+                event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), EnderDragon.class);
             }
         }
         if(cowTeleDeath) {
