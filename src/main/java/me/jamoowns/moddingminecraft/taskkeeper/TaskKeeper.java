@@ -82,7 +82,7 @@ public final class TaskKeeper {
 
 		task.incrementTask(player);
 		Score updatedScore = scoreboard.getObjective("tasks").getScore(task.describe(player));
-		updatedScore.setScore(boardItems.indexOf(task));
+		updatedScore.setScore(tasks.indexOf(task));
 
 		if (task.isComplete(player)) {
 			task.reward.accept(player);
