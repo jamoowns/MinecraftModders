@@ -63,6 +63,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -193,9 +194,7 @@ public class MobListener implements Listener {
         if((entity instanceof Arrow)) {
             Arrow arrow = (Arrow) entity;
             ProjectileSource shooter = arrow.getShooter();
-            Bukkit.broadcastMessage(shooter.getClass().toString());
-            Bukkit.broadcastMessage(shooter.getClass().getTypeName());
-            if((shooter instanceof Player)||(shooter instanceof Dispenser)) {
+            if((shooter instanceof Player)||(shooter instanceof BlockProjectileSource)) {
             	if(arrow.getBasePotionData().getType() == PotionType.WEAKNESS) {
             		Random r = new Random();
                     int low = 1;
