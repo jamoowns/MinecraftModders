@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -77,8 +79,15 @@ public final class JamoListener implements Listener {
 		}
 
 		taskKeeper = new TaskKeeper(javaPlugin);
-		taskKeeper.addTask("pig");
-		taskKeeper.addTask("cow");
+
+		Consumer<UUID> pigReward = playerId -> {
+			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_AXE));
+		};
+		Consumer<UUID> cowReward = playerId -> {
+			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_CHESTPLATE));
+		};
+		taskKeeper.addTask("Kill pigs", pigReward, 20);
+		taskKeeper.addTask("Kill cows", cowReward, 25);
 		taskKeeper.addBoardItem("Hello and ready for the party");
 	}
 
@@ -131,12 +140,12 @@ public final class JamoListener implements Listener {
 		if (event.getEntity().getType() == EntityType.PIG) {
 			Player mcPlayer = event.getEntity().getKiller();
 			if (mcPlayer != null) {
-				taskKeeper.updateTask(mcPlayer.getUniqueId(), "pig", true);
+				taskKeeper.incrementTask(mcPlayer.getUniqueId(), "pig");
 			}
 		} else if (event.getEntity().getType() == EntityType.COW) {
 			Player mcPlayer = event.getEntity().getKiller();
 			if (mcPlayer != null) {
-				taskKeeper.updateTask(mcPlayer.getUniqueId(), "cow", true);
+				taskKeeper.incrementTask(mcPlayer.getUniqueId(), "cow");
 			}
 		}
 	}

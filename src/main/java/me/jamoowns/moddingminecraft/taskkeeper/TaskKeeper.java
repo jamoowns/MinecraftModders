@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,8 +47,8 @@ public final class TaskKeeper {
 		javaPlugin.getServer().getPluginManager().registerEvents(playerEventListener, javaPlugin);
 	}
 
-	public final void addTask(String taskName) {
-		Task task = new Task(taskName);
+	public final void addTask(String taskName, Consumer<UUID> reward, Integer goal) {
+		Task task = new Task(taskName, reward, goal);
 		tasks.add(task);
 
 		for (Player online : Bukkit.getOnlinePlayers()) {
@@ -71,7 +72,7 @@ public final class TaskKeeper {
 		addBoardItem(player, boardItem);
 	}
 
-	public final void updateTask(UUID player, String taskName, Boolean completed) {
+	public final void incrementTask(UUID player, String taskName) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
 
 		Task task = Collections.find(tasks, Task::id, taskName).get();
@@ -79,9 +80,13 @@ public final class TaskKeeper {
 		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
 		score.getScoreboard().resetScores(task.describe(player));
 
-		task.complete(player, completed);
+		task.incrementTask(player);
 		Score updatedScore = scoreboard.getObjective("tasks").getScore(task.describe(player));
 		updatedScore.setScore(boardItems.indexOf(task));
+
+		if (task.isComplete(player)) {
+			task.reward.accept(player);
+		}
 	}
 
 	void register(Player player) {
@@ -160,11 +165,17 @@ public final class TaskKeeper {
 	private class Task implements IBoardItem {
 		private String taskName;
 
-		private Map<UUID, Boolean> statusPerPlayer;
+		private Map<UUID, Integer> statusPerPlayer;
 
-		Task(String aTaskName) {
+		private Consumer<UUID> reward;
+
+		private Integer goal;
+
+		Task(String aTaskName, Consumer<UUID> aReward, Integer aGoal) {
 			taskName = aTaskName;
 			statusPerPlayer = new HashMap<>();
+			reward = aReward;
+			goal = aGoal;
 		}
 
 		public boolean hasPlayer(UUID player) {
@@ -172,24 +183,39 @@ public final class TaskKeeper {
 		}
 
 		public void addPlayer(UUID player) {
-			statusPerPlayer.put(player, false);
+			statusPerPlayer.put(player, 0);
 		}
 
-		public void complete(UUID player, Boolean completed) {
-			statusPerPlayer.put(player, completed);
+		public void incrementTask(UUID player) {
+			if (statusPerPlayer.get(player) < goal) {
+				statusPerPlayer.put(player, statusPerPlayer.get(player) + 1);
+			}
 		}
 
 		public String describe(UUID player) {
 			return ChatColor.GREEN + taskName + ChatColor.YELLOW + " - " + ChatColor.AQUA
-					+ completeDescription(statusPerPlayer.get(player));
+					+ goalStatusDescription(player) + ChatColor.YELLOW + " - " + ChatColor.AQUA
+					+ completeDescription(player);
+		}
+
+		public boolean isComplete(UUID player) {
+			return statusPerPlayer.get(player) == goal;
 		}
 
 		public String id() {
 			return taskName;
 		}
 
-		private final String completeDescription(Boolean isCompleted) {
-			return isCompleted ? "COMPLETED" : "INCOMPLETE";
+		public void giveReward(UUID player) {
+			reward.accept(player);
+		}
+
+		private final String goalStatusDescription(UUID player) {
+			return statusPerPlayer.get(player) + "/" + goal;
+		}
+
+		private final String completeDescription(UUID player) {
+			return isComplete(player) ? "COMPLETED" : "INCOMPLETE";
 		}
 	}
 
