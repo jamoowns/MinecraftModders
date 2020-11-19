@@ -259,6 +259,8 @@ public class MobListener implements Listener {
     		    				loc.add(k-10,i,j-10);
     		    				if(!arrow.getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")) {
     		    					multi[j][k] = arrow.getLocation().getWorld().getBlockAt(loc).getType();
+    		    				}else {
+    		    					multi[j][k] = Material.AIR;
     		    				}
                             }
                         }
