@@ -220,7 +220,7 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onCraftItemEvent(CraftItemEvent event) {
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 13; i++) {
 			Enchantment enchantment = enchantments.get(RANDOM.nextInt(enchantments.size()));
 			ItemStack result = event.getRecipe().getResult().clone();
 			if (enchantment.canEnchantItem(result)) {
