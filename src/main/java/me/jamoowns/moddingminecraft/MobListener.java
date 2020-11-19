@@ -257,8 +257,10 @@ public class MobListener implements Listener {
     						for(int k = 0; k < 21; k++) {
     		    				Location loc = arrow.getLocation();
     		    				loc.add(k-10,i,j-10);
-    		    				if(!arrow.getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")) {
+    		    				if(!arrow.getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")||loc.getY()<63) {
     		    					multi[j][k] = arrow.getLocation().getWorld().getBlockAt(loc).getType();
+    		    				}else {
+    		    					multi[j][k] = Material.AIR;
     		    				}
                             }
                         }
@@ -269,7 +271,12 @@ public class MobListener implements Listener {
     						for(int k = 0; k < 21; k++) {
     		    				Location loc = arrow.getLocation();
     		    				loc.add(k-10,i,j-10);
-    		    				arrow.getLocation().getWorld().getBlockAt(loc).setType(multi[j][k]);
+    		    				if(!arrow.getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")||loc.getY()<63) {
+    		    					arrow.getLocation().getWorld().getBlockAt(loc).setType(multi[j][k]);
+    		    				}else {
+    		    					arrow.getLocation().getWorld().getBlockAt(loc).setType(Material.AIR);
+    		    				}
+    		    				
                             }
                         }
     				}
