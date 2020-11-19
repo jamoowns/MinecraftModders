@@ -221,7 +221,7 @@ public final class JamoListener implements Listener {
 	@EventHandler
 	public void onPrepareItemCraftEvent(PrepareItemCraftEvent event) {
 		for (int i = 0; i < RANDOM.nextInt(5); i++) {
-			Enchantment enchantment = enchantments.get(i);
+			Enchantment enchantment = enchantments.get(RANDOM.nextInt(enchantments.size() - 1));
 			ItemStack result = event.getRecipe().getResult().clone();
 			if (enchantment.canEnchantItem(result)) {
 				ItemMeta meta = result.getItemMeta();
