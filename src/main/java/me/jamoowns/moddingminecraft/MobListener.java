@@ -194,14 +194,13 @@ public class MobListener implements Listener {
             Arrow arrow = (Arrow) entity;
             ProjectileSource shooter = arrow.getShooter();
             if((shooter instanceof Player)||(shooter instanceof Dispenser)) {
-            	Player player = (Player)shooter;
             	if(arrow.getBasePotionData().getType() == PotionType.WEAKNESS) {
             		Random r = new Random();
                     int low = 1;
                     int high = 5;
                     int result = r.nextInt(high-low) + low;
                     for(int i = 0; i < result; i++) {
-                    	player.getWorld().spawn(arrow.getLocation(), Creeper.class);
+                    	arrow.getLocation().getWorld().spawn(arrow.getLocation(), Creeper.class);
                     }
                     arrow.remove();
     			}
@@ -211,19 +210,19 @@ public class MobListener implements Listener {
                     int high = 10;
                     int result = r.nextInt(high-low) + low;
                     for(int i = 0; i < result; i++) {
-                    	player.getWorld().spawn(arrow.getLocation(), Shulker.class);
+                    	arrow.getLocation().getWorld().spawn(arrow.getLocation(), Shulker.class);
                     }
                     arrow.remove();
     			}
     			if(arrow.getBasePotionData().getType() == PotionType.INSTANT_DAMAGE) {
-    				player.getWorld().createExplosion(arrow.getLocation(), 5.0F);
+    				arrow.getLocation().getWorld().createExplosion(arrow.getLocation(), 5.0F);
                     arrow.remove();
     			}
     			if(arrow.getBasePotionData().getType() == PotionType.LUCK) {
     				Location loc = arrow.getLocation();
-    				if(!player.getWorld().getBlockAt(loc.add(0,-1,0)).getType().name().contains("LEAVES")) {
-    					player.getWorld().getBlockAt(loc).setType(Material.DIRT);
-        				player.getWorld().generateTree(arrow.getLocation(), TreeType.TREE);
+    				if(!arrow.getLocation().getWorld().getBlockAt(loc.add(0,-1,0)).getType().name().contains("LEAVES")) {
+    					arrow.getLocation().getWorld().getBlockAt(loc).setType(Material.DIRT);
+    					arrow.getLocation().getWorld().generateTree(arrow.getLocation(), TreeType.TREE);
                         arrow.remove();
     				}
     			}
@@ -235,9 +234,9 @@ public class MobListener implements Listener {
         		    				Location loc = arrow.getLocation();
         		    				loc.add(k-4,i,j-4);
         		    				if(loc.getY() < 59) {
-            		    				player.getWorld().getBlockAt(loc).setType(Material.STONE);
+        		    					arrow.getLocation().getWorld().getBlockAt(loc).setType(Material.STONE);
         		    				}else {
-            		    				player.getWorld().getBlockAt(loc).setType(Material.DIRT);
+        		    					arrow.getLocation().getWorld().getBlockAt(loc).setType(Material.DIRT);
         		    				}
                                 }
                             }
@@ -257,7 +256,7 @@ public class MobListener implements Listener {
     						for(int k = 0; k < 21; k++) {
     		    				Location loc = arrow.getLocation();
     		    				loc.add(k-10,i,j-10);
-    		    				multi[j][k] = player.getWorld().getBlockAt(loc).getType();
+    		    				multi[j][k] = arrow.getLocation().getWorld().getBlockAt(loc).getType();
                             }
                         }
         				
@@ -267,7 +266,7 @@ public class MobListener implements Listener {
     						for(int k = 0; k < 21; k++) {
     		    				Location loc = arrow.getLocation();
     		    				loc.add(k-10,i,j-10);
-    		    				player.getWorld().getBlockAt(loc).setType(multi[j][k]);
+    		    				arrow.getLocation().getWorld().getBlockAt(loc).setType(multi[j][k]);
                             }
                         }
     				}
