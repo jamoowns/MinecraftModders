@@ -82,12 +82,18 @@ public final class JamoListener implements Listener {
 
 		Consumer<UUID> pigReward = playerId -> {
 			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_AXE));
+			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_PICKAXE));
+			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_SHOVEL));
 		};
 		Consumer<UUID> cowReward = playerId -> {
 			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_CHESTPLATE));
+			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_HELMET));
+			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_BOOTS));
+			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_LEGGINGS));
 		};
-		taskKeeper.addTask("Kill pigs", pigReward, 15);
-		taskKeeper.addTask("Kill cows", cowReward, 15);
+		taskKeeper.addTask("Kill pigs", pigReward, 5);
+		taskKeeper.addTask("Kill cows", cowReward, 12);
+		taskKeeper.addBoardItem("Could be cool to have a live band");
 		taskKeeper.addBoardItem("Hello and ready for the party");
 	}
 
