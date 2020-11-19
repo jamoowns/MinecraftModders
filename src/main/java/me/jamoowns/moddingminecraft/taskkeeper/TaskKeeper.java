@@ -77,15 +77,17 @@ public final class TaskKeeper {
 
 		Task task = Collections.find(tasks, Task::id, taskName).get();
 
-		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
-		score.getScoreboard().resetScores(task.describe(player));
+		if (!task.isComplete(player)) {
+			Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
+			score.getScoreboard().resetScores(task.describe(player));
 
-		task.incrementTask(player);
-		Score updatedScore = scoreboard.getObjective("tasks").getScore(task.describe(player));
-		updatedScore.setScore(tasks.indexOf(task));
+			task.incrementTask(player);
+			Score updatedScore = scoreboard.getObjective("tasks").getScore(task.describe(player));
+			updatedScore.setScore(tasks.indexOf(task));
 
-		if (task.isComplete(player)) {
-			task.reward.accept(player);
+			if (task.isComplete(player)) {
+				task.reward.accept(player);
+			}
 		}
 	}
 
