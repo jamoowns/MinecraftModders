@@ -28,11 +28,13 @@ public final class TaskKeeper {
 
 	private final PlayerEventListener playerEventListener;
 
-	private final List<IBoardItem> boardItems;
+	private final List<BoardItem> boardItems;
+	private final List<Task> tasks;
 
 	public TaskKeeper(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		boardItems = new ArrayList<>();
+		tasks = new ArrayList<>();
 
 		boardsByPlayer = new HashMap<>();
 
@@ -46,42 +48,40 @@ public final class TaskKeeper {
 
 	public final void addTask(String taskName) {
 		Task task = new Task(taskName);
-		boardItems.add(task);
+		tasks.add(task);
 
 		for (Player online : Bukkit.getOnlinePlayers()) {
 			addTask(online.getUniqueId(), task);
 		}
 	}
 
-	public final void addBoardItem(String boardItem) {
-		IBoardItem task = new BoardItem(boardItem);
-		boardItems.add(task);
+	public final void addBoardItem(String aBoardItem) {
+		BoardItem boardItem = new BoardItem(aBoardItem);
+		boardItems.add(boardItem);
 
 		for (Player online : Bukkit.getOnlinePlayers()) {
-			addTask(online.getUniqueId(), task);
+			addBoardItem(online.getUniqueId(), boardItem);
 		}
 	}
 
-	public final void addBoardItem(UUID player, String boardItem) {
-		IBoardItem task = new BoardItem(boardItem);
-		boardItems.add(task);
+	public final void addBoardItem(UUID player, String aBoardItem) {
+		BoardItem boardItem = new BoardItem(aBoardItem);
+		boardItems.add(boardItem);
 
-		addTask(player, task);
+		addBoardItem(player, boardItem);
 	}
 
 	public final void updateTask(UUID player, String taskName, Boolean completed) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
 
-		IBoardItem boardItem = Collections.find(boardItems, IBoardItem::id, taskName).get();
+		Task task = Collections.find(tasks, Task::id, taskName).get();
 
-		Score score = scoreboard.getObjective("tasks").getScore(boardItem.describe(player));
-		score.getScoreboard().resetScores(boardItem.describe(player));
+		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
+		score.getScoreboard().resetScores(task.describe(player));
 
-		if (boardItem instanceof Task) {
-			((Task) boardItem).complete(player, completed);
-		}
-		Score updatedScore = scoreboard.getObjective("tasks").getScore(boardItem.describe(player));
-		updatedScore.setScore(boardItems.indexOf(boardItem));
+		task.complete(player, completed);
+		Score updatedScore = scoreboard.getObjective("tasks").getScore(task.describe(player));
+		updatedScore.setScore(boardItems.indexOf(task));
 	}
 
 	void register(Player player) {
@@ -94,17 +94,29 @@ public final class TaskKeeper {
 		boardsByPlayer.put(player.getUniqueId(), board);
 
 		boardItems.forEach(task -> {
+			addBoardItem(player.getUniqueId(), task);
+		});
+		tasks.forEach(task -> {
 			addTask(player.getUniqueId(), task);
 		});
 	}
 
-	private void addTask(UUID player, IBoardItem task) {
+	private void addTask(UUID player, Task task) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
 		if (!task.hasPlayer(player)) {
 			task.addPlayer(player);
 		}
 		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
-		score.setScore(boardItems.indexOf(task));
+		score.setScore(tasks.indexOf(task));
+	}
+
+	private void addBoardItem(UUID player, BoardItem boardItem) {
+		Scoreboard scoreboard = boardsByPlayer.get(player);
+		if (!boardItem.hasPlayer(player)) {
+			boardItem.addPlayer(player);
+		}
+		Score score = scoreboard.getObjective("tasks").getScore(boardItem.describe(player));
+		score.setScore(boardItems.indexOf(boardItem) + tasks.size());
 	}
 
 	private interface IBoardItem {
