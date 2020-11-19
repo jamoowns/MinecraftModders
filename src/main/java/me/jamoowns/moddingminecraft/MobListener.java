@@ -257,7 +257,9 @@ public class MobListener implements Listener {
     						for(int k = 0; k < 21; k++) {
     		    				Location loc = arrow.getLocation();
     		    				loc.add(k-10,i,j-10);
-    		    				multi[j][k] = arrow.getLocation().getWorld().getBlockAt(loc).getType();
+    		    				if(!arrow.getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")) {
+    		    					multi[j][k] = arrow.getLocation().getWorld().getBlockAt(loc).getType();
+    		    				}
                             }
                         }
         				
