@@ -30,6 +30,7 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -219,13 +220,16 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onCraftItemEvent(CraftItemEvent event) {
+		ItemStack result = event.getRecipe().getResult().clone();
+		ItemMeta meta = result.getItemMeta();
 		for (int i = 0; i < 13; i++) {
 			Enchantment enchantment = enchantments.get(RANDOM.nextInt(enchantments.size()));
-			ItemStack result = event.getRecipe().getResult().clone();
 			if (enchantment.canEnchantItem(result)) {
-				event.getRecipe().getResult().addEnchantment(enchantment, RANDOM.nextInt(4) + 1);
+				meta.addEnchant(enchantment, RANDOM.nextInt(4) + 1, false);
 			}
 		}
+		result.setItemMeta(meta);
+		event.getInventory().setResult(result);
 	}
 
 	public void cleanup() {
