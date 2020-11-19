@@ -24,7 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -219,7 +219,7 @@ public final class JamoListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPrepareItemCraftEvent(PrepareItemCraftEvent event) {
+	public void onCraftItemEvent(CraftItemEvent event) {
 		for (int i = 0; i < RANDOM.nextInt(5); i++) {
 			Enchantment enchantment = enchantments.get(RANDOM.nextInt(enchantments.size()));
 			ItemStack result = event.getRecipe().getResult().clone();
