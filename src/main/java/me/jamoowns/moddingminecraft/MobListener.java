@@ -193,7 +193,8 @@ public class MobListener implements Listener {
         if((entity instanceof Arrow)) {
             Arrow arrow = (Arrow) entity;
             ProjectileSource shooter = arrow.getShooter();
-            Bukkit.broadcastMessage(shooter.toString());
+            Bukkit.broadcastMessage(shooter.getClass().toString());
+            Bukkit.broadcastMessage(shooter.getClass().getTypeName());
             if((shooter instanceof Player)||(shooter instanceof Dispenser)) {
             	if(arrow.getBasePotionData().getType() == PotionType.WEAKNESS) {
             		Random r = new Random();
