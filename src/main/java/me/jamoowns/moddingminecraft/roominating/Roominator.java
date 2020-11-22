@@ -73,16 +73,16 @@ public final class Roominator {
 				topRight = doorLocation.clone().add(width / 2, height, length);
 				break;
 			case EAST:
-				width = aLength;
-				length = aWidth;
-				bottomLeft = doorLocation.clone().subtract(0, 0, length / 2);
-				topRight = doorLocation.clone().add(width, height, length / 2);
+				width = aWidth;
+				length = aLength;
+				bottomLeft = doorLocation.clone().subtract(0, 0, width / 2);
+				topRight = doorLocation.clone().add(length, height, width / 2);
 				break;
 			case WEST:
-				width = aLength * -1;
-				length = aWidth * -1;
-				bottomLeft = doorLocation.clone().subtract(0, 0, length / 2);
-				topRight = doorLocation.clone().add(width, height, length / 2);
+				width = aWidth * -1;
+				length = aLength * -1;
+				bottomLeft = doorLocation.clone().subtract(0, 0, width / 2);
+				topRight = doorLocation.clone().add(length, height, width / 2);
 				break;
 			case SOUTH:
 			default:
