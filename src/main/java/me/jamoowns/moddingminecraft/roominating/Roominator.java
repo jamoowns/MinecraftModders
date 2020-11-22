@@ -65,24 +65,49 @@ public final class Roominator {
 		Location topRight;
 		int length;
 		int width;
+		List<Location> windows;
 		switch (direction) {
 			case NORTH:
 				width = aWidth;
 				length = aLength * -1;
 				bottomLeft = doorLocation.clone().subtract(width / 2, 0, 0);
 				topRight = doorLocation.clone().add(width / 2, height, length);
+				windows = walls(doorLocation.clone().add(width / 2, 1, length / 2),
+						doorLocation.clone().add(width / 2, 2, length / 2));
+
+				windows.addAll(
+						walls(bottomLeft.clone().add(0, 1, length / 2), bottomLeft.clone().add(0, 2, length / 2)));
+
+				/* Back windows. */
+				windows.addAll(walls(doorLocation.clone().add(0, 1, length), doorLocation.clone().add(0, 2, length)));
 				break;
 			case EAST:
 				width = aWidth;
 				length = aLength;
 				bottomLeft = doorLocation.clone().subtract(0, 0, width / 2);
 				topRight = doorLocation.clone().add(length, height, width / 2);
+				windows = walls(doorLocation.clone().add(length / 2, 1, width / 2),
+						doorLocation.clone().add(length / 2, 2, width / 2));
+
+				windows.addAll(
+						walls(bottomLeft.clone().add(length / 2, 1, 0), bottomLeft.clone().add(length / 2, 2, 0)));
+
+				/* Back windows. */
+				windows.addAll(walls(doorLocation.clone().add(length, 1, 0), doorLocation.clone().add(length, 2, 0)));
 				break;
 			case WEST:
 				width = aWidth * -1;
 				length = aLength * -1;
 				bottomLeft = doorLocation.clone().subtract(0, 0, width / 2);
 				topRight = doorLocation.clone().add(length, height, width / 2);
+				windows = walls(doorLocation.clone().add(length / 2, 1, width / 2),
+						doorLocation.clone().add(length / 2, 2, width / 2));
+
+				windows.addAll(
+						walls(bottomLeft.clone().add(length / 2, 1, 0), bottomLeft.clone().add(length / 2, 2, 0)));
+
+				/* Back windows. */
+				windows.addAll(walls(doorLocation.clone().add(length, 1, 0), doorLocation.clone().add(length, 2, 0)));
 				break;
 			case SOUTH:
 			default:
@@ -90,6 +115,14 @@ public final class Roominator {
 				length = aLength;
 				bottomLeft = doorLocation.clone().subtract(width / 2, 0, 0);
 				topRight = doorLocation.clone().add(width / 2, height, length);
+				windows = walls(doorLocation.clone().add(width / 2, 1, length / 2),
+						doorLocation.clone().add(width / 2, 2, length / 2));
+
+				windows.addAll(
+						walls(bottomLeft.clone().add(0, 1, length / 2), bottomLeft.clone().add(0, 2, length / 2)));
+
+				/* Back windows. */
+				windows.addAll(walls(doorLocation.clone().add(0, 1, length), doorLocation.clone().add(0, 2, length)));
 		}
 
 		List<PlannedBlock> plannedBlocks = new ArrayList<>();
@@ -103,15 +136,6 @@ public final class Roominator {
 		plannedBlocks.addAll(PlannedBlocks.plannedBlock(roof, Material.OAK_PLANKS));
 
 		plannedBlocks.addAll(door(doorLocation, Material.OAK_DOOR, Hinge.RIGHT, BlockFace.SOUTH));
-
-		/* Wall windows. */
-		List<Location> windows = walls(doorLocation.clone().add(width / 2, 1, length / 2),
-				doorLocation.clone().add(width / 2, 2, length / 2));
-
-		windows.addAll(walls(bottomLeft.clone().add(0, 1, length / 2), bottomLeft.clone().add(0, 2, length / 2)));
-
-		/* Back windows. */
-		windows.addAll(walls(doorLocation.clone().add(0, 1, length), doorLocation.clone().add(0, 2, length)));
 
 		plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
 
