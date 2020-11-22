@@ -88,7 +88,7 @@ public final class Roominator {
 
 		plannedBlocks.addAll(PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE));
 
-		List<Location> roof = wall(doorLocation.clone().subtract(width / 2, height, 0), topRight);
+		List<Location> roof = wall(doorLocation.clone().subtract(width / 2, 0, 0).add(0, height, 0), topRight);
 
 		plannedBlocks.addAll(PlannedBlocks.plannedBlock(roof, Material.OAK_PLANKS));
 
