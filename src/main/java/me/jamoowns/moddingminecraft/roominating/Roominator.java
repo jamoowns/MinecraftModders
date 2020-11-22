@@ -76,7 +76,36 @@ public final class Roominator {
 				width = aWidth;
 				length = aLength;
 		}
-		return standardRoom(startLocation, width, length, aHeight);
+		return room(startLocation, width, length, aHeight);
+	}
+
+	private static List<PlannedBlock> room(Location doorLocation, int width, int length, int height) {
+		List<PlannedBlock> plannedBlocks = new ArrayList<>();
+		Location bottomLeft = doorLocation.clone().subtract(width / 2, 0, 0);
+		Location topRight = doorLocation.clone().add(width / 2, height, length);
+
+		List<Location> walls = walls(bottomLeft, topRight);
+
+		plannedBlocks.addAll(PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE));
+
+		List<Location> roof = wall(doorLocation.clone().subtract(width / 2, height, 0), topRight);
+
+		plannedBlocks.addAll(PlannedBlocks.plannedBlock(roof, Material.OAK_PLANKS));
+
+		plannedBlocks.addAll(door(doorLocation, Material.OAK_DOOR, Hinge.RIGHT, BlockFace.SOUTH));
+
+		List<Location> windows = walls(doorLocation.clone().add(width / 2, 1, ((int) length / 2)),
+				doorLocation.clone().add(width / 2, 2, ((int) length / 2)));
+
+		windows.addAll(walls(doorLocation.clone().subtract(width / 2, 0, 0).add(0, 1, ((int) length / 2)),
+				doorLocation.clone().subtract(width / 2, 0, 0).add(0, 2, ((int) length / 2))));
+
+		windows.addAll(walls(doorLocation.clone().add(((int) width / 2), 1, length),
+				doorLocation.clone().add(((int) width / 2), 2, length)));
+
+		plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
+
+		return plannedBlocks;
 	}
 
 	private static List<PlannedBlock> standardRoom(Location startLocation, int width, int length, int height) {
