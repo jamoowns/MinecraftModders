@@ -142,54 +142,6 @@ public final class Roominator {
 		return plannedBlocks;
 	}
 
-	public static List<PlannedBlock> moreStandardRoom(Location startLocation, int aWidth, int aLength, int height,
-			BlockFace direction) {
-		int width;
-		int length;
-		switch (direction) {
-			case NORTH:
-				width = aWidth;
-				length = aLength * -1;
-				break;
-			case EAST:
-				width = aLength;
-				length = aWidth;
-				break;
-			case WEST:
-				width = aLength * -1;
-				length = aWidth * -1;
-				break;
-			case SOUTH:
-			default:
-				width = aWidth;
-				length = aLength;
-		}
-
-		List<Location> walls = walls(startLocation, startLocation.clone().add(width, height, length));
-		List<PlannedBlock> plannedBlocks = PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE);
-
-		List<Location> roof = wall(startLocation.clone().add(0, height, 0),
-				startLocation.clone().add(width, height, length));
-
-		plannedBlocks.addAll(PlannedBlocks.plannedBlock(roof, Material.OAK_PLANKS));
-
-		plannedBlocks.addAll(door(startLocation.clone().add(((int) width / 2), 0, 0), Material.OAK_DOOR, Hinge.RIGHT,
-				BlockFace.SOUTH));
-
-		List<Location> windows = walls(startLocation.clone().add(width, 1, ((int) length / 2)),
-				startLocation.clone().add(width, 2, ((int) length / 2)));
-
-		windows.addAll(walls(startLocation.clone().add(0, 1, ((int) length / 2)),
-				startLocation.clone().add(0, 2, ((int) length / 2))));
-
-		windows.addAll(walls(startLocation.clone().add(((int) width / 2), 1, length),
-				startLocation.clone().add(((int) width / 2), 2, length)));
-
-		plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
-
-		return plannedBlocks;
-	}
-
 	private static List<Location> walls(Location startLocation, Location endLocation) {
 		List<Location> room = new ArrayList<>();
 
