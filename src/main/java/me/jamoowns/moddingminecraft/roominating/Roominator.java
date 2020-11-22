@@ -56,6 +56,70 @@ public final class Roominator {
 
 	public static List<PlannedBlock> standardRoom(Location startLocation, int aWidth, int aLength, int aHeight,
 			BlockFace direction) {
+		return room(startLocation, aWidth, aLength, aHeight, direction);
+	}
+
+	private static List<PlannedBlock> room(Location doorLocation, int aWidth, int aLength, int height,
+			BlockFace direction) {
+		Location bottomLeft;
+		Location topRight;
+		int length;
+		int width;
+		switch (direction) {
+			case NORTH:
+				width = aWidth;
+				length = aLength * -1;
+				bottomLeft = doorLocation.clone().subtract(width / 2, 0, 0);
+				topRight = doorLocation.clone().add(width / 2, height, length);
+				break;
+			case EAST:
+				width = aLength;
+				length = aWidth;
+				bottomLeft = doorLocation.clone().subtract(0, 0, width / 2);
+				topRight = doorLocation.clone().add(length, height, width / 2);
+				break;
+			case WEST:
+				width = aLength * -1;
+				length = aWidth * -1;
+				bottomLeft = doorLocation.clone().subtract(0, 0, width / 2);
+				topRight = doorLocation.clone().add(length, height, width / 2);
+				break;
+			case SOUTH:
+			default:
+				width = aWidth;
+				length = aLength;
+				bottomLeft = doorLocation.clone().subtract(width / 2, 0, 0);
+				topRight = doorLocation.clone().add(width / 2, height, length);
+		}
+
+		List<PlannedBlock> plannedBlocks = new ArrayList<>();
+
+		List<Location> walls = walls(bottomLeft, topRight);
+
+		plannedBlocks.addAll(PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE));
+
+		List<Location> roof = wall(bottomLeft.clone().add(0, height, 0), topRight);
+
+		plannedBlocks.addAll(PlannedBlocks.plannedBlock(roof, Material.OAK_PLANKS));
+
+		plannedBlocks.addAll(door(doorLocation, Material.OAK_DOOR, Hinge.RIGHT, BlockFace.SOUTH));
+
+		/* Wall windows. */
+		List<Location> windows = walls(doorLocation.clone().add(width / 2, 1, length / 2),
+				doorLocation.clone().add(width / 2, 2, length / 2));
+
+		windows.addAll(walls(bottomLeft.clone().add(0, 1, length / 2), bottomLeft.clone().add(0, 2, length / 2)));
+
+		/* Back windows. */
+		windows.addAll(walls(doorLocation.clone().add(0, 1, length), doorLocation.clone().add(0, 2, length)));
+
+		plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
+
+		return plannedBlocks;
+	}
+
+	public static List<PlannedBlock> moreStandardRoom(Location startLocation, int aWidth, int aLength, int height,
+			BlockFace direction) {
 		int width;
 		int length;
 		switch (direction) {
@@ -76,39 +140,7 @@ public final class Roominator {
 				width = aWidth;
 				length = aLength;
 		}
-		return room(startLocation, width, length, aHeight);
-	}
 
-	private static List<PlannedBlock> room(Location doorLocation, int width, int length, int height) {
-		List<PlannedBlock> plannedBlocks = new ArrayList<>();
-		Location bottomLeft = doorLocation.clone().subtract(width / 2, 0, 0);
-		Location topRight = doorLocation.clone().add(width / 2, height, length);
-
-		List<Location> walls = walls(bottomLeft, topRight);
-
-		plannedBlocks.addAll(PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE));
-
-		List<Location> roof = wall(doorLocation.clone().subtract(width / 2, 0, 0).add(0, height, 0), topRight);
-
-		plannedBlocks.addAll(PlannedBlocks.plannedBlock(roof, Material.OAK_PLANKS));
-
-		plannedBlocks.addAll(door(doorLocation, Material.OAK_DOOR, Hinge.RIGHT, BlockFace.SOUTH));
-
-		List<Location> windows = walls(doorLocation.clone().add(width / 2, 1, ((int) length / 2)),
-				doorLocation.clone().add(width / 2, 2, ((int) length / 2)));
-
-		windows.addAll(walls(doorLocation.clone().subtract(width / 2, 0, 0).add(0, 1, ((int) length / 2)),
-				doorLocation.clone().subtract(width / 2, 0, 0).add(0, 2, ((int) length / 2))));
-
-		windows.addAll(walls(doorLocation.clone().add(((int) width / 2), 1, length),
-				doorLocation.clone().add(((int) width / 2), 2, length)));
-
-		plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
-
-		return plannedBlocks;
-	}
-
-	private static List<PlannedBlock> standardRoom(Location startLocation, int width, int length, int height) {
 		List<Location> walls = walls(startLocation, startLocation.clone().add(width, height, length));
 		List<PlannedBlock> plannedBlocks = PlannedBlocks.plannedBlock(walls, Material.COBBLESTONE);
 
