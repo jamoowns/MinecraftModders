@@ -135,7 +135,7 @@ public final class Roominator {
 
 		plannedBlocks.addAll(PlannedBlocks.plannedBlock(roof, Material.OAK_PLANKS));
 
-		plannedBlocks.addAll(door(doorLocation, Material.OAK_DOOR, Hinge.RIGHT, BlockFace.SOUTH));
+		plannedBlocks.addAll(door(doorLocation, Material.OAK_DOOR, Hinge.RIGHT, direction));
 
 		plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
 
