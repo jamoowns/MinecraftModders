@@ -477,6 +477,7 @@ public class MobListener implements Listener {
                 itemb.setItemMeta(metab);
                 event.getDrops().add(item);
                 event.getDrops().add(itemb);
+                event.getEntity().getLocation().getWorld().setTime(1000);
             }
         }
         if(phantomDeath) {
