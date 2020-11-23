@@ -107,6 +107,7 @@ public final class JamoListener implements Listener {
 			Location chestLocation = p.getLocation().add(RANDOM.nextInt(40) - 20, RANDOM.nextInt(6),
 					RANDOM.nextInt(40) - 20);
 
+			// Location chestLocation = p.getLocation().add(0, 3, 0);
 			if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
 				done = true;
 				p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 20, 1);
@@ -178,8 +179,8 @@ public final class JamoListener implements Listener {
 
 			Location startPoint = event.getBlockAgainst().getLocation().add(0, 1, 0);
 
-			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, RANDOM.nextInt(5) + 4,
-					RANDOM.nextInt(5) + 4, 5, linearFace(event.getPlayer().getLocation().getYaw()));
+			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, 4, 8, 5,
+					linearFace(event.getPlayer().getLocation().getYaw()));
 
 			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
 		}
