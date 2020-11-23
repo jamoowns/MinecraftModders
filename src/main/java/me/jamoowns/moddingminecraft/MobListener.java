@@ -60,8 +60,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -455,6 +457,26 @@ public class MobListener implements Listener {
                 event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Phantom.class);
                 event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Phantom.class);
                 event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Phantom.class);
+            }
+        }
+
+        if(phantomDeath) {
+            if(event.getEntity() instanceof Ghast)
+            { 
+            	Ghast ghastEnt = (Ghast) event.getEntity();
+                Player mcPlayer = ghastEnt.getKiller();
+                if(mcPlayer == null)
+                    return;
+                ItemStack item = new ItemStack(Material.TIPPED_ARROW,16);
+                PotionMeta meta = (PotionMeta) item.getItemMeta();
+                meta.setBasePotionData(new PotionData(PotionType.INSTANT_DAMAGE));
+                item.setItemMeta(meta);
+                ItemStack itemb = new ItemStack(Material.TIPPED_ARROW,16);
+                PotionMeta metab = (PotionMeta) itemb.getItemMeta();
+                metab.setBasePotionData(new PotionData(PotionType.INVISIBILITY));
+                itemb.setItemMeta(metab);
+                event.getDrops().add(item);
+                event.getDrops().add(itemb);
             }
         }
         if(phantomDeath) {
