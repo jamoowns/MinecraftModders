@@ -29,9 +29,11 @@ import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Husk;
 import org.bukkit.entity.Illager;
 import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -58,8 +60,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -88,6 +92,7 @@ public class MobListener implements Listener {
     private boolean chickenDeath = true;
     private boolean pigDeath = true;
     private boolean beeDeath = true;
+    private boolean phantomDeath = true;
     
     public MobListener(JavaPlugin aJavaPlugin) {
         javaPlugin = aJavaPlugin;
@@ -443,7 +448,46 @@ public class MobListener implements Listener {
                 Player mcPlayer = BeeEnt.getKiller();
                 if(mcPlayer == null)
                     return;
-                event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), EnderDragon.class);
+                event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Ghast.class);
+                mcPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
+                event.getEntity().getLocation().getWorld().setTime(13000);
+                mcPlayer.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
+                event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Phantom.class);
+                event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Phantom.class);
+                event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Phantom.class);
+                event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Phantom.class);
+                event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Phantom.class);
+            }
+        }
+
+        if(phantomDeath) {
+            if(event.getEntity() instanceof Ghast)
+            { 
+            	Ghast ghastEnt = (Ghast) event.getEntity();
+                Player mcPlayer = ghastEnt.getKiller();
+                if(mcPlayer == null)
+                    return;
+                ItemStack item = new ItemStack(Material.TIPPED_ARROW,16);
+                PotionMeta meta = (PotionMeta) item.getItemMeta();
+                meta.setBasePotionData(new PotionData(PotionType.INSTANT_DAMAGE));
+                item.setItemMeta(meta);
+                ItemStack itemb = new ItemStack(Material.TIPPED_ARROW,16);
+                PotionMeta metab = (PotionMeta) itemb.getItemMeta();
+                metab.setBasePotionData(new PotionData(PotionType.INVISIBILITY));
+                itemb.setItemMeta(metab);
+                event.getDrops().add(item);
+                event.getDrops().add(itemb);
+                event.getEntity().getLocation().getWorld().setTime(1000);
+            }
+        }
+        if(phantomDeath) {
+            if(event.getEntity() instanceof Phantom)
+            { 
+            	Phantom phantomEnt = (Phantom) event.getEntity();
+                Player mcPlayer = phantomEnt.getKiller();
+                if(mcPlayer == null)
+                    return;
+                event.getDrops().add(new ItemStack(Material.BLAZE_POWDER, 1));
             }
         }
         if(cowTeleDeath) {
