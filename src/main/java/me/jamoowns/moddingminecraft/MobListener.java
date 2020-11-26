@@ -547,7 +547,7 @@ public class MobListener implements Listener {
 
 				ItemStack arrow = new ItemStack(Material.TIPPED_ARROW);
 
-				if (RANDOM.nextInt(5) == 1) {
+				if (RANDOM.nextInt(4) == 1) {
 					PotionMeta meta = (PotionMeta) arrow.getItemMeta();
 					meta.setBasePotionData(new PotionData(PotionType.INSTANT_DAMAGE));
 					arrow.setItemMeta(meta);

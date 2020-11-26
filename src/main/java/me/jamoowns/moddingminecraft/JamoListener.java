@@ -3,7 +3,9 @@ package me.jamoowns.moddingminecraft;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -54,6 +56,10 @@ public final class JamoListener implements Listener {
 
 	private final TaskKeeper taskKeeper;
 
+	private List<Material> wools;
+
+	private Map<UUID, Material> headTypeByPlayer;
+
 	public JamoListener(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		RANDOM = new Random();
@@ -66,6 +72,26 @@ public final class JamoListener implements Listener {
 		bucketTypes.add(Material.SALMON_BUCKET);
 		bucketTypes.add(Material.TROPICAL_FISH_BUCKET);
 		bucketTypes.add(Material.WATER_BUCKET);
+
+		wools = new ArrayList<>();
+		wools.add(Material.BLACK_WOOL);
+		wools.add(Material.BLUE_WOOL);
+		wools.add(Material.BROWN_WOOL);
+		wools.add(Material.CYAN_WOOL);
+		wools.add(Material.GRAY_WOOL);
+		wools.add(Material.GREEN_WOOL);
+		wools.add(Material.LIGHT_BLUE_WOOL);
+		wools.add(Material.LIGHT_GRAY_WOOL);
+		wools.add(Material.LIME_WOOL);
+		wools.add(Material.MAGENTA_WOOL);
+		wools.add(Material.ORANGE_WOOL);
+		wools.add(Material.PINK_WOOL);
+		wools.add(Material.PURPLE_WOOL);
+		wools.add(Material.RED_WOOL);
+		wools.add(Material.WHITE_WOOL);
+		wools.add(Material.YELLOW_WOOL);
+
+		headTypeByPlayer = new HashMap<>();
 
 		enchantments = Arrays.asList(Enchantment.values());
 
@@ -174,15 +200,25 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
+		Player player = event.getPlayer();
 		if (event.getBlockPlaced().getType() == Material.STONE_PRESSURE_PLATE) {
 			event.getBlockPlaced().setType(Material.AIR);
 
 			Location startPoint = event.getBlockAgainst().getLocation().add(0, 1, 0);
 
 			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, RANDOM.nextInt(5) + 4,
-					RANDOM.nextInt(5) + 4, 5, linearFace(event.getPlayer().getLocation().getYaw()));
+					RANDOM.nextInt(5) + 4, 5, linearFace(player.getLocation().getYaw()));
 
 			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
+		} else if (event.getBlockPlaced().getType() == Material.ACTIVATOR_RAIL) {
+			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
+
+			Zombie zombie = event.getBlock().getWorld().spawn(spawnLocation, Zombie.class);
+			zombie.setCustomName(player.getName() + "'s minion");
+			zombie.setCustomNameVisible(true);
+			Material headType = headTypeByPlayer.computeIfAbsent(player.getUniqueId(), uuid -> wools.get(0));
+			wools.remove(headType);
+			zombie.getEquipment().setHelmet(new ItemStack(headType));
 		}
 	}
 
