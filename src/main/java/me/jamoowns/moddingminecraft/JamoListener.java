@@ -219,6 +219,7 @@ public final class JamoListener implements Listener {
 			Material headType = headTypeByPlayer.computeIfAbsent(player.getUniqueId(), uuid -> wools.get(0));
 			wools.remove(headType);
 			zombie.getEquipment().setHelmet(new ItemStack(headType));
+			event.getBlockPlaced().setType(Material.AIR);
 		}
 	}
 
