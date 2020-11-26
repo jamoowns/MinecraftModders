@@ -216,7 +216,8 @@ public final class JamoListener implements Listener {
 			Zombie zombie = event.getBlock().getWorld().spawn(spawnLocation, Zombie.class);
 			zombie.setCustomName(player.getName() + "'s minion");
 			zombie.setCustomNameVisible(true);
-			Material headType = headTypeByPlayer.computeIfAbsent(player.getUniqueId(), uuid -> wools.get(0));
+			Material headType = headTypeByPlayer.computeIfAbsent(player.getUniqueId(),
+					uuid -> wools.get(RANDOM.nextInt(wools.size())));
 			wools.remove(headType);
 			zombie.getEquipment().setHelmet(new ItemStack(headType));
 			event.getBlockPlaced().setType(Material.AIR);
