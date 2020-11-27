@@ -245,6 +245,6 @@ public final class JamoListener implements Listener {
 	}
 
 	public void cleanup() {
-		/* Empty for now. */
+		teams.cleanup();
 	}
 }

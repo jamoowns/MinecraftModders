@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,11 +46,24 @@ public final class Teams {
 		availableTeamColours.add(new TeamColour(Material.WHITE_WOOL, ChatColor.WHITE));
 		availableTeamColours.add(new TeamColour(Material.YELLOW_WOOL, ChatColor.YELLOW));
 
+		cleanup();
 		for (Player online : Bukkit.getOnlinePlayers()) {
 			register(online.getName(), online.getUniqueId());
 		}
 		playerEventListener = new PlayerEventListener(this);
 		javaPlugin.getServer().getPluginManager().registerEvents(playerEventListener, javaPlugin);
+	}
+
+	public final void cleanup() {
+		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+		board.getTeams().forEach(team -> {
+			team.getEntries().forEach(e -> {
+				Entity entity = Bukkit.getEntity(UUID.fromString(e));
+				if (!(entity instanceof Player)) {
+					entity.remove();
+				}
+			});
+		});
 	}
 
 	public final void register(String teamName, UUID player) {
