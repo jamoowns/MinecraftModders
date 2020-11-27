@@ -52,11 +52,11 @@ public final class Teams {
 	}
 
 	public final void register(String teamName, UUID player) {
-		if (!teamExists(teamName)) {
+		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+		if (!teamExists(teamName) && board.getTeam(teamName) == null) {
 			Army army = new Army(teamName, availableTeamColours.remove(RANDOM.nextInt(availableTeamColours.size())));
 			armies.add(army);
 
-			Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 			Team team = board.registerNewTeam(army.getTeamName());
 			team.setColor(army.getTeamColour().getColour());
 		}
