@@ -121,12 +121,14 @@ public final class JamoListener implements Listener {
 								.info(mob.getTarget() == null ? "NULL" : mob.getTarget().getName().toString());
 						if (mob.getTarget() == null) {
 							Collection<Entity> nearbyEntities = mob.getWorld().getNearbyEntities(mob.getLocation(), 15,
-									15, 15, e -> {
-										return e instanceof LivingEntity && teams.hasTeam(mob.getUniqueId())
-												&& teams.hasTeam(e.getUniqueId()) && !teams.getTeamName(e.getUniqueId())
-														.equalsIgnoreCase(teams.getTeamName(mob.getUniqueId()));
-									});
-							Optional<Entity> target = nearbyEntities.stream()
+									15, 15, e -> e instanceof LivingEntity);
+							List<Entity> teamedEntitiesNearby = nearbyEntities.stream()
+									.filter(e -> teams.hasTeam(e.getUniqueId()))
+									.filter(e -> !teams.getTeamName(e.getUniqueId())
+											.equalsIgnoreCase(teams.getTeamName(mob.getUniqueId())))
+									.collect(Collectors.toList());
+
+							Optional<Entity> target = teamedEntitiesNearby.stream()
 									.sorted((o1, o2) -> Double.compare(entity.getLocation().distance(o1.getLocation()),
 											entity.getLocation().distance(o2.getLocation())))
 									.findFirst();
