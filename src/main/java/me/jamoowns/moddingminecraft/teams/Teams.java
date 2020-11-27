@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -53,12 +54,15 @@ public final class Teams {
 
 	public final void register(String teamName, UUID player) {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-		if (!teamExists(teamName) && board.getTeam(teamName) == null) {
+		if (!teamExists(teamName)) {
 			Army army = new Army(teamName, availableTeamColours.remove(RANDOM.nextInt(availableTeamColours.size())));
 			armies.add(army);
 
-			Team team = board.registerNewTeam(army.getTeamName());
-			team.setColor(army.getTeamColour().getColour());
+			System.out.println(board.getTeams().stream().map(t -> t.getName()).collect(Collectors.toList()));
+			if (board.getTeam(teamName) == null) {
+				Team team = board.registerNewTeam(army.getTeamName());
+				team.setColor(army.getTeamColour().getColour());
+			}
 		}
 		Army team = getTeam(teamName);
 		team.add(player);
