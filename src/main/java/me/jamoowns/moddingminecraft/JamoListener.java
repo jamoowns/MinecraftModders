@@ -3,8 +3,12 @@ package me.jamoowns.moddingminecraft;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -16,7 +20,10 @@ import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
@@ -57,9 +64,14 @@ public final class JamoListener implements Listener {
 
 	private final Teams teams;
 
+	private final List<UUID> teamedMobs;
+
 	public JamoListener(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		RANDOM = new Random();
+
+		teamedMobs = new ArrayList<>();
+
 		bucketTypes = new ArrayList<>();
 		bucketTypes.add(Material.BUCKET);
 		bucketTypes.add(Material.COD_BUCKET);
@@ -99,6 +111,36 @@ public final class JamoListener implements Listener {
 		taskKeeper.addTask("Kill cows", cowReward, 12);
 		taskKeeper.addBoardItem("Could be cool to have a live band");
 		taskKeeper.addBoardItem("Hello and ready for the party");
+
+		Timer mobTargetTimer = new Timer();
+		TimerTask mobTargetTask = new TimerTask() {
+
+			@Override
+			public final void run() {
+				teamedMobs.forEach(uuid -> {
+					Entity entity = Bukkit.getEntity(uuid);
+					if (entity instanceof Mob) {
+						Mob mob = (Mob) entity;
+						if (mob.getTarget() == null) {
+							Collection<Entity> nearbyEntities = mob.getWorld().getNearbyEntities(mob.getLocation(), 15,
+									15, 15, e -> {
+										return e instanceof LivingEntity && !teams.getTeamName(e.getUniqueId())
+												.equalsIgnoreCase(teams.getTeamName(mob.getUniqueId()));
+									});
+							Optional<Entity> target = nearbyEntities.stream()
+									.sorted((o1, o2) -> Double.compare(entity.getLocation().distance(o1.getLocation()),
+											entity.getLocation().distance(o2.getLocation())))
+									.findFirst();
+							if (target.isPresent()) {
+								mob.setTarget((LivingEntity) target.get());
+							}
+						}
+					}
+				});
+			}
+		};
+
+		mobTargetTimer.schedule(mobTargetTask, 5000, 5000);
 	}
 
 	private void randomChestSpawn() {
@@ -158,6 +200,7 @@ public final class JamoListener implements Listener {
 				taskKeeper.incrementTask(mcPlayer.getUniqueId(), "Kill cows");
 			}
 		}
+		teamedMobs.remove(event.getEntity().getUniqueId());
 	}
 
 	@EventHandler
@@ -182,19 +225,20 @@ public final class JamoListener implements Listener {
 		if (event.getBlockPlaced().getType() == Material.STONE_PRESSURE_PLATE) {
 			event.getBlockPlaced().setType(Material.AIR);
 
-			Location startPoint = event.getBlockAgainst().getLocation().add(0, 1, 0);
+			Location startPoint = event.getBlockPlaced().getLocation().add(0, 0, 0);
 
 			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, RANDOM.nextInt(5) + 4,
 					RANDOM.nextInt(5) + 4, 5, linearFace(player.getLocation().getYaw()));
 
 			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
 		} else if (event.getBlockPlaced().getType() == Material.ACTIVATOR_RAIL) {
+			event.getBlockPlaced().setType(Material.AIR);
+
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
 
 			Zombie zombie = event.getBlock().getWorld().spawn(spawnLocation, Zombie.class);
 			teams.register(player.getUniqueId(), zombie);
-
-			event.getBlockPlaced().setType(Material.AIR);
+			teamedMobs.add(zombie.getUniqueId());
 		}
 	}
 
@@ -219,7 +263,6 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent event) {
-
 		if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.BELL) {
 			Player player = event.getPlayer();
 			Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
