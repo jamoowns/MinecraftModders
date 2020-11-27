@@ -25,15 +25,12 @@ public final class TaskKeeper {
 
 	private Map<UUID, Scoreboard> boardsByPlayer;
 
-	private final JavaPlugin javaPlugin;
-
 	private final PlayerEventListener playerEventListener;
 
 	private final List<BoardItem> boardItems;
 	private final List<Task> tasks;
 
-	public TaskKeeper(JavaPlugin aJavaPlugin) {
-		javaPlugin = aJavaPlugin;
+	public TaskKeeper(JavaPlugin javaPlugin) {
 		boardItems = new ArrayList<>();
 		tasks = new ArrayList<>();
 

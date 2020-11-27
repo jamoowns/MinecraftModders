@@ -3,9 +3,7 @@ package me.jamoowns.moddingminecraft;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -40,6 +38,7 @@ import org.bukkit.potion.PotionEffectType;
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
 import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
+import me.jamoowns.moddingminecraft.teams.Teams;
 
 public final class JamoListener implements Listener {
 
@@ -56,9 +55,7 @@ public final class JamoListener implements Listener {
 
 	private final TaskKeeper taskKeeper;
 
-	private List<Material> wools;
-
-	private Map<UUID, Material> headTypeByPlayer;
+	private final Teams teams;
 
 	public JamoListener(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -73,26 +70,6 @@ public final class JamoListener implements Listener {
 		bucketTypes.add(Material.TROPICAL_FISH_BUCKET);
 		bucketTypes.add(Material.WATER_BUCKET);
 
-		wools = new ArrayList<>();
-		wools.add(Material.BLACK_WOOL);
-		wools.add(Material.BLUE_WOOL);
-		wools.add(Material.BROWN_WOOL);
-		wools.add(Material.CYAN_WOOL);
-		wools.add(Material.GRAY_WOOL);
-		wools.add(Material.GREEN_WOOL);
-		wools.add(Material.LIGHT_BLUE_WOOL);
-		wools.add(Material.LIGHT_GRAY_WOOL);
-		wools.add(Material.LIME_WOOL);
-		wools.add(Material.MAGENTA_WOOL);
-		wools.add(Material.ORANGE_WOOL);
-		wools.add(Material.PINK_WOOL);
-		wools.add(Material.PURPLE_WOOL);
-		wools.add(Material.RED_WOOL);
-		wools.add(Material.WHITE_WOOL);
-		wools.add(Material.YELLOW_WOOL);
-
-		headTypeByPlayer = new HashMap<>();
-
 		enchantments = Arrays.asList(Enchantment.values());
 
 		if (RANDOM_CHESTS) {
@@ -105,6 +82,7 @@ public final class JamoListener implements Listener {
 		}
 
 		taskKeeper = new TaskKeeper(javaPlugin);
+		teams = new Teams(javaPlugin);
 
 		Consumer<UUID> pigReward = playerId -> {
 			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_AXE));
@@ -214,12 +192,8 @@ public final class JamoListener implements Listener {
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
 
 			Zombie zombie = event.getBlock().getWorld().spawn(spawnLocation, Zombie.class);
-			zombie.setCustomName(player.getName() + "'s minion");
-			zombie.setCustomNameVisible(true);
-			Material headType = headTypeByPlayer.computeIfAbsent(player.getUniqueId(),
-					uuid -> wools.get(RANDOM.nextInt(wools.size())));
-			wools.remove(headType);
-			zombie.getEquipment().setHelmet(new ItemStack(headType));
+			teams.register(player.getUniqueId(), zombie);
+
 			event.getBlockPlaced().setType(Material.AIR);
 		}
 	}
