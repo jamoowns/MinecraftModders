@@ -117,15 +117,9 @@ public final class JamoListener implements Listener {
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity instanceof Mob) {
 						Mob mob = (Mob) entity;
-						javaPlugin.getLogger()
-								.info(mob.getTarget() == null ? "NULL" : mob.getTarget().getName().toString());
 						if (mob.getTarget() == null) {
 							Collection<Entity> nearbyEntities = mob.getWorld().getNearbyEntities(mob.getLocation(), 15,
 									15, 15, e -> e instanceof LivingEntity && teams.hasTeam(e.getUniqueId()));
-
-							nearbyEntities.forEach(e -> {
-								javaPlugin.getLogger().info(e.toString());
-							});
 							List<Entity> teamedEntitiesNearby = nearbyEntities.stream()
 									.filter(e -> !teams.getTeamName(e.getUniqueId())
 											.equalsIgnoreCase(teams.getTeamName(mob.getUniqueId())))
@@ -135,8 +129,7 @@ public final class JamoListener implements Listener {
 									.sorted((o1, o2) -> Double.compare(entity.getLocation().distance(o1.getLocation()),
 											entity.getLocation().distance(o2.getLocation())))
 									.findFirst();
-							javaPlugin.getLogger().info(target.toString());
-							if (target.isPresent()) {
+							if (target.isPresent() && !(target.get() instanceof Player)) {
 								mob.setTarget((LivingEntity) target.get());
 							}
 						}
