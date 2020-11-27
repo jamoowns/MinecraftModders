@@ -110,7 +110,7 @@ public final class JamoListener implements Listener {
 		taskKeeper.addBoardItem("Could be cool to have a live band");
 		taskKeeper.addBoardItem("Hello and ready for the party");
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 			@Override
 			public void run() {
 				teamedMobs.forEach(uuid -> {
@@ -137,7 +137,7 @@ public final class JamoListener implements Listener {
 					}
 				});
 			}
-		}, 80L); // 80 Tick (4 Second) delay before run() is called
+		}, 80L, 80L); // 80 Tick (4 Second) delay before run() is called
 	}
 
 	private void randomChestSpawn() {
