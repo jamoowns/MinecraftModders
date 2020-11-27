@@ -117,7 +117,7 @@ public final class JamoListener implements Listener {
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity instanceof Mob) {
 						Mob mob = (Mob) entity;
-						System.out.println(mob.getTarget());
+						Bukkit.broadcastMessage(mob.getTarget().getName().toString());
 						if (mob.getTarget() == null) {
 							Collection<Entity> nearbyEntities = mob.getWorld().getNearbyEntities(mob.getLocation(), 15,
 									15, 15, e -> {
@@ -129,6 +129,7 @@ public final class JamoListener implements Listener {
 									.sorted((o1, o2) -> Double.compare(entity.getLocation().distance(o1.getLocation()),
 											entity.getLocation().distance(o2.getLocation())))
 									.findFirst();
+							Bukkit.broadcastMessage(target.toString());
 							if (target.isPresent()) {
 								mob.setTarget((LivingEntity) target.get());
 							}
@@ -136,7 +137,7 @@ public final class JamoListener implements Listener {
 					}
 				});
 			}
-		}, 100L); // 100 Tick (5 Second) delay before run() is called
+		}, 80L); // 80 Tick (4 Second) delay before run() is called
 	}
 
 	private void randomChestSpawn() {
