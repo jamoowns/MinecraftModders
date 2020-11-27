@@ -59,13 +59,15 @@ public final class Teams {
 			armies.add(army);
 
 			System.out.println(board.getTeams().stream().map(t -> t.getName()).collect(Collectors.toList()));
+			Team team = board.getTeam(army.getTeamName());
 			if (board.getTeam(teamName) == null) {
-				Team team = board.registerNewTeam(army.getTeamName());
-				team.setColor(army.getTeamColour().getColour());
+				team = board.registerNewTeam(army.getTeamName());
 			}
+			team.setColor(army.getTeamColour().getColour());
 		}
-		Army team = getTeam(teamName);
-		team.add(player);
+		Army army = getTeam(teamName);
+		army.add(player);
+		board.getTeam(army.getTeamName()).addEntry(player.toString());
 	}
 
 	private final boolean teamExists(String teamName) {
