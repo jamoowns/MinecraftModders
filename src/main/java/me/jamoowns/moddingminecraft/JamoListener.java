@@ -117,6 +117,7 @@ public final class JamoListener implements Listener {
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity instanceof Mob) {
 						Mob mob = (Mob) entity;
+						javaPlugin.getLogger().info(mob.getTarget().getName());
 						if (mob.getTarget() == null) {
 							Collection<Entity> nearbyEntities = mob.getWorld().getNearbyEntities(mob.getLocation(), 15,
 									15, 15, e -> {
@@ -128,6 +129,7 @@ public final class JamoListener implements Listener {
 									.sorted((o1, o2) -> Double.compare(entity.getLocation().distance(o1.getLocation()),
 											entity.getLocation().distance(o2.getLocation())))
 									.findFirst();
+							javaPlugin.getLogger().info(target.toString());
 							if (target.isPresent()) {
 								mob.setTarget((LivingEntity) target.get());
 							}
