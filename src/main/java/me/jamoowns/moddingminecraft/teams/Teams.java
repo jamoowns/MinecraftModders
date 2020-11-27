@@ -98,6 +98,10 @@ public final class Teams {
 		return armies.stream().filter(t -> t.has(entity)).findFirst().get();
 	}
 
+	public final boolean hasTeam(UUID entity) {
+		return armies.stream().anyMatch(t -> t.has(entity));
+	}
+
 	public final String getTeamName(UUID entity) {
 		return getTeam(entity).getTeamName();
 	}
