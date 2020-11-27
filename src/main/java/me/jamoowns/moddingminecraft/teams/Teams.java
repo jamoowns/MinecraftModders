@@ -22,14 +22,14 @@ public final class Teams {
 
 	private List<TeamColour> availableTeamColours;
 
-	private List<Army> teams;
+	private List<Army> armies;
 
 	private final Random RANDOM;
 
 	private final PlayerEventListener playerEventListener;
 
 	public Teams(JavaPlugin javaPlugin) {
-		teams = new ArrayList<>();
+		armies = new ArrayList<>();
 		RANDOM = new Random();
 
 		availableTeamColours = new ArrayList<>();
@@ -49,13 +49,12 @@ public final class Teams {
 		}
 		playerEventListener = new PlayerEventListener(this);
 		javaPlugin.getServer().getPluginManager().registerEvents(playerEventListener, javaPlugin);
-		javaPlugin.getServer().getPluginManager().registerEvents(playerEventListener, javaPlugin);
 	}
 
 	public final void register(String teamName, UUID player) {
 		if (!teamExists(teamName)) {
 			Army army = new Army(teamName, availableTeamColours.remove(RANDOM.nextInt(availableTeamColours.size())));
-			teams.add(army);
+			armies.add(army);
 
 			Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 			Team team = board.registerNewTeam(army.getTeamName());
@@ -66,15 +65,15 @@ public final class Teams {
 	}
 
 	private final boolean teamExists(String teamName) {
-		return teams.stream().anyMatch(t -> t.getTeamName().equalsIgnoreCase(teamName));
+		return armies.stream().anyMatch(t -> t.getTeamName().equalsIgnoreCase(teamName));
 	}
 
 	private final Army getTeam(String teamName) {
-		return teams.stream().filter(t -> t.getTeamName().equalsIgnoreCase(teamName)).findFirst().get();
+		return armies.stream().filter(t -> t.getTeamName().equalsIgnoreCase(teamName)).findFirst().get();
 	}
 
 	private final Army getTeam(UUID entity) {
-		return teams.stream().filter(t -> t.has(entity)).findFirst().get();
+		return armies.stream().filter(t -> t.has(entity)).findFirst().get();
 	}
 
 	public final String getTeamName(UUID entity) {
