@@ -58,9 +58,13 @@ public final class Teams {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 		board.getTeams().forEach(team -> {
 			team.getEntries().forEach(e -> {
-				Entity entity = Bukkit.getEntity(UUID.fromString(e));
-				if (!(entity instanceof Player)) {
-					entity.remove();
+				try {
+					Entity entity = Bukkit.getEntity(UUID.fromString(e));
+					if (!(entity instanceof Player)) {
+						entity.remove();
+					}
+				} catch (Exception exc) {
+					/* Don't judge me. e can be a player name, and UUID.fromString(e) complains. */
 				}
 			});
 		});
