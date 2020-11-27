@@ -7,8 +7,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -112,11 +110,9 @@ public final class JamoListener implements Listener {
 		taskKeeper.addBoardItem("Could be cool to have a live band");
 		taskKeeper.addBoardItem("Hello and ready for the party");
 
-		Timer mobTargetTimer = new Timer();
-		TimerTask mobTargetTask = new TimerTask() {
-
+		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 			@Override
-			public final void run() {
+			public void run() {
 				teamedMobs.forEach(uuid -> {
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity instanceof Mob) {
@@ -139,9 +135,7 @@ public final class JamoListener implements Listener {
 					}
 				});
 			}
-		};
-
-		mobTargetTimer.schedule(mobTargetTask, 5000, 5000);
+		}, 100L); // 100 Tick (5 Second) delay before run() is called
 	}
 
 	private void randomChestSpawn() {
