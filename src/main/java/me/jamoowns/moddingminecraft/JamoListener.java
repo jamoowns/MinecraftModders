@@ -121,6 +121,7 @@ public final class JamoListener implements Listener {
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity instanceof Mob) {
 						Mob mob = (Mob) entity;
+						System.out.println(mob.getTarget());
 						if (mob.getTarget() == null) {
 							Collection<Entity> nearbyEntities = mob.getWorld().getNearbyEntities(mob.getLocation(), 15,
 									15, 15, e -> {
