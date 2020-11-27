@@ -115,9 +115,9 @@ public final class Teams {
 		Material headType = army.getTeamColour().getHead();
 		mob.getEquipment().setHelmet(new ItemStack(headType));
 
-		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-		Team team = board.getTeam(army.getTeamName());
-		team.addEntry(mob.getUniqueId().toString());
+		army.add(mob.getUniqueId());
+		Bukkit.getScoreboardManager().getMainScoreboard().getTeam(army.getTeamName())
+				.addEntry(mob.getUniqueId().toString());
 	}
 
 	private class PlayerEventListener implements Listener {
