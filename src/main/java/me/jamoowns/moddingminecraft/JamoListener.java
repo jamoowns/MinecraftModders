@@ -126,8 +126,8 @@ public final class JamoListener implements Listener {
 								.collect(Collectors.toList());
 
 						Optional<Entity> target = teamedEntitiesNearby.stream()
-								.sorted((o1, o2) -> Double.compare(entity.getLocation().distance(o2.getLocation()),
-										entity.getLocation().distance(o1.getLocation())))
+								.sorted((o1, o2) -> Double.compare(entity.getLocation().distance(o1.getLocation()),
+										entity.getLocation().distance(o2.getLocation())))
 								.findFirst();
 						if (target.isPresent()) {
 							mob.setTarget((LivingEntity) target.get());
