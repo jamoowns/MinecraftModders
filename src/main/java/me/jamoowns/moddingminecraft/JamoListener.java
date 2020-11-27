@@ -117,7 +117,8 @@ public final class JamoListener implements Listener {
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity instanceof Mob) {
 						Mob mob = (Mob) entity;
-						javaPlugin.getLogger().info(mob.getTarget().toString());
+						javaPlugin.getLogger()
+								.info(mob.getTarget() == null ? "NULL" : mob.getTarget().getName().toString());
 						if (mob.getTarget() == null) {
 							Collection<Entity> nearbyEntities = mob.getWorld().getNearbyEntities(mob.getLocation(), 15,
 									15, 15, e -> {
