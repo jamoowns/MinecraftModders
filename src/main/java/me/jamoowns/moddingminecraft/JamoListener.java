@@ -1,10 +1,14 @@
 package me.jamoowns.moddingminecraft;
 
+import static me.jamoowns.moddingminecraft.common.itemcollections.ItemCollections.BUCKET_TYPES;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -40,6 +44,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
 import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
@@ -50,7 +55,6 @@ public final class JamoListener implements Listener {
 	private final JavaPlugin javaPlugin;
 
 	private final Random RANDOM;
-	private final List<Material> bucketTypes;
 	private final List<Enchantment> enchantments;
 
 	private final boolean RANDOM_CHESTS = false;
@@ -64,21 +68,17 @@ public final class JamoListener implements Listener {
 
 	private final List<UUID> teamedMobs;
 
+	private Map<String, CustomItem> customItemsByName;
+
+	private CustomItem normalZombieStick;
+
+	private CustomItem normalRoomItem;
+
 	public JamoListener(JavaPlugin aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		RANDOM = new Random();
 
 		teamedMobs = new ArrayList<>();
-
-		bucketTypes = new ArrayList<>();
-		bucketTypes.add(Material.BUCKET);
-		bucketTypes.add(Material.COD_BUCKET);
-		bucketTypes.add(Material.LAVA_BUCKET);
-		bucketTypes.add(Material.MILK_BUCKET);
-		bucketTypes.add(Material.PUFFERFISH_BUCKET);
-		bucketTypes.add(Material.SALMON_BUCKET);
-		bucketTypes.add(Material.TROPICAL_FISH_BUCKET);
-		bucketTypes.add(Material.WATER_BUCKET);
 
 		enchantments = Arrays.asList(Enchantment.values());
 
@@ -94,19 +94,16 @@ public final class JamoListener implements Listener {
 		taskKeeper = new TaskKeeper(javaPlugin);
 		teams = new Teams(javaPlugin);
 
+		setupCustomItems();
+
 		Consumer<UUID> pigReward = playerId -> {
-			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_AXE));
-			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_PICKAXE));
-			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_SHOVEL));
+			Bukkit.getPlayer(playerId).getInventory().addItem(normalZombieStick.asItem());
 		};
 		Consumer<UUID> cowReward = playerId -> {
-			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_CHESTPLATE));
-			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_HELMET));
-			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_BOOTS));
-			Bukkit.getPlayer(playerId).getInventory().addItem(new ItemStack(Material.GOLDEN_LEGGINGS));
+			Bukkit.getPlayer(playerId).getInventory().addItem(normalRoomItem.asItem());
 		};
-		taskKeeper.addTask("Kill pigs", pigReward, 5);
-		taskKeeper.addTask("Kill cows", cowReward, 12);
+		taskKeeper.addTask("Kill pigs", pigReward, 2);
+		taskKeeper.addTask("Kill cows", cowReward, 2);
 		taskKeeper.addBoardItem("Could be cool to have a live band");
 		taskKeeper.addBoardItem("Hello and ready for the party");
 
@@ -137,6 +134,30 @@ public final class JamoListener implements Listener {
 				});
 			}
 		}, 80L, 80L); // 80 Tick (4 Second) delay before run() is called
+	}
+
+	private void setupCustomItems() {
+		customItemsByName = new HashMap<>();
+
+		normalZombieStick = new CustomItem(Material.REDSTONE_TORCH, "Normal Zombie");
+		normalZombieStick.setBlockPlaceEvent(event -> {
+			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
+			Zombie zombie = event.getBlock().getWorld().spawn(spawnLocation, Zombie.class);
+			teams.register(event.getPlayer().getUniqueId(), zombie);
+			teamedMobs.add(zombie.getUniqueId());
+		});
+		customItemsByName.put(normalZombieStick.name(), normalZombieStick);
+
+		normalRoomItem = new CustomItem(Material.LECTERN, "Standard Room");
+		normalRoomItem.setBlockPlaceEvent(event -> {
+			Location startPoint = event.getBlockPlaced().getLocation().add(0, 0, 0);
+
+			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, RANDOM.nextInt(5) + 4,
+					RANDOM.nextInt(5) + 4, 5, linearFace(event.getPlayer().getLocation().getYaw()));
+
+			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
+		});
+		customItemsByName.put(normalRoomItem.name(), normalRoomItem);
 	}
 
 	private void randomChestSpawn() {
@@ -207,7 +228,7 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
-		event.setItemStack(new ItemStack(bucketTypes.get(RANDOM.nextInt(bucketTypes.size()))));
+		event.setItemStack(new ItemStack(BUCKET_TYPES.get(RANDOM.nextInt(BUCKET_TYPES.size()))));
 	}
 
 	@EventHandler
@@ -217,24 +238,10 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
-		Player player = event.getPlayer();
-		if (event.getBlockPlaced().getType() == Material.STONE_PRESSURE_PLATE) {
+		CustomItem customItem = customItemsByName.get(event.getItemInHand().getItemMeta().getDisplayName());
+		if (customItem != null && customItem.hasBlockPlaceEvent()) {
 			event.getBlockPlaced().setType(Material.AIR);
-
-			Location startPoint = event.getBlockPlaced().getLocation().add(0, 0, 0);
-
-			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, RANDOM.nextInt(5) + 4,
-					RANDOM.nextInt(5) + 4, 5, linearFace(player.getLocation().getYaw()));
-
-			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
-		} else if (event.getBlockPlaced().getType() == Material.ACTIVATOR_RAIL) {
-			event.getBlockPlaced().setType(Material.AIR);
-
-			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
-
-			Zombie zombie = event.getBlock().getWorld().spawn(spawnLocation, Zombie.class);
-			teams.register(player.getUniqueId(), zombie);
-			teamedMobs.add(zombie.getUniqueId());
+			customItem.blockPlaceEvent().accept(event);
 		}
 	}
 
