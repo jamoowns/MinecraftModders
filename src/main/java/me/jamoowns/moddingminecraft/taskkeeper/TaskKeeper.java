@@ -19,7 +19,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
-import me.jamoowns.fated.Collections;
+import me.jamoowns.moddingminecraft.common.fated.Collections;
 
 public final class TaskKeeper {
 

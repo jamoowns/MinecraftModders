@@ -1,4 +1,4 @@
-package me.jamoowns.moddingminecraft.itemcollections;
+package me.jamoowns.moddingminecraft.common.itemcollections;
 
 import java.util.Arrays;
 import java.util.List;

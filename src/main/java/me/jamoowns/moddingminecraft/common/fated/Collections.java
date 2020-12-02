@@ -1,4 +1,4 @@
-package me.jamoowns.fated;
+package me.jamoowns.moddingminecraft.common.fated;
 
 import java.util.Collection;
 import java.util.List;
