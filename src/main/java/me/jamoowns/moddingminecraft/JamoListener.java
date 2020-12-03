@@ -22,11 +22,13 @@ import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -72,6 +74,8 @@ public final class JamoListener implements Listener {
 	private List<CustomItem> mobSpawningItems;
 
 	private CustomItem normalZombieStick;
+	private CustomItem normalSkeletonStick;
+	private CustomItem normalCreeperStick;
 
 	private CustomItem normalMobStick;
 
@@ -164,6 +168,26 @@ public final class JamoListener implements Listener {
 		});
 		customItemsByName.put(normalZombieStick.name(), normalZombieStick);
 		mobSpawningItems.add(normalZombieStick);
+
+		normalSkeletonStick = new CustomItem(Material.END_ROD, "Normal Skeleton");
+		normalSkeletonStick.setBlockPlaceEvent(event -> {
+			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
+			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Skeleton.class);
+			teams.register(event.getPlayer().getUniqueId(), mob);
+			teamedMobs.add(mob.getUniqueId());
+		});
+		customItemsByName.put(normalSkeletonStick.name(), normalSkeletonStick);
+		mobSpawningItems.add(normalSkeletonStick);
+
+		normalCreeperStick = new CustomItem(Material.TWISTING_VINES, "Normal Creeper");
+		normalCreeperStick.setBlockPlaceEvent(event -> {
+			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
+			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Creeper.class);
+			teams.register(event.getPlayer().getUniqueId(), mob);
+			teamedMobs.add(mob.getUniqueId());
+		});
+		customItemsByName.put(normalCreeperStick.name(), normalCreeperStick);
+		mobSpawningItems.add(normalCreeperStick);
 
 		normalMobStick = new CustomItem(Material.SOUL_TORCH, "Unkown Mob");
 		normalMobStick.setBlockPlaceEvent(event -> {
