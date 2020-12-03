@@ -166,7 +166,7 @@ public final class JamoListener implements Listener {
 		normalMobStick.setBlockPlaceEvent(event -> {
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
 			List<EntityType> mobList = Arrays.asList(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.IRON_GOLEM,
-					EntityType.PIGLIN_BRUTE);
+					EntityType.PIGLIN);
 			Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation,
 					mobList.get(RANDOM.nextInt(mobList.size())));
 			teams.register(event.getPlayer().getUniqueId(), (Mob) mob);
