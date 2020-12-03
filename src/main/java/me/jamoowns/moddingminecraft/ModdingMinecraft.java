@@ -17,7 +17,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	@Override
 	public void onEnable() {
 		statusByFeature = new HashMap<>();
-		statusByFeature.put(Feature.BATTLE_ROYALE, true);
+		statusByFeature.put(Feature.BATTLE_ROYALE, false);
 
 		playerListener = new JamoListener(this);
 		mobListener = new MobListener(this);
@@ -50,6 +50,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	}
 
 	public final boolean isFeatureActive(Feature feature) {
-		return statusByFeature.get(feature);
+		return statusByFeature.getOrDefault(feature, false);
 	}
 }
