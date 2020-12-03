@@ -27,6 +27,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -72,6 +73,8 @@ public final class JamoListener implements Listener {
 
 	private CustomItem normalZombieStick;
 
+	private CustomItem normalMobStick;
+	
 	private CustomItem normalRoomItem;
 
 	public JamoListener(JavaPlugin aJavaPlugin) {
@@ -147,6 +150,17 @@ public final class JamoListener implements Listener {
 			teamedMobs.add(zombie.getUniqueId());
 		});
 		customItemsByName.put(normalZombieStick.name(), normalZombieStick);
+		
+		normalMobStick = new CustomItem(Material.SOUL_TORCH, "Unkown Mob");
+		normalMobStick.setBlockPlaceEvent(event -> {
+			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
+			List<EntityType> mobList = Arrays.asList(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.IRON_GOLEM, EntityType.PIGLIN_BRUTE);
+					Random r = new Random();
+			Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation, mobList.get(r.nextInt(mobList.size())));
+			teams.register(event.getPlayer().getUniqueId(), mob);
+			teamedMobs.add(mob.getUniqueId());
+		});
+		customItemsByName.put(normalMobStick.name(), normalMobStick);
 
 		normalRoomItem = new CustomItem(Material.LECTERN, "Standard Room");
 		normalRoomItem.setBlockPlaceEvent(event -> {

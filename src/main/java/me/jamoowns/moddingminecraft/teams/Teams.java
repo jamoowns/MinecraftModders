@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -121,7 +122,20 @@ public final class Teams {
 		Bukkit.getScoreboardManager().getMainScoreboard().getTeam(army.getTeamName())
 				.addEntry(mob.getUniqueId().toString());
 	}
+	public void register(UUID owner, Entity mob) {
+		// TODO Auto-generated method stub
+		Player player = Bukkit.getPlayer(owner);
+		mob.setCustomName(player.getName() + "'s minion");
+		mob.setCustomNameVisible(true);
+		mob.setGlowing(true);
+		Army army = getTeam(owner);
+		Material headType = army.getTeamColour().getHead();
+		((LivingEntity) mob).getEquipment().setHelmet(new ItemStack(headType));
 
+		army.add(mob.getUniqueId());
+		Bukkit.getScoreboardManager().getMainScoreboard().getTeam(army.getTeamName())
+				.addEntry(mob.getUniqueId().toString());
+	}
 	private class PlayerEventListener implements Listener {
 
 		private Teams teams;
@@ -136,4 +150,6 @@ public final class Teams {
 			teams.register(player.getName(), player.getUniqueId());
 		}
 	}
+
+	
 }
