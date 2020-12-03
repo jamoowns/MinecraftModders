@@ -40,7 +40,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -52,7 +51,7 @@ import me.jamoowns.moddingminecraft.teams.Teams;
 
 public final class JamoListener implements Listener {
 
-	private final JavaPlugin javaPlugin;
+	private final ModdingMinecraft javaPlugin;
 
 	private final Random RANDOM;
 	private final List<Enchantment> enchantments;
@@ -74,7 +73,7 @@ public final class JamoListener implements Listener {
 
 	private CustomItem normalRoomItem;
 
-	public JamoListener(JavaPlugin aJavaPlugin) {
+	public JamoListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		RANDOM = new Random();
 
@@ -129,11 +128,24 @@ public final class JamoListener implements Listener {
 						if (target.isPresent()) {
 							mob.setTarget((LivingEntity) target.get());
 						}
-						// }
 					}
 				});
 			}
-		}, 80L, 80L); // 80 Tick (4 Second) delay before run() is called
+		}, 4 * ONE_SECOND, 4 * ONE_SECOND);
+
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
+			@Override
+			public void run() {
+				if (javaPlugin.isFeatureActive(Feature.BATTLE_ROYALE)) {
+					Bukkit.getOnlinePlayers().forEach(player -> {
+						ItemStack item = customItemsByName.values().stream().collect(Collectors.toList())
+								.get(RANDOM.nextInt(customItemsByName.values().size())).asItem();
+						item.setAmount(RANDOM.nextInt(4));
+						player.getInventory().addItem(item);
+					});
+				}
+			}
+		}, ONE_MINUTE, ONE_MINUTE);
 	}
 
 	private void setupCustomItems() {
