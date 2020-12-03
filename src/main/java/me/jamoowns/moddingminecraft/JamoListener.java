@@ -169,11 +169,22 @@ public final class JamoListener implements Listener {
 		normalMobStick.setBlockPlaceEvent(event -> {
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
 			List<EntityType> mobList = Arrays.asList(EntityType.ZOMBIE, EntityType.SKELETON,
-					EntityType.ZOMBIFIED_PIGLIN, EntityType.CREEPER, EntityType.SHULKER);
-			Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation,
-					mobList.get(RANDOM.nextInt(mobList.size())));
-			teams.register(event.getPlayer().getUniqueId(), (Mob) mob);
-			teamedMobs.add(mob.getUniqueId());
+					EntityType.ZOMBIFIED_PIGLIN);
+			List<EntityType> RaremobList = Arrays.asList(EntityType.CREEPER, EntityType.SHULKER);
+			
+			
+			if(RANDOM.nextInt(10)>3) {
+				Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation,
+						mobList.get(RANDOM.nextInt(mobList.size())));
+				teams.register(event.getPlayer().getUniqueId(), (Mob) mob);
+				teamedMobs.add(mob.getUniqueId());
+			}else {
+				Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation,
+						RaremobList.get(RANDOM.nextInt(RaremobList.size())));
+				teams.register(event.getPlayer().getUniqueId(), (Mob) mob);
+				teamedMobs.add(mob.getUniqueId());
+			}
+			
 		});
 		customItemsByName.put(normalMobStick.name(), normalMobStick);
 		mobSpawningItems.add(normalMobStick);
