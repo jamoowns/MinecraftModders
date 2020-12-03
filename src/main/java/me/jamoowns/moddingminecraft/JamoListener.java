@@ -270,7 +270,10 @@ public final class JamoListener implements Listener {
 				taskKeeper.incrementTask(mcPlayer.getUniqueId(), "Kill cows");
 			}
 		}
-		teamedMobs.remove(event.getEntity().getUniqueId());
+		if (teamedMobs.contains(event.getEntity().getUniqueId())) {
+			teamedMobs.remove(event.getEntity().getUniqueId());
+			event.getDrops().clear();
+		}
 	}
 
 	@EventHandler
