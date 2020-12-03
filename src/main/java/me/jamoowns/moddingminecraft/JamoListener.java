@@ -90,14 +90,13 @@ public final class JamoListener implements Listener {
 
 		enchantments = Arrays.asList(Enchantment.values());
 
-		if (RANDOM_CHESTS) {
-			Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
-				public void run() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
+			public void run() {
+				if (javaPlugin.isFeatureActive(Feature.RANDOM_CHESTS)) {
 					randomChestSpawn();
 				}
-			}, RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE,
-					RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE);
-		}
+			}
+		}, RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE, RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE);
 
 		taskKeeper = new TaskKeeper(javaPlugin);
 		teams = new Teams(javaPlugin);
