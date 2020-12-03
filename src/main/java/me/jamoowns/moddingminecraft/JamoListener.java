@@ -69,6 +69,8 @@ public final class JamoListener implements Listener {
 
 	private Map<String, CustomItem> customItemsByName;
 
+	private List<CustomItem> mobSpawningItems;
+
 	private CustomItem normalZombieStick;
 
 	private CustomItem normalMobStick;
@@ -80,6 +82,7 @@ public final class JamoListener implements Listener {
 		RANDOM = new Random();
 
 		teamedMobs = new ArrayList<>();
+		mobSpawningItems = new ArrayList<>();
 
 		enchantments = Arrays.asList(Enchantment.values());
 
@@ -140,9 +143,8 @@ public final class JamoListener implements Listener {
 			public void run() {
 				if (javaPlugin.isFeatureActive(Feature.BATTLE_ROYALE)) {
 					Bukkit.getOnlinePlayers().forEach(player -> {
-						ItemStack item = customItemsByName.values().stream().collect(Collectors.toList())
-								.get(RANDOM.nextInt(customItemsByName.values().size())).asItem();
-						item.setAmount(RANDOM.nextInt(4));
+						ItemStack item = mobSpawningItems.get(RANDOM.nextInt(mobSpawningItems.size())).asItem();
+						item.setAmount(RANDOM.nextInt(5) + 5);
 						player.getInventory().addItem(item);
 					});
 				}
@@ -161,6 +163,7 @@ public final class JamoListener implements Listener {
 			teamedMobs.add(mob.getUniqueId());
 		});
 		customItemsByName.put(normalZombieStick.name(), normalZombieStick);
+		mobSpawningItems.add(normalZombieStick);
 
 		normalMobStick = new CustomItem(Material.SOUL_TORCH, "Unkown Mob");
 		normalMobStick.setBlockPlaceEvent(event -> {
@@ -173,6 +176,7 @@ public final class JamoListener implements Listener {
 			teamedMobs.add(mob.getUniqueId());
 		});
 		customItemsByName.put(normalMobStick.name(), normalMobStick);
+		mobSpawningItems.add(normalMobStick);
 
 		normalRoomItem = new CustomItem(Material.LECTERN, "Standard Room");
 		normalRoomItem.setBlockPlaceEvent(event -> {
