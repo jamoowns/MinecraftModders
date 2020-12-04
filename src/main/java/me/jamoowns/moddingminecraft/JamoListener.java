@@ -147,12 +147,12 @@ public final class JamoListener implements Listener {
 				if (javaPlugin.isFeatureActive(Feature.BATTLE_ROYALE)) {
 					Bukkit.getOnlinePlayers().forEach(player -> {
 						ItemStack item = mobSpawningItems.get(RANDOM.nextInt(mobSpawningItems.size())).asItem();
-						item.setAmount(RANDOM.nextInt(5) + 5);
+						item.setAmount(RANDOM.nextInt(15) + 10);
 						player.getInventory().addItem(item);
 					});
 				}
 			}
-		}, ONE_MINUTE, ONE_MINUTE);
+		}, ONE_MINUTE / 2, ONE_MINUTE / 2);
 	}
 
 	private void setupCustomItems() {
@@ -194,20 +194,19 @@ public final class JamoListener implements Listener {
 			List<EntityType> mobList = Arrays.asList(EntityType.ZOMBIE, EntityType.SKELETON,
 					EntityType.ZOMBIFIED_PIGLIN);
 			List<EntityType> RaremobList = Arrays.asList(EntityType.CREEPER, EntityType.SHULKER);
-			
-			
-			if(RANDOM.nextInt(10)>3) {
+
+			if (RANDOM.nextInt(10) > 3) {
 				Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation,
 						mobList.get(RANDOM.nextInt(mobList.size())));
 				teams.register(event.getPlayer().getUniqueId(), (Mob) mob);
 				teamedMobs.add(mob.getUniqueId());
-			}else {
+			} else {
 				Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation,
 						RaremobList.get(RANDOM.nextInt(RaremobList.size())));
 				teams.register(event.getPlayer().getUniqueId(), (Mob) mob);
 				teamedMobs.add(mob.getUniqueId());
 			}
-			
+
 		});
 		customItemsByName.put(normalMobStick.name(), normalMobStick);
 		mobSpawningItems.add(normalMobStick);
