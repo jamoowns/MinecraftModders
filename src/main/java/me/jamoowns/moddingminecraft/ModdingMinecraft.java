@@ -10,8 +10,9 @@ import me.jamoowns.moddingminecraft.teams.Teams;
 
 public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
-	private JamoListener playerListener;
+	private JamoListener jamoListener;
 	private MobListener mobListener;
+	private MoshyListener moshyListener;
 
 	private Map<Feature, Boolean> statusByFeature;
 
@@ -24,15 +25,17 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		statusByFeature.put(Feature.BATTLE_ROYALE, false);
 		teams = new Teams(this);
 
-		playerListener = new JamoListener(this);
+		jamoListener = new JamoListener(this);
 		mobListener = new MobListener(this);
+		moshyListener = new MoshyListener();
 
 		CommandMinecraftModders commandExecutor = new CommandMinecraftModders();
 		commandExecutor.addListener(this);
 
 		this.getCommand("mm").setExecutor(commandExecutor);
-		getServer().getPluginManager().registerEvents(playerListener, this);
+		getServer().getPluginManager().registerEvents(jamoListener, this);
 		getServer().getPluginManager().registerEvents(mobListener, this);
+		getServer().getPluginManager().registerEvents(moshyListener, this);
 	}
 
 	public final Teams getTeams() {
@@ -42,7 +45,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	// Fired when plug-in is disabled
 	@Override
 	public final void onDisable() {
-		playerListener.cleanup();
+		jamoListener.cleanup();
 		mobListener.cleanup();
 	}
 
