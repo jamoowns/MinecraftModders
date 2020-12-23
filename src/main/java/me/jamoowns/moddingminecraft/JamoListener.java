@@ -34,7 +34,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -49,7 +49,6 @@ import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
 import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
-import me.jamoowns.moddingminecraft.teams.Teams;
 
 public final class JamoListener implements Listener {
 
@@ -58,14 +57,11 @@ public final class JamoListener implements Listener {
 	private final Random RANDOM;
 	private final List<Enchantment> enchantments;
 
-	private final boolean RANDOM_CHESTS = false;
-
 	private static final long ONE_SECOND = 20L;
+
 	private static final long ONE_MINUTE = ONE_SECOND * 60;
 
 	private final TaskKeeper taskKeeper;
-
-	private final Teams teams;
 
 	private final List<UUID> teamedMobs;
 
@@ -99,7 +95,6 @@ public final class JamoListener implements Listener {
 		}, RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE, RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE);
 
 		taskKeeper = new TaskKeeper(javaPlugin);
-		teams = new Teams(javaPlugin);
 
 		setupCustomItems();
 
@@ -125,8 +120,9 @@ public final class JamoListener implements Listener {
 						Collection<Entity> nearbyEntities = mob.getWorld().getNearbyEntities(mob.getLocation(), 15, 15,
 								15, e -> e instanceof LivingEntity);
 						List<Entity> teamedEntitiesNearby = nearbyEntities.stream()
-								.filter(e -> !teams.hasTeam(e.getUniqueId()) || !teams.getTeamName(e.getUniqueId())
-										.equalsIgnoreCase(teams.getTeamName(mob.getUniqueId())))
+								.filter(e -> !javaPlugin.getTeams().hasTeam(e.getUniqueId())
+										|| !javaPlugin.getTeams().getTeamName(e.getUniqueId())
+												.equalsIgnoreCase(javaPlugin.getTeams().getTeamName(mob.getUniqueId())))
 								.collect(Collectors.toList());
 
 						Optional<Entity> target = teamedEntitiesNearby.stream()
@@ -162,7 +158,7 @@ public final class JamoListener implements Listener {
 		normalZombieStick.setBlockPlaceEvent(event -> {
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
 			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Zombie.class);
-			teams.register(event.getPlayer().getUniqueId(), mob);
+			javaPlugin.getTeams().register(event.getPlayer().getUniqueId(), mob);
 			teamedMobs.add(mob.getUniqueId());
 		});
 		customItemsByName.put(normalZombieStick.name(), normalZombieStick);
@@ -172,7 +168,7 @@ public final class JamoListener implements Listener {
 		normalSkeletonStick.setBlockPlaceEvent(event -> {
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
 			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Skeleton.class);
-			teams.register(event.getPlayer().getUniqueId(), mob);
+			javaPlugin.getTeams().register(event.getPlayer().getUniqueId(), mob);
 			teamedMobs.add(mob.getUniqueId());
 		});
 		customItemsByName.put(normalSkeletonStick.name(), normalSkeletonStick);
@@ -182,7 +178,7 @@ public final class JamoListener implements Listener {
 		normalCreeperStick.setBlockPlaceEvent(event -> {
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
 			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Creeper.class);
-			teams.register(event.getPlayer().getUniqueId(), mob);
+			javaPlugin.getTeams().register(event.getPlayer().getUniqueId(), mob);
 			teamedMobs.add(mob.getUniqueId());
 		});
 		customItemsByName.put(normalCreeperStick.name(), normalCreeperStick);
@@ -198,12 +194,12 @@ public final class JamoListener implements Listener {
 			if (RANDOM.nextInt(10) > 3) {
 				Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation,
 						mobList.get(RANDOM.nextInt(mobList.size())));
-				teams.register(event.getPlayer().getUniqueId(), (Mob) mob);
+				javaPlugin.getTeams().register(event.getPlayer().getUniqueId(), (Mob) mob);
 				teamedMobs.add(mob.getUniqueId());
 			} else {
 				Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation,
 						RaremobList.get(RANDOM.nextInt(RaremobList.size())));
-				teams.register(event.getPlayer().getUniqueId(), (Mob) mob);
+				javaPlugin.getTeams().register(event.getPlayer().getUniqueId(), (Mob) mob);
 				teamedMobs.add(mob.getUniqueId());
 			}
 
@@ -260,10 +256,9 @@ public final class JamoListener implements Listener {
 	}
 
 	@EventHandler
-	public void onEntityPickupItemEvent(EntityPickupItemEvent event) {
-		if (event.getItem().getType().name().contains("CARPET")) {
+	public void onEntitySpawnEvent(EntitySpawnEvent event) {
+		if (event.getEntity().getType().name().contains("CARPET")) {
 			event.setCancelled(true);
-			event.getItem().remove();
 		}
 	}
 
@@ -357,6 +352,6 @@ public final class JamoListener implements Listener {
 	}
 
 	public void cleanup() {
-		teams.cleanup();
+		javaPlugin.getTeams().cleanup();
 	}
 }

@@ -34,16 +34,16 @@ public final class Teams {
 		RANDOM = new Random();
 
 		availableTeamColours = new ArrayList<>();
-		availableTeamColours.add(new TeamColour(Material.BLACK_WOOL, ChatColor.BLACK));
-		availableTeamColours.add(new TeamColour(Material.BLUE_WOOL, ChatColor.BLUE));
-		availableTeamColours.add(new TeamColour(Material.CYAN_WOOL, ChatColor.AQUA));
-		availableTeamColours.add(new TeamColour(Material.GRAY_WOOL, ChatColor.GRAY));
-		availableTeamColours.add(new TeamColour(Material.GREEN_WOOL, ChatColor.GREEN));
-		availableTeamColours.add(new TeamColour(Material.ORANGE_WOOL, ChatColor.GOLD));
-		availableTeamColours.add(new TeamColour(Material.PURPLE_WOOL, ChatColor.LIGHT_PURPLE));
-		availableTeamColours.add(new TeamColour(Material.RED_WOOL, ChatColor.RED));
-		availableTeamColours.add(new TeamColour(Material.WHITE_WOOL, ChatColor.WHITE));
-		availableTeamColours.add(new TeamColour(Material.YELLOW_WOOL, ChatColor.YELLOW));
+		availableTeamColours.add(new TeamColour(Material.BLACK_WOOL, ChatColor.BLACK, Material.BLACK_CARPET));
+		availableTeamColours.add(new TeamColour(Material.BLUE_WOOL, ChatColor.BLUE, Material.BLUE_CARPET));
+		availableTeamColours.add(new TeamColour(Material.CYAN_WOOL, ChatColor.AQUA, Material.CYAN_CARPET));
+		availableTeamColours.add(new TeamColour(Material.GRAY_WOOL, ChatColor.GRAY, Material.GRAY_CARPET));
+		availableTeamColours.add(new TeamColour(Material.GREEN_WOOL, ChatColor.GREEN, Material.GREEN_CARPET));
+		availableTeamColours.add(new TeamColour(Material.ORANGE_WOOL, ChatColor.GOLD, Material.ORANGE_CARPET));
+		availableTeamColours.add(new TeamColour(Material.PURPLE_WOOL, ChatColor.LIGHT_PURPLE, Material.PURPLE_CARPET));
+		availableTeamColours.add(new TeamColour(Material.RED_WOOL, ChatColor.RED, Material.RED_CARPET));
+		availableTeamColours.add(new TeamColour(Material.WHITE_WOOL, ChatColor.WHITE, Material.WHITE_CARPET));
+		availableTeamColours.add(new TeamColour(Material.YELLOW_WOOL, ChatColor.YELLOW, Material.YELLOW_CARPET));
 
 		cleanup();
 		for (Player online : Bukkit.getOnlinePlayers()) {
@@ -96,7 +96,7 @@ public final class Teams {
 		return armies.stream().filter(t -> t.getTeamName().equalsIgnoreCase(teamName)).findFirst().get();
 	}
 
-	private final Army getTeam(UUID entity) {
+	public final Army getTeam(UUID entity) {
 		return armies.stream().filter(t -> t.has(entity)).findFirst().get();
 	}
 
