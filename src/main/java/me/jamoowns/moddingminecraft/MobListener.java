@@ -49,7 +49,6 @@ import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -59,7 +58,7 @@ import org.bukkit.projectiles.ProjectileSource;
 
 public class MobListener implements Listener {
 
-	private final JavaPlugin javaPlugin;
+	private final ModdingMinecraft javaPlugin;
 
 	private Map<UUID, List<Block>> trailByPlayer;
 
@@ -79,7 +78,7 @@ public class MobListener implements Listener {
 	private boolean beeDeath = true;
 	private boolean phantomDeath = true;
 
-	public MobListener(JavaPlugin aJavaPlugin) {
+	public MobListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
 		trailByPlayer = new HashMap<>();
@@ -256,7 +255,9 @@ public class MobListener implements Listener {
 							for (int k = 0; k < 21; k++) {
 								Location loc = arrow.getLocation();
 								loc.add(k - 10, i, j - 10);
-								if (!arrow.getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")&&!arrow.getLocation().getWorld().getBlockAt(loc).getType().name().contains("LAVA")
+								if (!arrow.getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")
+										&& !arrow.getLocation().getWorld().getBlockAt(loc).getType().name()
+												.contains("LAVA")
 										|| loc.getY() < 63) {
 									arrow.getLocation().getWorld().getBlockAt(loc).setType(multi[j][k]);
 								} else {
@@ -317,12 +318,9 @@ public class MobListener implements Listener {
 						}
 					}
 					trailByPlayer.put(event.getPlayer().getUniqueId(), trail);
-					if (event.getPlayer().getName().equalsIgnoreCase("mabmo")) {
 
-						event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(Material.CYAN_CARPET);
-					} else {
-						event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(Material.RED_CARPET);
-					}
+					event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(
+							javaPlugin.getTeams().getTeam(event.getPlayer().getUniqueId()).getTeamColour().getTrail());
 				}
 			}
 		}

@@ -6,6 +6,8 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.jamoowns.moddingminecraft.teams.Teams;
+
 public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private JamoListener playerListener;
@@ -13,11 +15,14 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private Map<Feature, Boolean> statusByFeature;
 
+	private Teams teams;
+
 	// Fired when plug-in is first enabled
 	@Override
-	public void onEnable() {
+	public final void onEnable() {
 		statusByFeature = new HashMap<>();
 		statusByFeature.put(Feature.BATTLE_ROYALE, false);
+		teams = new Teams(this);
 
 		playerListener = new JamoListener(this);
 		mobListener = new MobListener(this);
@@ -30,9 +35,13 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		getServer().getPluginManager().registerEvents(mobListener, this);
 	}
 
+	public final Teams getTeams() {
+		return teams;
+	}
+
 	// Fired when plug-in is disabled
 	@Override
-	public void onDisable() {
+	public final void onDisable() {
 		playerListener.cleanup();
 		mobListener.cleanup();
 	}
