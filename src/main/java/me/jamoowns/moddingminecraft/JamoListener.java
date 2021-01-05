@@ -48,6 +48,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
@@ -69,6 +70,8 @@ public final class JamoListener implements Listener {
 	private final TaskKeeper taskKeeper;
 
 	private List<CustomItem> mobSpawningItems;
+
+	private CustomItem lightningAnusItem;
 
 	private CustomItem skeletonArrowItem;
 
@@ -227,6 +230,19 @@ public final class JamoListener implements Listener {
 			event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Skeleton.class);
 		});
 		javaPlugin.customItems().customItemsByName().put(skeletonArrowItem.name(), skeletonArrowItem);
+
+		lightningAnusItem = new CustomItem(Material.CHAIN, "Lightning Storm");
+		lightningAnusItem.setBlockPlaceEvent(event -> {
+			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
+
+			Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
+				@Override
+				public void run() {
+					spawnLocation.getWorld().strikeLightningEffect(spawnLocation);
+				}
+			}, ONE_SECOND * 5, ONE_SECOND * 5);
+		});
+		javaPlugin.customItems().customItemsByName().put(lightningAnusItem.name(), lightningAnusItem);
 	}
 
 	private void randomChestSpawn() {
@@ -337,13 +353,9 @@ public final class JamoListener implements Listener {
 			event.getBlockPlaced().setType(Material.AIR);
 			customItem.blockPlaceEvent().accept(event);
 		}
-		if(event.getBlock().getType().equals(Material.HAY_BLOCK)) {
-			String[] hay = {"Hey", "Hello", "Sup", "Greetings", "Hi", "Bonjour", "Good Day", "Good Bye"};
-			Random r = new Random();
-			int low = 0;
-			int high = 8;
-			int result = r.nextInt(high - low) + low;
-			event.getPlayer().sendMessage(hay[result]);
+		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
+			String[] hay = { "Hey", "Hello", "Sup", "Greetings", "Hi", "Bonjour", "Good Day", "Good Bye" };
+			Broadcaster.sendInfo(event.getPlayer(), hay[RANDOM.nextInt(8)]);
 		}
 		if(event.getBlock().getType().equals(Material.GOLD_BLOCK)) {
 			
@@ -376,7 +388,10 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onPlayerUnleashEntityEvent(EntityShootBowEvent event) {
-		event.getProjectile().setCustomName(event.getConsumable().getItemMeta().getDisplayName());
+		if (event.getProjectile() != null && event.getConsumable() != null
+				&& event.getConsumable().getItemMeta() != null) {
+			event.getProjectile().setCustomName(event.getConsumable().getItemMeta().getDisplayName());
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
