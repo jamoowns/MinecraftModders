@@ -337,6 +337,14 @@ public final class JamoListener implements Listener {
 			event.getBlockPlaced().setType(Material.AIR);
 			customItem.blockPlaceEvent().accept(event);
 		}
+		if(event.getBlock().getType().equals(Material.HAY_BLOCK)) {
+			String[] hay = {"Hey", "Hello", "Sup", "Greetings", "Hi", "Bonjour", "Good Day", "Good Bye"};
+			Random r = new Random();
+			int low = 0;
+			int high = 8;
+			int result = r.nextInt(high - low) + low;
+			event.getPlayer().sendMessage(hay[result]);
+		}
 	}
 
 	@EventHandler
