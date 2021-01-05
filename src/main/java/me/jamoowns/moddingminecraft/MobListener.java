@@ -20,6 +20,7 @@ import org.bukkit.entity.Bee;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Husk;
@@ -39,6 +40,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -56,6 +58,7 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 
 public class MobListener implements Listener {
@@ -352,7 +355,104 @@ public class MobListener implements Listener {
 			}
 		}
 	}
+	@EventHandler
+	public void onBlockPlace(BlockPlaceEvent event) {
+		
+		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
+		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
+		        if(ent instanceof Villager){ 
+		            if(ent.getName().contains("Bob")) {
 
+		    			event.getPlayer().getServer().broadcastMessage("'Can you get this Basalt polished for me'-"+ent.getName());
+		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+		    				public void run() {
+		    					event.getBlockPlaced().setType(Material.BASALT);
+		    				}
+		    			}, 10);
+		            }
+		        }
+		    }
+		}
+		if (event.getBlock().getType().equals(Material.BASALT)) {
+		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
+		        if(ent instanceof Villager){ 
+		            if(ent.getName().contains("Sam")) {
+
+		            	event.getPlayer().getServer().broadcastMessage("'I can polish that for you right now'-"+ent.getName());
+		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+		    				public void run() {
+		    					event.getBlockPlaced().setType(Material.POLISHED_BASALT);
+		    				}
+		    			}, 10);
+		            }
+		        }
+		    }
+		}
+
+		if (event.getBlock().getType().equals(Material.POLISHED_BASALT)) {
+		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
+		        if(ent instanceof Villager){ 
+		            if(ent.getName().contains("Bob")) {
+
+		            	event.getPlayer().getServer().broadcastMessage("'thanks for getting it polished it for me, here's a targe to practice your skills'-"+ent.getName());
+		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+		    				public void run() {
+		    					event.getBlockPlaced().setType(Material.POLISHED_BASALT);
+		    				}
+		    			}, 10);
+		            }
+		        }
+		    }
+		}
+
+		if (event.getBlock().getType().equals(Material.TARGET)) {
+		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
+		        if(ent instanceof Villager){ 
+		            if(ent.getName().contains("Finch")) {
+
+		            	event.getPlayer().getServer().broadcastMessage("'Just what I needed, here's something to dry your clothes on'-"+ent.getName());
+		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+		    				public void run() {
+		    					event.getBlockPlaced().setType(Material.SCAFFOLDING);
+		    				}
+		    			}, 10);
+		            }
+		        }
+		    }
+		}
+		
+
+		if (event.getBlock().getType().equals(Material.TARGET)) {
+		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
+		        if(ent instanceof Villager){ 
+		            if(ent.getName().contains("Finch")) {
+
+		            	event.getPlayer().getServer().broadcastMessage("'Just what I needed, here's something to dry your clothes on'-"+ent.getName());
+		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+		    				public void run() {
+		    					event.getBlockPlaced().setType(Material.SCAFFOLDING);
+		    				}
+		    			}, 10);
+		            }
+		        }
+		    }
+		}
+		if (event.getBlock().getType().equals(Material.SCAFFOLDING)) {
+		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
+		        if(ent instanceof Villager){ 
+		            if(ent.getName().contains("Finch")) {
+
+		            	event.getPlayer().getServer().broadcastMessage("'Sweet now i can dry my wet pants, have some wheat to make bread'-"+ent.getName());
+		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+		    				public void run() {
+		    					event.getBlockPlaced().setType(Material.HAY_BLOCK);
+		    				}
+		    			}, 10);
+		            }
+		        }
+		    }
+		}
+	}
 	@EventHandler
 	public void onEntityDeathEvent(EntityDeathEvent event) {
 		if (javaPlugin.isFeatureActive(Feature.FUNKY_MOB_DEATH)) {
