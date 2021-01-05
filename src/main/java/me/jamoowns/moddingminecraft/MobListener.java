@@ -394,10 +394,10 @@ public class MobListener implements Listener {
 		        if(ent instanceof Villager){ 
 		            if(ent.getName().contains("Bob")) {
 
-		            	event.getPlayer().getServer().broadcastMessage("'thanks for getting it polished it for me, here's a targe to practice your skills'-"+ent.getName());
+		            	event.getPlayer().getServer().broadcastMessage("'thanks for getting it polished it for me, here's a target to practice your skills'-"+ent.getName());
 		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 		    				public void run() {
-		    					event.getBlockPlaced().setType(Material.POLISHED_BASALT);
+		    					event.getBlockPlaced().setType(Material.TARGET);
 		    				}
 		    			}, 10);
 		            }
