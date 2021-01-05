@@ -285,7 +285,7 @@ public final class JamoListener implements Listener {
 	}
 
 	public void showAllItems(Player player) {
-		Inventory inv = Bukkit.createInventory(null, 9, "Custom Items");
+		Inventory inv = Bukkit.createInventory(null, 18, "Custom Items");
 
 		ItemStack survival = new ItemStack(Material.DIAMOND_BLOCK);
 		ItemMeta survivalMeta = survival.getItemMeta();
@@ -297,9 +297,9 @@ public final class JamoListener implements Listener {
 		creativeMeta.setDisplayName("Creative");
 		creative.setItemMeta(creativeMeta);
 
-		inv.setItem(3, survival);
-		inv.setItem(5, creative);
-
+		for (int i = 0; i < customItemsByName.values().size(); i++) {
+			inv.setItem(i, new ArrayList<>(customItemsByName.values()).get(i).asItem());
+		}
 		player.openInventory(inv);
 	}
 
