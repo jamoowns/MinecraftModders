@@ -20,7 +20,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -225,10 +224,7 @@ public final class JamoListener implements Listener {
 
 		skeletonArrowItem = new CustomItem(Material.ARROW, "Skeleton Arrow");
 		skeletonArrowItem.setProjectileHitEvent(event -> {
-			if ((event.getEntity() instanceof Arrow)) {
-				Arrow arrow = (Arrow) event.getEntity();
-				arrow.getLocation().getWorld().spawn(arrow.getLocation(), Skeleton.class);
-			}
+			event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Skeleton.class);
 		});
 		javaPlugin.customItems().customItemsByName().put(skeletonArrowItem.name(), skeletonArrowItem);
 	}
