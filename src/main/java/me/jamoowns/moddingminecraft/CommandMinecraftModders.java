@@ -26,11 +26,13 @@ public final class CommandMinecraftModders implements CommandExecutor {
 
 	@Override
 	public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		Consumer<Player> commandToRun = commands.get(args[0]);
-		if (commandToRun != null) {
-			if (sender instanceof Player) {
-				commandToRun.accept((Player) sender);
-				return true;
+		if (args.length > 0) {
+			Consumer<Player> commandToRun = commands.get(args[0]);
+			if (commandToRun != null) {
+				if (sender instanceof Player) {
+					commandToRun.accept((Player) sender);
+					return true;
+				}
 			}
 		}
 		List<Feature> features = Arrays.asList(Feature.values());
