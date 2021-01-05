@@ -345,6 +345,33 @@ public final class JamoListener implements Listener {
 			int result = r.nextInt(high - low) + low;
 			event.getPlayer().sendMessage(hay[result]);
 		}
+		if(event.getBlock().getType().equals(Material.GOLD_BLOCK)) {
+			
+			event.getPlayer().sendMessage("'Can you get this Basalt polished for me'-Bob the Builder");
+			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+				public void run() {
+					event.getBlockPlaced().setType(Material.BASALT);
+				}
+			}, 180);
+		}
+		if(event.getBlock().getType().equals(Material.BASALT)) {
+			
+			event.getPlayer().sendMessage("'I can polish that for you right now'-Stonemason Sam");
+			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+				public void run() {
+					event.getBlockPlaced().setType(Material.POLISHED_BASALT);
+				}
+			}, 180);
+		}
+		if(event.getBlock().getType().equals(Material.POLISHED_BASALT)) {
+			
+			event.getPlayer().sendMessage("'thanks for getting it polished it for me'-Bob the Builder");
+			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+				public void run() {
+					event.getBlockPlaced().setType(Material.GOLD_BLOCK);
+				}
+			}, 180);
+		}
 	}
 
 	@EventHandler
