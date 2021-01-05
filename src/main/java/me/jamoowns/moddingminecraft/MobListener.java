@@ -56,6 +56,8 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 
+import me.jamoowns.moddingminecraft.customitems.CustomItem;
+
 public class MobListener implements Listener {
 
 	private final ModdingMinecraft javaPlugin;
@@ -64,10 +66,25 @@ public class MobListener implements Listener {
 
 	private final Random RANDOM;
 
+	private CustomItem creeperArrowItem;
+
 	public MobListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
 		trailByPlayer = new HashMap<>();
+		setupCustomItems();
+	}
+
+	private void setupCustomItems() {
+		creeperArrowItem = new CustomItem(Material.ARROW, "Creeper Arrow");
+		creeperArrowItem.setProjectileHitEvent(event -> {
+			int result = RANDOM.nextInt(4) + 1;
+			for (int i = 0; i < result; i++) {
+				event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Creeper.class);
+			}
+		});
+		javaPlugin.customItems().customItemsByName().put(creeperArrowItem.name(), creeperArrowItem);
+
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -162,16 +179,6 @@ public class MobListener implements Listener {
 			Arrow arrow = (Arrow) entity;
 			ProjectileSource shooter = arrow.getShooter();
 			if ((shooter instanceof Player) || (shooter instanceof BlockProjectileSource)) {
-				if (arrow.getBasePotionData().getType() == PotionType.WEAKNESS) {
-					Random r = new Random();
-					int low = 1;
-					int high = 5;
-					int result = r.nextInt(high - low) + low;
-					for (int i = 0; i < result; i++) {
-						arrow.getLocation().getWorld().spawn(arrow.getLocation(), Creeper.class);
-					}
-					arrow.remove();
-				}
 				if (arrow.getBasePotionData().getType() == PotionType.SLOWNESS) {
 					Random r = new Random();
 					int low = 4;
