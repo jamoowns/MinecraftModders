@@ -422,25 +422,10 @@ public class MobListener implements Listener {
 		}
 		
 
-		if (event.getBlock().getType().equals(Material.TARGET)) {
-		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
-		        if(ent instanceof Villager){ 
-		            if(ent.getName().contains("Finch")) {
-
-		            	event.getPlayer().getServer().broadcastMessage("'Just what I needed, here's something to dry your clothes on'-"+ent.getName());
-		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-		    				public void run() {
-		    					event.getBlockPlaced().setType(Material.SCAFFOLDING);
-		    				}
-		    			}, 10);
-		            }
-		        }
-		    }
-		}
 		if (event.getBlock().getType().equals(Material.SCAFFOLDING)) {
 		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
 		        if(ent instanceof Villager){ 
-		            if(ent.getName().contains("Finch")) {
+		            if(ent.getName().contains("Fred")) {
 
 		            	event.getPlayer().getServer().broadcastMessage("'Sweet now i can dry my wet pants, have some wheat to make bread'-"+ent.getName());
 		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
