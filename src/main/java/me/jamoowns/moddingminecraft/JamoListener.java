@@ -364,7 +364,7 @@ public final class JamoListener implements Listener {
 				public void run() {
 					event.getBlockPlaced().setType(Material.BASALT);
 				}
-			}, 180);
+			}, 20);
 		}
 		if(event.getBlock().getType().equals(Material.BASALT)) {
 			
@@ -373,7 +373,7 @@ public final class JamoListener implements Listener {
 				public void run() {
 					event.getBlockPlaced().setType(Material.POLISHED_BASALT);
 				}
-			}, 180);
+			}, 20);
 		}
 		if(event.getBlock().getType().equals(Material.POLISHED_BASALT)) {
 			
@@ -382,7 +382,7 @@ public final class JamoListener implements Listener {
 				public void run() {
 					event.getBlockPlaced().setType(Material.GOLD_BLOCK);
 				}
-			}, 180);
+			}, 50);
 		}
 	}
 
