@@ -30,6 +30,7 @@ public final class CommandMinecraftModders implements CommandExecutor {
 		if (commandToRun != null) {
 			if (sender instanceof Player) {
 				commandToRun.accept((Player) sender);
+				return true;
 			}
 		}
 		List<Feature> features = Arrays.asList(Feature.values());
