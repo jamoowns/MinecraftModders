@@ -25,6 +25,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	// Fired when plug-in is first enabled
 	@Override
 	public final void onEnable() {
+		commandExecutor = new CommandMinecraftModders();
 		statusByFeature = new HashMap<>();
 
 		Feature[] features = Feature.values();
@@ -65,8 +66,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		jamoListener = new JamoListener(this);
 		mobListener = new MobListener(this);
 		moshyListener = new MoshyListener();
-
-		commandExecutor = new CommandMinecraftModders();
 		commandExecutor.addListener(this);
 
 		this.getCommand("mm").setExecutor(commandExecutor);
