@@ -341,7 +341,9 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onPlayerUnleashEntityEvent(EntityShootBowEvent event) {
-		event.getProjectile().setCustomName(event.getConsumable().getItemMeta().getDisplayName());
+		if (event.getProjectile() != null) {
+			event.getProjectile().setCustomName(event.getConsumable().getItemMeta().getDisplayName());
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
