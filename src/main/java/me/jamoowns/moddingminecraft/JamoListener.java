@@ -111,10 +111,10 @@ public final class JamoListener implements Listener {
 		Consumer<UUID> cowReward = playerId -> {
 			Bukkit.getPlayer(playerId).getInventory().addItem(normalRoomItem.asItem());
 		};
-		taskKeeper.addTask("Kill pigs", pigReward, 2);
-		taskKeeper.addTask("Kill cows", cowReward, 2);
-		taskKeeper.addBoardItem("Could be cool to have a live band");
-		taskKeeper.addBoardItem("Hello and ready for the party");
+//		taskKeeper.addTask("Kill pigs", pigReward, 2);
+//		taskKeeper.addTask("Kill cows", cowReward, 2);
+		taskKeeper.addBoardItem("Randomly swapping every 5 mins");
+		taskKeeper.addBoardItem("Get to the nether...");
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 			@Override
@@ -357,8 +357,8 @@ public final class JamoListener implements Listener {
 			String[] hay = { "Hey", "Hello", "Sup", "Greetings", "Hi", "Bonjour", "Good Day", "Good Bye" };
 			Broadcaster.sendInfo(event.getPlayer(), hay[RANDOM.nextInt(8)]);
 		}
-		if(event.getBlock().getType().equals(Material.GOLD_BLOCK)) {
-			
+		if (event.getBlock().getType().equals(Material.GOLD_BLOCK)) {
+
 			event.getPlayer().sendMessage("'Can you get this Basalt polished for me'-Bob the Builder");
 			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 				public void run() {
@@ -366,8 +366,8 @@ public final class JamoListener implements Listener {
 				}
 			}, 180);
 		}
-		if(event.getBlock().getType().equals(Material.BASALT)) {
-			
+		if (event.getBlock().getType().equals(Material.BASALT)) {
+
 			event.getPlayer().sendMessage("'I can polish that for you right now'-Stonemason Sam");
 			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 				public void run() {
@@ -375,8 +375,8 @@ public final class JamoListener implements Listener {
 				}
 			}, 180);
 		}
-		if(event.getBlock().getType().equals(Material.POLISHED_BASALT)) {
-			
+		if (event.getBlock().getType().equals(Material.POLISHED_BASALT)) {
+
 			event.getPlayer().sendMessage("'thanks for getting it polished it for me'-Bob the Builder");
 			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 				public void run() {
