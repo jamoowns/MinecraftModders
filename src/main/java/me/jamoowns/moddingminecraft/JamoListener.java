@@ -48,6 +48,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
@@ -337,19 +338,16 @@ public final class JamoListener implements Listener {
 			event.getBlockPlaced().setType(Material.AIR);
 			customItem.blockPlaceEvent().accept(event);
 		}
-		if(event.getBlock().getType().equals(Material.HAY_BLOCK)) {
-			String[] hay = {"Hey", "Hello", "Sup", "Greetings", "Hi", "Bonjour", "Good Day", "Good Bye"};
-			Random r = new Random();
-			int low = 0;
-			int high = 8;
-			int result = r.nextInt(high - low) + low;
-			event.getPlayer().sendMessage(hay[result]);
+		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
+			String[] hay = { "Hey", "Hello", "Sup", "Greetings", "Hi", "Bonjour", "Good Day", "Good Bye" };
+			Broadcaster.sendInfo(event.getPlayer(), hay[RANDOM.nextInt(8)]);
 		}
 	}
 
 	@EventHandler
 	public void onPlayerUnleashEntityEvent(EntityShootBowEvent event) {
-		if (event.getProjectile() != null) {
+		if (event.getProjectile() != null && event.getConsumable() != null
+				&& event.getConsumable().getItemMeta() != null) {
 			event.getProjectile().setCustomName(event.getConsumable().getItemMeta().getDisplayName());
 		}
 	}
