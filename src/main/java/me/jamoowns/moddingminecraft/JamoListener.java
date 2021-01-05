@@ -289,12 +289,16 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
-		event.setItemStack(new ItemStack(BUCKET_TYPES.get(RANDOM.nextInt(BUCKET_TYPES.size()))));
+		if (javaPlugin.isFeatureActive(Feature.RANDOM_BUCKET)) {
+			event.setItemStack(new ItemStack(BUCKET_TYPES.get(RANDOM.nextInt(BUCKET_TYPES.size()))));
+		}
 	}
 
 	@EventHandler
 	public void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
-		event.setHatchingType(EntityType.WITCH);
+		if (javaPlugin.isFeatureActive(Feature.EGG_WITCH)) {
+			event.setHatchingType(EntityType.WITCH);
+		}
 	}
 
 	@EventHandler
@@ -327,28 +331,32 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent event) {
-		if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.BELL) {
-			Player player = event.getPlayer();
-			Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
+		if (javaPlugin.isFeatureActive(Feature.ZOMBIE_BELL)) {
+			if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.BELL) {
+				Player player = event.getPlayer();
+				Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
 
-			Zombie zombie = player.getWorld().spawn(dundundun, Zombie.class);
-			zombie.setTarget(player);
-			zombie.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 1));
+				Zombie zombie = player.getWorld().spawn(dundundun, Zombie.class);
+				zombie.setTarget(player);
+				zombie.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 1));
+			}
 		}
 	}
 
 	@EventHandler
 	public void onCraftItemEvent(CraftItemEvent event) {
-		ItemStack result = event.getRecipe().getResult().clone();
-		ItemMeta meta = result.getItemMeta();
-		for (int i = 0; i < 7; i++) {
-			Enchantment enchantment = enchantments.get(RANDOM.nextInt(enchantments.size()));
-			if (enchantment.canEnchantItem(result)) {
-				meta.addEnchant(enchantment, RANDOM.nextInt(4) + 1, false);
+		if (javaPlugin.isFeatureActive(Feature.RANDOM_ENCHANT)) {
+			ItemStack result = event.getRecipe().getResult().clone();
+			ItemMeta meta = result.getItemMeta();
+			for (int i = 0; i < 7; i++) {
+				Enchantment enchantment = enchantments.get(RANDOM.nextInt(enchantments.size()));
+				if (enchantment.canEnchantItem(result)) {
+					meta.addEnchant(enchantment, RANDOM.nextInt(4) + 1, false);
+				}
 			}
+			result.setItemMeta(meta);
+			event.getInventory().setResult(result);
 		}
-		result.setItemMeta(meta);
-		event.getInventory().setResult(result);
 	}
 
 	public void cleanup() {

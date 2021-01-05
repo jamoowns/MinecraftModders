@@ -64,20 +64,6 @@ public class MobListener implements Listener {
 
 	private final Random RANDOM;
 
-	private boolean playerTrail = true;
-	private boolean playerDeath = true;
-	private boolean spiderWebDeath = true;
-	private boolean cowTeleDeath = true;
-	private boolean vilIronBeeDeath = true;
-	private boolean creeperWaitDeath = true;
-	private boolean skeletonVisionDeath = true;
-	private boolean zombieBabushkaDeath = true;
-	private boolean sheepDeath = true;
-	private boolean chickenDeath = true;
-	private boolean pigDeath = true;
-	private boolean beeDeath = true;
-	private boolean phantomDeath = true;
-
 	public MobListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
@@ -86,7 +72,6 @@ public class MobListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEvent(PlayerItemConsumeEvent e) {
-
 		// get all the relative values for comparation
 		final Player p = e.getPlayer();
 		if (e.getItem().getType().equals(Material.SPIDER_EYE)) {
@@ -125,18 +110,18 @@ public class MobListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onWeatherChange(WeatherChangeEvent event) {
-
 		boolean rain = event.toWeatherState();
-		if (rain)
+		if (rain) {
 			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onThunderChange(ThunderChangeEvent event) {
-
 		boolean storm = event.toThunderState();
-		if (storm)
+		if (storm) {
 			event.setCancelled(true);
+		}
 	}
 
 	public Material[][] RotateShapeSquareGrid(Material[][] shape, int rotate) {
@@ -277,8 +262,7 @@ public class MobListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMoveEvent(PlayerMoveEvent event) {
-
-		if (playerTrail) {
+		if (javaPlugin.isFeatureActive(Feature.PLAYER_TRAIL)) {
 			Location belowPlayer = event.getPlayer().getLocation().add(0, -1, 0);
 
 			if (!belowPlayer.getBlock().isEmpty() && !belowPlayer.getBlock().isLiquid()) {
@@ -344,8 +328,7 @@ public class MobListener implements Listener {
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		if (playerDeath) {
-
+		if (javaPlugin.isFeatureActive(Feature.IRON_GOLEM)) {
 			Player playerEnt = (Player) event.getEntity();
 			Random r = new Random();
 			int low = 0;
@@ -364,8 +347,7 @@ public class MobListener implements Listener {
 
 	@EventHandler
 	public void onEntityDeathEvent(EntityDeathEvent event) {
-
-		if (sheepDeath) {
+		if (javaPlugin.isFeatureActive(Feature.FUNKY_MOB_DEATH)) {
 			if (event.getEntity() instanceof Sheep) {
 				Sheep sheepEnt = (Sheep) event.getEntity();
 				Player mcPlayer = sheepEnt.getKiller();
@@ -387,8 +369,6 @@ public class MobListener implements Listener {
 					}, 180);
 				}
 			}
-		}
-		if (chickenDeath) {
 			if (event.getEntity() instanceof Chicken) {
 				Chicken chickenEnt = (Chicken) event.getEntity();
 				Player mcPlayer = chickenEnt.getKiller();
@@ -414,8 +394,6 @@ public class MobListener implements Listener {
 					event.getDrops().add(new ItemStack(Material.ENDER_PEARL, 3));
 				}
 			}
-		}
-		if (beeDeath) {
 			if (event.getEntity() instanceof Bee) {
 				Bee BeeEnt = (Bee) event.getEntity();
 				Player mcPlayer = BeeEnt.getKiller();
@@ -431,9 +409,6 @@ public class MobListener implements Listener {
 				event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Phantom.class);
 				event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Phantom.class);
 			}
-		}
-
-		if (phantomDeath) {
 			if (event.getEntity() instanceof Ghast) {
 				Ghast ghastEnt = (Ghast) event.getEntity();
 				Player mcPlayer = ghastEnt.getKiller();
@@ -451,8 +426,6 @@ public class MobListener implements Listener {
 				event.getDrops().add(itemb);
 				event.getEntity().getLocation().getWorld().setTime(1000);
 			}
-		}
-		if (phantomDeath) {
 			if (event.getEntity() instanceof Phantom) {
 				Phantom phantomEnt = (Phantom) event.getEntity();
 				Player mcPlayer = phantomEnt.getKiller();
@@ -460,8 +433,6 @@ public class MobListener implements Listener {
 					return;
 				event.getDrops().add(new ItemStack(Material.BLAZE_POWDER, 1));
 			}
-		}
-		if (cowTeleDeath) {
 			if (event.getEntity() instanceof Cow) {
 				Cow cowEnt = (Cow) event.getEntity();
 				Player mcPlayer = cowEnt.getKiller();
@@ -472,8 +443,6 @@ public class MobListener implements Listener {
 					mcPlayer.teleport(mcPlayer.getLocation().add(0, 5, 0));
 				}
 			}
-		}
-		if (pigDeath) {
 			if (event.getEntity() instanceof Pig) {
 				Pig pigEnt = (Pig) event.getEntity();
 				Player mcPlayer = pigEnt.getKiller();
@@ -484,8 +453,6 @@ public class MobListener implements Listener {
 					event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Ravager.class);
 				}
 			}
-		}
-		if (vilIronBeeDeath) {
 			if (event.getEntity() instanceof Villager) {
 				Villager villagerEnt = (Villager) event.getEntity();
 				Player mcPlayer = villagerEnt.getKiller();
@@ -504,9 +471,6 @@ public class MobListener implements Listener {
 					}
 				}
 			}
-		}
-
-		if (zombieBabushkaDeath) {
 			if (event.getEntity() instanceof Zombie) {
 				Zombie zombieEnt = (Zombie) event.getEntity();
 				Player mcPlayer = zombieEnt.getKiller();
@@ -529,8 +493,6 @@ public class MobListener implements Listener {
 					}
 				}
 			}
-		}
-		if (skeletonVisionDeath) {
 			if (event.getEntity() instanceof Skeleton) {
 				Skeleton skeletonEnt = (Skeleton) event.getEntity();
 				Player mcPlayer = skeletonEnt.getKiller();
@@ -554,9 +516,6 @@ public class MobListener implements Listener {
 					// item)
 				}
 			}
-		}
-
-		if (creeperWaitDeath) {
 			if (event.getEntity() instanceof Creeper) {
 				Creeper creeperEnt = (Creeper) event.getEntity();
 				Player mcPlayer = creeperEnt.getKiller();
@@ -576,11 +535,7 @@ public class MobListener implements Listener {
 					yield = 1;
 				}
 				tnt.setYield(yield);
-
 			}
-		}
-
-		if (spiderWebDeath) {
 			if (event.getEntity() instanceof Spider) {
 				Spider spiderEnt = (Spider) event.getEntity();
 				Player mcPlayer = spiderEnt.getKiller();
@@ -627,10 +582,7 @@ public class MobListener implements Listener {
 						event.getEntity().getWorld().getBlockAt(loc).setType(Material.COBWEB);
 					}
 				}
-
 			}
 		}
-
 	}
-
 }

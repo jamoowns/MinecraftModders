@@ -11,7 +11,9 @@ import me.jamoowns.moddingminecraft.teams.Teams;
 public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private JamoListener jamoListener;
+
 	private MobListener mobListener;
+
 	private MoshyListener moshyListener;
 
 	private Map<Feature, Boolean> statusByFeature;
@@ -22,7 +24,40 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	@Override
 	public final void onEnable() {
 		statusByFeature = new HashMap<>();
-		statusByFeature.put(Feature.BATTLE_ROYALE, false);
+
+		Feature[] features = Feature.values();
+
+		for (Feature feature : features) {
+			switch (feature) {
+				case BATTLE_ROYALE:
+					statusByFeature.put(Feature.BATTLE_ROYALE, false);
+					break;
+				case RANDOM_CHESTS:
+					statusByFeature.put(Feature.RANDOM_CHESTS, false);
+					break;
+				case RANDOM_ENCHANT:
+					statusByFeature.put(Feature.RANDOM_ENCHANT, true);
+					break;
+				case ZOMBIE_BELL:
+					statusByFeature.put(Feature.ZOMBIE_BELL, true);
+					break;
+				case EGG_WITCH:
+					statusByFeature.put(Feature.EGG_WITCH, true);
+					break;
+				case RANDOM_BUCKET:
+					statusByFeature.put(Feature.RANDOM_BUCKET, true);
+					break;
+				case FUNKY_MOB_DEATH:
+					statusByFeature.put(Feature.FUNKY_MOB_DEATH, true);
+					break;
+				case IRON_GOLEM:
+					statusByFeature.put(Feature.IRON_GOLEM, true);
+					break;
+				case PLAYER_TRAIL:
+					statusByFeature.put(Feature.PLAYER_TRAIL, true);
+					break;
+			}
+		}
 		teams = new Teams(this);
 
 		jamoListener = new JamoListener(this);
