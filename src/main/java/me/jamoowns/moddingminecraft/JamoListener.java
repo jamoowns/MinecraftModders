@@ -231,7 +231,7 @@ public final class JamoListener implements Listener {
 		});
 		javaPlugin.customItems().customItemsByName().put(skeletonArrowItem.name(), skeletonArrowItem);
 
-		lightningAnusItem = new CustomItem(Material.GHAST_TEAR, "Lightning Storm");
+		lightningAnusItem = new CustomItem(Material.CHAIN, "Lightning Storm");
 		lightningAnusItem.setBlockPlaceEvent(event -> {
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
 
