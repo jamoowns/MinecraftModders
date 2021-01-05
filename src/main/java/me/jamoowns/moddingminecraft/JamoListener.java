@@ -71,6 +71,8 @@ public final class JamoListener implements Listener {
 
 	private List<CustomItem> mobSpawningItems;
 
+	private CustomItem lightningAnusItem;
+
 	private CustomItem skeletonArrowItem;
 
 	private CustomItem normalZombieStick;
@@ -228,6 +230,19 @@ public final class JamoListener implements Listener {
 			event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Skeleton.class);
 		});
 		javaPlugin.customItems().customItemsByName().put(skeletonArrowItem.name(), skeletonArrowItem);
+
+		lightningAnusItem = new CustomItem(Material.GHAST_TEAR, "Lightning Storm");
+		lightningAnusItem.setBlockPlaceEvent(event -> {
+			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
+
+			Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
+				@Override
+				public void run() {
+					spawnLocation.getWorld().strikeLightningEffect(spawnLocation);
+				}
+			}, ONE_SECOND * 5, ONE_SECOND * 5);
+		});
+		javaPlugin.customItems().customItemsByName().put(lightningAnusItem.name(), lightningAnusItem);
 	}
 
 	private void randomChestSpawn() {
