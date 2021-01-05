@@ -1,6 +1,7 @@
 package me.jamoowns.moddingminecraft.teams;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -120,6 +121,14 @@ public final class Teams {
 		army.add(mob.getUniqueId());
 		Bukkit.getScoreboardManager().getMainScoreboard().getTeam(army.getTeamName())
 				.addEntry(mob.getUniqueId().toString());
+	}
+
+	public final Collection<Army> allTeams() {
+		return armies;
+	}
+
+	public final Collection<UUID> teamMembers(String teamName) {
+		return getTeam(teamName).teamMembers();
 	}
 
 	private class PlayerEventListener implements Listener {

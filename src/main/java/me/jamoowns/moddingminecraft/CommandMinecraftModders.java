@@ -9,16 +9,18 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandMinecraftModders implements CommandExecutor {
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
+
+public final class CommandMinecraftModders implements CommandExecutor {
 
 	private IFeatureListener featureListener;
 
 	public CommandMinecraftModders() {
-		// Empty.
+		/* Empty. */
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		List<Feature> features = Arrays.asList(Feature.values());
 		if (args.length == 2) {
 			String featureName = args[1];
@@ -37,8 +39,7 @@ public class CommandMinecraftModders implements CommandExecutor {
 		}
 		// Show help
 		if (sender instanceof Player) {
-			Player player = (Player) sender;
-			player.sendMessage(
+			Broadcaster.sendInfo(sender,
 					"possible features: " + features.stream().map(Feature::name).collect(Collectors.joining(", ")));
 		}
 		return false;

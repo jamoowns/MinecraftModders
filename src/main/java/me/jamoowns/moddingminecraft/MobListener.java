@@ -320,7 +320,7 @@ public class MobListener implements Listener {
 					trailByPlayer.put(event.getPlayer().getUniqueId(), trail);
 
 					event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(
-							javaPlugin.getTeams().getTeam(event.getPlayer().getUniqueId()).getTeamColour().getTrail());
+							javaPlugin.teams().getTeam(event.getPlayer().getUniqueId()).getTeamColour().getTrail());
 				}
 			}
 		}

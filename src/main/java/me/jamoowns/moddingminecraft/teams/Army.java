@@ -1,11 +1,13 @@
 package me.jamoowns.moddingminecraft.teams;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 public final class Army {
 	private final String teamName;
+
 	private final TeamColour teamColour;
 
 	private List<UUID> teamMembers;
@@ -30,5 +32,13 @@ public final class Army {
 
 	public final boolean has(UUID uuid) {
 		return teamMembers.contains(uuid);
+	}
+
+	public final Collection<UUID> teamMembers() {
+		return teamMembers;
+	}
+
+	public final void remove(UUID uuid) {
+		teamMembers.remove(uuid);
 	}
 }
