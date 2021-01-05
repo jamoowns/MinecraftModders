@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import org.bukkit.Material;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -15,6 +16,8 @@ public final class CustomItem {
 	private Material material;
 
 	private Optional<Consumer<BlockPlaceEvent>> blockPlaceEvent;
+
+	private Optional<Consumer<ProjectileHitEvent>> projectileHitEvent;
 
 	private String name;
 
@@ -40,6 +43,18 @@ public final class CustomItem {
 
 	public final boolean hasBlockPlaceEvent() {
 		return blockPlaceEvent.isPresent();
+	}
+
+	public final void setProjectileHitEvent(Consumer<ProjectileHitEvent> event) {
+		projectileHitEvent = Optional.of(event);
+	}
+
+	public final Consumer<ProjectileHitEvent> projectileHitEvent() {
+		return projectileHitEvent.get();
+	}
+
+	public final boolean hasProjectileHitEvent() {
+		return projectileHitEvent.isPresent();
 	}
 
 	public final String name() {

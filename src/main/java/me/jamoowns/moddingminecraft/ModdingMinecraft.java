@@ -6,9 +6,12 @@ import java.util.Map;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
+import me.jamoowns.moddingminecraft.customitems.CustomItems;
 import me.jamoowns.moddingminecraft.teams.Teams;
 
 public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
+
+	private CustomItems customItems;
 
 	private JamoListener jamoListener;
 
@@ -27,6 +30,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void onEnable() {
 		commandExecutor = new CommandMinecraftModders();
 		statusByFeature = new HashMap<>();
+
+		customItems = new CustomItems();
 
 		Feature[] features = Feature.values();
 
@@ -72,6 +77,10 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		getServer().getPluginManager().registerEvents(jamoListener, this);
 		getServer().getPluginManager().registerEvents(mobListener, this);
 		getServer().getPluginManager().registerEvents(moshyListener, this);
+	}
+
+	public final CustomItems customItems() {
+		return customItems;
 	}
 
 	public final Teams teams() {
