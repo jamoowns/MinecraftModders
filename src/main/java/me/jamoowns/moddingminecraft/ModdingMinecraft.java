@@ -18,6 +18,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private Map<Feature, Boolean> statusByFeature;
 
+	private CommandMinecraftModders commandExecutor;
+
 	private Teams teams;
 
 	// Fired when plug-in is first enabled
@@ -64,7 +66,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		mobListener = new MobListener(this);
 		moshyListener = new MoshyListener();
 
-		CommandMinecraftModders commandExecutor = new CommandMinecraftModders();
+		commandExecutor = new CommandMinecraftModders();
 		commandExecutor.addListener(this);
 
 		this.getCommand("mm").setExecutor(commandExecutor);
@@ -98,5 +100,9 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	public final boolean isFeatureActive(Feature feature) {
 		return statusByFeature.getOrDefault(feature, false);
+	}
+
+	public final CommandMinecraftModders commandExecutor() {
+		return commandExecutor;
 	}
 }

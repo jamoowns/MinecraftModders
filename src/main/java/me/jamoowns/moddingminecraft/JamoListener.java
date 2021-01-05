@@ -40,6 +40,7 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -151,6 +152,8 @@ public final class JamoListener implements Listener {
 				}
 			}
 		}, ONE_MINUTE / 2, ONE_MINUTE / 2);
+
+		javaPlugin.commandExecutor().registerCommand("items", this::showAllItems);
 	}
 
 	private final static boolean isMob(UUID uuid) {
@@ -279,6 +282,25 @@ public final class JamoListener implements Listener {
 			javaPlugin.teams().getTeam(entityUuid).remove(entityUuid);
 			event.getDrops().clear();
 		}
+	}
+
+	public void showAllItems(Player player) {
+		Inventory inv = Bukkit.createInventory(null, 9, "Custom Items");
+
+		ItemStack survival = new ItemStack(Material.DIAMOND_BLOCK);
+		ItemMeta survivalMeta = survival.getItemMeta();
+		ItemStack creative = new ItemStack(Material.REDSTONE_BLOCK);
+		ItemMeta creativeMeta = creative.getItemMeta();
+
+		survivalMeta.setDisplayName("Survival");
+		survival.setItemMeta(survivalMeta);
+		creativeMeta.setDisplayName("Creative");
+		creative.setItemMeta(creativeMeta);
+
+		inv.setItem(3, survival);
+		inv.setItem(5, creative);
+
+		player.openInventory(inv);
 	}
 
 	@EventHandler
