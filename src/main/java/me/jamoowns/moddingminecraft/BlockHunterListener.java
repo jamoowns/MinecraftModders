@@ -98,7 +98,7 @@ public final class BlockHunterListener implements Listener {
 	private ModdingMinecraft javaPlugin;
 
 	private static final long CHOOSING_TIME = TimeConstants.ONE_MINUTE * 2;
-	private static final long SEARCHING_TIME = TimeConstants.ONE_MINUTE * 5;
+	private static final long SEARCHING_TIME = TimeConstants.ONE_MINUTE * 4;
 
 	private enum GameState {
 		SETUP, SEARCHING, CHOOSING, STOPPED
@@ -248,7 +248,7 @@ public final class BlockHunterListener implements Listener {
 
 		Bukkit.getScheduler().runTaskLater(javaPlugin,
 				() -> Broadcaster.broadcastInfo("You have 1 minute left to search for your block!"),
-				TimeConstants.ONE_MINUTE);
+				SEARCHING_TIME - TimeConstants.ONE_MINUTE);
 		Bukkit.getScheduler().runTaskLater(javaPlugin, () -> {
 			new CountdownTimer(javaPlugin, 10,
 					() -> Broadcaster.broadcastInfo("You have 10 seconds left to search for your block!"),
