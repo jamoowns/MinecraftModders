@@ -207,7 +207,7 @@ public final class BlockHunterListener implements Listener {
 
 	public final void beginGame(Player host) {
 		if (currentGameState == GameState.SETUP) {
-			if (gameplayers.size() >= 2 && gameplayers.stream().allMatch(g -> g.standLocation() != null)) {
+			if (gameplayers.size() >= 2) {
 				Broadcaster.broadcastInfo("Blockhunt has STARTED!");
 				setChoosingPhase();
 			} else {
