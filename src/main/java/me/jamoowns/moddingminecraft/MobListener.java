@@ -36,6 +36,7 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.Witch;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -272,6 +273,35 @@ public class MobListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMoveEvent(PlayerMoveEvent event) {
+		
+		for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
+	        if(ent instanceof Witch){ 
+	            if(ent.getName().contains("Winfred")) {
+
+	            	event.getPlayer().getServer().broadcastMessage("'Get Back'-"+ent.getName());
+	    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+	    				public void run() {
+	    					event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
+	    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
+	    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
+	    					if (javaPlugin.isFeatureActive(Feature.PLAYER_TRAIL)) {
+	    					List<Block> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
+	    						for(int i = 0;i<trail.size();i++) {
+	    							if (trail.get(trail.size() - i).getType().name().contains("CARPET")) {
+	    								event.getPlayer().teleport(trail.get(trail.size() - i).getLocation());
+		    							break;
+		    						}
+		    					}
+	    						}
+	    					
+	    					}
+	    			}, 10);
+	            }
+	        }
+	    }
+		
+		
+		
 		if (javaPlugin.isFeatureActive(Feature.PLAYER_TRAIL)) {
 			Location belowPlayer = event.getPlayer().getLocation().add(0, -1, 0);
 
@@ -323,7 +353,11 @@ public class MobListener implements Listener {
 
 	public void cleanup() {
 		trailByPlayer.values().forEach(blocks -> {
-			blocks.forEach(block -> block.setType(Material.AIR));
+			blocks.forEach(block -> {
+				if (block.getType().name().contains("CARPET")) {
+					block.setType(Material.AIR);
+				}
+			});
 		});
 		trailByPlayer.clear();
 	}
@@ -332,7 +366,9 @@ public class MobListener implements Listener {
 	public void onPlayerQuitEvent(PlayerQuitEvent event) {
 		List<Block> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
 		trail.forEach(block -> {
-			block.setType(Material.AIR);
+			if (block.getType().name().contains("CARPET")) {
+				block.setType(Material.AIR);
+			}
 		});
 		trailByPlayer.remove(event.getPlayer().getUniqueId());
 	}
