@@ -109,9 +109,9 @@ public final class BlockHunterListener implements Listener {
 		meta.setDisplayName("Block stand");
 		blockStand.setItemMeta(meta);
 
-		javaPlugin.commandExecutor().registerCommand("blockhunter init", p -> initiateGame());
-		javaPlugin.commandExecutor().registerCommand("blockhunter start", p -> beginGame(p));
-		javaPlugin.commandExecutor().registerCommand("blockhunter join", this::join);
+		javaPlugin.commandExecutor().registerCommand("blockhunter_init", p -> initiateGame());
+		javaPlugin.commandExecutor().registerCommand("blockhunter_start", p -> beginGame(p));
+		javaPlugin.commandExecutor().registerCommand("blockhunter_join", this::join);
 	}
 
 	@EventHandler
