@@ -151,14 +151,22 @@ public final class BlockHunterListener implements Listener {
 				break;
 			case SEARCHING:
 				if (gp.isPresent()) {
-					if (event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
-						Material targetsBlock = gp.get().targetPlayer().chosenBlock();
-						if (targetsBlock.equals(event.getBlock().getType())) {
-							Broadcaster.sendInfo(event.getPlayer(), "Correct! wait for other players to finish");
-							Broadcaster.broadcastInfo(event.getPlayer().getDisplayName() + " has found their block");
-							gp.get().foundBlock(true);
-						} else {
-							Broadcaster.sendInfo(event.getPlayer(), "Incorrect, keep searching for: " + targetsBlock);
+					if (event.getItemInHand().equals(blockStand)) {
+						gp.get().setStand(event.getBlock().getLocation());
+						Broadcaster.sendInfo(event.getPlayer(),
+								"Block stand has been placed at: " + event.getBlock().getLocation().toString());
+					} else {
+						if (event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
+							Material targetsBlock = gp.get().targetPlayer().chosenBlock();
+							if (targetsBlock.equals(event.getBlock().getType())) {
+								Broadcaster.sendInfo(event.getPlayer(), "Correct! wait for other players to finish");
+								Broadcaster
+										.broadcastInfo(event.getPlayer().getDisplayName() + " has found their block");
+								gp.get().foundBlock(true);
+							} else {
+								Broadcaster.sendInfo(event.getPlayer(),
+										"Incorrect, keep searching for: " + targetsBlock);
+							}
 						}
 					}
 				}
@@ -272,6 +280,7 @@ public final class BlockHunterListener implements Listener {
 					+ ". Place it on your stand. You have 4 minutes!");
 
 			gp.clearStand();
+			gp.clearChosenBlock();
 			player.getInventory().addItem(blockStand);
 		}
 
