@@ -56,7 +56,7 @@ public final class BlockHunterListener implements Listener {
 		}
 
 		public Location standLocation() {
-			return standLocation;
+			return standLocation.clone();
 		}
 
 		public Material chosenBlock() {
@@ -140,13 +140,6 @@ public final class BlockHunterListener implements Listener {
 						Broadcaster.sendInfo(event.getPlayer(),
 								"Block stand has been placed at: " + event.getBlock().getLocation().toString());
 					} else {
-						Broadcaster.broadcastError(event.getBlockPlaced().getLocation());
-						Broadcaster.broadcastError(blockAbove(gp.get().standLocation()));
-						Broadcaster.broadcastError(gp.get().hasStandPlaced() ? "TRUE" : "FALSE");
-						Broadcaster.broadcastError(
-								event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))
-										? "TRUE"
-										: "FALSE");
 						if (gp.get().hasStandPlaced()
 								&& event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
 							Broadcaster.sendInfo(event.getPlayer(), "You have chosen: " + event.getBlock().getType());
@@ -319,7 +312,7 @@ public final class BlockHunterListener implements Listener {
 	}
 
 	private Location blockAbove(Location loc) {
-		return loc.add(0, 1, 0).clone();
+		return loc.clone().add(0, 1, 0).clone();
 	}
 
 	public final void stopGame() {
