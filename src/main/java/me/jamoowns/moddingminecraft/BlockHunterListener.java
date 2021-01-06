@@ -156,7 +156,8 @@ public final class BlockHunterListener implements Listener {
 						Broadcaster.sendInfo(event.getPlayer(),
 								"Block stand has been placed at: " + event.getBlock().getLocation().toString());
 					} else {
-						if (event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
+						if (gp.get().hasStandPlaced()
+								&& event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
 							Material targetsBlock = gp.get().targetPlayer().chosenBlock();
 							if (targetsBlock.equals(event.getBlock().getType())) {
 								Broadcaster.sendInfo(event.getPlayer(), "Correct! wait for other players to finish");
@@ -195,7 +196,8 @@ public final class BlockHunterListener implements Listener {
 				break;
 			case SEARCHING:
 				if (gp.isPresent()) {
-					if (event.getBlock().getLocation().equals(blockAbove(gp.get().standLocation()))) {
+					if (gp.get().hasStandPlaced()
+							&& event.getBlock().getLocation().equals(blockAbove(gp.get().standLocation()))) {
 						if (gp.get().hasFoundBlock()) {
 							Broadcaster.sendInfo(event.getPlayer(), "Woops, you have unfound your block");
 							Broadcaster
@@ -246,6 +248,7 @@ public final class BlockHunterListener implements Listener {
 			Player player = Bukkit.getPlayer(gp.playerId());
 			Broadcaster.sendInfo(player, "Choose a block and place it on your stand You have 2 minutes!");
 
+			gp.clearChosenBlock();
 			gp.clearStand();
 			player.getInventory().addItem(blockStand);
 		}
@@ -280,7 +283,6 @@ public final class BlockHunterListener implements Listener {
 					+ ". Place it on your stand. You have 4 minutes!");
 
 			gp.clearStand();
-			gp.clearChosenBlock();
 			player.getInventory().addItem(blockStand);
 		}
 
