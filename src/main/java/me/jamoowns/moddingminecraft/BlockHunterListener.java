@@ -1,9 +1,12 @@
 package me.jamoowns.moddingminecraft;
 
+import static com.google.common.base.Predicates.not;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -91,6 +94,10 @@ public final class BlockHunterListener implements Listener {
 		public boolean hasFoundBlock() {
 			return hasFoundBlock;
 		}
+
+		public void setTargetPlayer(GamePlayer aTargetPlayer) {
+			targetPlayer = aTargetPlayer;
+		}
 	}
 
 	private GameState currentGameState = GameState.STOPPED;
@@ -114,8 +121,9 @@ public final class BlockHunterListener implements Listener {
 		blockStand.setItemMeta(meta);
 
 		javaPlugin.commandExecutor().registerCommand("blockhunter_init", p -> initiateGame());
-		javaPlugin.commandExecutor().registerCommand("blockhunter_start", p -> beginGame(p));
 		javaPlugin.commandExecutor().registerCommand("blockhunter_join", this::join);
+		javaPlugin.commandExecutor().registerCommand("blockhunter_start", this::beginGame);
+		javaPlugin.commandExecutor().registerCommand("blockhunter_stop", p -> stopGame());
 	}
 
 	@EventHandler
@@ -235,10 +243,11 @@ public final class BlockHunterListener implements Listener {
 			player.getInventory().addItem(blockStand);
 		}
 		Bukkit.getScheduler().runTaskLater(javaPlugin, () -> {
-			new CountdownTimer(javaPlugin, 10,
+			CountdownTimer countDown = new CountdownTimer(javaPlugin, 10,
 					() -> Broadcaster.broadcastInfo("You have 10 seconds left to choose your block"),
 					() -> Broadcaster.broadcastInfo("Time's up!"),
 					timer -> Broadcaster.broadcastInfo("Time left to choose: " + timer.getSecondsLeft()));
+			countDown.scheduleTimer();
 		}, CHOOSING_TIME - TimeConstants.ONE_SECOND * 10);
 		Bukkit.getScheduler().runTaskLater(javaPlugin, this::setSearchingPhase, CHOOSING_TIME);
 	}
@@ -246,14 +255,36 @@ public final class BlockHunterListener implements Listener {
 	private void setSearchingPhase() {
 		currentGameState = GameState.SEARCHING;
 
+		List<GamePlayer> unChosenPlayers = new ArrayList<>(gameplayers);
+		for (GamePlayer gp : gameplayers) {
+			GamePlayer targetPlayer;
+			if (gameplayers.size() % 2 == 0) {
+				targetPlayer = Collections
+						.findFirst(unChosenPlayers.stream().filter(not(gp::equals)).collect(Collectors.toList()));
+			} else {
+				targetPlayer = Collections.findFirst(unChosenPlayers.stream().filter(not(gp::equals))
+						.filter(other -> !other.targetPlayer().equals(gp)).collect(Collectors.toList()));
+			}
+			gp.setTargetPlayer(targetPlayer);
+			Player player = Bukkit.getPlayer(gp.playerId());
+			Player target = Bukkit.getPlayer(gp.targetPlayer().playerId());
+			Material targetBlock = gp.targetPlayer().chosenBlock();
+			Broadcaster.sendInfo(player, "You are searching for " + target.getDisplayName() + "'s block: " + targetBlock
+					+ ". Place it on your stand. You have 4 minutes!");
+
+			gp.clearStand();
+			player.getInventory().addItem(blockStand);
+		}
+
 		Bukkit.getScheduler().runTaskLater(javaPlugin,
 				() -> Broadcaster.broadcastInfo("You have 1 minute left to search for your block!"),
 				SEARCHING_TIME - TimeConstants.ONE_MINUTE);
 		Bukkit.getScheduler().runTaskLater(javaPlugin, () -> {
-			new CountdownTimer(javaPlugin, 10,
+			CountdownTimer countDown = new CountdownTimer(javaPlugin, 10,
 					() -> Broadcaster.broadcastInfo("You have 10 seconds left to search for your block!"),
 					() -> Broadcaster.broadcastInfo("Time's up!"),
 					timer -> Broadcaster.broadcastInfo("Time left to find the block: " + timer.getSecondsLeft()));
+			countDown.scheduleTimer();
 		}, SEARCHING_TIME - TimeConstants.ONE_SECOND * 10);
 		Bukkit.getScheduler().runTaskLater(javaPlugin, this::checkWinnerPhase, SEARCHING_TIME);
 	}
