@@ -273,32 +273,27 @@ public class MobListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMoveEvent(PlayerMoveEvent event) {
-		
-		for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
-	        if(ent instanceof Witch){ 
-	            if(ent.getName().contains("Winfred")) {
-
-	            	event.getPlayer().getServer().broadcastMessage("'Get Back'-"+ent.getName());
-	    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-	    				public void run() {
-	    					event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
-	    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
-	    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
-	    					if (javaPlugin.isFeatureActive(Feature.PLAYER_TRAIL)) {
-	    					List<Block> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
-	    						for(int i = 0;i<trail.size();i++) {
-	    							if (trail.get(trail.size() - i).getType().name().contains("CARPET")) {
-	    								event.getPlayer().teleport(trail.get(trail.size() - i).getLocation());
-		    							break;
-		    						}
+		if (javaPlugin.isFeatureActive(Feature.Winfred)) {
+			for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
+		        if(ent instanceof Witch){ 
+		            if(ent.getName().contains("Winfred")) {
+	
+		            	event.getPlayer().getServer().broadcastMessage("'Get Back'-"+ent.getName());
+		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+		    				public void run() {
+		    					event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
+		    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
+		    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
+		    					event.getPlayer().teleport(ent.getLocation().add(9, 5, 9));
+		    					
 		    					}
-	    						}
-	    					
-	    					}
-	    			}, 10);
-	            }
-	        }
-	    }
+		    			}, 10);
+		            }
+		        }   
+	        }   
+		}
+		
+		
 		
 		
 		

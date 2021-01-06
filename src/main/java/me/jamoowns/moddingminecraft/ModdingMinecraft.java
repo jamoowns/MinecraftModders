@@ -64,6 +64,11 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 				case PLAYER_TRAIL:
 					statusByFeature.put(Feature.PLAYER_TRAIL, true);
 					break;
+				case Winfred:
+					statusByFeature.put(Feature.Winfred, true);
+					break;
+				default:
+					break;
 			}
 		}
 		teams = new Teams(this);
