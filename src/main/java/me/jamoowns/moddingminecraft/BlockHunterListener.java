@@ -283,6 +283,7 @@ public final class BlockHunterListener implements Listener {
 					+ ". Place it on your stand. You have 4 minutes!");
 
 			gp.clearStand();
+			gp.foundBlock(false);
 			player.getInventory().addItem(blockStand);
 		}
 
@@ -305,6 +306,7 @@ public final class BlockHunterListener implements Listener {
 				Broadcaster.broadcastInfo(Bukkit.getPlayer(gp.playerId).getDisplayName() + " has been eliminated");
 			}
 		}
+		gameplayers.removeIf(gp -> !gp.hasFoundBlock());
 		if (gameplayers.size() == 0) {
 			Broadcaster.broadcastInfo("Stalemate! Round will start again");
 			setChoosingPhase();
