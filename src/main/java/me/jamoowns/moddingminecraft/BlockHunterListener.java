@@ -134,19 +134,20 @@ public final class BlockHunterListener implements Listener {
 			case SETUP:
 				break;
 			case CHOOSING:
-				if (event.getItemInHand().equals(blockStand)) {
-					if (gp.isPresent()) {
+				if (gp.isPresent()) {
+					if (event.getItemInHand().equals(blockStand)) {
 						gp.get().setStand(event.getBlock().getLocation());
 						Broadcaster.sendInfo(event.getPlayer(),
 								"Block stand has been placed at: " + event.getBlock().getLocation().toString());
-					}
-				}
-				if (gp.isPresent()) {
-					if (gp.get().hasStandPlaced()
-							&& event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
-						Broadcaster.sendInfo(event.getPlayer(), "You have chosen: " + event.getBlock().getType());
+					} else {
+						Broadcaster.broadcastError(event.getBlockPlaced().getLocation().toString());
+						Broadcaster.broadcastError(blockAbove(gp.get().standLocation()).toString());
+						if (gp.get().hasStandPlaced()
+								&& event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
+							Broadcaster.sendInfo(event.getPlayer(), "You have chosen: " + event.getBlock().getType());
 
-						gp.get().chosenBlock(event.getBlock().getType());
+							gp.get().chosenBlock(event.getBlock().getType());
+						}
 					}
 				}
 				break;
