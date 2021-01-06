@@ -140,8 +140,11 @@ public final class BlockHunterListener implements Listener {
 						Broadcaster.sendInfo(event.getPlayer(),
 								"Block stand has been placed at: " + event.getBlock().getLocation().toString());
 					} else {
-						Broadcaster.broadcastError(event.getBlockPlaced().getLocation().toString());
-						Broadcaster.broadcastError(blockAbove(gp.get().standLocation()).toString());
+						Broadcaster.broadcastError(event.getBlockPlaced().getLocation());
+						Broadcaster.broadcastError(blockAbove(gp.get().standLocation()));
+						Broadcaster.broadcastError(gp.get().hasStandPlaced());
+						Broadcaster.broadcastError(
+								event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation())));
 						if (gp.get().hasStandPlaced()
 								&& event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
 							Broadcaster.sendInfo(event.getPlayer(), "You have chosen: " + event.getBlock().getType());
