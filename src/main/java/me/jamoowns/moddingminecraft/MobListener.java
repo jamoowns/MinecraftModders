@@ -278,16 +278,17 @@ public class MobListener implements Listener {
 		        if(ent instanceof Witch){ 
 		            if(ent.getName().contains("Winfred")) {
 	
-		            	event.getPlayer().getServer().broadcastMessage("'Get Back'-"+ent.getName());
-		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-		    				public void run() {
-		    					event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
-		    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
-		    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
-		    					event.getPlayer().teleport(ent.getLocation().add(9, 5, 9));
-		    					
-		    					}
-		    			}, 10);
+		            	event.getPlayer().sendMessage("'Get Back'-"+ent.getName());event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
+    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
+    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
+    					Random r = new Random();
+    					int low = 1;
+    					int high = 19;
+    					int resulty = r.nextInt(high - low) + low;
+
+    					int resultx = r.nextInt(high - low) + low;
+    					event.getPlayer().teleport(ent.getLocation().add(resultx-9, 5, resulty-9));
+		    			
 		            }
 		        }   
 	        }   
