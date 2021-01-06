@@ -19,6 +19,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private MoshyListener moshyListener;
 
+	private BlockHunterListener blockHunterListener;
+
 	private Map<Feature, Boolean> statusByFeature;
 
 	private CommandMinecraftModders commandExecutor;
@@ -71,12 +73,14 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		jamoListener = new JamoListener(this);
 		mobListener = new MobListener(this);
 		moshyListener = new MoshyListener();
+		blockHunterListener = new BlockHunterListener(this);
 		commandExecutor.addListener(this);
 
 		this.getCommand("mm").setExecutor(commandExecutor);
 		getServer().getPluginManager().registerEvents(jamoListener, this);
 		getServer().getPluginManager().registerEvents(mobListener, this);
 		getServer().getPluginManager().registerEvents(moshyListener, this);
+		getServer().getPluginManager().registerEvents(blockHunterListener, this);
 	}
 
 	public final CustomItems customItems() {

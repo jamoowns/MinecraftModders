@@ -48,7 +48,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
+import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
@@ -62,10 +62,6 @@ public final class JamoListener implements Listener {
 	private final Random RANDOM;
 
 	private final List<Enchantment> enchantments;
-
-	private static final long ONE_SECOND = 20L;
-
-	private static final long ONE_MINUTE = ONE_SECOND * 60;
 
 	private final TaskKeeper taskKeeper;
 
@@ -99,7 +95,8 @@ public final class JamoListener implements Listener {
 					randomChestSpawn();
 				}
 			}
-		}, RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE, RANDOM.nextInt((int) (ONE_MINUTE * 2)) + ONE_MINUTE);
+		}, RANDOM.nextInt((int) (TimeConstants.ONE_MINUTE * 2)) + TimeConstants.ONE_MINUTE,
+				RANDOM.nextInt((int) (TimeConstants.ONE_MINUTE * 2)) + TimeConstants.ONE_MINUTE);
 
 		taskKeeper = new TaskKeeper(javaPlugin);
 
@@ -143,7 +140,7 @@ public final class JamoListener implements Listener {
 							}
 						});
 			}
-		}, 4 * ONE_SECOND, 4 * ONE_SECOND);
+		}, 4 * TimeConstants.ONE_SECOND, 4 * TimeConstants.ONE_SECOND);
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 			@Override
@@ -156,7 +153,7 @@ public final class JamoListener implements Listener {
 					});
 				}
 			}
-		}, ONE_MINUTE / 2, ONE_MINUTE / 2);
+		}, TimeConstants.ONE_MINUTE / 2, TimeConstants.ONE_MINUTE / 2);
 
 		javaPlugin.commandExecutor().registerCommand("items", this::showAllItems);
 	}
@@ -240,7 +237,7 @@ public final class JamoListener implements Listener {
 				public void run() {
 					spawnLocation.getWorld().strikeLightningEffect(spawnLocation);
 				}
-			}, ONE_SECOND * 5, ONE_SECOND * 5);
+			}, TimeConstants.ONE_SECOND * 5, TimeConstants.ONE_SECOND * 5);
 		});
 		javaPlugin.customItems().customItemsByName().put(lightningAnusItem.name(), lightningAnusItem);
 	}
