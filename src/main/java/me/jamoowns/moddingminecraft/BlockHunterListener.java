@@ -48,6 +48,10 @@ public final class BlockHunterListener implements Listener {
 			return playerId;
 		}
 
+		public boolean hasStandPlaced() {
+			return standLocation != null;
+		}
+
 		public Location standLocation() {
 			return standLocation;
 		}
@@ -69,7 +73,7 @@ public final class BlockHunterListener implements Listener {
 		}
 
 		public void clearStand() {
-			if (standLocation() != null) {
+			if (hasStandPlaced()) {
 				standLocation().getBlock().setType(Material.AIR);
 				blockAbove(standLocation()).getBlock().setType(Material.AIR);
 			}
@@ -120,6 +124,8 @@ public final class BlockHunterListener implements Listener {
 		Optional<GamePlayer> gp = gamePlayer(playerUuid);
 		switch (currentGameState) {
 			case SETUP:
+				break;
+			case CHOOSING:
 				if (event.getItemInHand().equals(blockStand)) {
 					if (gp.isPresent()) {
 						gp.get().setStand(event.getBlock().getLocation());
@@ -127,10 +133,9 @@ public final class BlockHunterListener implements Listener {
 								"Block stand has been placed at: " + event.getBlock().getLocation().toString());
 					}
 				}
-				break;
-			case CHOOSING:
 				if (gp.isPresent()) {
-					if (event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
+					if (gp.get().hasStandPlaced()
+							&& event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
 						Broadcaster.sendInfo(event.getPlayer(), "You have chosen: " + event.getBlock().getType());
 
 						gp.get().chosenBlock(event.getBlock().getType());
@@ -165,7 +170,8 @@ public final class BlockHunterListener implements Listener {
 				break;
 			case CHOOSING:
 				if (gp.isPresent()) {
-					if (event.getBlock().getLocation().equals(blockAbove(gp.get().standLocation()))) {
+					if (gp.get().hasStandPlaced()
+							&& event.getBlock().getLocation().equals(blockAbove(gp.get().standLocation()))) {
 						Broadcaster.sendInfo(event.getPlayer(), "You have removed your choice!");
 
 						gp.get().clearChosenBlock();
@@ -223,7 +229,7 @@ public final class BlockHunterListener implements Listener {
 		currentGameState = GameState.CHOOSING;
 		for (GamePlayer gp : gameplayers) {
 			Player player = Bukkit.getPlayer(gp.playerId());
-			Broadcaster.sendInfo(player, "Choose a block and place it on your stand!");
+			Broadcaster.sendInfo(player, "Choose a block and place it on your stand You have 2 minutes!");
 
 			gp.clearStand();
 			player.getInventory().addItem(blockStand);

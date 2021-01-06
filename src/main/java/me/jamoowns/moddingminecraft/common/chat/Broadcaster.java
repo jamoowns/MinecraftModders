@@ -6,11 +6,11 @@ import org.bukkit.command.CommandSender;
 public final class Broadcaster {
 
 	public static final void broadcastInfo(final String message) {
-		Bukkit.broadcastMessage(ChatColourStyles.INFO_COLOUR + message);
+		Bukkit.broadcastMessage("[ALL]" + ChatColourStyles.INFO_COLOUR + message);
 	}
 
 	public static final void broadcastError(final String message) {
-		Bukkit.broadcastMessage(ChatColourStyles.ERROR_COLOUR + message);
+		Bukkit.broadcastMessage("[ALL]" + ChatColourStyles.ERROR_COLOUR + message);
 	}
 
 	public static final void sendInfo(final CommandSender player, final String message) {
