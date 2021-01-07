@@ -118,6 +118,9 @@ public class MobListener implements Listener {
 			SwitchAllPlayers(event.getPlayer().getWorld());
 			
 		}
+		if(event.getMessage().contains("SwapNearMe")) {
+			SwitchAllPlayersRanged(event.getPlayer().getLocation(), 20, 5, 20);
+		}
 	}
 	public void SwitchAllPlayers(World world) {
 		List<Player> PlayerArr = new ArrayList<Player>();
@@ -138,6 +141,31 @@ public class MobListener implements Listener {
 			}
 		}
 	}
+	public void SwitchAllPlayersRanged(Location loc, int x, int y, int z) {
+		List<Player> PlayerArr = new ArrayList<Player>();
+		
+		for(Entity players: ((Entity) loc).getNearbyEntities(x, y, z)){
+	        if(players instanceof Player){ 
+	        	PlayerArr.add((Player) players);
+	        }
+        } 
+		
+		if(PlayerArr.size()>1) {
+			int count = 0;
+			Location firstloc = PlayerArr.get(0).getLocation();
+			for (Player player : PlayerArr) 
+			{ 
+			    if(count == PlayerArr.size()-1) {
+			    	player.teleport(firstloc);
+			    }else {
+			    	player.teleport(PlayerArr.get(count+1).getLocation());
+			    }
+			    count++;
+			}
+		}
+	}
+	
+	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEvent(PlayerItemConsumeEvent e) {
 		// get all the relative values for comparation
