@@ -342,6 +342,7 @@ public class MobListener implements Listener {
 		            			    	player.teleport(PlayerArr.get(count).getLocation());
 		            			    	player.getWorld().strikeLightningEffect(PlayerArr.get(count).getLocation());
 		            			    }
+		            			    count++;
 		            			}
 		            		}
 		            		
