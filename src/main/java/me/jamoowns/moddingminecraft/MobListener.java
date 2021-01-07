@@ -316,7 +316,7 @@ public class MobListener implements Listener {
     					int resultx = r.nextInt(high - low) + low;
     					event.getPlayer().teleport(ent.getLocation().add(resultx-9, 5, resulty-9));
     					
-    					if(((Witch) ent).getHealth() < ((Witch) ent).getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue()/2) {
+    					if(((Witch) ent).getHealth() < ((Witch) ent).getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue()/.5) {
 		            		List<Player> PlayerArr = new ArrayList<Player>();
 		            		
 		            		for(Entity players: ent.getNearbyEntities(20.0D, 20.0D, 20.0D)){
