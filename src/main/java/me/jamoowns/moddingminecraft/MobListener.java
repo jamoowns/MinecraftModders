@@ -10,14 +10,12 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Chicken;
@@ -32,10 +30,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Ravager;
 import org.bukkit.entity.Sheep;
-import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.TNTPrimed;
@@ -48,9 +44,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -64,12 +58,7 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import org.bukkit.projectiles.BlockProjectileSource;
-import org.bukkit.projectiles.ProjectileSource;
-import org.bukkit.util.Vector;
-import org.w3c.dom.events.Event;
 
-import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 
 public class MobListener implements Listener {
@@ -81,389 +70,21 @@ public class MobListener implements Listener {
 	private final Random RANDOM;
 
 	private CustomItem multiShotBowItem;
-	
+
 	private CustomItem creeperArrowItem;
 	private CustomItem explosiveArrowItem;
 	private CustomItem treeArrowItem;
 	private CustomItem rotateArrowItem;
 	private CustomItem fillArrowItem;
-	
+
 	private CustomItem swapsiesSplashPotionItem;
 	private CustomItem medusaSplashPotionItem;
 
-	
-	
 	public MobListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
 		trailByPlayer = new HashMap<>();
 		setupCustomItems();
-	}
-
-	private void setupCustomItems() {
-		multiShotBowItem = new CustomItem(Material.CROSSBOW, "MultiShot Bow");
-		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
-		meta.addEnchant(Enchantment.MULTISHOT, 1, true);
-		multiShotBowItem.asItem().setItemMeta(meta);
-		javaPlugin.customItems().customItemsByName().put(multiShotBowItem.name(), multiShotBowItem);
-		
-		
-		creeperArrowItem = new CustomItem(Material.ARROW, "Creeper Arrow");
-		creeperArrowItem.setProjectileHitEvent(event -> {
-			int result = RANDOM.nextInt(4) + 1;
-			for (int i = 0; i < result; i++) {
-				event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Creeper.class);
-			}
-		});
-		javaPlugin.customItems().customItemsByName().put(creeperArrowItem.name(), creeperArrowItem);
-		
-		explosiveArrowItem = new CustomItem(Material.ARROW, "Explosive Arrow");
-		explosiveArrowItem.setProjectileHitEvent(event -> {
-			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
-		});
-		javaPlugin.customItems().customItemsByName().put(explosiveArrowItem.name(), explosiveArrowItem);
-		
-		treeArrowItem = new CustomItem(Material.ARROW, "Tree Arrow");
-		treeArrowItem.setProjectileHitEvent(event -> {
-			Location loc = event.getEntity().getLocation();
-			if (!event.getEntity().getLocation().getWorld().getBlockAt(loc.add(0, -1, 0)).getType().name()
-					.contains("LEAVES")) {
-				event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.DIRT);
-				event.getEntity().getLocation().getWorld().generateTree(event.getEntity().getLocation(), TreeType.TREE);
-				event.getEntity().remove();
-			}
-		});
-		javaPlugin.customItems().customItemsByName().put(treeArrowItem.name(), treeArrowItem);
-
-		rotateArrowItem = new CustomItem(Material.ARROW, "Rotate Arrow");
-		rotateArrowItem.setProjectileHitEvent(event -> {
-			Random r = new Random();
-			int low = 1;
-			int high = 4;
-			int result = r.nextInt(high - low) + low;
-			for (int i = 0; i < 10; i++) {
-				Material[][] multi = new Material[21][21];
-
-				for (int j = 0; j < 21; j++) {
-					for (int k = 0; k < 21; k++) {
-						Location loc = event.getEntity().getLocation();
-						loc.add(k - 10, i, j - 10);
-						if (!event.getEntity().getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")
-								|| loc.getY() < 63) {
-							multi[j][k] = event.getEntity().getLocation().getWorld().getBlockAt(loc).getType();
-						} else {
-							multi[j][k] = Material.AIR;
-						}
-					}
-				}
-
-				multi = RotateShapeSquareGrid(multi, 90 * result);
-
-				for (int j = 0; j < 21; j++) {
-					for (int k = 0; k < 21; k++) {
-						Location loc = event.getEntity().getLocation();
-						loc.add(k - 10, i, j - 10);
-						if (!event.getEntity().getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")
-								&& !event.getEntity().getLocation().getWorld().getBlockAt(loc).getType().name()
-										.contains("LAVA")
-								|| loc.getY() < 63) {
-							event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(multi[j][k]);
-						} else {
-							event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.AIR);
-						}
-
-					}
-				}
-			}
-
-			event.getEntity().remove();
-		});
-		javaPlugin.customItems().customItemsByName().put(rotateArrowItem.name(), rotateArrowItem);
-
-		fillArrowItem = new CustomItem(Material.ARROW, "Fill Arrow");
-		fillArrowItem.setProjectileHitEvent(event -> {
-			for (int i = 0; i < 9; i++) {
-				if (event.getEntity().getLocation().getY() + i < 63) {
-					for (int j = 0; j < 9; j++) {
-						for (int k = 0; k < 9; k++) {
-							Location loc = event.getEntity().getLocation();
-							loc.add(k - 4, i, j - 4);
-							if (loc.getY() < 59) {
-								event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.STONE);
-							} else {
-								event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.DIRT);
-							}
-						}
-					}
-				}
-			}
-			event.getEntity().remove();
-		});
-		javaPlugin.customItems().customItemsByName().put(fillArrowItem.name(), fillArrowItem);
-		
-		swapsiesSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
-		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
-			((Server) event.getEntity().getWorld()).broadcastMessage("your message");
-			SwitchAllPlayersInAnArea(event.getHitBlock().getLocation(), 20, 5, 20);
-		});
-		javaPlugin.customItems().customItemsByName().put(swapsiesSplashPotionItem.name(), swapsiesSplashPotionItem);
-
-		medusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Tears of Medusa");
-		medusaSplashPotionItem.setPotionSplashEvent(event -> {
-			PotionAllPlayersInAnArea(event.getHitBlock().getLocation(), 20, 5, 20,PotionEffectType.SLOW, 100, 200);
-		});
-		javaPlugin.customItems().customItemsByName().put(medusaSplashPotionItem.name(), medusaSplashPotionItem);
-	}
-
-	@EventHandler
-	public void PlayerChatEvent(PlayerChatEvent event) {
-		if(event.getMessage().contains("Winfred the Weak")) {
-			Witch witch = event.getPlayer().getLocation().getWorld().spawn(event.getPlayer().getLocation(),
-					Witch.class);
-			witch.getWorld().strikeLightningEffect(witch.getLocation());
-			witch.setCustomName("Winfred the Witch");
-			witch.setFallDistance(-400);
-			for (int i = 0; i < 3; i++) {
-				witch.getLocation().getWorld().spawn(witch.getLocation().add(0, 1, 0),
-						Bat.class);
-			}
-    		for(Entity players: witch.getNearbyEntities(20.0D, 20.0D, 20.0D)){
-		        if(players instanceof Player){ 
-		        	players.sendMessage("'Get away from me'-"+witch.getName());
-		        }
-	        }
-		}
-		if(event.getMessage().contains("Switch")) {
-			SwitchAllPlayers(event.getPlayer().getWorld());
-			
-		}
-
-		if(event.getMessage().contains("SwapNearMe")) {
-			SwitchAllPlayersInAnArea(event.getPlayer().getLocation(),20,5,20);
-			
-		}
-	}
-	
-	public void SwitchAllPlayers(World world) {
-		List<Player> PlayerArr = new ArrayList<Player>();
-		
-		PlayerArr = world.getPlayers();
-		
-		if(PlayerArr.size()>1) {
-			int count = 0;
-			Location firstloc = PlayerArr.get(0).getLocation();
-			for (Player player : PlayerArr) 
-			{ 
-			    if(count == PlayerArr.size()-1) {
-			    	player.teleport(firstloc);
-			    }else {
-			    	player.teleport(PlayerArr.get(count+1).getLocation());
-			    }
-			    count++;
-			}
-		}
-	}
-	
-	public void SwitchAllPlayersInAnArea(Location loc, int x, int y, int z) {
-		List<Player> PlayerArr = new ArrayList<Player>();
-		
-		for(Entity players: loc.getWorld().getNearbyEntities(loc,x, y, z)){
-	        if(players instanceof Player){ 
-	        	PlayerArr.add((Player) players);
-	        }
-        } 
-		
-		if(PlayerArr.size()>1) {
-			int count = 0;
-			Location firstloc = PlayerArr.get(0).getLocation();
-			for (Player player : PlayerArr) 
-			{ 
-			    if(count == PlayerArr.size()-1) {
-			    	player.teleport(firstloc);
-			    }else {
-			    	player.teleport(PlayerArr.get(count+1).getLocation());
-			    }
-			    count++;
-			}
-		}
-	}
-	
-	public void PotionAllPlayersInAnArea(Location loc, int x, int y, int z ,PotionEffectType potionEffectType,int duration,int amplifier) {
-		for(Entity players: loc.getWorld().getNearbyEntities(loc,x, y, z)){
-	        if(players instanceof Player){ 
-	        	((LivingEntity) players).addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
-	        }
-        } 
-	}
-	
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerInteractEvent(PlayerItemConsumeEvent e) {
-		// get all the relative values for comparation
-		final Player p = e.getPlayer();
-		if (e.getItem().getType().equals(Material.SPIDER_EYE)) {
-			// schedule a task to see if they have eaten the cookie(maybe the time could be
-			// a little faster idk)
-			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-				public void run() {
-					p.setFallDistance(-20);
-					p.teleport(p.getLocation().add(0, 20, 0));
-				}
-			}, 100L);
-
-		}
-		Location playerLoc = p.getLocation();
-		Location playerLoc2 = p.getLocation();
-		playerLoc2.setY(900);
-		if (playerLoc.add(0, 2, 0).getBlock().getType().equals(Material.AIR)) {
-			if (e.getItem().getType().equals(Material.COOKED_SALMON)) {
-				Husk deadPlayer = p.getLocation().getWorld().spawn(p.getLocation(), Husk.class);
-				deadPlayer.getEquipment().setArmorContents(p.getEquipment().getArmorContents());
-				deadPlayer.getEquipment().setItemInMainHand(p.getEquipment().getItemInMainHand());
-				deadPlayer.getEquipment().setItemInOffHand(p.getEquipment().getItemInOffHand());
-				ItemStack is = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
-				deadPlayer.getEquipment().setHelmet(is);
-
-				p.teleport(playerLoc2);
-				Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-					public void run() {
-						p.setFallDistance(0);
-						p.teleport(playerLoc.add(0, -2, 0));
-					}
-				}, 230);
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onWeatherChange(WeatherChangeEvent event) {
-		boolean rain = event.toWeatherState();
-		if (rain) {
-			event.setCancelled(true);
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onThunderChange(ThunderChangeEvent event) {
-		boolean storm = event.toThunderState();
-		if (storm) {
-			event.setCancelled(true);
-		}
-	}
-
-	public Material[][] RotateShapeSquareGrid(Material[][] shape, int rotate) {
-		if (rotate == 90) {
-			Material[][] newShape = new Material[shape[1].length][shape[0].length];
-
-			for (int r = 0; r < shape[0].length; r++) {
-				for (int c = 0; c < shape[1].length; c++) {
-					int newR = newShape[1].length - r - 1;
-					int newC = newShape[0].length - c - 1;
-					newShape[newC][newR] = shape[r][c];
-				}
-			}
-
-			return newShape;
-		} else if (rotate == 180) {
-			Material[][] newShape = new Material[shape[0].length][shape[1].length];
-
-			for (int r = 0; r < shape[0].length; r++) {
-				for (int c = 0; c < shape[1].length; c++) {
-					int newR = newShape[0].length - r - 1;
-					int newC = newShape[1].length - c - 1;
-					newShape[newR][newC] = shape[r][c];
-				}
-			}
-			return newShape;
-		} else if (rotate == 270) {
-			return RotateShapeSquareGrid(RotateShapeSquareGrid(shape, 90), 180);
-		}
-
-		return shape;
-	}
-
-	@EventHandler
-	public void onProjectileLaunch(ProjectileLaunchEvent event) {
-		
-	}
-
-	@EventHandler
-	public void onPlayerMoveEvent(PlayerMoveEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.Winfred)) {
-			for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
-		        if(ent instanceof Witch){ 
-		            if(ent.getName().contains("Winfred")) {
-		            	event.getPlayer().sendMessage("'Get Back'-"+ent.getName());
-		            	event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
-    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
-    					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
-    					Random r = new Random();
-    					int low = 1;
-    					int high = 19;
-    					int resulty = r.nextInt(high - low) + low;
-
-    					int resultx = r.nextInt(high - low) + low;
-    					
-    					event.getPlayer().teleport(ent.getLocation().add(resultx-9, 5, resulty-9));
-    					
-    					if(((Witch) ent).getHealth() < ((Witch) ent).getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue()*.75) {
-    						SwitchAllPlayers(event.getPlayer().getWorld());
-		            	}
-		            }
-		        }   
-	        }   
-		}
-		
-		
-		
-		
-		
-		if (javaPlugin.isFeatureActive(Feature.PLAYER_TRAIL)) {
-			Location belowPlayer = event.getPlayer().getLocation().add(0, -1, 0);
-
-			if (!belowPlayer.getBlock().isEmpty() && !belowPlayer.getBlock().isLiquid()) {
-
-				BlockFace facing = event.getPlayer().getFacing();
-				int x = 0;
-				int z = 0;
-				if (facing == BlockFace.SOUTH) {
-					x = 0;
-					z = -1;
-				} else if (facing == BlockFace.NORTH) {
-					x = 0;
-					z = 1;
-				} else if (facing == BlockFace.EAST) {
-					x = -1;
-					z = 0;
-				} else if (facing == BlockFace.WEST) {
-					x = 1;
-					z = 0;
-				}
-
-				Location behindPlayer = event.getPlayer().getLocation().add(x, 0, z);
-				Location belowBehindPlayer = event.getPlayer().getLocation().add(x, -1, z);
-				Block blockBehindPlayer = event.getPlayer().getWorld().getBlockAt(behindPlayer);
-				Block blockBelowBehindPlayer = event.getPlayer().getWorld().getBlockAt(belowBehindPlayer);
-
-				if (blockBehindPlayer.isEmpty() && !blockBehindPlayer.isLiquid()
-						&& !blockBelowBehindPlayer.getType().name().contains("CARPET")
-						&& blockBelowBehindPlayer.getType() != Material.GRASS
-						&& !blockBelowBehindPlayer.getType().name().contains("SNOW")
-						&& !blockBelowBehindPlayer.isLiquid() && !blockBelowBehindPlayer.isEmpty()) {
-					List<Block> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
-					trail.add(event.getPlayer().getWorld().getBlockAt(behindPlayer));
-					if (trail.size() > 100) {
-						Block first = trail.remove(0);
-						if (first.getType().name().contains("CARPET")) {
-							first.setType(Material.AIR);
-						}
-					}
-					trailByPlayer.put(event.getPlayer().getUniqueId(), trail);
-
-					event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(
-							javaPlugin.teams().getTeam(event.getPlayer().getUniqueId()).getTeamColour().getTrail());
-				}
-			}
-		}
 	}
 
 	public void cleanup() {
@@ -478,119 +99,99 @@ public class MobListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerQuitEvent(PlayerQuitEvent event) {
-		List<Block> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
-		trail.forEach(block -> {
-			if (block.getType().name().contains("CARPET")) {
-				block.setType(Material.AIR);
-			}
-		});
-		trailByPlayer.remove(event.getPlayer().getUniqueId());
-	}
+	public void onBlockPlace(BlockPlaceEvent event) {
 
-	@EventHandler
-	public void onPlayerDeath(PlayerDeathEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.IRON_GOLEM)) {
-			Player playerEnt = (Player) event.getEntity();
-			Random r = new Random();
-			int low = 0;
-			int high = 3;
-			int result = r.nextInt(high - low) + low;
-			for (int i = 0; i < result; i++) {
-				event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), IronGolem.class);
-				if (playerEnt.getKiller() instanceof Player) {
-					if (playerEnt != playerEnt.getKiller())
-						event.getEntity().getLocation().getWorld().spawnEntity(playerEnt.getKiller().getLocation(),
-								EntityType.FIREWORK);
+		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
+			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+				if (ent instanceof Villager) {
+					if (ent.getName().contains("Bob")) {
+
+						event.getPlayer().getServer()
+								.broadcastMessage("'Can you get this Basalt polished for me'-" + ent.getName());
+						Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+							@Override
+							public void run() {
+								event.getBlockPlaced().setType(Material.BASALT);
+							}
+						}, 10);
+					}
+				}
+			}
+		}
+		if (event.getBlock().getType().equals(Material.BASALT)) {
+			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+				if (ent instanceof Villager) {
+					if (ent.getName().contains("Sam")) {
+
+						event.getPlayer().getServer()
+								.broadcastMessage("'I can polish that for you right now'-" + ent.getName());
+						Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+							@Override
+							public void run() {
+								event.getBlockPlaced().setType(Material.POLISHED_BASALT);
+							}
+						}, 10);
+					}
+				}
+			}
+		}
+
+		if (event.getBlock().getType().equals(Material.POLISHED_BASALT)) {
+			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+				if (ent instanceof Villager) {
+					if (ent.getName().contains("Bob")) {
+
+						event.getPlayer().getServer().broadcastMessage(
+								"'thanks for getting it polished it for me, here's a target to practice your skills'-"
+										+ ent.getName());
+						Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+							@Override
+							public void run() {
+								event.getBlockPlaced().setType(Material.TARGET);
+							}
+						}, 10);
+					}
+				}
+			}
+		}
+
+		if (event.getBlock().getType().equals(Material.TARGET)) {
+			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+				if (ent instanceof Villager) {
+					if (ent.getName().contains("Finch")) {
+
+						event.getPlayer().getServer().broadcastMessage(
+								"'Just what I needed, here's something to dry your clothes on'-" + ent.getName());
+						Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+							@Override
+							public void run() {
+								event.getBlockPlaced().setType(Material.SCAFFOLDING);
+							}
+						}, 10);
+					}
+				}
+			}
+		}
+
+		if (event.getBlock().getType().equals(Material.SCAFFOLDING)) {
+			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+				if (ent instanceof Villager) {
+					if (ent.getName().contains("Fred")) {
+
+						event.getPlayer().getServer().broadcastMessage(
+								"'Sweet now i can dry my wet pants, have some wheat to make bread'-" + ent.getName());
+						Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+							@Override
+							public void run() {
+								event.getBlockPlaced().setType(Material.HAY_BLOCK);
+							}
+						}, 10);
+					}
 				}
 			}
 		}
 	}
-	
-	@EventHandler
-	public void onBlockPlace(BlockPlaceEvent event) {
-		
-		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
-		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
-		        if(ent instanceof Villager){ 
-		            if(ent.getName().contains("Bob")) {
 
-		    			event.getPlayer().getServer().broadcastMessage("'Can you get this Basalt polished for me'-"+ent.getName());
-		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-		    				public void run() {
-		    					event.getBlockPlaced().setType(Material.BASALT);
-		    				}
-		    			}, 10);
-		            }
-		        }
-		    }
-		}
-		if (event.getBlock().getType().equals(Material.BASALT)) {
-		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
-		        if(ent instanceof Villager){ 
-		            if(ent.getName().contains("Sam")) {
-
-		            	event.getPlayer().getServer().broadcastMessage("'I can polish that for you right now'-"+ent.getName());
-		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-		    				public void run() {
-		    					event.getBlockPlaced().setType(Material.POLISHED_BASALT);
-		    				}
-		    			}, 10);
-		            }
-		        }
-		    }
-		}
-
-		if (event.getBlock().getType().equals(Material.POLISHED_BASALT)) {
-		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
-		        if(ent instanceof Villager){ 
-		            if(ent.getName().contains("Bob")) {
-
-		            	event.getPlayer().getServer().broadcastMessage("'thanks for getting it polished it for me, here's a target to practice your skills'-"+ent.getName());
-		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-		    				public void run() {
-		    					event.getBlockPlaced().setType(Material.TARGET);
-		    				}
-		    			}, 10);
-		            }
-		        }
-		    }
-		}
-
-		if (event.getBlock().getType().equals(Material.TARGET)) {
-		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
-		        if(ent instanceof Villager){ 
-		            if(ent.getName().contains("Finch")) {
-
-		            	event.getPlayer().getServer().broadcastMessage("'Just what I needed, here's something to dry your clothes on'-"+ent.getName());
-		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-		    				public void run() {
-		    					event.getBlockPlaced().setType(Material.SCAFFOLDING);
-		    				}
-		    			}, 10);
-		            }
-		        }
-		    }
-		}
-		
-
-		if (event.getBlock().getType().equals(Material.SCAFFOLDING)) {
-		    for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
-		        if(ent instanceof Villager){ 
-		            if(ent.getName().contains("Fred")) {
-
-		            	event.getPlayer().getServer().broadcastMessage("'Sweet now i can dry my wet pants, have some wheat to make bread'-"+ent.getName());
-		    			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-		    				public void run() {
-		    					event.getBlockPlaced().setType(Material.HAY_BLOCK);
-		    				}
-		    			}, 10);
-		            }
-		        }
-		    }
-		}
-	}
-	
 	@EventHandler
 	public void onEntityDeathEvent(EntityDeathEvent event) {
 		if (javaPlugin.isFeatureActive(Feature.FUNKY_MOB_DEATH)) {
@@ -603,6 +204,7 @@ public class MobListener implements Listener {
 				if (sheepEnt.isAdult()) {
 					mcPlayer.sendTitle("You're about to die", "20 secs to live after this", 40, 40, 40);
 					Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+						@Override
 						public void run() {
 							for (int i = 0; i < 3; i++) {
 								Creeper crepper = mcPlayer.getLocation().getWorld().spawn(mcPlayer.getLocation(),
@@ -830,5 +432,396 @@ public class MobListener implements Listener {
 				}
 			}
 		}
+	}
+
+	@EventHandler
+	public void onPlayerDeath(PlayerDeathEvent event) {
+		if (javaPlugin.isFeatureActive(Feature.IRON_GOLEM)) {
+			Player playerEnt = event.getEntity();
+			Random r = new Random();
+			int low = 0;
+			int high = 3;
+			int result = r.nextInt(high - low) + low;
+			for (int i = 0; i < result; i++) {
+				event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), IronGolem.class);
+				if (playerEnt.getKiller() instanceof Player) {
+					if (playerEnt != playerEnt.getKiller())
+						event.getEntity().getLocation().getWorld().spawnEntity(playerEnt.getKiller().getLocation(),
+								EntityType.FIREWORK);
+				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerInteractEvent(PlayerItemConsumeEvent e) {
+		// get all the relative values for comparation
+		final Player p = e.getPlayer();
+		if (e.getItem().getType().equals(Material.SPIDER_EYE)) {
+			// schedule a task to see if they have eaten the cookie(maybe the time could be
+			// a little faster idk)
+			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+				@Override
+				public void run() {
+					p.setFallDistance(-20);
+					p.teleport(p.getLocation().add(0, 20, 0));
+				}
+			}, 100L);
+
+		}
+		Location playerLoc = p.getLocation();
+		Location playerLoc2 = p.getLocation();
+		playerLoc2.setY(900);
+		if (playerLoc.add(0, 2, 0).getBlock().getType().equals(Material.AIR)) {
+			if (e.getItem().getType().equals(Material.COOKED_SALMON)) {
+				Husk deadPlayer = p.getLocation().getWorld().spawn(p.getLocation(), Husk.class);
+				deadPlayer.getEquipment().setArmorContents(p.getEquipment().getArmorContents());
+				deadPlayer.getEquipment().setItemInMainHand(p.getEquipment().getItemInMainHand());
+				deadPlayer.getEquipment().setItemInOffHand(p.getEquipment().getItemInOffHand());
+				ItemStack is = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
+				deadPlayer.getEquipment().setHelmet(is);
+
+				p.teleport(playerLoc2);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+					@Override
+					public void run() {
+						p.setFallDistance(0);
+						p.teleport(playerLoc.add(0, -2, 0));
+					}
+				}, 230);
+			}
+		}
+	}
+
+	@EventHandler
+	public void onPlayerMoveEvent(PlayerMoveEvent event) {
+		if (javaPlugin.isFeatureActive(Feature.Winfred)) {
+			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+				if (ent instanceof Witch) {
+					if (ent.getName().contains("Winfred")) {
+						event.getPlayer().sendMessage("'Get Back'-" + ent.getName());
+						event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
+						event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
+						event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
+						Random r = new Random();
+						int low = 1;
+						int high = 19;
+						int resulty = r.nextInt(high - low) + low;
+
+						int resultx = r.nextInt(high - low) + low;
+
+						event.getPlayer().teleport(ent.getLocation().add(resultx - 9, 5, resulty - 9));
+
+						if (((Witch) ent).getHealth() < ((Witch) ent).getAttribute(Attribute.GENERIC_MAX_HEALTH)
+								.getDefaultValue() * .75) {
+							SwitchAllPlayers(event.getPlayer().getWorld());
+						}
+					}
+				}
+			}
+		}
+
+		if (javaPlugin.isFeatureActive(Feature.PLAYER_TRAIL)) {
+			Location belowPlayer = event.getPlayer().getLocation().add(0, -1, 0);
+
+			if (!belowPlayer.getBlock().isEmpty() && !belowPlayer.getBlock().isLiquid()) {
+
+				BlockFace facing = event.getPlayer().getFacing();
+				int x = 0;
+				int z = 0;
+				if (facing == BlockFace.SOUTH) {
+					x = 0;
+					z = -1;
+				} else if (facing == BlockFace.NORTH) {
+					x = 0;
+					z = 1;
+				} else if (facing == BlockFace.EAST) {
+					x = -1;
+					z = 0;
+				} else if (facing == BlockFace.WEST) {
+					x = 1;
+					z = 0;
+				}
+
+				Location behindPlayer = event.getPlayer().getLocation().add(x, 0, z);
+				Location belowBehindPlayer = event.getPlayer().getLocation().add(x, -1, z);
+				Block blockBehindPlayer = event.getPlayer().getWorld().getBlockAt(behindPlayer);
+				Block blockBelowBehindPlayer = event.getPlayer().getWorld().getBlockAt(belowBehindPlayer);
+
+				if (blockBehindPlayer.isEmpty() && !blockBehindPlayer.isLiquid()
+						&& !blockBelowBehindPlayer.getType().name().contains("CARPET")
+						&& blockBelowBehindPlayer.getType() != Material.GRASS
+						&& !blockBelowBehindPlayer.getType().name().contains("SNOW")
+						&& !blockBelowBehindPlayer.isLiquid() && !blockBelowBehindPlayer.isEmpty()) {
+					List<Block> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
+					trail.add(event.getPlayer().getWorld().getBlockAt(behindPlayer));
+					if (trail.size() > 100) {
+						Block first = trail.remove(0);
+						if (first.getType().name().contains("CARPET")) {
+							first.setType(Material.AIR);
+						}
+					}
+					trailByPlayer.put(event.getPlayer().getUniqueId(), trail);
+
+					event.getPlayer().getWorld().getBlockAt(behindPlayer).setType(
+							javaPlugin.teams().getTeam(event.getPlayer().getUniqueId()).getTeamColour().getTrail());
+				}
+			}
+		}
+	}
+
+	@EventHandler
+	public void onPlayerQuitEvent(PlayerQuitEvent event) {
+		List<Block> trail = trailByPlayer.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>());
+		trail.forEach(block -> {
+			if (block.getType().name().contains("CARPET")) {
+				block.setType(Material.AIR);
+			}
+		});
+		trailByPlayer.remove(event.getPlayer().getUniqueId());
+	}
+
+	@EventHandler
+	public void onProjectileLaunch(ProjectileLaunchEvent event) {
+
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onThunderChange(ThunderChangeEvent event) {
+		boolean storm = event.toThunderState();
+		if (storm) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onWeatherChange(WeatherChangeEvent event) {
+		boolean rain = event.toWeatherState();
+		if (rain) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void PlayerChatEvent(PlayerChatEvent event) {
+		if (event.getMessage().contains("Winfred the Weak")) {
+			Witch witch = event.getPlayer().getLocation().getWorld().spawn(event.getPlayer().getLocation(),
+					Witch.class);
+			witch.getWorld().strikeLightningEffect(witch.getLocation());
+			witch.setCustomName("Winfred the Witch");
+			witch.setFallDistance(-400);
+			for (int i = 0; i < 3; i++) {
+				witch.getLocation().getWorld().spawn(witch.getLocation().add(0, 1, 0), Bat.class);
+			}
+			for (Entity players : witch.getNearbyEntities(20.0D, 20.0D, 20.0D)) {
+				if (players instanceof Player) {
+					players.sendMessage("'Get away from me'-" + witch.getName());
+				}
+			}
+		}
+		if (event.getMessage().contains("Switch")) {
+			SwitchAllPlayers(event.getPlayer().getWorld());
+
+		}
+
+		if (event.getMessage().contains("SwapNearMe")) {
+			SwitchAllPlayersInAnArea(event.getPlayer().getLocation(), 20, 5, 20);
+		}
+	}
+
+	public void PotionAllPlayersInAnArea(Location loc, int x, int y, int z, PotionEffectType potionEffectType,
+			int duration, int amplifier) {
+		for (Entity players : loc.getWorld().getNearbyEntities(loc, x, y, z)) {
+			if (players instanceof Player) {
+				((LivingEntity) players).addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
+			}
+		}
+	}
+
+	public Material[][] RotateShapeSquareGrid(Material[][] shape, int rotate) {
+		if (rotate == 90) {
+			Material[][] newShape = new Material[shape[1].length][shape[0].length];
+
+			for (int r = 0; r < shape[0].length; r++) {
+				for (int c = 0; c < shape[1].length; c++) {
+					int newR = newShape[1].length - r - 1;
+					int newC = newShape[0].length - c - 1;
+					newShape[newC][newR] = shape[r][c];
+				}
+			}
+
+			return newShape;
+		} else if (rotate == 180) {
+			Material[][] newShape = new Material[shape[0].length][shape[1].length];
+
+			for (int r = 0; r < shape[0].length; r++) {
+				for (int c = 0; c < shape[1].length; c++) {
+					int newR = newShape[0].length - r - 1;
+					int newC = newShape[1].length - c - 1;
+					newShape[newR][newC] = shape[r][c];
+				}
+			}
+			return newShape;
+		} else if (rotate == 270) {
+			return RotateShapeSquareGrid(RotateShapeSquareGrid(shape, 90), 180);
+		}
+
+		return shape;
+	}
+
+	public void SwitchAllPlayers(World world) {
+		List<Player> PlayerArr = new ArrayList<Player>();
+
+		PlayerArr = world.getPlayers();
+
+		if (PlayerArr.size() > 1) {
+			int count = 0;
+			Location firstloc = PlayerArr.get(0).getLocation();
+			for (Player player : PlayerArr) {
+				if (count == PlayerArr.size() - 1) {
+					player.teleport(firstloc);
+				} else {
+					player.teleport(PlayerArr.get(count + 1).getLocation());
+				}
+				count++;
+			}
+		}
+	}
+
+	public void SwitchAllPlayersInAnArea(Location loc, int x, int y, int z) {
+		List<Player> PlayerArr = new ArrayList<Player>();
+
+		for (Entity players : loc.getWorld().getNearbyEntities(loc, x, y, z)) {
+			if (players instanceof Player) {
+				PlayerArr.add((Player) players);
+			}
+		}
+
+		if (PlayerArr.size() > 1) {
+			int count = 0;
+			Location firstloc = PlayerArr.get(0).getLocation();
+			for (Player player : PlayerArr) {
+				if (count == PlayerArr.size() - 1) {
+					player.teleport(firstloc);
+				} else {
+					player.teleport(PlayerArr.get(count + 1).getLocation());
+				}
+				count++;
+			}
+		}
+	}
+
+	private void setupCustomItems() {
+		multiShotBowItem = new CustomItem(Material.CROSSBOW, "MultiShot Bow");
+		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
+		meta.addEnchant(Enchantment.MULTISHOT, 1, true);
+		multiShotBowItem.asItem().setItemMeta(meta);
+		javaPlugin.customItems().customItemsByName().put(multiShotBowItem.name(), multiShotBowItem);
+
+		creeperArrowItem = new CustomItem(Material.ARROW, "Creeper Arrow");
+		creeperArrowItem.setProjectileHitEvent(event -> {
+			int result = RANDOM.nextInt(4) + 1;
+			for (int i = 0; i < result; i++) {
+				event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Creeper.class);
+			}
+		});
+		javaPlugin.customItems().customItemsByName().put(creeperArrowItem.name(), creeperArrowItem);
+
+		explosiveArrowItem = new CustomItem(Material.ARROW, "Explosive Arrow");
+		explosiveArrowItem.setProjectileHitEvent(event -> {
+			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
+		});
+		javaPlugin.customItems().customItemsByName().put(explosiveArrowItem.name(), explosiveArrowItem);
+
+		treeArrowItem = new CustomItem(Material.ARROW, "Tree Arrow");
+		treeArrowItem.setProjectileHitEvent(event -> {
+			Location loc = event.getEntity().getLocation();
+			if (!event.getEntity().getLocation().getWorld().getBlockAt(loc.add(0, -1, 0)).getType().name()
+					.contains("LEAVES")) {
+				event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.DIRT);
+				event.getEntity().getLocation().getWorld().generateTree(event.getEntity().getLocation(), TreeType.TREE);
+				event.getEntity().remove();
+			}
+		});
+		javaPlugin.customItems().customItemsByName().put(treeArrowItem.name(), treeArrowItem);
+
+		rotateArrowItem = new CustomItem(Material.ARROW, "Rotate Arrow");
+		rotateArrowItem.setProjectileHitEvent(event -> {
+			Random r = new Random();
+			int low = 1;
+			int high = 4;
+			int result = r.nextInt(high - low) + low;
+			for (int i = 0; i < 10; i++) {
+				Material[][] multi = new Material[21][21];
+
+				for (int j = 0; j < 21; j++) {
+					for (int k = 0; k < 21; k++) {
+						Location loc = event.getEntity().getLocation();
+						loc.add(k - 10, i, j - 10);
+						if (!event.getEntity().getLocation().getWorld().getBlockAt(loc).getType().name()
+								.contains("WATER") || loc.getY() < 63) {
+							multi[j][k] = event.getEntity().getLocation().getWorld().getBlockAt(loc).getType();
+						} else {
+							multi[j][k] = Material.AIR;
+						}
+					}
+				}
+
+				multi = RotateShapeSquareGrid(multi, 90 * result);
+
+				for (int j = 0; j < 21; j++) {
+					for (int k = 0; k < 21; k++) {
+						Location loc = event.getEntity().getLocation();
+						loc.add(k - 10, i, j - 10);
+						if (!event.getEntity().getLocation().getWorld().getBlockAt(loc).getType().name()
+								.contains("WATER")
+								&& !event.getEntity().getLocation().getWorld().getBlockAt(loc).getType().name()
+										.contains("LAVA")
+								|| loc.getY() < 63) {
+							event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(multi[j][k]);
+						} else {
+							event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.AIR);
+						}
+
+					}
+				}
+			}
+
+			event.getEntity().remove();
+		});
+		javaPlugin.customItems().customItemsByName().put(rotateArrowItem.name(), rotateArrowItem);
+
+		fillArrowItem = new CustomItem(Material.ARROW, "Fill Arrow");
+		fillArrowItem.setProjectileHitEvent(event -> {
+			for (int i = 0; i < 9; i++) {
+				if (event.getEntity().getLocation().getY() + i < 63) {
+					for (int j = 0; j < 9; j++) {
+						for (int k = 0; k < 9; k++) {
+							Location loc = event.getEntity().getLocation();
+							loc.add(k - 4, i, j - 4);
+							if (loc.getY() < 59) {
+								event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.STONE);
+							} else {
+								event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.DIRT);
+							}
+						}
+					}
+				}
+			}
+			event.getEntity().remove();
+		});
+		javaPlugin.customItems().customItemsByName().put(fillArrowItem.name(), fillArrowItem);
+
+		swapsiesSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
+		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
+			SwitchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
+		});
+		javaPlugin.customItems().customItemsByName().put(swapsiesSplashPotionItem.name(), swapsiesSplashPotionItem);
+
+		medusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Tears of Medusa");
+		medusaSplashPotionItem.setPotionSplashEvent(event -> {
+			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.SLOW, 100, 200);
+		});
+		javaPlugin.customItems().customItemsByName().put(medusaSplashPotionItem.name(), medusaSplashPotionItem);
 	}
 }
