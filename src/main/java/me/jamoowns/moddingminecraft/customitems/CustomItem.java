@@ -61,7 +61,7 @@ public final class CustomItem {
 		return projectileHitEvent.isPresent();
 	}
 
-	public boolean hasProjectileLaunchEvent() {
+	public final boolean hasProjectileLaunchEvent() {
 		return projectileLaunchEvent.isPresent();
 	}
 
@@ -77,7 +77,7 @@ public final class CustomItem {
 		return projectileHitEvent.get();
 	}
 
-	public Consumer<ProjectileLaunchEvent> projectileLaunchEvent() {
+	public final Consumer<ProjectileLaunchEvent> projectileLaunchEvent() {
 		return projectileLaunchEvent.get();
 	}
 
