@@ -297,9 +297,6 @@ public class MobListener implements Listener {
 		        		        if(players instanceof Player){ 
 		        		        	PlayerArr.add(((Player) players));
 
-		        		        	((LivingEntity) players).sendMessage("'All of you Get Back'-"+ent.getName());
-		        		        	((LivingEntity) players).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 80, 1));
-		        		        	((LivingEntity) players).addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 210, 1));
 		        		        }
 	        		        }
 		            		
@@ -308,12 +305,16 @@ public class MobListener implements Listener {
 		            			Location firstloc = PlayerArr.get(0).getLocation();
 		            			for (Player player : PlayerArr) 
 		            			{ 
+
+		            				player.sendMessage("'All of you Get Back'-"+ent.getName());
+		            				player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
+		            				player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
 		            			    if(count == PlayerArr.size()-1) {
 		            			    	player.teleport(firstloc);
-		            			    	event.getPlayer().getWorld().strikeLightningEffect(firstloc);
+		            			    	player.getWorld().strikeLightningEffect(firstloc);
 		            			    }else {
 		            			    	player.teleport(PlayerArr.get(count).getLocation());
-		            			    	event.getPlayer().getWorld().strikeLightningEffect(PlayerArr.get(count).getLocation());
+		            			    	player.getWorld().strikeLightningEffect(PlayerArr.get(count).getLocation());
 		            			    }
 		            			}
 		            		}
