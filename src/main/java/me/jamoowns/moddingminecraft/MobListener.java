@@ -80,6 +80,8 @@ public class MobListener implements Listener {
 	private CustomItem swapsiesSplashPotionItem;
 	private CustomItem medusaSplashPotionItem;
 
+	private CustomItem ExplosiveSnowBallItem;
+
 	public MobListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
@@ -581,13 +583,8 @@ public class MobListener implements Listener {
 	}
 
 	@EventHandler
-	public void onProjectileLaunch(ProjectileLaunchEvent event) {
-
-	}
-
-	@EventHandler
 	public void onProjectileThrownEvent(ProjectileLaunchEvent event) {
-		event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(3));
+		event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(8));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -828,5 +825,11 @@ public class MobListener implements Listener {
 			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.JUMP, 100, 100000);
 		});
 		javaPlugin.customItems().register(medusaSplashPotionItem);
+
+		ExplosiveSnowBallItem = new CustomItem(Material.SNOWBALL, "Ice Creep");
+		ExplosiveSnowBallItem.setProjectileHitEvent(event -> {
+			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
+		});
+		javaPlugin.customItems().register(ExplosiveSnowBallItem);
 	}
 }
