@@ -820,6 +820,7 @@ public class MobListener implements Listener {
 		medusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Tears of Medusa");
 		medusaSplashPotionItem.setPotionSplashEvent(event -> {
 			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.SLOW, 100, 200);
+			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.JUMP, 100, 100000);
 		});
 		javaPlugin.customItems().customItemsByName().put(medusaSplashPotionItem.name(), medusaSplashPotionItem);
 	}
