@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -63,6 +64,7 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+import org.w3c.dom.events.Event;
 
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
@@ -100,6 +102,7 @@ public class MobListener implements Listener {
 		
 		swapsiesSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
 		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
+			((Server) event.getEntity().getWorld()).broadcastMessage("your message");
 			SwitchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
 		});
 		javaPlugin.customItems().customItemsByName().put(swapsiesSplashPotionItem.name(), swapsiesSplashPotionItem);
