@@ -61,7 +61,7 @@ import org.bukkit.potion.PotionType;
 
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 
-public class MobListener implements Listener {
+public class MabListener implements Listener {
 
 	private final ModdingMinecraft javaPlugin;
 
@@ -82,7 +82,7 @@ public class MobListener implements Listener {
 
 	private CustomItem ExplosiveSnowBallItem;
 
-	public MobListener(ModdingMinecraft aJavaPlugin) {
+	public MabListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
 		trailByPlayer = new HashMap<>();
