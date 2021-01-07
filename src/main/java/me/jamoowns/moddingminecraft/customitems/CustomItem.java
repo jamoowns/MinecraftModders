@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -19,6 +20,8 @@ public final class CustomItem {
 	private Optional<Consumer<BlockPlaceEvent>> blockPlaceEvent;
 
 	private Optional<Consumer<ProjectileHitEvent>> projectileHitEvent;
+
+	private Optional<Consumer<ProjectileLaunchEvent>> projectileLaunchEvent;
 
 	private String name;
 
@@ -58,6 +61,10 @@ public final class CustomItem {
 		return projectileHitEvent.isPresent();
 	}
 
+	public boolean hasProjectileLaunchEvent() {
+		return projectileLaunchEvent.isPresent();
+	}
+
 	public final String name() {
 		return name;
 	}
@@ -70,6 +77,10 @@ public final class CustomItem {
 		return projectileHitEvent.get();
 	}
 
+	public Consumer<ProjectileLaunchEvent> projectileLaunchEvent() {
+		return projectileLaunchEvent.get();
+	}
+
 	public final void setBlockPlaceEvent(Consumer<BlockPlaceEvent> event) {
 		blockPlaceEvent = Optional.of(event);
 	}
@@ -80,5 +91,9 @@ public final class CustomItem {
 
 	public final void setProjectileHitEvent(Consumer<ProjectileHitEvent> event) {
 		projectileHitEvent = Optional.of(event);
+	}
+
+	public final void setProjectileLaunchEvent(Consumer<ProjectileLaunchEvent> event) {
+		projectileLaunchEvent = Optional.of(event);
 	}
 }

@@ -276,6 +276,11 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
+		Projectile entity = event.getEntity();
+		CustomItem customItem = javaPlugin.customItems().getItem(entity.getCustomName());
+		if (customItem != null && customItem.hasProjectileLaunchEvent()) {
+			customItem.projectileLaunchEvent().accept(event);
+		}
 		ProjectileSource shooter = event.getEntity().getShooter();
 		if (shooter instanceof Player) {
 			ItemStack item = ((Player) shooter).getInventory().getItemInMainHand();
