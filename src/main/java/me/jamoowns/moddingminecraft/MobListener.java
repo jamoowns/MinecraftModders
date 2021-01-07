@@ -387,23 +387,7 @@ public class MobListener implements Listener {
 
 	@EventHandler
 	public void onProjectileLaunch(ProjectileLaunchEvent event) {
-		  Projectile projectile = event.getEntity();
-	        ProjectileSource source = projectile.getShooter();
-	        if (!(source instanceof Player)) {
-	            return;
-	        }
-	        Player player = (Player) source;
-	        if (!player.getItemInHand().getType().equals(Material.BOW)) {
-	            return;
-	        }
-	        if (!this.isMultiArrowEnabled) {
-	            return;
-	        }
-	        isMultiArrowEnabled = false;
-	        for (int i = 0; i < 5; i++) {
-	            player.launchProjectile(Arrow.class);
-	        }
-	        isMultiArrowEnabled = true;
+		
 	}
 
 	@EventHandler
