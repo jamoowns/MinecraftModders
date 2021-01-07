@@ -401,7 +401,6 @@ public class MobListener implements Listener {
 	        for (int i = 0; i < 5; i++) {
 	            player.launchProjectile(Arrow.class);
 	        }
-
 	        isMultiArrowEnabled = true;
 	}
 
