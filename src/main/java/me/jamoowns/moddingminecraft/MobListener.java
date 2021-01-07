@@ -76,7 +76,9 @@ public class MobListener implements Listener {
 	private final Random RANDOM;
 
 	private CustomItem creeperArrowItem;
-
+	
+	private CustomItem swapsiesSplashPotionItem;
+	
 	public MobListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
@@ -93,6 +95,12 @@ public class MobListener implements Listener {
 			}
 		});
 		javaPlugin.customItems().customItemsByName().put(creeperArrowItem.name(), creeperArrowItem);
+		
+		swapsiesSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
+		swapsiesSplashPotionItem.setProjectileHitEvent(event -> {
+			SwitchAllPlayersRanged(event.getEntity().getLocation(), 20, 5, 20);
+		});
+		javaPlugin.customItems().customItemsByName().put(swapsiesSplashPotionItem.name(), swapsiesSplashPotionItem);
 
 	}
 
