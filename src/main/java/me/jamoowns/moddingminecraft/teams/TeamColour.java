@@ -15,12 +15,12 @@ public final class TeamColour {
 		trail = aTrail;
 	}
 
-	public final Material getHead() {
-		return head;
-	}
-
 	public final ChatColor getColour() {
 		return colour;
+	}
+
+	public final Material getHead() {
+		return head;
 	}
 
 	public final Material getTrail() {

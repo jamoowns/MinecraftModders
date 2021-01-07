@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -59,6 +58,10 @@ import me.jamoowns.moddingminecraft.teams.Army;
 
 public final class JamoListener implements Listener {
 
+	private final static boolean isMob(UUID uuid) {
+		return Bukkit.getEntity(uuid) instanceof Mob;
+	}
+
 	private final ModdingMinecraft javaPlugin;
 
 	private final Random RANDOM;
@@ -105,14 +108,6 @@ public final class JamoListener implements Listener {
 
 		setupCustomItems();
 
-		Consumer<UUID> pigReward = playerId -> {
-			Bukkit.getPlayer(playerId).getInventory().addItem(normalZombieStick.asItem());
-		};
-		Consumer<UUID> cowReward = playerId -> {
-			Bukkit.getPlayer(playerId).getInventory().addItem(normalRoomItem.asItem());
-		};
-//		taskKeeper.addTask("Kill pigs", pigReward, 2);
-//		taskKeeper.addTask("Kill cows", cowReward, 2);
 		taskKeeper.addBoardItem("Randomly swapping every 5 mins");
 		taskKeeper.addBoardItem("Get to the nether...");
 
@@ -161,8 +156,198 @@ public final class JamoListener implements Listener {
 		javaPlugin.commandExecutor().registerCommand(java.util.Collections.emptyList(), "items", this::showAllItems);
 	}
 
-	private final static boolean isMob(UUID uuid) {
-		return Bukkit.getEntity(uuid) instanceof Mob;
+	public void cleanup() {
+		javaPlugin.teams().cleanup();
+	}
+
+	@EventHandler
+	public void onBlockPlace(BlockPlaceEvent event) {
+		CustomItem customItem = javaPlugin.customItems().customItemsByName()
+				.get(event.getItemInHand().getItemMeta().getDisplayName());
+		if (customItem != null && customItem.hasBlockPlaceEvent()) {
+			event.getBlockPlaced().setType(Material.AIR);
+			customItem.blockPlaceEvent().accept(event);
+		}
+	}
+
+	@EventHandler
+	public void onCraftItemEvent(CraftItemEvent event) {
+		if (javaPlugin.isFeatureActive(Feature.RANDOM_ENCHANT)) {
+			ItemStack result = event.getRecipe().getResult().clone();
+			ItemMeta meta = result.getItemMeta();
+			for (int i = 0; i < 7; i++) {
+				Enchantment enchantment = enchantments.get(RANDOM.nextInt(enchantments.size()));
+				if (enchantment.canEnchantItem(result)) {
+					meta.addEnchant(enchantment, RANDOM.nextInt(4) + 1, false);
+				}
+			}
+			result.setItemMeta(meta);
+			event.getInventory().setResult(result);
+		}
+	}
+
+	@EventHandler
+	public void onEntityDeathEvent(EntityDeathEvent event) {
+		UUID entityUuid = event.getEntity().getUniqueId();
+		if (event.getEntity().getType() == EntityType.PIG) {
+			if (event.getEntity().getKiller() != null) {
+				taskKeeper.incrementTask(entityUuid, "Kill pigs");
+			}
+		} else if (event.getEntity().getType() == EntityType.COW) {
+			if (event.getEntity().getKiller() != null) {
+				taskKeeper.incrementTask(entityUuid, "Kill cows");
+			}
+		}
+		if (isMob(entityUuid) && javaPlugin.teams().hasTeam(entityUuid)) {
+			javaPlugin.teams().getTeam(entityUuid).remove(entityUuid);
+			event.getDrops().clear();
+		}
+	}
+
+	@EventHandler
+	public void onEntityShootBowEvent(EntityShootBowEvent event) {
+		if (event.getProjectile() != null && event.getConsumable() != null
+				&& event.getConsumable().getItemMeta() != null) {
+			event.getProjectile().setCustomName(event.getConsumable().getItemMeta().getDisplayName());
+		}
+	}
+
+	@EventHandler
+	public void onEntitySpawnEvent(EntitySpawnEvent event) {
+		if (event.getEntity().getType().name().contains("CARPET")) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
+		if (javaPlugin.isFeatureActive(Feature.RANDOM_BUCKET)) {
+			event.setItemStack(new ItemStack(BUCKET_TYPES.get(RANDOM.nextInt(BUCKET_TYPES.size()))));
+		}
+	}
+
+	@EventHandler
+	public void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
+		if (javaPlugin.isFeatureActive(Feature.EGG_WITCH)) {
+			event.setHatchingType(EntityType.WITCH);
+		}
+	}
+
+	@EventHandler
+	public void onPlayerInteractEvent(PlayerInteractEvent event) {
+		if (javaPlugin.isFeatureActive(Feature.ZOMBIE_BELL)) {
+			if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.BELL) {
+				Player player = event.getPlayer();
+				Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
+
+				Zombie zombie = player.getWorld().spawn(dundundun, Zombie.class);
+				zombie.setTarget(player);
+				zombie.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 1));
+			}
+		}
+	}
+
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
+				event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
+	}
+
+	@EventHandler
+	public void onPotionSplashEvent(PotionSplashEvent event) {
+		Projectile entity = event.getEntity();
+		CustomItem customItem = javaPlugin.customItems().customItemsByName().get(entity.getCustomName());
+		if (customItem != null && customItem.hasPotionSplashEvent()) {
+			customItem.potionSplashEvent().accept(event);
+			event.getEntity().remove();
+		}
+	}
+
+	@EventHandler
+	public void onProjectileHit(ProjectileHitEvent event) {
+		Projectile entity = event.getEntity();
+		CustomItem customItem = javaPlugin.customItems().customItemsByName().get(entity.getCustomName());
+		if (customItem != null && customItem.hasProjectileHitEvent()) {
+			customItem.projectileHitEvent().accept(event);
+			event.getEntity().remove();
+		}
+	}
+
+	@EventHandler
+	public void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
+		ProjectileSource shooter = event.getEntity().getShooter();
+		if (shooter instanceof Player) {
+			ItemStack item = ((Player) shooter).getInventory().getItemInMainHand();
+			if (event.getEntity() != null && item != null && item.getItemMeta() != null) {
+				event.getEntity().setCustomName(item.getItemMeta().getDisplayName());
+			}
+		}
+	}
+
+	public void showAllItems(Player player) {
+		Inventory inv = Bukkit.createInventory(null,
+				(int) (Math.ceil(javaPlugin.customItems().customItemsByName().values().size() / 9) * 9 + 9),
+				"Custom Items");
+
+		for (int i = 0; i < javaPlugin.customItems().customItemsByName().values().size(); i++) {
+			inv.setItem(i, new ArrayList<>(javaPlugin.customItems().customItemsByName().values()).get(i).asItem());
+		}
+		player.openInventory(inv);
+	}
+
+	private BlockFace linearFace(float yaw) {
+		double rotation = (yaw - 90) % 360;
+		if (rotation < 0) {
+			rotation += 360.0;
+		}
+
+		if (0 <= rotation && rotation < 67.5 || 337.5 <= rotation && rotation < 360.0) {
+			return BlockFace.WEST;
+		} else if (67.5 <= rotation && rotation < 157.5) {
+			return BlockFace.NORTH;
+		} else if (157.5 <= rotation && rotation < 247.5) {
+			return BlockFace.EAST;
+		} else if (247.5 <= rotation && rotation < 337.5) {
+			return BlockFace.SOUTH;
+		} else {
+			return BlockFace.WEST;
+		}
+	}
+
+	private void randomChestSpawn() {
+		List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
+		Player p = players.get(RANDOM.nextInt(players.size()));
+
+		int attempts = 0;
+		boolean done = false;
+		while (attempts < 30 && !done) {
+			Location chestLocation = p.getLocation().add(RANDOM.nextInt(40) - 20, RANDOM.nextInt(6),
+					RANDOM.nextInt(40) - 20);
+
+			// Location chestLocation = p.getLocation().add(0, 3, 0);
+			if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
+				done = true;
+				p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 20, 1);
+				p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 25, 1);
+
+				p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
+
+				Chest chest = (Chest) p.getWorld().getBlockAt(chestLocation).getState();
+
+				List<Material> materials = Arrays.asList(Material.values());
+
+				List<Material> itemsForChest = new ArrayList<>();
+
+				for (int i = 0; i < RANDOM.nextInt(5) + 1; i++) {
+					itemsForChest.add(materials.get(RANDOM.nextInt(materials.size())));
+				}
+
+				List<ItemStack> forChest = itemsForChest.stream().map(ItemStack::new).collect(Collectors.toList());
+
+				chest.getInventory().setContents(forChest.toArray(new ItemStack[forChest.size()]));
+				p.getWorld().spawnEntity(chest.getLocation(), EntityType.FIREWORK);
+			}
+		}
 	}
 
 	private void setupCustomItems() {
@@ -243,199 +428,5 @@ public final class JamoListener implements Listener {
 			}, TimeConstants.ONE_SECOND * 5, TimeConstants.ONE_SECOND * 5);
 		});
 		javaPlugin.customItems().customItemsByName().put(lightningAnusItem.name(), lightningAnusItem);
-	}
-
-	private void randomChestSpawn() {
-		List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
-		Player p = players.get(RANDOM.nextInt(players.size()));
-
-		int attempts = 0;
-		boolean done = false;
-		while (attempts < 30 && !done) {
-			Location chestLocation = p.getLocation().add(RANDOM.nextInt(40) - 20, RANDOM.nextInt(6),
-					RANDOM.nextInt(40) - 20);
-
-			// Location chestLocation = p.getLocation().add(0, 3, 0);
-			if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
-				done = true;
-				p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 20, 1);
-				p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 25, 1);
-
-				p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
-
-				Chest chest = (Chest) p.getWorld().getBlockAt(chestLocation).getState();
-
-				List<Material> materials = Arrays.asList(Material.values());
-
-				List<Material> itemsForChest = new ArrayList<>();
-
-				for (int i = 0; i < RANDOM.nextInt(5) + 1; i++) {
-					itemsForChest.add(materials.get(RANDOM.nextInt(materials.size())));
-				}
-
-				List<ItemStack> forChest = itemsForChest.stream().map(ItemStack::new).collect(Collectors.toList());
-
-				chest.getInventory().setContents(forChest.toArray(new ItemStack[forChest.size()]));
-				p.getWorld().spawnEntity(chest.getLocation(), EntityType.FIREWORK);
-			}
-		}
-	}
-
-	@EventHandler
-	public void onEntitySpawnEvent(EntitySpawnEvent event) {
-		if (event.getEntity().getType().name().contains("CARPET")) {
-			event.setCancelled(true);
-		}
-	}
-
-	@EventHandler
-	public void onEntityDeathEvent(EntityDeathEvent event) {
-		UUID entityUuid = event.getEntity().getUniqueId();
-		if (event.getEntity().getType() == EntityType.PIG) {
-			if (event.getEntity().getKiller() != null) {
-				taskKeeper.incrementTask(entityUuid, "Kill pigs");
-			}
-		} else if (event.getEntity().getType() == EntityType.COW) {
-			if (event.getEntity().getKiller() != null) {
-				taskKeeper.incrementTask(entityUuid, "Kill cows");
-			}
-		}
-		if (isMob(entityUuid) && javaPlugin.teams().hasTeam(entityUuid)) {
-			javaPlugin.teams().getTeam(entityUuid).remove(entityUuid);
-			event.getDrops().clear();
-		}
-	}
-
-	public void showAllItems(Player player) {
-		Inventory inv = Bukkit.createInventory(null,
-				(int) (Math.ceil(javaPlugin.customItems().customItemsByName().values().size() / 9) * 9 + 9),
-				"Custom Items");
-
-		for (int i = 0; i < javaPlugin.customItems().customItemsByName().values().size(); i++) {
-			inv.setItem(i, new ArrayList<>(javaPlugin.customItems().customItemsByName().values()).get(i).asItem());
-		}
-		player.openInventory(inv);
-	}
-
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
-				event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
-	}
-
-	@EventHandler
-	public void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.RANDOM_BUCKET)) {
-			event.setItemStack(new ItemStack(BUCKET_TYPES.get(RANDOM.nextInt(BUCKET_TYPES.size()))));
-		}
-	}
-
-	@EventHandler
-	public void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.EGG_WITCH)) {
-			event.setHatchingType(EntityType.WITCH);
-		}
-	}
-
-	@EventHandler
-	public void onBlockPlace(BlockPlaceEvent event) {
-		CustomItem customItem = javaPlugin.customItems().customItemsByName()
-				.get(event.getItemInHand().getItemMeta().getDisplayName());
-		if (customItem != null && customItem.hasBlockPlaceEvent()) {
-			event.getBlockPlaced().setType(Material.AIR);
-			customItem.blockPlaceEvent().accept(event);
-		}
-	}
-
-	@EventHandler
-	public void onEntityShootBowEvent(EntityShootBowEvent event) {
-		if (event.getProjectile() != null && event.getConsumable() != null
-				&& event.getConsumable().getItemMeta() != null) {
-			event.getProjectile().setCustomName(event.getConsumable().getItemMeta().getDisplayName());
-		}
-	}
-
-	@EventHandler
-	public void onProjectileHit(ProjectileHitEvent event) {
-		Projectile entity = event.getEntity();
-		CustomItem customItem = javaPlugin.customItems().customItemsByName().get(entity.getCustomName());
-		if (customItem != null && customItem.hasProjectileHitEvent()) {
-			customItem.projectileHitEvent().accept(event);
-			event.getEntity().remove();
-		}
-	}
-
-	@EventHandler
-	public void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
-		ProjectileSource shooter = event.getEntity().getShooter();
-		if (shooter instanceof Player) {
-			ItemStack item = ((Player) shooter).getInventory().getItemInMainHand();
-			if (event.getEntity() != null && item != null && item.getItemMeta() != null) {
-				event.getEntity().setCustomName(item.getItemMeta().getDisplayName());
-			}
-		}
-	}
-
-	@EventHandler
-	public void onPotionSplashEvent(PotionSplashEvent event) {
-		Projectile entity = event.getEntity();
-		CustomItem customItem = javaPlugin.customItems().customItemsByName().get(entity.getCustomName());
-		if (customItem != null && customItem.hasPotionSplashEvent()) {
-			customItem.potionSplashEvent().accept(event);
-			event.getEntity().remove();
-		}
-	}
-
-	private BlockFace linearFace(float yaw) {
-		double rotation = (yaw - 90) % 360;
-		if (rotation < 0) {
-			rotation += 360.0;
-		}
-
-		if (0 <= rotation && rotation < 67.5 || 337.5 <= rotation && rotation < 360.0) {
-			return BlockFace.WEST;
-		} else if (67.5 <= rotation && rotation < 157.5) {
-			return BlockFace.NORTH;
-		} else if (157.5 <= rotation && rotation < 247.5) {
-			return BlockFace.EAST;
-		} else if (247.5 <= rotation && rotation < 337.5) {
-			return BlockFace.SOUTH;
-		} else {
-			return BlockFace.WEST;
-		}
-	}
-
-	@EventHandler
-	public void onPlayerInteractEvent(PlayerInteractEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.ZOMBIE_BELL)) {
-			if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.BELL) {
-				Player player = event.getPlayer();
-				Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
-
-				Zombie zombie = player.getWorld().spawn(dundundun, Zombie.class);
-				zombie.setTarget(player);
-				zombie.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 1));
-			}
-		}
-	}
-
-	@EventHandler
-	public void onCraftItemEvent(CraftItemEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.RANDOM_ENCHANT)) {
-			ItemStack result = event.getRecipe().getResult().clone();
-			ItemMeta meta = result.getItemMeta();
-			for (int i = 0; i < 7; i++) {
-				Enchantment enchantment = enchantments.get(RANDOM.nextInt(enchantments.size()));
-				if (enchantment.canEnchantItem(result)) {
-					meta.addEnchant(enchantment, RANDOM.nextInt(4) + 1, false);
-				}
-			}
-			result.setItemMeta(meta);
-			event.getInventory().setResult(result);
-		}
-	}
-
-	public void cleanup() {
-		javaPlugin.teams().cleanup();
 	}
 }

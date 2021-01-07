@@ -14,6 +14,17 @@ import org.bukkit.block.data.type.Door.Hinge;
 
 public final class Roominator {
 
+	public static void build(World world, List<PlannedBlock> plannedBlocks) {
+		plannedBlocks.forEach(plannedBlock -> {
+			world.getBlockAt(plannedBlock.getLocation()).setBlockData(plannedBlock.getBlockData());
+		});
+	}
+
+	public static List<PlannedBlock> standardRoom(Location startLocation, int aWidth, int aLength, int aHeight,
+			BlockFace direction) {
+		return room(startLocation, aWidth, aLength, aHeight, direction);
+	}
+
 	private static List<PlannedBlock> door(Location doorLocation, Material doorType, Hinge hinge, BlockFace blockFace) {
 		Door doorBottom = (Door) Bukkit.createBlockData(doorType);
 
@@ -30,33 +41,6 @@ public final class Roominator {
 		door.add(PlannedBlock.plannedBlock(doorLocation, doorBottom));
 		door.add(PlannedBlock.plannedBlock(doorLocation.clone().add(0, 1, 0), doorTop));
 		return door;
-	}
-
-	public static void build(World world, List<PlannedBlock> plannedBlocks) {
-		plannedBlocks.forEach(plannedBlock -> {
-			world.getBlockAt(plannedBlock.getLocation()).setBlockData(plannedBlock.getBlockData());
-		});
-	}
-
-	private static List<Location> wall(Location startLocation, Location endLocation) {
-		List<Location> wall = new ArrayList<>();
-
-		for (int x = 0; x <= Math.abs(endLocation.getX() - startLocation.getX()); x++) {
-			for (int y = 0; y <= Math.abs(endLocation.getY() - startLocation.getY()); y++) {
-				for (int z = 0; z <= Math.abs(endLocation.getZ() - startLocation.getZ()); z++) {
-					int theX = endLocation.getX() >= startLocation.getX() ? x : x * -1;
-					int theY = endLocation.getY() >= startLocation.getY() ? y : y * -1;
-					int theZ = endLocation.getZ() >= startLocation.getZ() ? z : z * -1;
-					wall.add(startLocation.clone().add(theX, theY, theZ));
-				}
-			}
-		}
-		return wall;
-	}
-
-	public static List<PlannedBlock> standardRoom(Location startLocation, int aWidth, int aLength, int aHeight,
-			BlockFace direction) {
-		return room(startLocation, aWidth, aLength, aHeight, direction);
 	}
 
 	private static List<PlannedBlock> room(Location doorLocation, int aWidth, int aLength, int height,
@@ -140,6 +124,22 @@ public final class Roominator {
 		plannedBlocks.addAll(PlannedBlocks.plannedBlock(windows, Material.GLASS));
 
 		return plannedBlocks;
+	}
+
+	private static List<Location> wall(Location startLocation, Location endLocation) {
+		List<Location> wall = new ArrayList<>();
+
+		for (int x = 0; x <= Math.abs(endLocation.getX() - startLocation.getX()); x++) {
+			for (int y = 0; y <= Math.abs(endLocation.getY() - startLocation.getY()); y++) {
+				for (int z = 0; z <= Math.abs(endLocation.getZ() - startLocation.getZ()); z++) {
+					int theX = endLocation.getX() >= startLocation.getX() ? x : x * -1;
+					int theY = endLocation.getY() >= startLocation.getY() ? y : y * -1;
+					int theZ = endLocation.getZ() >= startLocation.getZ() ? z : z * -1;
+					wall.add(startLocation.clone().add(theX, theY, theZ));
+				}
+			}
+		}
+		return wall;
 	}
 
 	private static List<Location> walls(Location startLocation, Location endLocation) {

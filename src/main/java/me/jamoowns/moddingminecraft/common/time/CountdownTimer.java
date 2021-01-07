@@ -41,6 +41,24 @@ public class CountdownTimer implements Runnable {
 	}
 
 	/**
+	 * Gets the seconds left this timer should run
+	 *
+	 * @return Seconds left timer should run
+	 */
+	public int getSecondsLeft() {
+		return secondsLeft;
+	}
+
+	/**
+	 * Gets the total seconds this timer was set to run for
+	 *
+	 * @return Total seconds timer should run
+	 */
+	public int getTotalSeconds() {
+		return seconds;
+	}
+
+	/**
 	 * Runs the timer once, decrements seconds etc... Really wish we could make it
 	 * protected/private so you couldn't access it
 	 */
@@ -65,24 +83,6 @@ public class CountdownTimer implements Runnable {
 		everySecond.accept(this);
 
 		secondsLeft--;
-	}
-
-	/**
-	 * Gets the total seconds this timer was set to run for
-	 *
-	 * @return Total seconds timer should run
-	 */
-	public int getTotalSeconds() {
-		return seconds;
-	}
-
-	/**
-	 * Gets the seconds left this timer should run
-	 *
-	 * @return Seconds left timer should run
-	 */
-	public int getSecondsLeft() {
-		return secondsLeft;
 	}
 
 	/**

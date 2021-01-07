@@ -38,8 +38,8 @@ public final class CustomItem {
 		item.setItemMeta(itemMeta);
 	}
 
-	public final void setBlockPlaceEvent(Consumer<BlockPlaceEvent> event) {
-		blockPlaceEvent = Optional.of(event);
+	public final ItemStack asItem() {
+		return item.clone();
 	}
 
 	public final Consumer<BlockPlaceEvent> blockPlaceEvent() {
@@ -50,35 +50,35 @@ public final class CustomItem {
 		return blockPlaceEvent.isPresent();
 	}
 
-	public final void setProjectileHitEvent(Consumer<ProjectileHitEvent> event) {
-		projectileHitEvent = Optional.of(event);
-	}
-
-	public final Consumer<ProjectileHitEvent> projectileHitEvent() {
-		return projectileHitEvent.get();
+	public final boolean hasPotionSplashEvent() {
+		return potionSplashEvent.isPresent();
 	}
 
 	public final boolean hasProjectileHitEvent() {
 		return projectileHitEvent.isPresent();
 	}
 
-	public final void setPotionSplashEvent(Consumer<PotionSplashEvent> event) {
-		potionSplashEvent = Optional.of(event);
+	public final String name() {
+		return name;
 	}
 
 	public final Consumer<PotionSplashEvent> potionSplashEvent() {
 		return potionSplashEvent.get();
 	}
 
-	public final boolean hasPotionSplashEvent() {
-		return potionSplashEvent.isPresent();
+	public final Consumer<ProjectileHitEvent> projectileHitEvent() {
+		return projectileHitEvent.get();
 	}
 
-	public final String name() {
-		return name;
+	public final void setBlockPlaceEvent(Consumer<BlockPlaceEvent> event) {
+		blockPlaceEvent = Optional.of(event);
 	}
 
-	public final ItemStack asItem() {
-		return item.clone();
+	public final void setPotionSplashEvent(Consumer<PotionSplashEvent> event) {
+		potionSplashEvent = Optional.of(event);
+	}
+
+	public final void setProjectileHitEvent(Consumer<ProjectileHitEvent> event) {
+		projectileHitEvent = Optional.of(event);
 	}
 }
