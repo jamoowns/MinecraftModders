@@ -828,7 +828,7 @@ public class MobListener implements Listener {
 		javaPlugin.customItems().customItemsByName().put(medusaSplashPotionItem.name(), medusaSplashPotionItem);
 
 		ExplosiveSnowBallItem = new CustomItem(Material.SNOWBALL, "Ice Creep");
-		ExplosiveSnowBallItem.setPotionSplashEvent(event -> {
+		ExplosiveSnowBallItem.setProjectileHitEvent(event -> {
 			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
 		});
 		javaPlugin.customItems().customItemsByName().put(ExplosiveSnowBallItem.name(), ExplosiveSnowBallItem);
