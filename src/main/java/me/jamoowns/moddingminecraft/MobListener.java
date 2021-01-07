@@ -247,6 +247,7 @@ public class MobListener implements Listener {
 			
 		}
 	}
+	
 	public void SwitchAllPlayers(World world) {
 		List<Player> PlayerArr = new ArrayList<Player>();
 		
@@ -266,6 +267,7 @@ public class MobListener implements Listener {
 			}
 		}
 	}
+	
 	public void SwitchAllPlayersInAnArea(Location loc, int x, int y, int z) {
 		List<Player> PlayerArr = new ArrayList<Player>();
 		
@@ -289,6 +291,7 @@ public class MobListener implements Listener {
 			}
 		}
 	}
+	
 	public void PotionAllPlayersInAnArea(Location loc, int x, int y, int z ,PotionEffectType potionEffectType,int duration,int amplifier) {
 		for(Entity players: loc.getWorld().getNearbyEntities(loc,x, y, z)){
 	        if(players instanceof Player){ 
@@ -296,7 +299,6 @@ public class MobListener implements Listener {
 	        }
         } 
 	}
-	
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEvent(PlayerItemConsumeEvent e) {
