@@ -586,6 +586,11 @@ public class MobListener implements Listener {
 
 	}
 
+	@EventHandler
+	public void onProjectileThrownEvent(ProjectileLaunchEvent event) {
+		event.getEntity().getVelocity().setX(event.getEntity().getVelocity().getX() * 4);
+	}
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onThunderChange(ThunderChangeEvent event) {
 		boolean storm = event.toThunderState();
