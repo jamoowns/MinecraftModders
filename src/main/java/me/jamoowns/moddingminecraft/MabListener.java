@@ -584,7 +584,7 @@ public class MabListener implements Listener {
 
 	@EventHandler
 	public void onProjectileThrownEvent(ProjectileLaunchEvent event) {
-		event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(8));
+
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -817,6 +817,9 @@ public class MabListener implements Listener {
 		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
 			SwitchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
 		});
+		swapsiesSplashPotionItem.setProjectileLaunchEvent(event -> {
+			event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(4));
+		});
 		javaPlugin.customItems().register(swapsiesSplashPotionItem);
 
 		medusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Tears of Medusa");
@@ -824,12 +827,19 @@ public class MabListener implements Listener {
 			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.SLOW, 100, 200);
 			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.JUMP, 100, 100000);
 		});
+		medusaSplashPotionItem.setProjectileLaunchEvent(event -> {
+			event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(3));
+		});
 		javaPlugin.customItems().register(medusaSplashPotionItem);
 
 		ExplosiveSnowBallItem = new CustomItem(Material.SNOWBALL, "Ice Creep");
 		ExplosiveSnowBallItem.setProjectileHitEvent(event -> {
 			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
 		});
+		ExplosiveSnowBallItem.setProjectileLaunchEvent(event -> {
+			event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(8));
+		});
+
 		javaPlugin.customItems().register(ExplosiveSnowBallItem);
 	}
 }
