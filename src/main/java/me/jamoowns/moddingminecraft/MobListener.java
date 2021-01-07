@@ -105,7 +105,6 @@ public class MobListener implements Listener {
 		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
 		meta.addEnchant(Enchantment.MULTISHOT, 1, true);
 		multiShotBowItem.asItem().setItemMeta(meta);
-		
 		javaPlugin.customItems().customItemsByName().put(multiShotBowItem.name(), multiShotBowItem);
 		
 		
@@ -254,6 +253,8 @@ public class MobListener implements Listener {
 			item = rotateArrowItem.asItem();
 			event.getPlayer().getInventory().addItem(item);
 			item = fillArrowItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+			item = multiShotBowItem.asItem();
 			event.getPlayer().getInventory().addItem(item);
 			
 		}
