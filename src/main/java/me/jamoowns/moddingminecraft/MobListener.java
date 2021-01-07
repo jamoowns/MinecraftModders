@@ -587,7 +587,7 @@ public class MobListener implements Listener {
 
 	@EventHandler
 	public void onProjectileThrownEvent(ProjectileLaunchEvent event) {
-		event.getEntity().getVelocity().setX(event.getEntity().getVelocity().getX() * 4);
+		event.getEntity().getVelocity().setY(event.getEntity().getVelocity().getY() * 4);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
