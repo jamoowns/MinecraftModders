@@ -203,14 +203,13 @@ public class MobListener implements Listener {
 		
 		swapsiesSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
 		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
-			((Server) event.getEntity().getWorld()).broadcastMessage("your message");
-			SwitchAllPlayersInAnArea(event.getHitBlock().getLocation(), 20, 5, 20);
+			SwitchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
 		});
 		javaPlugin.customItems().customItemsByName().put(swapsiesSplashPotionItem.name(), swapsiesSplashPotionItem);
 
 		medusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Tears of Medusa");
 		medusaSplashPotionItem.setPotionSplashEvent(event -> {
-			PotionAllPlayersInAnArea(event.getHitBlock().getLocation(), 20, 5, 20,PotionEffectType.SLOW, 100, 200);
+			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20,PotionEffectType.SLOW, 100, 200);
 		});
 		javaPlugin.customItems().customItemsByName().put(medusaSplashPotionItem.name(), medusaSplashPotionItem);
 	}
@@ -240,7 +239,6 @@ public class MobListener implements Listener {
 
 		if(event.getMessage().contains("SwapNearMe")) {
 			SwitchAllPlayersInAnArea(event.getPlayer().getLocation(),20,5,20);
-			
 		}
 	}
 	
