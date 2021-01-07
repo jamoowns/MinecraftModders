@@ -383,13 +383,18 @@ public class MobListener implements Listener {
 
 	@EventHandler
 	public void onProjectileLaunch(ProjectileLaunchEvent event) {
-		if(event.getEntity() instanceof Player){ 
-			Arrow arrow = event.getEntity().getWorld().spawn(((LivingEntity) event.getEntity()).getEyeLocation().add(0, 10, 0), Arrow.class);
-	        arrow.setShooter((ProjectileSource) event.getEntity());
-	        arrow.setVelocity(event.getEntity().getLocation().getDirection().multiply(3.5));
-			
-		}
-		
+		  Projectile projectile = event.getEntity();
+	        ProjectileSource source = projectile.getShooter();
+	        if (!(source instanceof Player)) {
+	            return;
+	        }
+	        Player player = (Player) source;
+	        if (!player.getItemInHand().getType().equals(Material.BOW)) {
+	            return;
+	        }
+	        for (int i = 0; i < 5; i++) {
+	            player.launchProjectile(Arrow.class);
+	        }
 	}
 
 	@EventHandler
