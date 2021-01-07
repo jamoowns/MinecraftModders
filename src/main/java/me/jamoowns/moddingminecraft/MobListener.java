@@ -10,11 +10,13 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
@@ -47,6 +49,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -55,6 +58,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -63,6 +67,7 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+import org.w3c.dom.events.Event;
 
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
@@ -75,9 +80,18 @@ public class MobListener implements Listener {
 
 	private final Random RANDOM;
 
+	private CustomItem multiShotBowItem;
+	
 	private CustomItem creeperArrowItem;
+	private CustomItem explosiveArrowItem;
+	private CustomItem treeArrowItem;
+	private CustomItem rotateArrowItem;
+	private CustomItem fillArrowItem;
 	
 	private CustomItem swapsiesSplashPotionItem;
+	private CustomItem medusaSplashPotionItem;
+
+	
 	
 	public MobListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
@@ -87,6 +101,13 @@ public class MobListener implements Listener {
 	}
 
 	private void setupCustomItems() {
+		multiShotBowItem = new CustomItem(Material.CROSSBOW, "MultiShot Bow");
+		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
+		meta.addEnchant(Enchantment.MULTISHOT, 1, true);
+		multiShotBowItem.asItem().setItemMeta(meta);
+		javaPlugin.customItems().customItemsByName().put(multiShotBowItem.name(), multiShotBowItem);
+		
+		
 		creeperArrowItem = new CustomItem(Material.ARROW, "Creeper Arrow");
 		creeperArrowItem.setProjectileHitEvent(event -> {
 			int result = RANDOM.nextInt(4) + 1;
@@ -96,12 +117,102 @@ public class MobListener implements Listener {
 		});
 		javaPlugin.customItems().customItemsByName().put(creeperArrowItem.name(), creeperArrowItem);
 		
+		explosiveArrowItem = new CustomItem(Material.ARROW, "Explosive Arrow");
+		explosiveArrowItem.setProjectileHitEvent(event -> {
+			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
+		});
+		javaPlugin.customItems().customItemsByName().put(explosiveArrowItem.name(), explosiveArrowItem);
+		
+		treeArrowItem = new CustomItem(Material.ARROW, "Tree Arrow");
+		treeArrowItem.setProjectileHitEvent(event -> {
+			Location loc = event.getEntity().getLocation();
+			if (!event.getEntity().getLocation().getWorld().getBlockAt(loc.add(0, -1, 0)).getType().name()
+					.contains("LEAVES")) {
+				event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.DIRT);
+				event.getEntity().getLocation().getWorld().generateTree(event.getEntity().getLocation(), TreeType.TREE);
+				event.getEntity().remove();
+			}
+		});
+		javaPlugin.customItems().customItemsByName().put(treeArrowItem.name(), treeArrowItem);
+
+		rotateArrowItem = new CustomItem(Material.ARROW, "Rotate Arrow");
+		rotateArrowItem.setProjectileHitEvent(event -> {
+			Random r = new Random();
+			int low = 1;
+			int high = 4;
+			int result = r.nextInt(high - low) + low;
+			for (int i = 0; i < 10; i++) {
+				Material[][] multi = new Material[21][21];
+
+				for (int j = 0; j < 21; j++) {
+					for (int k = 0; k < 21; k++) {
+						Location loc = event.getEntity().getLocation();
+						loc.add(k - 10, i, j - 10);
+						if (!event.getEntity().getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")
+								|| loc.getY() < 63) {
+							multi[j][k] = event.getEntity().getLocation().getWorld().getBlockAt(loc).getType();
+						} else {
+							multi[j][k] = Material.AIR;
+						}
+					}
+				}
+
+				multi = RotateShapeSquareGrid(multi, 90 * result);
+
+				for (int j = 0; j < 21; j++) {
+					for (int k = 0; k < 21; k++) {
+						Location loc = event.getEntity().getLocation();
+						loc.add(k - 10, i, j - 10);
+						if (!event.getEntity().getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")
+								&& !event.getEntity().getLocation().getWorld().getBlockAt(loc).getType().name()
+										.contains("LAVA")
+								|| loc.getY() < 63) {
+							event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(multi[j][k]);
+						} else {
+							event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.AIR);
+						}
+
+					}
+				}
+			}
+
+			event.getEntity().remove();
+		});
+		javaPlugin.customItems().customItemsByName().put(rotateArrowItem.name(), rotateArrowItem);
+
+		fillArrowItem = new CustomItem(Material.ARROW, "Fill Arrow");
+		fillArrowItem.setProjectileHitEvent(event -> {
+			for (int i = 0; i < 9; i++) {
+				if (event.getEntity().getLocation().getY() + i < 63) {
+					for (int j = 0; j < 9; j++) {
+						for (int k = 0; k < 9; k++) {
+							Location loc = event.getEntity().getLocation();
+							loc.add(k - 4, i, j - 4);
+							if (loc.getY() < 59) {
+								event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.STONE);
+							} else {
+								event.getEntity().getLocation().getWorld().getBlockAt(loc).setType(Material.DIRT);
+							}
+						}
+					}
+				}
+			}
+			event.getEntity().remove();
+		});
+		javaPlugin.customItems().customItemsByName().put(fillArrowItem.name(), fillArrowItem);
+		
 		swapsiesSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
-		swapsiesSplashPotionItem.setProjectileHitEvent(event -> {
-			SwitchAllPlayersRanged(event.getEntity().getLocation(), 20, 5, 20);
+		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
+			((Server) event.getEntity().getWorld()).broadcastMessage("your message");
+			SwitchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
 		});
 		javaPlugin.customItems().customItemsByName().put(swapsiesSplashPotionItem.name(), swapsiesSplashPotionItem);
 
+		medusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Tears of Medusa");
+		medusaSplashPotionItem.setPotionSplashEvent(event -> {
+			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20,PotionEffectType.SLOW, 50, 256);
+		});
+		javaPlugin.customItems().customItemsByName().put(medusaSplashPotionItem.name(), medusaSplashPotionItem);
 	}
 
 	@EventHandler
@@ -126,10 +237,29 @@ public class MobListener implements Listener {
 			SwitchAllPlayers(event.getPlayer().getWorld());
 			
 		}
-		if(event.getMessage().contains("SwapNearMe")) {
-			SwitchAllPlayersRanged(event.getPlayer().getLocation(), 20, 5, 20);
+
+		if(event.getMessage().contains("Gimme")) {
+
+			ItemStack item = swapsiesSplashPotionItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+			item = medusaSplashPotionItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+			item = creeperArrowItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+			item = explosiveArrowItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+			item = treeArrowItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+			item = rotateArrowItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+			item = fillArrowItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+			item = multiShotBowItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+			
 		}
 	}
+	
 	public void SwitchAllPlayers(World world) {
 		List<Player> PlayerArr = new ArrayList<Player>();
 		
@@ -149,7 +279,8 @@ public class MobListener implements Listener {
 			}
 		}
 	}
-	public void SwitchAllPlayersRanged(Location loc, int x, int y, int z) {
+	
+	public void SwitchAllPlayersInAnArea(Location loc, int x, int y, int z) {
 		List<Player> PlayerArr = new ArrayList<Player>();
 		
 		for(Entity players: loc.getWorld().getNearbyEntities(loc,x, y, z)){
@@ -173,6 +304,13 @@ public class MobListener implements Listener {
 		}
 	}
 	
+	public void PotionAllPlayersInAnArea(Location loc, int x, int y, int z ,PotionEffectType potionEffectType,int duration,int amplifier) {
+		for(Entity players: loc.getWorld().getNearbyEntities(loc,x, y, z)){
+	        if(players instanceof Player){ 
+	        	((LivingEntity) players).addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
+	        }
+        } 
+	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEvent(PlayerItemConsumeEvent e) {
@@ -259,99 +397,9 @@ public class MobListener implements Listener {
 		return shape;
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onProjectileHit(ProjectileHitEvent event) {
-		Projectile entity = event.getEntity();
-		if ((entity instanceof Arrow)) {
-			Arrow arrow = (Arrow) entity;
-			ProjectileSource shooter = arrow.getShooter();
-			if ((shooter instanceof Player) || (shooter instanceof BlockProjectileSource)) {
-				if (arrow.getBasePotionData().getType() == PotionType.SLOWNESS) {
-					Random r = new Random();
-					int low = 4;
-					int high = 10;
-					int result = r.nextInt(high - low) + low;
-					for (int i = 0; i < result; i++) {
-						arrow.getLocation().getWorld().spawn(arrow.getLocation(), Shulker.class);
-					}
-					arrow.remove();
-				}
-				if (arrow.getBasePotionData().getType() == PotionType.INSTANT_DAMAGE) {
-					arrow.getLocation().getWorld().createExplosion(arrow.getLocation(), 5.0F);
-					arrow.remove();
-				}
-				if (arrow.getBasePotionData().getType() == PotionType.LUCK) {
-					Location loc = arrow.getLocation();
-					if (!arrow.getLocation().getWorld().getBlockAt(loc.add(0, -1, 0)).getType().name()
-							.contains("LEAVES")) {
-						arrow.getLocation().getWorld().getBlockAt(loc).setType(Material.DIRT);
-						arrow.getLocation().getWorld().generateTree(arrow.getLocation(), TreeType.TREE);
-						arrow.remove();
-					}
-				}
-				if (arrow.getBasePotionData().getType() == PotionType.STRENGTH) {
-					for (int i = 0; i < 9; i++) {
-						if (arrow.getLocation().getY() + i < 63) {
-							for (int j = 0; j < 9; j++) {
-								for (int k = 0; k < 9; k++) {
-									Location loc = arrow.getLocation();
-									loc.add(k - 4, i, j - 4);
-									if (loc.getY() < 59) {
-										arrow.getLocation().getWorld().getBlockAt(loc).setType(Material.STONE);
-									} else {
-										arrow.getLocation().getWorld().getBlockAt(loc).setType(Material.DIRT);
-									}
-								}
-							}
-						}
-					}
-					arrow.remove();
-				}
-				if (arrow.getBasePotionData().getType() == PotionType.INVISIBILITY) {
-					Random r = new Random();
-					int low = 1;
-					int high = 4;
-					int result = r.nextInt(high - low) + low;
-					for (int i = 0; i < 10; i++) {
-						Material[][] multi = new Material[21][21];
-
-						for (int j = 0; j < 21; j++) {
-							for (int k = 0; k < 21; k++) {
-								Location loc = arrow.getLocation();
-								loc.add(k - 10, i, j - 10);
-								if (!arrow.getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")
-										|| loc.getY() < 63) {
-									multi[j][k] = arrow.getLocation().getWorld().getBlockAt(loc).getType();
-								} else {
-									multi[j][k] = Material.AIR;
-								}
-							}
-						}
-
-						multi = RotateShapeSquareGrid(multi, 90 * result);
-
-						for (int j = 0; j < 21; j++) {
-							for (int k = 0; k < 21; k++) {
-								Location loc = arrow.getLocation();
-								loc.add(k - 10, i, j - 10);
-								if (!arrow.getLocation().getWorld().getBlockAt(loc).getType().name().contains("WATER")
-										&& !arrow.getLocation().getWorld().getBlockAt(loc).getType().name()
-												.contains("LAVA")
-										|| loc.getY() < 63) {
-									arrow.getLocation().getWorld().getBlockAt(loc).setType(multi[j][k]);
-								} else {
-									arrow.getLocation().getWorld().getBlockAt(loc).setType(Material.AIR);
-								}
-
-							}
-						}
-					}
-
-					arrow.remove();
-				}
-
-			}
-		}
+	@EventHandler
+	public void onProjectileLaunch(ProjectileLaunchEvent event) {
+		
 	}
 
 	@EventHandler
