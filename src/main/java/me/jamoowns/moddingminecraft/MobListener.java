@@ -144,7 +144,7 @@ public class MobListener implements Listener {
 	public void SwitchAllPlayersRanged(Location loc, int x, int y, int z) {
 		List<Player> PlayerArr = new ArrayList<Player>();
 		
-		for(Entity players: ((Entity) loc).getNearbyEntities(x, y, z)){
+		for(Entity players: loc.getWorld().getNearbyEntities(loc,x, y, z)){
 	        if(players instanceof Player){ 
 	        	PlayerArr.add((Player) players);
 	        }
