@@ -48,6 +48,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -380,8 +381,14 @@ public class MobListener implements Listener {
 		return shape;
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onProjectileHit(ProjectileHitEvent event) {
+	@EventHandler
+	public void onProjectileLaunch(ProjectileLaunchEvent event) {
+		if(event.getEntity() instanceof Player){ 
+			Arrow arrow = event.getEntity().getWorld().spawn(((LivingEntity) event.getEntity()).getEyeLocation().add(0, 10, 0), Arrow.class);
+	        arrow.setShooter((ProjectileSource) event.getEntity());
+	        arrow.setVelocity(event.getEntity().getLocation().getDirection().multiply(3.5));
+			
+		}
 		
 	}
 
