@@ -1,8 +1,9 @@
-package me.jamoowns.moddingminecraft;
+package me.jamoowns.moddingminecraft.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -11,28 +12,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.jamoowns.moddingminecraft.Feature;
+import me.jamoowns.moddingminecraft.IFeatureListener;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 
 public final class CommandMinecraftModders implements CommandExecutor {
-
-	private class ModdersCommand {
-
-		private String command;
-
-		private List<ModdersCommand> subCommands;
-
-		private Consumer<Player> action;
-
-		public ModdersCommand(final String theCommand, Consumer<Player> aAction) {
-			subCommands = new ArrayList<>();
-			command = theCommand;
-			action = aAction;
-		}
-
-		public final void addSubCommand(ModdersCommand subCommand) {
-			subCommands.add(subCommand);
-		}
-	}
 
 	private IFeatureListener featureListener;
 
@@ -49,19 +33,10 @@ public final class CommandMinecraftModders implements CommandExecutor {
 	@Override
 	public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length > 0) {
-			List<ModdersCommand> commandChildren = commands;
-			Consumer<Player> commandToRun = null;
-			for (String arg : args) {
-				for (ModdersCommand c : commandChildren) {
-					if (c.command.equalsIgnoreCase(arg)) {
-						commandToRun = c.action;
-						commandChildren = c.subCommands;
-					}
-				}
-			}
-			if (commandToRun != null) {
+			Optional<Consumer<Player>> commandToRun = moddersCommand(Arrays.asList(args)).map(ModdersCommand::action);
+			if (commandToRun.isPresent()) {
 				if (sender instanceof Player) {
-					commandToRun.accept((Player) sender);
+					commandToRun.get().accept((Player) sender);
 					return true;
 				}
 			}
@@ -93,29 +68,23 @@ public final class CommandMinecraftModders implements CommandExecutor {
 	public final void registerCommand(List<String> parentChain, String command, Consumer<Player> function) {
 		ModdersCommand moddersCommand = new ModdersCommand(command, function);
 
-		ModdersCommand parentCommand = moddersCommand(parentChain);
+		Optional<ModdersCommand> parentCommand = moddersCommand(parentChain);
 
-		if (parentCommand == null) {
-			commands.add(moddersCommand);
+		if (parentCommand.isPresent()) {
+			parentCommand.get().addSubCommand(moddersCommand);
 		} else {
-			parentCommand.addSubCommand(moddersCommand);
+			commands.add(moddersCommand);
 		}
 	}
 
-	/**
-	 * @Nullable
-	 * 
-	 * @param commandPath
-	 * @return
-	 */
-	private ModdersCommand moddersCommand(List<String> commandPath) {
+	private Optional<ModdersCommand> moddersCommand(Iterable<String> commandPath) {
 		List<ModdersCommand> commandChildren = commands;
-		ModdersCommand command = null;
+		Optional<ModdersCommand> command = Optional.empty();
 		for (String parent : commandPath) {
 			for (ModdersCommand c : commandChildren) {
-				if (c.command.equalsIgnoreCase(parent)) {
-					command = c;
-					commandChildren = c.subCommands;
+				if (c.command().equalsIgnoreCase(parent)) {
+					command = Optional.of(c);
+					commandChildren = c.subCommands();
 				}
 			}
 		}
