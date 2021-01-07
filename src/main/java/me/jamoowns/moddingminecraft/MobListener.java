@@ -86,6 +86,8 @@ public class MobListener implements Listener {
 	
 	private CustomItem swapsiesSplashPotionItem;
 	private CustomItem medusaSplashPotionItem;
+
+	private boolean isMultiArrowEnabled;
 	
 	
 	public MobListener(ModdingMinecraft aJavaPlugin) {
@@ -392,9 +394,15 @@ public class MobListener implements Listener {
 	        if (!player.getItemInHand().getType().equals(Material.BOW)) {
 	            return;
 	        }
+	        if (!this.isMultiArrowEnabled) {
+	            return;
+	        }
+	        isMultiArrowEnabled = false;
 	        for (int i = 0; i < 5; i++) {
 	            player.launchProjectile(Arrow.class);
 	        }
+
+	        isMultiArrowEnabled = true;
 	}
 
 	@EventHandler
