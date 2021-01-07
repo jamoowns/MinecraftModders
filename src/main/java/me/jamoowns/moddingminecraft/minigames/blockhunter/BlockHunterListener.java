@@ -28,76 +28,6 @@ import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 
 public final class BlockHunterListener implements Listener {
 
-	private class GamePlayer {
-
-		private UUID playerId;
-
-		private Location standLocation;
-
-		private Material chosenBlock;
-
-		private GamePlayer targetPlayer;
-
-		private boolean hasFoundBlock;
-
-		public GamePlayer(UUID aPlayer) {
-			playerId = aPlayer;
-			hasFoundBlock = false;
-		}
-
-		public Material chosenBlock() {
-			return chosenBlock;
-		}
-
-		public void chosenBlock(Material mat) {
-			chosenBlock = mat;
-		}
-
-		public void clearChosenBlock() {
-			chosenBlock = null;
-		}
-
-		public void clearStand() {
-			if (hasStandPlaced()) {
-				standLocation().getBlock().setType(Material.AIR);
-				blockAbove(standLocation()).getBlock().setType(Material.AIR);
-			}
-			standLocation = null;
-		}
-
-		public void foundBlock(boolean found) {
-			hasFoundBlock = found;
-		}
-
-		public boolean hasFoundBlock() {
-			return hasFoundBlock;
-		}
-
-		public boolean hasStandPlaced() {
-			return standLocation != null;
-		}
-
-		public UUID playerId() {
-			return playerId;
-		}
-
-		public void setStand(Location loc) {
-			standLocation = loc;
-		}
-
-		public void setTargetPlayer(GamePlayer aTargetPlayer) {
-			targetPlayer = aTargetPlayer;
-		}
-
-		public Location standLocation() {
-			return standLocation.clone();
-		}
-
-		public GamePlayer targetPlayer() {
-			return targetPlayer;
-		}
-	}
-
 	private enum GameState {
 		SETUP, SEARCHING, CHOOSING, STOPPED
 	}
@@ -249,6 +179,7 @@ public final class BlockHunterListener implements Listener {
 
 	public final void stopGame() {
 		for (GamePlayer gp : gameplayers) {
+			removeStand(gp);
 			gp.clearStand();
 		}
 		gameplayers.clear();
@@ -263,7 +194,7 @@ public final class BlockHunterListener implements Listener {
 	private void checkWinnerPhase() {
 		for (GamePlayer gp : gameplayers) {
 			if (!gp.hasFoundBlock()) {
-				Broadcaster.broadcastInfo(Bukkit.getPlayer(gp.playerId).getDisplayName() + " has been eliminated");
+				Broadcaster.broadcastInfo(Bukkit.getPlayer(gp.playerId()).getDisplayName() + " has been eliminated");
 			}
 		}
 		gameplayers.removeIf(gp -> !gp.hasFoundBlock());
@@ -284,6 +215,13 @@ public final class BlockHunterListener implements Listener {
 		return Collections.find(gameplayers, GamePlayer::playerId, player);
 	}
 
+	private void removeStand(GamePlayer gp) {
+		if (gp.hasStandPlaced()) {
+			gp.standLocation().getBlock().setType(Material.AIR);
+			blockAbove(gp.standLocation()).getBlock().setType(Material.AIR);
+		}
+	}
+
 	private void setChoosingPhase() {
 		currentGameState = GameState.CHOOSING;
 		for (GamePlayer gp : gameplayers) {
@@ -291,6 +229,7 @@ public final class BlockHunterListener implements Listener {
 			Broadcaster.sendInfo(player, "Choose a block and place it on your stand You have 2 minutes!");
 
 			gp.clearChosenBlock();
+			removeStand(gp);
 			gp.clearStand();
 			player.getInventory().addItem(blockStand);
 		}
@@ -323,6 +262,7 @@ public final class BlockHunterListener implements Listener {
 			Broadcaster.sendInfo(player, "You are searching for " + target.getDisplayName() + "'s block: " + targetBlock
 					+ ". Place it on your stand. You have 4 minutes!");
 
+			removeStand(gp);
 			gp.clearStand();
 			gp.foundBlock(false);
 			player.getInventory().addItem(blockStand);
