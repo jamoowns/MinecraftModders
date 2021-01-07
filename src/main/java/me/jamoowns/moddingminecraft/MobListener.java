@@ -120,16 +120,14 @@ public class MobListener implements Listener {
 			PlayerArr = event.getPlayer().getWorld().getPlayers();
 			
 			if(PlayerArr.size()>1) {
-				int count = 1;
+				int count = 0;
 				Location firstloc = PlayerArr.get(0).getLocation();
 				for (Player player : PlayerArr) 
 				{ 
 				    if(count == PlayerArr.size()-1) {
 				    	player.teleport(firstloc);
-				    	player.getWorld().strikeLightningEffect(firstloc);
 				    }else {
-				    	player.teleport(PlayerArr.get(count).getLocation());
-				    	player.getWorld().strikeLightningEffect(PlayerArr.get(count).getLocation());
+				    	player.teleport(PlayerArr.get(count+1).getLocation());
 				    }
 				    count++;
 				}
