@@ -99,14 +99,14 @@ public class MobListener implements Listener {
 		javaPlugin.customItems().customItemsByName().put(creeperArrowItem.name(), creeperArrowItem);
 		
 		swapsiesSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
-		swapsiesSplashPotionItem.PotionSplashEvent(event -> {
+		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
 			SwitchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
 		});
 		javaPlugin.customItems().customItemsByName().put(swapsiesSplashPotionItem.name(), swapsiesSplashPotionItem);
 
-		MedusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
-		MedusaSplashPotionItem.PotionSplashEvent(event -> {
-			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20,PotionEffectType.Slowness, 50, 256);
+		MedusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Tears of Medusa");
+		MedusaSplashPotionItem.setPotionSplashEvent(event -> {
+			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20,PotionEffectType.SLOW, 50, 256);
 		});
 		javaPlugin.customItems().customItemsByName().put(MedusaSplashPotionItem.name(), MedusaSplashPotionItem);
 	}
