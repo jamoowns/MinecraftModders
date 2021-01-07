@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -114,27 +115,29 @@ public class MobListener implements Listener {
 	        }
 		}
 		if(event.getMessage().contains("Switch")) {
+			SwitchAllPlayers(event.getPlayer().getWorld());
 			
-			List<Player> PlayerArr = new ArrayList<Player>();
-			
-			PlayerArr = event.getPlayer().getWorld().getPlayers();
-			
-			if(PlayerArr.size()>1) {
-				int count = 0;
-				Location firstloc = PlayerArr.get(0).getLocation();
-				for (Player player : PlayerArr) 
-				{ 
-				    if(count == PlayerArr.size()-1) {
-				    	player.teleport(firstloc);
-				    }else {
-				    	player.teleport(PlayerArr.get(count+1).getLocation());
-				    }
-				    count++;
-				}
+		}
+	}
+	public void SwitchAllPlayers(World world) {
+		List<Player> PlayerArr = new ArrayList<Player>();
+		
+		PlayerArr = world.getPlayers();
+		
+		if(PlayerArr.size()>1) {
+			int count = 0;
+			Location firstloc = PlayerArr.get(0).getLocation();
+			for (Player player : PlayerArr) 
+			{ 
+			    if(count == PlayerArr.size()-1) {
+			    	player.teleport(firstloc);
+			    }else {
+			    	player.teleport(PlayerArr.get(count+1).getLocation());
+			    }
+			    count++;
 			}
 		}
 	}
-	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEvent(PlayerItemConsumeEvent e) {
 		// get all the relative values for comparation
@@ -342,13 +345,11 @@ public class MobListener implements Listener {
 
 		        		        }
 	        		        }
-		            		
 		            		if(PlayerArr.size()>1) {
-		            			int count = 1;
+		            			int count = 0;
 		            			Location firstloc = PlayerArr.get(0).getLocation();
 		            			for (Player player : PlayerArr) 
 		            			{ 
-
 		            				player.sendMessage("'All of you Get Back'-"+ent.getName());
 		            				player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
 		            				player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
@@ -356,16 +357,12 @@ public class MobListener implements Listener {
 		            			    	player.teleport(firstloc);
 		            			    	player.getWorld().strikeLightningEffect(firstloc);
 		            			    }else {
-		            			    	player.teleport(PlayerArr.get(count).getLocation());
-		            			    	player.getWorld().strikeLightningEffect(PlayerArr.get(count).getLocation());
+		            			    	player.teleport(PlayerArr.get(count+1).getLocation());
+		            			    	player.getWorld().strikeLightningEffect(PlayerArr.get(count+1).getLocation());
 		            			    }
-		            			    count++;
 		            			}
 		            		}
-		            		
 		            	}
-		            	
-		    			
 		            }
 		        }   
 	        }   
