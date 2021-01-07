@@ -11,7 +11,19 @@ public class CustomItems {
 		customItemsByName = new HashMap<>();
 	}
 
-	public final Map<String, CustomItem> customItemsByName() {
-		return customItemsByName;
+	public Iterable<CustomItem> allItems() {
+		return customItemsByName.values();
+	}
+
+	public final CustomItem getItem(String itemName) {
+		return customItemsByName.get(itemName);
+	}
+
+	public final void register(CustomItem item) {
+		customItemsByName.put(item.name(), item);
+	}
+
+	public final int totalCustomItems() {
+		return customItemsByName.keySet().size();
 	}
 }

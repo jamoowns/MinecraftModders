@@ -49,6 +49,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
+import com.google.common.collect.Lists;
+
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
@@ -162,8 +164,7 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
-		CustomItem customItem = javaPlugin.customItems().customItemsByName()
-				.get(event.getItemInHand().getItemMeta().getDisplayName());
+		CustomItem customItem = javaPlugin.customItems().getItem(event.getItemInHand().getItemMeta().getDisplayName());
 		if (customItem != null && customItem.hasBlockPlaceEvent()) {
 			event.getBlockPlaced().setType(Material.AIR);
 			customItem.blockPlaceEvent().accept(event);
@@ -256,7 +257,7 @@ public final class JamoListener implements Listener {
 	@EventHandler
 	public void onPotionSplashEvent(PotionSplashEvent event) {
 		Projectile entity = event.getEntity();
-		CustomItem customItem = javaPlugin.customItems().customItemsByName().get(entity.getCustomName());
+		CustomItem customItem = javaPlugin.customItems().getItem(entity.getCustomName());
 		if (customItem != null && customItem.hasPotionSplashEvent()) {
 			customItem.potionSplashEvent().accept(event);
 			event.getEntity().remove();
@@ -266,7 +267,7 @@ public final class JamoListener implements Listener {
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent event) {
 		Projectile entity = event.getEntity();
-		CustomItem customItem = javaPlugin.customItems().customItemsByName().get(entity.getCustomName());
+		CustomItem customItem = javaPlugin.customItems().getItem(entity.getCustomName());
 		if (customItem != null && customItem.hasProjectileHitEvent()) {
 			customItem.projectileHitEvent().accept(event);
 			event.getEntity().remove();
@@ -286,11 +287,12 @@ public final class JamoListener implements Listener {
 
 	public void showAllItems(Player player) {
 		Inventory inv = Bukkit.createInventory(null,
-				(int) (Math.ceil(javaPlugin.customItems().customItemsByName().values().size() / 9) * 9 + 9),
-				"Custom Items");
+				(int) (Math.ceil(javaPlugin.customItems().totalCustomItems() / 9) * 9 + 9), "Custom Items");
 
-		for (int i = 0; i < javaPlugin.customItems().customItemsByName().values().size(); i++) {
-			inv.setItem(i, new ArrayList<>(javaPlugin.customItems().customItemsByName().values()).get(i).asItem());
+		List<CustomItem> allItems = Lists.newArrayList(javaPlugin.customItems().allItems());
+
+		for (int i = 0; i < javaPlugin.customItems().totalCustomItems(); i++) {
+			inv.setItem(i, allItems.get(i).asItem());
 		}
 		player.openInventory(inv);
 	}
@@ -357,7 +359,7 @@ public final class JamoListener implements Listener {
 			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Zombie.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
 		});
-		javaPlugin.customItems().customItemsByName().put(normalZombieStick.name(), normalZombieStick);
+		javaPlugin.customItems().register(normalZombieStick);
 		mobSpawningItems.add(normalZombieStick);
 
 		normalSkeletonStick = new CustomItem(Material.END_ROD, "Normal Skeleton");
@@ -366,7 +368,7 @@ public final class JamoListener implements Listener {
 			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Skeleton.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
 		});
-		javaPlugin.customItems().customItemsByName().put(normalSkeletonStick.name(), normalSkeletonStick);
+		javaPlugin.customItems().register(normalSkeletonStick);
 		mobSpawningItems.add(normalSkeletonStick);
 
 		normalCreeperStick = new CustomItem(Material.TWISTING_VINES, "Normal Creeper");
@@ -375,7 +377,7 @@ public final class JamoListener implements Listener {
 			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Creeper.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
 		});
-		javaPlugin.customItems().customItemsByName().put(normalCreeperStick.name(), normalCreeperStick);
+		javaPlugin.customItems().register(normalCreeperStick);
 		mobSpawningItems.add(normalCreeperStick);
 
 		normalMobStick = new CustomItem(Material.SOUL_TORCH, "Unkown Mob");
@@ -396,7 +398,7 @@ public final class JamoListener implements Listener {
 			}
 
 		});
-		javaPlugin.customItems().customItemsByName().put(normalMobStick.name(), normalMobStick);
+		javaPlugin.customItems().register(normalMobStick);
 		mobSpawningItems.add(normalMobStick);
 
 		normalRoomItem = new CustomItem(Material.LECTERN, "Standard Room");
@@ -408,13 +410,13 @@ public final class JamoListener implements Listener {
 
 			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
 		});
-		javaPlugin.customItems().customItemsByName().put(normalRoomItem.name(), normalRoomItem);
+		javaPlugin.customItems().register(normalRoomItem);
 
 		skeletonArrowItem = new CustomItem(Material.ARROW, "Skeleton Arrow");
 		skeletonArrowItem.setProjectileHitEvent(event -> {
 			event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Skeleton.class);
 		});
-		javaPlugin.customItems().customItemsByName().put(skeletonArrowItem.name(), skeletonArrowItem);
+		javaPlugin.customItems().register(skeletonArrowItem);
 
 		lightningAnusItem = new CustomItem(Material.CHAIN, "Lightning Storm");
 		lightningAnusItem.setBlockPlaceEvent(event -> {
@@ -427,6 +429,6 @@ public final class JamoListener implements Listener {
 				}
 			}, TimeConstants.ONE_SECOND * 5, TimeConstants.ONE_SECOND * 5);
 		});
-		javaPlugin.customItems().customItemsByName().put(lightningAnusItem.name(), lightningAnusItem);
+		javaPlugin.customItems().register(lightningAnusItem);
 	}
 }
