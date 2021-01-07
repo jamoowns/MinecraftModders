@@ -22,6 +22,21 @@ import org.bukkit.scoreboard.Team;
 
 public final class Teams {
 
+	private class PlayerEventListener implements Listener {
+
+		private Teams teams;
+
+		PlayerEventListener(Teams aTeams) {
+			teams = aTeams;
+		}
+
+		@EventHandler
+		public void onPlayerJoin(PlayerJoinEvent event) {
+			Player player = event.getPlayer();
+			teams.register(player.getName(), player.getUniqueId());
+		}
+	}
+
 	private List<TeamColour> availableTeamColours;
 
 	private List<Army> armies;
@@ -54,23 +69,25 @@ public final class Teams {
 		javaPlugin.getServer().getPluginManager().registerEvents(playerEventListener, javaPlugin);
 	}
 
+	public final Collection<Army> allTeams() {
+		return armies;
+	}
+
 	public final void cleanup() {
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 		board.getTeams().forEach(this::cleanupTeam);
 	}
 
-	private final void cleanupTeam(Team team) {
-		team.getEntries().forEach(e -> {
-			try {
-				Entity entity = Bukkit.getEntity(UUID.fromString(e));
-				if (!(entity instanceof Player)) {
-					entity.remove();
-				}
-			} catch (Exception exc) {
-				/* Don't judge me. e can be a player name, and UUID.fromString(e) complains. */
-			}
-		});
-		team.getEntries().forEach(team::removeEntry);
+	public final Army getTeam(UUID entity) {
+		return armies.stream().filter(t -> t.has(entity)).findFirst().get();
+	}
+
+	public final String getTeamName(UUID entity) {
+		return getTeam(entity).getTeamName();
+	}
+
+	public final boolean hasTeam(UUID entity) {
+		return armies.stream().anyMatch(t -> t.has(entity));
 	}
 
 	public final void register(String teamName, UUID player) {
@@ -90,26 +107,6 @@ public final class Teams {
 		board.getTeam(army.getTeamName()).addEntry(player.toString());
 	}
 
-	private final boolean teamExists(String teamName) {
-		return armies.stream().anyMatch(t -> t.getTeamName().equalsIgnoreCase(teamName));
-	}
-
-	private final Army getTeam(String teamName) {
-		return armies.stream().filter(t -> t.getTeamName().equalsIgnoreCase(teamName)).findFirst().get();
-	}
-
-	public final Army getTeam(UUID entity) {
-		return armies.stream().filter(t -> t.has(entity)).findFirst().get();
-	}
-
-	public final boolean hasTeam(UUID entity) {
-		return armies.stream().anyMatch(t -> t.has(entity));
-	}
-
-	public final String getTeamName(UUID entity) {
-		return getTeam(entity).getTeamName();
-	}
-
 	public final void register(UUID owner, Mob mob) {
 		Player player = Bukkit.getPlayer(owner);
 		mob.setCustomName(player.getName() + "'s minion");
@@ -124,27 +121,30 @@ public final class Teams {
 				.addEntry(mob.getUniqueId().toString());
 	}
 
-	public final Collection<Army> allTeams() {
-		return armies;
-	}
-
 	public final Collection<UUID> teamMembers(String teamName) {
 		return getTeam(teamName).teamMembers();
 	}
 
-	private class PlayerEventListener implements Listener {
+	private final void cleanupTeam(Team team) {
+		team.getEntries().forEach(e -> {
+			try {
+				Entity entity = Bukkit.getEntity(UUID.fromString(e));
+				if (!(entity instanceof Player)) {
+					entity.remove();
+				}
+			} catch (Exception exc) {
+				/* Don't judge me. e can be a player name, and UUID.fromString(e) complains. */
+			}
+		});
+		team.getEntries().forEach(team::removeEntry);
+	}
 
-		private Teams teams;
+	private final Army getTeam(String teamName) {
+		return armies.stream().filter(t -> t.getTeamName().equalsIgnoreCase(teamName)).findFirst().get();
+	}
 
-		PlayerEventListener(Teams aTeams) {
-			teams = aTeams;
-		}
-
-		@EventHandler
-		public void onPlayerJoin(PlayerJoinEvent event) {
-			Player player = event.getPlayer();
-			teams.register(player.getName(), player.getUniqueId());
-		}
+	private final boolean teamExists(String teamName) {
+		return armies.stream().anyMatch(t -> t.getTeamName().equalsIgnoreCase(teamName));
 	}
 
 }

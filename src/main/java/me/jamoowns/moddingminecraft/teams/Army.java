@@ -18,27 +18,27 @@ public final class Army {
 		teamMembers = new ArrayList<>();
 	}
 
-	public final String getTeamName() {
-		return teamName;
+	public final void add(UUID uuid) {
+		teamMembers.add(uuid);
 	}
 
 	public final TeamColour getTeamColour() {
 		return teamColour;
 	}
 
-	public final void add(UUID uuid) {
-		teamMembers.add(uuid);
+	public final String getTeamName() {
+		return teamName;
 	}
 
 	public final boolean has(UUID uuid) {
 		return teamMembers.contains(uuid);
 	}
 
-	public final Collection<UUID> teamMembers() {
-		return teamMembers;
-	}
-
 	public final void remove(UUID uuid) {
 		teamMembers.remove(uuid);
+	}
+
+	public final Collection<UUID> teamMembers() {
+		return teamMembers;
 	}
 }

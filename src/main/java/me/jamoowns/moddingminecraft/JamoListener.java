@@ -92,6 +92,7 @@ public final class JamoListener implements Listener {
 		enchantments = Arrays.asList(Enchantment.values());
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
+			@Override
 			public void run() {
 				if (javaPlugin.isFeatureActive(Feature.RANDOM_CHESTS)) {
 					randomChestSpawn();
