@@ -16,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
@@ -57,6 +58,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -78,6 +80,8 @@ public class MobListener implements Listener {
 
 	private final Random RANDOM;
 
+	private CustomItem multiShotBowItem;
+	
 	private CustomItem creeperArrowItem;
 	private CustomItem explosiveArrowItem;
 	private CustomItem treeArrowItem;
@@ -87,7 +91,6 @@ public class MobListener implements Listener {
 	private CustomItem swapsiesSplashPotionItem;
 	private CustomItem medusaSplashPotionItem;
 
-	private boolean isMultiArrowEnabled;
 	
 	
 	public MobListener(ModdingMinecraft aJavaPlugin) {
@@ -98,6 +101,14 @@ public class MobListener implements Listener {
 	}
 
 	private void setupCustomItems() {
+		multiShotBowItem = new CustomItem(Material.CROSSBOW, "MultiShot Bow");
+		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
+		meta.addEnchant(Enchantment.MULTISHOT, 1, true);
+		multiShotBowItem.asItem().setItemMeta(meta);
+		
+		javaPlugin.customItems().customItemsByName().put(multiShotBowItem.name(), multiShotBowItem);
+		
+		
 		creeperArrowItem = new CustomItem(Material.ARROW, "Creeper Arrow");
 		creeperArrowItem.setProjectileHitEvent(event -> {
 			int result = RANDOM.nextInt(4) + 1;
