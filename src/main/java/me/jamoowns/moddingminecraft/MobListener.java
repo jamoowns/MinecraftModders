@@ -78,6 +78,8 @@ public class MobListener implements Listener {
 	private CustomItem creeperArrowItem;
 	
 	private CustomItem swapsiesSplashPotionItem;
+
+	private CustomItem MedusaSplashPotionItem;
 	
 	public MobListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
@@ -97,11 +99,16 @@ public class MobListener implements Listener {
 		javaPlugin.customItems().customItemsByName().put(creeperArrowItem.name(), creeperArrowItem);
 		
 		swapsiesSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
-		swapsiesSplashPotionItem.setProjectileHitEvent(event -> {
-			SwitchAllPlayersRanged(event.getEntity().getLocation(), 20, 5, 20);
+		swapsiesSplashPotionItem.PotionSplashEvent(event -> {
+			SwitchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
 		});
 		javaPlugin.customItems().customItemsByName().put(swapsiesSplashPotionItem.name(), swapsiesSplashPotionItem);
 
+		MedusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
+		MedusaSplashPotionItem.PotionSplashEvent(event -> {
+			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20,PotionEffectType.Slowness, 50, 256);
+		});
+		javaPlugin.customItems().customItemsByName().put(MedusaSplashPotionItem.name(), MedusaSplashPotionItem);
 	}
 
 	@EventHandler
@@ -126,9 +133,6 @@ public class MobListener implements Listener {
 			SwitchAllPlayers(event.getPlayer().getWorld());
 			
 		}
-		if(event.getMessage().contains("SwapNearMe")) {
-			SwitchAllPlayersRanged(event.getPlayer().getLocation(), 20, 5, 20);
-		}
 	}
 	public void SwitchAllPlayers(World world) {
 		List<Player> PlayerArr = new ArrayList<Player>();
@@ -149,7 +153,7 @@ public class MobListener implements Listener {
 			}
 		}
 	}
-	public void SwitchAllPlayersRanged(Location loc, int x, int y, int z) {
+	public void SwitchAllPlayersInAnArea(Location loc, int x, int y, int z) {
 		List<Player> PlayerArr = new ArrayList<Player>();
 		
 		for(Entity players: loc.getWorld().getNearbyEntities(loc,x, y, z)){
@@ -171,6 +175,13 @@ public class MobListener implements Listener {
 			    count++;
 			}
 		}
+	}
+	public void PotionAllPlayersInAnArea(Location loc, int x, int y, int z ,PotionEffectType potionEffectType,int duration,int amplifier) {
+		for(Entity players: loc.getWorld().getNearbyEntities(loc,x, y, z)){
+	        if(players instanceof Player){ 
+	        	((LivingEntity) players).addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
+	        }
+        } 
 	}
 	
 	
