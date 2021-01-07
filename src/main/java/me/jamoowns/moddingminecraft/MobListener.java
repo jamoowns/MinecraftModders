@@ -96,7 +96,7 @@ public class MobListener implements Listener {
 	}
 
 	@EventHandler
-	public void onAsyncPlayerChatEvent(PlayerChatEvent event) {
+	public void PlayerChatEvent(PlayerChatEvent event) {
 		if(event.getMessage().contains("Winfred the Weak")) {
 			Witch witch = event.getPlayer().getLocation().getWorld().spawn(event.getPlayer().getLocation(),
 					Witch.class);
