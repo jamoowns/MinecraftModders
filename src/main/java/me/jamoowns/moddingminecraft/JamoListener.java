@@ -306,8 +306,8 @@ public final class JamoListener implements Listener {
 	}
 
 	public void showAllItems(Player player) {
-		Inventory inv = Bukkit.createInventory(null, javaPlugin.customItems().customItemsByName().values().size() + 5,
-				"Custom Items");
+		Inventory inv = Bukkit.createInventory(null,
+				(int) Math.ceil(javaPlugin.customItems().customItemsByName().values().size() / 9) * 9, "Custom Items");
 
 		for (int i = 0; i < javaPlugin.customItems().customItemsByName().values().size(); i++) {
 			inv.setItem(i, new ArrayList<>(javaPlugin.customItems().customItemsByName().values()).get(i).asItem());
@@ -353,16 +353,6 @@ public final class JamoListener implements Listener {
 		}
 	}
 
-	public void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
-		ProjectileSource shooter = event.getEntity().getShooter();
-		if (shooter instanceof Player) {
-			ItemStack item = ((Player) shooter).getInventory().getItemInMainHand();
-			if (event.getEntity() != null && item != null && item.getItemMeta() != null) {
-				event.getEntity().setCustomName(item.getItemMeta().getDisplayName());
-			}
-		}
-	}
-
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent event) {
 		Projectile entity = event.getEntity();
@@ -370,6 +360,17 @@ public final class JamoListener implements Listener {
 		if (customItem != null && customItem.hasProjectileHitEvent()) {
 			customItem.projectileHitEvent().accept(event);
 			event.getEntity().remove();
+		}
+	}
+
+	@EventHandler
+	public void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
+		ProjectileSource shooter = event.getEntity().getShooter();
+		if (shooter instanceof Player) {
+			ItemStack item = ((Player) shooter).getInventory().getItemInMainHand();
+			if (event.getEntity() != null && item != null && item.getItemMeta() != null) {
+				event.getEntity().setCustomName(item.getItemMeta().getDisplayName());
+			}
 		}
 	}
 

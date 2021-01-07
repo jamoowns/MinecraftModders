@@ -30,6 +30,8 @@ public final class CustomItem {
 		name = aName;
 		material = aItem;
 		blockPlaceEvent = empty();
+		projectileHitEvent = empty();
+		potionSplashEvent = empty();
 		item = new ItemStack(material);
 		ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(aName);
