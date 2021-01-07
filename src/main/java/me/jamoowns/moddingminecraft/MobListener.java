@@ -334,7 +334,8 @@ public class MobListener implements Listener {
     					int resulty = r.nextInt(high - low) + low;
 
     					int resultx = r.nextInt(high - low) + low;
-    					event.getPlayer().teleport(ent.getLocation().add(resultx-9, 5, resulty-9));
+    					Location firstloc = ent.getLocation().add(resultx-9, 5, resulty-9);
+    					event.getPlayer().teleport(firstloc);
     					
     					if(((Witch) ent).getHealth() < ((Witch) ent).getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue()*.75) {
 		            		List<Player> PlayerArr = new ArrayList<Player>();
@@ -347,7 +348,7 @@ public class MobListener implements Listener {
 	        		        }
 		            		if(PlayerArr.size()>1) {
 		            			int count = 0;
-		            			Location firstloc = PlayerArr.get(0).getLocation();
+		            			
 		            			for (Player player : PlayerArr) 
 		            			{ 
 		            				player.sendMessage("'All of you Get Back'-"+ent.getName());
@@ -360,6 +361,7 @@ public class MobListener implements Listener {
 		            			    	player.teleport(PlayerArr.get(count+1).getLocation());
 		            			    	player.getWorld().strikeLightningEffect(PlayerArr.get(count+1).getLocation());
 		            			    }
+		            			    count++;
 		            			}
 		            		}
 		            	}
