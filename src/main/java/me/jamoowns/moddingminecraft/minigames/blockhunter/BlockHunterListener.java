@@ -1,4 +1,4 @@
-package me.jamoowns.moddingminecraft;
+package me.jamoowns.moddingminecraft.minigames.blockhunter;
 
 import static com.google.common.base.Predicates.not;
 
@@ -20,6 +20,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.fated.Collections;
 import me.jamoowns.moddingminecraft.common.time.CountdownTimer;
