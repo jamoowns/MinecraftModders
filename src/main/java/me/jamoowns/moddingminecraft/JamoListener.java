@@ -155,7 +155,7 @@ public final class JamoListener implements Listener {
 			}
 		}, TimeConstants.ONE_MINUTE / 2, TimeConstants.ONE_MINUTE / 2);
 
-		javaPlugin.commandExecutor().registerCommand("items", this::showAllItems);
+		javaPlugin.commandExecutor().registerCommand(java.util.Collections.emptyList(), "items", this::showAllItems);
 	}
 
 	private final static boolean isMob(UUID uuid) {

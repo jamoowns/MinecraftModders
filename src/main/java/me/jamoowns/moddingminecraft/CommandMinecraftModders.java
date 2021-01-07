@@ -1,9 +1,8 @@
 package me.jamoowns.moddingminecraft;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -18,16 +17,44 @@ public final class CommandMinecraftModders implements CommandExecutor {
 
 	private IFeatureListener featureListener;
 
-	private final Map<String, Consumer<Player>> commands;
+	private final List<ModdersCommand> commands;
+
+	private class ModdersCommand {
+
+		private String command;
+
+		private List<ModdersCommand> subCommands;
+
+		private Consumer<Player> action;
+
+		public ModdersCommand(final String theCommand, Consumer<Player> aAction) {
+			subCommands = new ArrayList<>();
+			command = theCommand;
+			action = aAction;
+		}
+
+		public final void addSubCommand(ModdersCommand subCommand) {
+			subCommands.add(subCommand);
+		}
+	}
 
 	public CommandMinecraftModders() {
-		commands = new HashMap<>();
+		commands = new ArrayList<>();
 	}
 
 	@Override
 	public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length > 0) {
-			Consumer<Player> commandToRun = commands.get(args[0]);
+			List<ModdersCommand> commandChildren = commands;
+			Consumer<Player> commandToRun = null;
+			for (String arg : args) {
+				for (ModdersCommand c : commandChildren) {
+					if (c.command.equalsIgnoreCase(arg)) {
+						commandToRun = c.action;
+						commandChildren = c.subCommands;
+					}
+				}
+			}
 			if (commandToRun != null) {
 				if (sender instanceof Player) {
 					commandToRun.accept((Player) sender);
@@ -59,8 +86,36 @@ public final class CommandMinecraftModders implements CommandExecutor {
 		return false;
 	}
 
-	public final void registerCommand(String command, Consumer<Player> function) {
-		commands.put(command, function);
+	public final void registerCommand(List<String> parentChain, String command, Consumer<Player> function) {
+		ModdersCommand moddersCommand = new ModdersCommand(command, function);
+
+		ModdersCommand parentCommand = moddersCommand(parentChain);
+
+		if (parentCommand == null) {
+			commands.add(moddersCommand);
+		} else {
+			parentCommand.addSubCommand(moddersCommand);
+		}
+	}
+
+	/**
+	 * @Nullable
+	 * 
+	 * @param commandPath
+	 * @return
+	 */
+	private ModdersCommand moddersCommand(List<String> commandPath) {
+		List<ModdersCommand> commandChildren = commands;
+		ModdersCommand command = null;
+		for (String parent : commandPath) {
+			for (ModdersCommand c : commandChildren) {
+				if (c.command.equalsIgnoreCase(parent)) {
+					command = c;
+					commandChildren = c.subCommands;
+				}
+			}
+		}
+		return command;
 	}
 
 	public final void addListener(IFeatureListener aFeatureListener) {

@@ -22,15 +22,18 @@ public class CountdownTimer implements Runnable {
 	private Runnable beforeTimer;
 	private Runnable afterTimer;
 
+	private int delay;
+
 	// Construct a timer, you could create multiple so for example if
 	// you do not want these "actions"
-	public CountdownTimer(JavaPlugin plugin, int seconds, Runnable beforeTimer, Runnable afterTimer,
+	public CountdownTimer(JavaPlugin plugin, int seconds, int delay, Runnable beforeTimer, Runnable afterTimer,
 			Consumer<CountdownTimer> everySecond) {
 		// Initializing fields
 		this.plugin = plugin;
 
 		this.seconds = seconds;
 		this.secondsLeft = seconds;
+		this.delay = delay;
 
 		this.beforeTimer = beforeTimer;
 		this.afterTimer = afterTimer;
@@ -87,7 +90,7 @@ public class CountdownTimer implements Runnable {
 	 */
 	public void scheduleTimer() {
 		// Initialize our assigned task's id, for later use so we can cancel
-		this.assignedTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, 0L, 20L);
+		this.assignedTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, delay, 20L);
 	}
 
 }
