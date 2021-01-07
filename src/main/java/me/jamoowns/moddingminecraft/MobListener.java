@@ -46,6 +46,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -59,6 +60,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
@@ -92,6 +94,30 @@ public class MobListener implements Listener {
 
 	}
 
+	@EventHandler
+	public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
+		String[] temp = event.getMessage().split(" ");
+		if(temp != null && temp.length == 3) {
+			if(temp[0]=="Winfred"&&temp[1]=="Winfred"&&temp[2]=="Winfred") {
+				Witch witch = event.getPlayer().getLocation().getWorld().spawn(event.getPlayer().getLocation(),
+						Witch.class);
+				witch.getWorld().strikeLightningEffect(witch.getLocation());
+				witch.setCustomName("Winfred the Witch");
+				witch.setFallDistance(-400);
+				for (int i = 0; i < 3; i++) {
+					witch.getLocation().getWorld().spawn(witch.getLocation().add(0, 1, 0),
+							Bat.class);
+				}
+        		for(Entity players: witch.getNearbyEntities(20.0D, 20.0D, 20.0D)){
+    		        if(players instanceof Player){ 
+    		        	players.sendMessage("'Get away from me'-"+witch.getName());
+    		        }
+		        }
+			}
+			
+		}
+	}
+	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEvent(PlayerItemConsumeEvent e) {
 		// get all the relative values for comparation
@@ -420,6 +446,7 @@ public class MobListener implements Listener {
 			}
 		}
 	}
+	
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
 		
@@ -503,6 +530,7 @@ public class MobListener implements Listener {
 		    }
 		}
 	}
+	
 	@EventHandler
 	public void onEntityDeathEvent(EntityDeathEvent event) {
 		if (javaPlugin.isFeatureActive(Feature.FUNKY_MOB_DEATH)) {
