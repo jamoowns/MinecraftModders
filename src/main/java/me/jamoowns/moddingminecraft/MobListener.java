@@ -238,6 +238,10 @@ public class MobListener implements Listener {
 			
 		}
 
+		if(event.getMessage().contains("SwapNearMe")) {
+			SwitchAllPlayersInAnArea(event.getPlayer().getLocation(),20,5,20);
+			
+		}
 		if(event.getMessage().contains("Gimme")) {
 
 			ItemStack item = swapsiesSplashPotionItem.asItem();
