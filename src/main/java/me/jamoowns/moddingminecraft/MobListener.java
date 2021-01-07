@@ -47,6 +47,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -95,7 +96,7 @@ public class MobListener implements Listener {
 	}
 
 	@EventHandler
-	public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
+	public void onAsyncPlayerChatEvent(PlayerChatEvent event) {
 		if(event.getMessage().contains("Winfred the Weak")) {
 			Witch witch = event.getPlayer().getLocation().getWorld().spawn(event.getPlayer().getLocation(),
 					Witch.class);
@@ -112,31 +113,28 @@ public class MobListener implements Listener {
 		        }
 	        }
 		}
-if(event.getMessage().contains("Switch")) {
-	
-	List<Player> PlayerArr = new ArrayList<Player>();
-	
-	PlayerArr = event.getPlayer().getWorld().getPlayers();
-	
-	if(PlayerArr.size()>1) {
-		int count = 1;
-		Location firstloc = PlayerArr.get(0).getLocation();
-		for (Player player : PlayerArr) 
-		{ 
-		    if(count == PlayerArr.size()-1) {
-		    	player.teleport(firstloc);
-		    	player.getWorld().strikeLightningEffect(firstloc);
-		    }else {
-		    	player.teleport(PlayerArr.get(count).getLocation());
-		    	player.getWorld().strikeLightningEffect(PlayerArr.get(count).getLocation());
-		    }
-		    count++;
+		if(event.getMessage().contains("Switch")) {
+			
+			List<Player> PlayerArr = new ArrayList<Player>();
+			
+			PlayerArr = event.getPlayer().getWorld().getPlayers();
+			
+			if(PlayerArr.size()>1) {
+				int count = 1;
+				Location firstloc = PlayerArr.get(0).getLocation();
+				for (Player player : PlayerArr) 
+				{ 
+				    if(count == PlayerArr.size()-1) {
+				    	player.teleport(firstloc);
+				    	player.getWorld().strikeLightningEffect(firstloc);
+				    }else {
+				    	player.teleport(PlayerArr.get(count).getLocation());
+				    	player.getWorld().strikeLightningEffect(PlayerArr.get(count).getLocation());
+				    }
+				    count++;
+				}
+			}
 		}
-	}
-}
-		
-		
-		
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
