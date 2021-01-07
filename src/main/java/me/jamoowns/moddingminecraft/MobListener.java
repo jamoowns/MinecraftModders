@@ -204,13 +204,13 @@ public class MobListener implements Listener {
 		swapsiesSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
 		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
 			((Server) event.getEntity().getWorld()).broadcastMessage("your message");
-			SwitchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
+			SwitchAllPlayersInAnArea(event.getHitBlock().getLocation(), 20, 5, 20);
 		});
 		javaPlugin.customItems().customItemsByName().put(swapsiesSplashPotionItem.name(), swapsiesSplashPotionItem);
 
 		medusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Tears of Medusa");
 		medusaSplashPotionItem.setPotionSplashEvent(event -> {
-			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20,PotionEffectType.SLOW, 50, 256);
+			PotionAllPlayersInAnArea(event.getHitBlock().getLocation(), 20, 5, 20,PotionEffectType.SLOW, 100, 200);
 		});
 		javaPlugin.customItems().customItemsByName().put(medusaSplashPotionItem.name(), medusaSplashPotionItem);
 	}
@@ -238,24 +238,8 @@ public class MobListener implements Listener {
 			
 		}
 
-		if(event.getMessage().contains("Gimme")) {
-
-			ItemStack item = swapsiesSplashPotionItem.asItem();
-			event.getPlayer().getInventory().addItem(item);
-			item = medusaSplashPotionItem.asItem();
-			event.getPlayer().getInventory().addItem(item);
-			item = creeperArrowItem.asItem();
-			event.getPlayer().getInventory().addItem(item);
-			item = explosiveArrowItem.asItem();
-			event.getPlayer().getInventory().addItem(item);
-			item = treeArrowItem.asItem();
-			event.getPlayer().getInventory().addItem(item);
-			item = rotateArrowItem.asItem();
-			event.getPlayer().getInventory().addItem(item);
-			item = fillArrowItem.asItem();
-			event.getPlayer().getInventory().addItem(item);
-			item = multiShotBowItem.asItem();
-			event.getPlayer().getInventory().addItem(item);
+		if(event.getMessage().contains("SwapNearMe")) {
+			SwitchAllPlayersInAnArea(event.getPlayer().getLocation(),20,5,20);
 			
 		}
 	}
