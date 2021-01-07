@@ -25,6 +25,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Husk;
 import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
@@ -277,8 +278,8 @@ public class MobListener implements Listener {
 			for(Entity ent: event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)){
 		        if(ent instanceof Witch){ 
 		            if(ent.getName().contains("Winfred")) {
-	
-		            	event.getPlayer().sendMessage("'Get Back'-"+ent.getName());event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
+		            	event.getPlayer().sendMessage("'Get Back'-"+ent.getName());
+		            	event.getPlayer().getWorld().strikeLightningEffect(event.getPlayer().getLocation());
     					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 1));
     					event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 180, 1));
     					Random r = new Random();
@@ -288,6 +289,37 @@ public class MobListener implements Listener {
 
     					int resultx = r.nextInt(high - low) + low;
     					event.getPlayer().teleport(ent.getLocation().add(resultx-9, 5, resulty-9));
+    					
+    					if(((Witch) ent).getHealth() < ((Witch) ent).getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue()/2) {
+		            		List<Player> PlayerArr = new ArrayList<Player>();
+		            		
+		            		for(Entity players: ent.getNearbyEntities(20.0D, 20.0D, 20.0D)){
+		        		        if(players instanceof Player){ 
+		        		        	PlayerArr.add(((Player) players));
+
+		        		        	((LivingEntity) players).sendMessage("'All of you Get Back'-"+ent.getName());
+		        		        	((LivingEntity) players).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 80, 1));
+		        		        	((LivingEntity) players).addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 210, 1));
+		        		        }
+	        		        }
+		            		
+		            		if(PlayerArr.size()>1) {
+		            			int count = 1;
+		            			Location firstloc = PlayerArr.get(0).getLocation();
+		            			for (Player player : PlayerArr) 
+		            			{ 
+		            			    if(count == PlayerArr.size()-1) {
+		            			    	player.teleport(firstloc);
+		            			    	event.getPlayer().getWorld().strikeLightningEffect(firstloc);
+		            			    }else {
+		            			    	player.teleport(PlayerArr.get(count).getLocation());
+		            			    	event.getPlayer().getWorld().strikeLightningEffect(PlayerArr.get(count).getLocation());
+		            			    }
+		            			}
+		            		}
+		            		
+		            	}
+		            	
 		    			
 		            }
 		        }   
