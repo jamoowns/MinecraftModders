@@ -138,8 +138,16 @@ public class MobListener implements Listener {
 		}
 
 		if(event.getMessage().contains("Gimme")) {
-			ItemStack item = medusaSplashPotionItem.asItem();
+
+			ItemStack item = swapsiesSplashPotionItem.asItem();
 			event.getPlayer().getInventory().addItem(item);
+			
+			item = medusaSplashPotionItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+
+			item = creeperArrowItem.asItem();
+			event.getPlayer().getInventory().addItem(item);
+			
 		}
 	}
 	public void SwitchAllPlayers(World world) {
