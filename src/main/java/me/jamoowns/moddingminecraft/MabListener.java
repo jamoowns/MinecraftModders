@@ -80,7 +80,7 @@ public class MabListener implements Listener {
 	private CustomItem swapsiesSplashPotionItem;
 	private CustomItem medusaSplashPotionItem;
 
-	private CustomItem ExplosiveSnowBallItem;
+	private CustomItem explosiveSnowBallItem;
 
 	public MabListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
@@ -832,14 +832,14 @@ public class MabListener implements Listener {
 		});
 		javaPlugin.customItems().register(medusaSplashPotionItem);
 
-		ExplosiveSnowBallItem = new CustomItem(Material.SNOWBALL, "Ice Creep");
-		ExplosiveSnowBallItem.setProjectileHitEvent(event -> {
+		explosiveSnowBallItem = new CustomItem(Material.SNOWBALL, "Ice Creep");
+		explosiveSnowBallItem.setProjectileHitEvent(event -> {
 			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
 		});
-		ExplosiveSnowBallItem.setProjectileLaunchEvent(event -> {
+		explosiveSnowBallItem.setProjectileLaunchEvent(event -> {
 			event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(8));
 		});
 
-		javaPlugin.customItems().register(ExplosiveSnowBallItem);
+		javaPlugin.customItems().register(explosiveSnowBallItem);
 	}
 }
