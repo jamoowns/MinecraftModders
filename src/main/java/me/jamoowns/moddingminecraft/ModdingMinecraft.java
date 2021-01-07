@@ -16,7 +16,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private JamoListener jamoListener;
 
-	private MobListener mobListener;
+	private MabListener mobListener;
 
 	private MoshyListener moshyListener;
 
@@ -108,7 +108,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		teams = new Teams(this);
 
 		jamoListener = new JamoListener(this);
-		mobListener = new MobListener(this);
+		mobListener = new MabListener(this);
 		moshyListener = new MoshyListener();
 		blockHunterListener = new BlockHunterListener(this);
 		commandExecutor.addListener(this);
