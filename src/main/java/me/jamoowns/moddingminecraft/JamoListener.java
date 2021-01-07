@@ -299,7 +299,7 @@ public final class JamoListener implements Listener {
 				taskKeeper.incrementTask(entityUuid, "Kill cows");
 			}
 		}
-		if (javaPlugin.teams().hasTeam(entityUuid)) {
+		if (isMob(entityUuid) && javaPlugin.teams().hasTeam(entityUuid)) {
 			javaPlugin.teams().getTeam(entityUuid).remove(entityUuid);
 			event.getDrops().clear();
 		}
