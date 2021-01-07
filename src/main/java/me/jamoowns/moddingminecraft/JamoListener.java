@@ -30,13 +30,14 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -47,6 +48,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
@@ -304,17 +306,8 @@ public final class JamoListener implements Listener {
 	}
 
 	public void showAllItems(Player player) {
-		Inventory inv = Bukkit.createInventory(null, 18, "Custom Items");
-
-		ItemStack survival = new ItemStack(Material.DIAMOND_BLOCK);
-		ItemMeta survivalMeta = survival.getItemMeta();
-		ItemStack creative = new ItemStack(Material.REDSTONE_BLOCK);
-		ItemMeta creativeMeta = creative.getItemMeta();
-
-		survivalMeta.setDisplayName("Survival");
-		survival.setItemMeta(survivalMeta);
-		creativeMeta.setDisplayName("Creative");
-		creative.setItemMeta(creativeMeta);
+		Inventory inv = Bukkit.createInventory(null, javaPlugin.customItems().customItemsByName().values().size() + 5,
+				"Custom Items");
 
 		for (int i = 0; i < javaPlugin.customItems().customItemsByName().values().size(); i++) {
 			inv.setItem(i, new ArrayList<>(javaPlugin.customItems().customItemsByName().values()).get(i).asItem());
@@ -353,19 +346,39 @@ public final class JamoListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerUnleashEntityEvent(EntityShootBowEvent event) {
+	public void onEntityShootBowEvent(EntityShootBowEvent event) {
 		if (event.getProjectile() != null && event.getConsumable() != null
 				&& event.getConsumable().getItemMeta() != null) {
 			event.getProjectile().setCustomName(event.getConsumable().getItemMeta().getDisplayName());
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
+		ProjectileSource shooter = event.getEntity().getShooter();
+		if (shooter instanceof Player) {
+			ItemStack item = ((Player) shooter).getInventory().getItemInMainHand();
+			if (event.getEntity() != null && item != null && item.getItemMeta() != null) {
+				event.getEntity().setCustomName(item.getItemMeta().getDisplayName());
+			}
+		}
+	}
+
+	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent event) {
 		Projectile entity = event.getEntity();
 		CustomItem customItem = javaPlugin.customItems().customItemsByName().get(entity.getCustomName());
 		if (customItem != null && customItem.hasProjectileHitEvent()) {
 			customItem.projectileHitEvent().accept(event);
+			event.getEntity().remove();
+		}
+	}
+
+	@EventHandler
+	public void onPotionSplashEvent(PotionSplashEvent event) {
+		Projectile entity = event.getEntity();
+		CustomItem customItem = javaPlugin.customItems().customItemsByName().get(entity.getCustomName());
+		if (customItem != null && customItem.hasPotionSplashEvent()) {
+			customItem.potionSplashEvent().accept(event);
 			event.getEntity().remove();
 		}
 	}

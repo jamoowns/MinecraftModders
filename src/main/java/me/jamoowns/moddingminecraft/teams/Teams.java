@@ -70,6 +70,7 @@ public final class Teams {
 				/* Don't judge me. e can be a player name, and UUID.fromString(e) complains. */
 			}
 		});
+		team.getEntries().forEach(team::removeEntry);
 	}
 
 	public final void register(String teamName, UUID player) {
