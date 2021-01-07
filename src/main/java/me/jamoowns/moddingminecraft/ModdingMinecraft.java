@@ -27,6 +27,37 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private Teams teams;
 
+	public final CommandMinecraftModders commandExecutor() {
+		return commandExecutor;
+	}
+
+	public final CustomItems customItems() {
+		return customItems;
+	}
+
+	@Override
+	public final void featureActivated(Feature feature) {
+		statusByFeature.put(feature, true);
+		Broadcaster.broadcastInfo("Activated: " + feature.name());
+	}
+
+	@Override
+	public final void featureDeactivated(Feature feature) {
+		statusByFeature.put(feature, false);
+		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
+	}
+
+	public final boolean isFeatureActive(Feature feature) {
+		return statusByFeature.getOrDefault(feature, false);
+	}
+
+	// Fired when plug-in is disabled
+	@Override
+	public final void onDisable() {
+		jamoListener.cleanup();
+		mobListener.cleanup();
+	}
+
 	// Fired when plug-in is first enabled
 	@Override
 	public final void onEnable() {
@@ -88,38 +119,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		getServer().getPluginManager().registerEvents(blockHunterListener, this);
 	}
 
-	public final CustomItems customItems() {
-		return customItems;
-	}
-
 	public final Teams teams() {
 		return teams;
-	}
-
-	// Fired when plug-in is disabled
-	@Override
-	public final void onDisable() {
-		jamoListener.cleanup();
-		mobListener.cleanup();
-	}
-
-	@Override
-	public final void featureActivated(Feature feature) {
-		statusByFeature.put(feature, true);
-		Broadcaster.broadcastInfo("Activated: " + feature.name());
-	}
-
-	@Override
-	public final void featureDeactivated(Feature feature) {
-		statusByFeature.put(feature, false);
-		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
-	}
-
-	public final boolean isFeatureActive(Feature feature) {
-		return statusByFeature.getOrDefault(feature, false);
-	}
-
-	public final CommandMinecraftModders commandExecutor() {
-		return commandExecutor;
 	}
 }

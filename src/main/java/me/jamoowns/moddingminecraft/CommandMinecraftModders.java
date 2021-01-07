@@ -15,10 +15,6 @@ import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 
 public final class CommandMinecraftModders implements CommandExecutor {
 
-	private IFeatureListener featureListener;
-
-	private final List<ModdersCommand> commands;
-
 	private class ModdersCommand {
 
 		private String command;
@@ -38,8 +34,16 @@ public final class CommandMinecraftModders implements CommandExecutor {
 		}
 	}
 
+	private IFeatureListener featureListener;
+
+	private final List<ModdersCommand> commands;
+
 	public CommandMinecraftModders() {
 		commands = new ArrayList<>();
+	}
+
+	public final void addListener(IFeatureListener aFeatureListener) {
+		featureListener = aFeatureListener;
 	}
 
 	@Override
@@ -116,9 +120,5 @@ public final class CommandMinecraftModders implements CommandExecutor {
 			}
 		}
 		return command;
-	}
-
-	public final void addListener(IFeatureListener aFeatureListener) {
-		featureListener = aFeatureListener;
 	}
 }

@@ -27,10 +27,6 @@ import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 
 public final class BlockHunterListener implements Listener {
 
-	private final ItemStack blockStand;
-
-	private final List<GamePlayer> gameplayers;
-
 	private class GamePlayer {
 
 		private UUID playerId;
@@ -48,18 +44,6 @@ public final class BlockHunterListener implements Listener {
 			hasFoundBlock = false;
 		}
 
-		public UUID playerId() {
-			return playerId;
-		}
-
-		public boolean hasStandPlaced() {
-			return standLocation != null;
-		}
-
-		public Location standLocation() {
-			return standLocation.clone();
-		}
-
 		public Material chosenBlock() {
 			return chosenBlock;
 		}
@@ -68,12 +52,8 @@ public final class BlockHunterListener implements Listener {
 			chosenBlock = mat;
 		}
 
-		public GamePlayer targetPlayer() {
-			return targetPlayer;
-		}
-
-		public void setStand(Location loc) {
-			standLocation = loc;
+		public void clearChosenBlock() {
+			chosenBlock = null;
 		}
 
 		public void clearStand() {
@@ -84,10 +64,6 @@ public final class BlockHunterListener implements Listener {
 			standLocation = null;
 		}
 
-		public void clearChosenBlock() {
-			chosenBlock = null;
-		}
-
 		public void foundBlock(boolean found) {
 			hasFoundBlock = found;
 		}
@@ -96,24 +72,48 @@ public final class BlockHunterListener implements Listener {
 			return hasFoundBlock;
 		}
 
+		public boolean hasStandPlaced() {
+			return standLocation != null;
+		}
+
+		public UUID playerId() {
+			return playerId;
+		}
+
+		public void setStand(Location loc) {
+			standLocation = loc;
+		}
+
 		public void setTargetPlayer(GamePlayer aTargetPlayer) {
 			targetPlayer = aTargetPlayer;
 		}
+
+		public Location standLocation() {
+			return standLocation.clone();
+		}
+
+		public GamePlayer targetPlayer() {
+			return targetPlayer;
+		}
 	}
-
-	private GameState currentGameState = GameState.STOPPED;
-
-	private ModdingMinecraft javaPlugin;
-
-	private static final int CHOOSING_TIME_MINUTES = 2;
-	private static final int SEARCHING_TIME_MINUTES = 5;
-
-	private static final long CHOOSING_TIME = TimeConstants.ONE_MINUTE * CHOOSING_TIME_MINUTES;
-	private static final long SEARCHING_TIME = TimeConstants.ONE_MINUTE * SEARCHING_TIME_MINUTES;
 
 	private enum GameState {
 		SETUP, SEARCHING, CHOOSING, STOPPED
 	}
+
+	private static final int CHOOSING_TIME_MINUTES = 2;
+
+	private static final int SEARCHING_TIME_MINUTES = 5;
+
+	private static final long CHOOSING_TIME = TimeConstants.ONE_MINUTE * CHOOSING_TIME_MINUTES;
+
+	private static final long SEARCHING_TIME = TimeConstants.ONE_MINUTE * SEARCHING_TIME_MINUTES;
+	private final ItemStack blockStand;
+
+	private final List<GamePlayer> gameplayers;
+	private GameState currentGameState = GameState.STOPPED;
+
+	private ModdingMinecraft javaPlugin;
 
 	public BlockHunterListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -128,6 +128,71 @@ public final class BlockHunterListener implements Listener {
 		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "join", this::join);
 		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "start", this::beginGame);
 		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "stop", p -> stopGame());
+	}
+
+	public final void beginGame(Player host) {
+		if (currentGameState == GameState.SETUP) {
+			if (gameplayers.size() >= 2) {
+				Broadcaster.broadcastInfo("Blockhunt has STARTED!");
+				setChoosingPhase();
+			} else {
+				Broadcaster.sendError(host,
+						"Unable to start game. Requires 2 players and all players to have placed stands");
+			}
+		} else {
+			Broadcaster.sendError(host, "Please initiate the game first");
+		}
+	}
+
+	public final void initiateGame() {
+		Broadcaster.broadcastInfo("Blockhunt has been initiated!");
+		currentGameState = GameState.SETUP;
+	}
+
+	public final void join(Player p) {
+		if (currentGameState == GameState.SETUP) {
+			Broadcaster.broadcastInfo(p.getDisplayName() + " has joined the blockhunt");
+
+			GamePlayer gamePlayer = new GamePlayer(p.getUniqueId());
+			gameplayers.add(gamePlayer);
+		} else {
+			Broadcaster.sendError(p, "Please initiate the game first");
+		}
+	}
+
+	@EventHandler
+	public final void onBlockBreakEvent(BlockBreakEvent event) {
+		UUID playerUuid = event.getPlayer().getUniqueId();
+		Optional<GamePlayer> gp = gamePlayer(playerUuid);
+		switch (currentGameState) {
+			case SETUP:
+				break;
+			case CHOOSING:
+				if (gp.isPresent()) {
+					if (gp.get().hasStandPlaced()
+							&& event.getBlock().getLocation().equals(blockAbove(gp.get().standLocation()))) {
+						Broadcaster.sendInfo(event.getPlayer(), "You have removed your choice!");
+
+						gp.get().clearChosenBlock();
+					}
+				}
+				break;
+			case SEARCHING:
+				if (gp.isPresent()) {
+					if (gp.get().hasStandPlaced()
+							&& event.getBlock().getLocation().equals(blockAbove(gp.get().standLocation()))) {
+						if (gp.get().hasFoundBlock()) {
+							Broadcaster.sendInfo(event.getPlayer(), "Woops, you have unfound your block");
+							Broadcaster
+									.broadcastError(event.getPlayer().getDisplayName() + " has unfound their block??");
+							gp.get().foundBlock(false);
+						}
+					}
+				}
+				break;
+			case STOPPED:
+				break;
+		}
 	}
 
 	@EventHandler
@@ -181,69 +246,41 @@ public final class BlockHunterListener implements Listener {
 		}
 	}
 
-	@EventHandler
-	public final void onBlockBreakEvent(BlockBreakEvent event) {
-		UUID playerUuid = event.getPlayer().getUniqueId();
-		Optional<GamePlayer> gp = gamePlayer(playerUuid);
-		switch (currentGameState) {
-			case SETUP:
-				break;
-			case CHOOSING:
-				if (gp.isPresent()) {
-					if (gp.get().hasStandPlaced()
-							&& event.getBlock().getLocation().equals(blockAbove(gp.get().standLocation()))) {
-						Broadcaster.sendInfo(event.getPlayer(), "You have removed your choice!");
-
-						gp.get().clearChosenBlock();
-					}
-				}
-				break;
-			case SEARCHING:
-				if (gp.isPresent()) {
-					if (gp.get().hasStandPlaced()
-							&& event.getBlock().getLocation().equals(blockAbove(gp.get().standLocation()))) {
-						if (gp.get().hasFoundBlock()) {
-							Broadcaster.sendInfo(event.getPlayer(), "Woops, you have unfound your block");
-							Broadcaster
-									.broadcastError(event.getPlayer().getDisplayName() + " has unfound their block??");
-							gp.get().foundBlock(false);
-						}
-					}
-				}
-				break;
-			case STOPPED:
-				break;
+	public final void stopGame() {
+		for (GamePlayer gp : gameplayers) {
+			gp.clearStand();
 		}
+		gameplayers.clear();
+		currentGameState = GameState.STOPPED;
+		Broadcaster.broadcastInfo("Blockhunt has been stopped!");
 	}
 
-	public final void initiateGame() {
-		Broadcaster.broadcastInfo("Blockhunt has been initiated!");
-		currentGameState = GameState.SETUP;
+	private Location blockAbove(Location loc) {
+		return loc.clone().add(0, 1, 0).clone();
 	}
 
-	public final void join(Player p) {
-		if (currentGameState == GameState.SETUP) {
-			Broadcaster.broadcastInfo(p.getDisplayName() + " has joined the blockhunt");
-
-			GamePlayer gamePlayer = new GamePlayer(p.getUniqueId());
-			gameplayers.add(gamePlayer);
-		} else {
-			Broadcaster.sendError(p, "Please initiate the game first");
-		}
-	}
-
-	public final void beginGame(Player host) {
-		if (currentGameState == GameState.SETUP) {
-			if (gameplayers.size() >= 2) {
-				Broadcaster.broadcastInfo("Blockhunt has STARTED!");
-				setChoosingPhase();
-			} else {
-				Broadcaster.sendError(host,
-						"Unable to start game. Requires 2 players and all players to have placed stands");
+	private void checkWinnerPhase() {
+		for (GamePlayer gp : gameplayers) {
+			if (!gp.hasFoundBlock()) {
+				Broadcaster.broadcastInfo(Bukkit.getPlayer(gp.playerId).getDisplayName() + " has been eliminated");
 			}
-		} else {
-			Broadcaster.sendError(host, "Please initiate the game first");
 		}
+		gameplayers.removeIf(gp -> !gp.hasFoundBlock());
+		if (gameplayers.size() == 0) {
+			Broadcaster.broadcastInfo("Stalemate! Round will start again");
+			setChoosingPhase();
+		} else if (gameplayers.size() == 1) {
+			Broadcaster.broadcastInfo(
+					"WINNER!! " + Bukkit.getPlayer(Collections.findFirst(gameplayers).playerId()).getDisplayName()
+							+ " has won block hunter!");
+			stopGame();
+		} else {
+			setChoosingPhase();
+		}
+	}
+
+	private Optional<GamePlayer> gamePlayer(UUID player) {
+		return Collections.find(gameplayers, GamePlayer::playerId, player);
 	}
 
 	private void setChoosingPhase() {
@@ -302,42 +339,5 @@ public final class BlockHunterListener implements Listener {
 		countDown.scheduleTimer();
 		Bukkit.getScheduler().runTaskLater(javaPlugin, this::checkWinnerPhase,
 				SEARCHING_TIME + TimeConstants.ONE_SECOND);
-	}
-
-	private void checkWinnerPhase() {
-		for (GamePlayer gp : gameplayers) {
-			if (!gp.hasFoundBlock()) {
-				Broadcaster.broadcastInfo(Bukkit.getPlayer(gp.playerId).getDisplayName() + " has been eliminated");
-			}
-		}
-		gameplayers.removeIf(gp -> !gp.hasFoundBlock());
-		if (gameplayers.size() == 0) {
-			Broadcaster.broadcastInfo("Stalemate! Round will start again");
-			setChoosingPhase();
-		} else if (gameplayers.size() == 1) {
-			Broadcaster.broadcastInfo(
-					"WINNER!! " + Bukkit.getPlayer(Collections.findFirst(gameplayers).playerId()).getDisplayName()
-							+ " has won block hunter!");
-			stopGame();
-		} else {
-			setChoosingPhase();
-		}
-	}
-
-	private Optional<GamePlayer> gamePlayer(UUID player) {
-		return Collections.find(gameplayers, GamePlayer::playerId, player);
-	}
-
-	private Location blockAbove(Location loc) {
-		return loc.clone().add(0, 1, 0).clone();
-	}
-
-	public final void stopGame() {
-		for (GamePlayer gp : gameplayers) {
-			gp.clearStand();
-		}
-		gameplayers.clear();
-		currentGameState = GameState.STOPPED;
-		Broadcaster.broadcastInfo("Blockhunt has been stopped!");
 	}
 }

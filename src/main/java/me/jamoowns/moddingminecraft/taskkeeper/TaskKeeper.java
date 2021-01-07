@@ -23,11 +23,128 @@ import me.jamoowns.moddingminecraft.common.fated.Collections;
 
 public final class TaskKeeper {
 
+	private class BoardItem implements IBoardItem {
+		private String boardItem;
+
+		private Map<UUID, Boolean> statusPerPlayer;
+
+		BoardItem(String aBoardItem) {
+			boardItem = aBoardItem;
+			statusPerPlayer = new HashMap<>();
+		}
+
+		@Override
+		public void addPlayer(UUID player) {
+			statusPerPlayer.put(player, false);
+		}
+
+		@Override
+		public String describe(UUID player) {
+			return ChatColor.YELLOW + boardItem;
+		}
+
+		@Override
+		public boolean hasPlayer(UUID player) {
+			return statusPerPlayer.containsKey(player);
+		}
+
+		@Override
+		public String id() {
+			return boardItem;
+		}
+	}
+
+	private interface IBoardItem {
+
+		public boolean hasPlayer(UUID player);
+
+		void addPlayer(UUID player);
+
+		String describe(UUID player);
+
+		String id();
+	}
+
+	private class PlayerEventListener implements Listener {
+
+		private TaskKeeper taskKeeper;
+
+		PlayerEventListener(TaskKeeper aTaskKeeper) {
+			taskKeeper = aTaskKeeper;
+		}
+
+		@EventHandler
+		public void onPlayerJoin(PlayerJoinEvent event) {
+			taskKeeper.register(event.getPlayer());
+		}
+	}
+	private class Task implements IBoardItem {
+		private String taskName;
+
+		private Map<UUID, Integer> statusPerPlayer;
+
+		private Consumer<UUID> reward;
+
+		private Integer goal;
+
+		Task(String aTaskName, Consumer<UUID> aReward, Integer aGoal) {
+			taskName = aTaskName;
+			statusPerPlayer = new HashMap<>();
+			reward = aReward;
+			goal = aGoal;
+		}
+
+		@Override
+		public void addPlayer(UUID player) {
+			statusPerPlayer.put(player, 0);
+		}
+
+		@Override
+		public String describe(UUID player) {
+			return ChatColor.GREEN + taskName + ChatColor.YELLOW + " - " + ChatColor.AQUA
+					+ goalStatusDescription(player) + ChatColor.YELLOW + " - " + ChatColor.AQUA
+					+ completeDescription(player);
+		}
+
+		public void giveReward(UUID player) {
+			reward.accept(player);
+		}
+
+		@Override
+		public boolean hasPlayer(UUID player) {
+			return statusPerPlayer.containsKey(player);
+		}
+
+		@Override
+		public String id() {
+			return taskName;
+		}
+
+		public void incrementTask(UUID player) {
+			if (statusPerPlayer.get(player) < goal) {
+				statusPerPlayer.put(player, statusPerPlayer.get(player) + 1);
+			}
+		}
+
+		public boolean isComplete(UUID player) {
+			return statusPerPlayer.get(player) == goal;
+		}
+
+		private final String completeDescription(UUID player) {
+			return isComplete(player) ? "COMPLETED" : "INCOMPLETE";
+		}
+
+		private final String goalStatusDescription(UUID player) {
+			return statusPerPlayer.get(player) + "/" + goal;
+		}
+	}
+
 	private Map<UUID, Scoreboard> boardsByPlayer;
 
 	private final PlayerEventListener playerEventListener;
 
 	private final List<BoardItem> boardItems;
+
 	private final List<Task> tasks;
 
 	public TaskKeeper(JavaPlugin javaPlugin) {
@@ -44,15 +161,6 @@ public final class TaskKeeper {
 		javaPlugin.getServer().getPluginManager().registerEvents(playerEventListener, javaPlugin);
 	}
 
-	public final void addTask(String taskName, Consumer<UUID> reward, Integer goal) {
-		Task task = new Task(taskName, reward, goal);
-		tasks.add(task);
-
-		for (Player online : Bukkit.getOnlinePlayers()) {
-			addTask(online.getUniqueId(), task);
-		}
-	}
-
 	public final void addBoardItem(String aBoardItem) {
 		BoardItem boardItem = new BoardItem(aBoardItem);
 		boardItems.add(boardItem);
@@ -67,6 +175,15 @@ public final class TaskKeeper {
 		boardItems.add(boardItem);
 
 		addBoardItem(player, boardItem);
+	}
+
+	public final void addTask(String taskName, Consumer<UUID> reward, Integer goal) {
+		Task task = new Task(taskName, reward, goal);
+		tasks.add(task);
+
+		for (Player online : Bukkit.getOnlinePlayers()) {
+			addTask(online.getUniqueId(), task);
+		}
 	}
 
 	public final void incrementTask(UUID player, String taskName) {
@@ -105,15 +222,6 @@ public final class TaskKeeper {
 		});
 	}
 
-	private void addTask(UUID player, Task task) {
-		Scoreboard scoreboard = boardsByPlayer.get(player);
-		if (!task.hasPlayer(player)) {
-			task.addPlayer(player);
-		}
-		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
-		score.setScore(tasks.indexOf(task));
-	}
-
 	private void addBoardItem(UUID player, BoardItem boardItem) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
 		if (!boardItem.hasPlayer(player)) {
@@ -123,112 +231,12 @@ public final class TaskKeeper {
 		score.setScore(boardItems.indexOf(boardItem) + tasks.size());
 	}
 
-	private interface IBoardItem {
-
-		public boolean hasPlayer(UUID player);
-
-		void addPlayer(UUID player);
-
-		String describe(UUID player);
-
-		String id();
-	}
-
-	private class BoardItem implements IBoardItem {
-		private String boardItem;
-
-		private Map<UUID, Boolean> statusPerPlayer;
-
-		BoardItem(String aBoardItem) {
-			boardItem = aBoardItem;
-			statusPerPlayer = new HashMap<>();
+	private void addTask(UUID player, Task task) {
+		Scoreboard scoreboard = boardsByPlayer.get(player);
+		if (!task.hasPlayer(player)) {
+			task.addPlayer(player);
 		}
-
-		public String id() {
-			return boardItem;
-		}
-
-		public boolean hasPlayer(UUID player) {
-			return statusPerPlayer.containsKey(player);
-		}
-
-		public void addPlayer(UUID player) {
-			statusPerPlayer.put(player, false);
-		}
-
-		public String describe(UUID player) {
-			return ChatColor.YELLOW + boardItem;
-		}
-	}
-
-	private class Task implements IBoardItem {
-		private String taskName;
-
-		private Map<UUID, Integer> statusPerPlayer;
-
-		private Consumer<UUID> reward;
-
-		private Integer goal;
-
-		Task(String aTaskName, Consumer<UUID> aReward, Integer aGoal) {
-			taskName = aTaskName;
-			statusPerPlayer = new HashMap<>();
-			reward = aReward;
-			goal = aGoal;
-		}
-
-		public boolean hasPlayer(UUID player) {
-			return statusPerPlayer.containsKey(player);
-		}
-
-		public void addPlayer(UUID player) {
-			statusPerPlayer.put(player, 0);
-		}
-
-		public void incrementTask(UUID player) {
-			if (statusPerPlayer.get(player) < goal) {
-				statusPerPlayer.put(player, statusPerPlayer.get(player) + 1);
-			}
-		}
-
-		public String describe(UUID player) {
-			return ChatColor.GREEN + taskName + ChatColor.YELLOW + " - " + ChatColor.AQUA
-					+ goalStatusDescription(player) + ChatColor.YELLOW + " - " + ChatColor.AQUA
-					+ completeDescription(player);
-		}
-
-		public boolean isComplete(UUID player) {
-			return statusPerPlayer.get(player) == goal;
-		}
-
-		public String id() {
-			return taskName;
-		}
-
-		public void giveReward(UUID player) {
-			reward.accept(player);
-		}
-
-		private final String goalStatusDescription(UUID player) {
-			return statusPerPlayer.get(player) + "/" + goal;
-		}
-
-		private final String completeDescription(UUID player) {
-			return isComplete(player) ? "COMPLETED" : "INCOMPLETE";
-		}
-	}
-
-	private class PlayerEventListener implements Listener {
-
-		private TaskKeeper taskKeeper;
-
-		PlayerEventListener(TaskKeeper aTaskKeeper) {
-			taskKeeper = aTaskKeeper;
-		}
-
-		@EventHandler
-		public void onPlayerJoin(PlayerJoinEvent event) {
-			taskKeeper.register(event.getPlayer());
-		}
+		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
+		score.setScore(tasks.indexOf(task));
 	}
 }
