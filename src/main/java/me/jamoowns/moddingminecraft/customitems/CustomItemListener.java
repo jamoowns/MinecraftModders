@@ -57,7 +57,8 @@ public final class CustomItemListener implements Listener {
 					event.getPlayer().getWorld().spawnParticle(Particle.TOTEM, event.getPlayer().getEyeLocation()
 							.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
 				}
-				customItem.clickEvent().accept(new SpellCastEvent(target.getLocation(), event.getPlayer()));
+				customItem.clickEvent()
+						.accept(new SpellCastEvent(target.getLocation().add(0.5, 0.5, 0.5), event.getPlayer()));
 				if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
 					event.getItem().setAmount(event.getItem().getAmount() - 1);
 				}
