@@ -1,7 +1,7 @@
 package me.jamoowns.moddingminecraft.customitems;
 
-import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -50,10 +50,8 @@ public final class CustomItemListener implements Listener {
 		Broadcaster.sendInfo(event.getPlayer(), "You are looking at: " + target);
 		if (target != null) {
 			for (double d = 0; d <= 30; d += 0.1) {
-				target.getWorld().playEffect(
-						event.getPlayer().getEyeLocation()
-								.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)),
-						Effect.VILLAGER_PLANT_GROW, 5);
+				target.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, event.getPlayer().getEyeLocation()
+						.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1);
 			}
 		}
 	}
