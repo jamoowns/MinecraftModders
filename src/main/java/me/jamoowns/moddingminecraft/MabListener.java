@@ -15,6 +15,8 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
@@ -103,24 +105,41 @@ public class MabListener implements Listener {
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
 		if (event.getBlock().getType().equals(Material.WARPED_HYPHAE)) {
+			World world = event.getBlockPlaced().getLocation().getWorld();
 			switch (linearFace(event.getPlayer().getLocation().getYaw())) {
 			case NORTH:
 
 				break;
 			case EAST:
 				for (int k = 0; k < 10; k++) {
-					for (int i = 0; i < 20; i++) {
+					for (int i = 0; i < 21; i++) {
+
 						Location loc = event.getBlockPlaced().getLocation();
-						loc.getWorld().getBlockAt(loc.add(0, i, 0 + k)).setType(Material.STONE_BRICKS);
+						Location locThree = event.getBlockPlaced().getLocation();
+						if (i == 20 && k % 2 == 0) {
+							world.getBlockAt(loc.add(0, i, 0 + k)).setType(Material.STONE_BRICK_STAIRS);
+							world.getBlockAt(locThree.add(14, i, 0 + k)).setType(Material.STONE_BRICK_STAIRS);
+
+							BlockData blockData = world.getBlockAt(loc).getBlockData();
+							if (blockData instanceof Directional) {
+								((Directional) blockData).setFacing(BlockFace.WEST);
+								world.getBlockAt(loc).setBlockData(blockData);
+							}
+
+							blockData = world.getBlockAt(locThree).getBlockData();
+							if (blockData instanceof Directional) {
+								((Directional) blockData).setFacing(BlockFace.NORTH);
+								world.getBlockAt(loc).setBlockData(blockData);
+							}
+						} else {
+							loc.getWorld().getBlockAt(loc.add(0, i, 0 + k)).setType(Material.STONE_BRICKS);
+							loc.getWorld().getBlockAt(locThree.add(14, i, 0 + k)).setType(Material.STONE_BRICKS);
+						}
 
 						Location locTwo = event.getBlockPlaced().getLocation();
-						loc.getWorld().getBlockAt(locTwo.add(11, i, 0 + k)).setType(Material.STONE_BRICKS);
-
-						Location locThree = event.getBlockPlaced().getLocation();
-						loc.getWorld().getBlockAt(locThree.add(14, i, 0 + k)).setType(Material.STONE_BRICKS);
-
+						world.getBlockAt(locTwo.add(11, i, 0 + k)).setType(Material.STONE_BRICKS);
 						Location locFour = event.getBlockPlaced().getLocation();
-						loc.getWorld().getBlockAt(locFour.add(3, i, 0 + k)).setType(Material.STONE_BRICKS);
+						world.getBlockAt(locFour.add(3, i, 0 + k)).setType(Material.STONE_BRICKS);
 					}
 				}
 
