@@ -57,6 +57,7 @@ public final class CustomItemListener implements Listener {
 							.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
 				}
 				customItem.clickEvent().accept(event);
+				event.getItem().setAmount(event.getItem().getAmount() - 1);
 			} else {
 				for (double d = 0; d <= MAX_RANGE; d += 0.1) {
 					event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
