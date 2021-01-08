@@ -128,8 +128,8 @@ public class MabListener implements Listener {
 
 							blockData = world.getBlockAt(locThree).getBlockData();
 							if (blockData instanceof Directional) {
-								((Directional) blockData).setFacing(BlockFace.NORTH);
-								world.getBlockAt(loc).setBlockData(blockData);
+								((Directional) blockData).setFacing(BlockFace.EAST);
+								world.getBlockAt(locThree).setBlockData(blockData);
 							}
 						} else {
 							loc.getWorld().getBlockAt(loc.add(0, i, 0 + k)).setType(Material.STONE_BRICKS);
