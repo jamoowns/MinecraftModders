@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.customitems;
 
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -47,6 +48,14 @@ public final class CustomItemListener implements Listener {
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
 		Block target = event.getPlayer().getTargetBlockExact(30);
 		Broadcaster.sendInfo(event.getPlayer(), "You are looking at: " + target);
+		if (target != null) {
+			for (double d = 0; d <= 30; d += 0.1) {
+				target.getWorld().playEffect(
+						event.getPlayer().getEyeLocation()
+								.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)),
+						Effect.VILLAGER_PLANT_GROW, 5);
+			}
+		}
 	}
 
 	@EventHandler
