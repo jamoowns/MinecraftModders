@@ -107,6 +107,27 @@ public class MabListener implements Listener {
 				Location loc = event.getBlockPlaced().getLocation();
 				loc.getWorld().getBlockAt(loc.add(0, i, 0)).setType(Material.STONE_BRICKS);
 			}
+
+			switch (linearFace(event.getPlayer().getLocation().getYaw())) {
+			case NORTH:
+				for (int i = 0; i < 20; i++) {
+					Location loc = event.getBlockPlaced().getLocation();
+					loc.getWorld().getBlockAt(loc.add(4, i, 0)).setType(Material.STONE_BRICKS);
+
+					Location locTwo = event.getBlockPlaced().getLocation();
+					loc.getWorld().getBlockAt(locTwo.add(12, i, 0)).setType(Material.STONE_BRICKS);
+
+					Location locThree = event.getBlockPlaced().getLocation();
+					loc.getWorld().getBlockAt(locThree.add(15, i, 0)).setType(Material.STONE_BRICKS);
+				}
+				break;
+			case EAST:
+				break;
+			case WEST:
+				break;
+			case SOUTH:
+			default:
+			}
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
@@ -715,6 +736,25 @@ public class MabListener implements Listener {
 				}
 				count++;
 			}
+		}
+	}
+
+	private BlockFace linearFace(float yaw) {
+		double rotation = (yaw - 90) % 360;
+		if (rotation < 0) {
+			rotation += 360.0;
+		}
+
+		if (0 <= rotation && rotation < 67.5 || 337.5 <= rotation && rotation < 360.0) {
+			return BlockFace.WEST;
+		} else if (67.5 <= rotation && rotation < 157.5) {
+			return BlockFace.NORTH;
+		} else if (157.5 <= rotation && rotation < 247.5) {
+			return BlockFace.EAST;
+		} else if (247.5 <= rotation && rotation < 337.5) {
+			return BlockFace.SOUTH;
+		} else {
+			return BlockFace.WEST;
 		}
 	}
 
