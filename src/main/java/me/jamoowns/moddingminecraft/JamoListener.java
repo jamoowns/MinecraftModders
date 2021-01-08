@@ -25,18 +25,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.PotionSplashEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -47,7 +41,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.projectiles.ProjectileSource;
 
 import com.google.common.collect.Lists;
 
@@ -163,15 +156,6 @@ public final class JamoListener implements Listener {
 	}
 
 	@EventHandler
-	public void onBlockPlace(BlockPlaceEvent event) {
-		CustomItem customItem = javaPlugin.customItems().getItem(event.getItemInHand().getItemMeta().getDisplayName());
-		if (customItem != null && customItem.hasBlockPlaceEvent()) {
-			event.getBlockPlaced().setType(Material.AIR);
-			customItem.blockPlaceEvent().accept(event);
-		}
-	}
-
-	@EventHandler
 	public void onCraftItemEvent(CraftItemEvent event) {
 		if (javaPlugin.isFeatureActive(Feature.RANDOM_ENCHANT)) {
 			ItemStack result = event.getRecipe().getResult().clone();
@@ -206,16 +190,8 @@ public final class JamoListener implements Listener {
 	}
 
 	@EventHandler
-	public void onEntityShootBowEvent(EntityShootBowEvent event) {
-		if (event.getProjectile() != null && event.getConsumable() != null
-				&& event.getConsumable().getItemMeta() != null) {
-			event.getProjectile().setCustomName(event.getConsumable().getItemMeta().getDisplayName());
-		}
-	}
-
-	@EventHandler
-	public void onEntitySpawnEvent(EntitySpawnEvent event) {
-		if (event.getEntity().getType().name().contains("CARPET")) {
+	public void onEntitySpawnEvent(BlockDropItemEvent event) {
+		if (event.getBlock().getType().name().contains("CARPET")) {
 			event.setCancelled(true);
 		}
 	}
@@ -252,54 +228,6 @@ public final class JamoListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
 				event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
-	}
-
-	@EventHandler
-	public void onPotionSplashEvent(PotionSplashEvent event) {
-		Projectile entity = event.getEntity();
-		CustomItem customItem = javaPlugin.customItems().getItem(entity.getCustomName());
-		if (customItem != null && customItem.hasPotionSplashEvent()) {
-			customItem.potionSplashEvent().accept(event);
-			event.getEntity().remove();
-		}
-	}
-
-	@EventHandler
-	public void onProjectileHit(ProjectileHitEvent event) {
-		Projectile entity = event.getEntity();
-		CustomItem customItem = javaPlugin.customItems().getItem(entity.getCustomName());
-		if (customItem != null && customItem.hasProjectileHitEvent()) {
-			customItem.projectileHitEvent().accept(event);
-			event.getEntity().remove();
-		}
-	}
-
-	@EventHandler
-	public void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
-		Projectile entity = event.getEntity();
-		CustomItem customItem = javaPlugin.customItems().getItem(entity.getCustomName());
-		if (customItem != null && customItem.hasProjectileLaunchEvent()) {
-			customItem.projectileLaunchEvent().accept(event);
-		}
-		ProjectileSource shooter = event.getEntity().getShooter();
-		if (shooter instanceof Player) {
-			ItemStack item = ((Player) shooter).getInventory().getItemInMainHand();
-			if (event.getEntity() != null && item != null && item.getItemMeta() != null) {
-				event.getEntity().setCustomName(item.getItemMeta().getDisplayName());
-			}
-		}
-	}
-
-	public void showAllItems(Player player) {
-		Inventory inv = Bukkit.createInventory(null,
-				(int) (Math.ceil(javaPlugin.customItems().totalCustomItems() / 9) * 9 + 9), "Custom Items");
-
-		List<CustomItem> allItems = Lists.newArrayList(javaPlugin.customItems().allItems());
-
-		for (int i = 0; i < javaPlugin.customItems().totalCustomItems(); i++) {
-			inv.setItem(i, allItems.get(i).asItem());
-		}
-		player.openInventory(inv);
 	}
 
 	private BlockFace linearFace(float yaw) {
@@ -435,5 +363,17 @@ public final class JamoListener implements Listener {
 			}, TimeConstants.ONE_SECOND * 5, TimeConstants.ONE_SECOND * 5);
 		});
 		javaPlugin.customItems().register(lightningAnusItem);
+	}
+
+	private void showAllItems(Player player) {
+		Inventory inv = Bukkit.createInventory(null,
+				(int) (Math.ceil(javaPlugin.customItems().totalCustomItems() / 9) * 9 + 9), "Custom Items");
+
+		List<CustomItem> allItems = Lists.newArrayList(javaPlugin.customItems().allItems());
+
+		for (int i = 0; i < javaPlugin.customItems().totalCustomItems(); i++) {
+			inv.setItem(i, allItems.get(i).asItem());
+		}
+		player.openInventory(inv);
 	}
 }

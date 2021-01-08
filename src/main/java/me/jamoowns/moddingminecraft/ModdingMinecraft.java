@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.jamoowns.moddingminecraft.commands.CommandMinecraftModders;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
+import me.jamoowns.moddingminecraft.customitems.CustomItemListener;
 import me.jamoowns.moddingminecraft.customitems.CustomItems;
 import me.jamoowns.moddingminecraft.minigames.blockhunter.BlockHunterListener;
 import me.jamoowns.moddingminecraft.teams.Teams;
@@ -28,6 +29,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	private CommandMinecraftModders commandExecutor;
 
 	private Teams teams;
+
+	private CustomItemListener customItemListener;
 
 	public final CommandMinecraftModders commandExecutor() {
 		return commandExecutor;
@@ -112,6 +115,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		mobListener = new MabListener(this);
 		moshyListener = new MoshyListener();
 		blockHunterListener = new BlockHunterListener(this);
+		customItemListener = new CustomItemListener(this);
 		commandExecutor.addListener(this);
 
 		this.getCommand("mm").setExecutor(commandExecutor);
@@ -119,6 +123,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		getServer().getPluginManager().registerEvents(mobListener, this);
 		getServer().getPluginManager().registerEvents(moshyListener, this);
 		getServer().getPluginManager().registerEvents(blockHunterListener, this);
+		getServer().getPluginManager().registerEvents(customItemListener, this);
 	}
 
 	public final Teams teams() {
