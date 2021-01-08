@@ -10,7 +10,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -24,7 +23,7 @@ public final class CustomItem {
 
 	private Optional<Consumer<ProjectileLaunchEvent>> projectileLaunchEvent;
 
-	private Optional<Consumer<PlayerInteractEvent>> clickEvent;
+	private Optional<Consumer<SpellCastEvent>> clickEvent;
 
 	private String name;
 
@@ -52,7 +51,7 @@ public final class CustomItem {
 		return blockPlaceEvent.get();
 	}
 
-	public final Consumer<PlayerInteractEvent> clickEvent() {
+	public final Consumer<SpellCastEvent> clickEvent() {
 		return clickEvent.get();
 	}
 
@@ -96,7 +95,7 @@ public final class CustomItem {
 		blockPlaceEvent = Optional.of(event);
 	}
 
-	public final void setClickEvent(Consumer<PlayerInteractEvent> event) {
+	public final void setClickEvent(Consumer<SpellCastEvent> event) {
 		clickEvent = Optional.of(event);
 	}
 
