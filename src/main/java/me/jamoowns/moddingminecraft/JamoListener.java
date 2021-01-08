@@ -13,6 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -122,7 +123,13 @@ public final class JamoListener implements Listener {
 										.filter(e -> !javaPlugin.teams().hasTeam(e.getUniqueId())
 												|| !javaPlugin.teams().getTeamName(e.getUniqueId()).equalsIgnoreCase(
 														javaPlugin.teams().getTeamName(mob.getUniqueId())))
-										.collect(Collectors.toList());
+										.filter(ent -> {
+											if (ent instanceof Player) {
+												GameMode gameMode = ((Player) ent).getGameMode();
+												return gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE;
+											}
+											return true;
+										}).collect(Collectors.toList());
 
 								Optional<Entity> target = teamedEntitiesNearby.stream()
 										.sorted((o1, o2) -> Double.compare(
