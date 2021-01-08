@@ -81,6 +81,8 @@ public final class JamoListener implements Listener {
 
 	private CustomItem normalRoomItem;
 
+	private CustomItem guardSniperStick;
+
 	public JamoListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		RANDOM = new Random();
@@ -296,36 +298,46 @@ public final class JamoListener implements Listener {
 		mobSpawningItems.add(normalZombieStick);
 
 		normalSkeletonStick = new CustomItem(Material.END_ROD, "Normal Skeleton");
-		normalSkeletonStick.setBlockPlaceEvent(event -> {
-			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
-			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Skeleton.class);
+		normalSkeletonStick.setClickEvent(event -> {
+			Location spawnLocation = event.getLocation().add(0, 1, 0);
+			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Skeleton.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
 		});
 		javaPlugin.customItems().register(normalSkeletonStick);
 		mobSpawningItems.add(normalSkeletonStick);
 
+		guardSniperStick = new CustomItem(Material.IRON_BARS, "Guard | Sniper");
+		guardSniperStick.setClickEvent(event -> {
+			Location spawnLocation = event.getLocation().add(0, 1, 0);
+			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Skeleton.class);
+			mob.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999, 99999));
+			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
+		});
+		javaPlugin.customItems().register(guardSniperStick);
+		mobSpawningItems.add(guardSniperStick);
+
 		normalCreeperStick = new CustomItem(Material.TWISTING_VINES, "Normal Creeper");
-		normalCreeperStick.setBlockPlaceEvent(event -> {
-			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
-			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Creeper.class);
+		normalCreeperStick.setClickEvent(event -> {
+			Location spawnLocation = event.getLocation().add(0, 1, 0);
+			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Creeper.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
 		});
 		javaPlugin.customItems().register(normalCreeperStick);
 		mobSpawningItems.add(normalCreeperStick);
 
 		normalMobStick = new CustomItem(Material.SOUL_TORCH, "Unkown Mob");
-		normalMobStick.setBlockPlaceEvent(event -> {
-			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
+		normalMobStick.setClickEvent(event -> {
+			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			List<EntityType> mobList = Arrays.asList(EntityType.ZOMBIE, EntityType.SKELETON,
 					EntityType.ZOMBIFIED_PIGLIN);
 			List<EntityType> RaremobList = Arrays.asList(EntityType.CREEPER, EntityType.SHULKER);
 
 			if (RANDOM.nextInt(10) > 3) {
-				Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation,
+				Entity mob = event.getLocation().getWorld().spawnEntity(spawnLocation,
 						mobList.get(RANDOM.nextInt(mobList.size())));
 				javaPlugin.teams().register(event.getPlayer().getUniqueId(), (Mob) mob);
 			} else {
-				Entity mob = event.getBlock().getWorld().spawnEntity(spawnLocation,
+				Entity mob = event.getLocation().getWorld().spawnEntity(spawnLocation,
 						RaremobList.get(RANDOM.nextInt(RaremobList.size())));
 				javaPlugin.teams().register(event.getPlayer().getUniqueId(), (Mob) mob);
 			}
