@@ -13,11 +13,11 @@ public final class SpellCastEvent {
 		player = aPlayer;
 	}
 
-	public Location getLocation() {
+	public final Location getLocation() {
 		return location;
 	}
 
-	public Player getPlayer() {
+	public final Player getPlayer() {
 		return player;
 	}
 }
