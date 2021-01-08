@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
-import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 
 public final class CustomItemListener implements Listener {
 
@@ -47,7 +46,6 @@ public final class CustomItemListener implements Listener {
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
 		Block target = event.getPlayer().getTargetBlockExact(30);
-		Broadcaster.sendInfo(event.getPlayer(), "You are looking at: " + target);
 		if (target != null) {
 			for (double d = 0; d <= 30; d += 0.1) {
 				target.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, event.getPlayer().getEyeLocation()
