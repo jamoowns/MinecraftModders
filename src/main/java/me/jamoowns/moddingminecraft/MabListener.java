@@ -143,7 +143,6 @@ public class MabListener implements Listener {
 							world.getBlockAt(locSix.add(-1, 0,0)).setType(Material.OAK_SLAB);
 							
 							
-							
 						} else {
 							loc.getWorld().getBlockAt(loc.add(0, i, 0 + k)).setType(Material.STONE_BRICKS);
 							loc.getWorld().getBlockAt(locThree.add(14, i, 0 + k)).setType(Material.STONE_BRICKS);
