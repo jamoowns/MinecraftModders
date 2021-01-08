@@ -287,9 +287,9 @@ public final class JamoListener implements Listener {
 
 	private void setupCustomItems() {
 		normalZombieStick = new CustomItem(Material.REDSTONE_TORCH, "Normal Zombie");
-		normalZombieStick.setBlockPlaceEvent(event -> {
-			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
-			Mob mob = event.getBlock().getWorld().spawn(spawnLocation, Zombie.class);
+		normalZombieStick.setClickEvent(event -> {
+			Location spawnLocation = event.getClickedBlock().getLocation().add(0, 1, 0);
+			Mob mob = event.getClickedBlock().getWorld().spawn(spawnLocation, Zombie.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
 		});
 		javaPlugin.customItems().register(normalZombieStick);

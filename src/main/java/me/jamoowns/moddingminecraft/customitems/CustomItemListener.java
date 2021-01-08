@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -47,16 +48,20 @@ public final class CustomItemListener implements Listener {
 
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
-		Block target = event.getPlayer().getTargetBlockExact(MAX_RANGE);
-		if (target != null) {
-			for (double d = 0; d <= target.getLocation().distance(event.getPlayer().getLocation()); d += 0.1) {
-				event.getPlayer().getWorld().spawnParticle(Particle.TOTEM, event.getPlayer().getEyeLocation()
-						.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
-			}
-		} else {
-			for (double d = 0; d <= MAX_RANGE; d += 0.1) {
-				event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
-						.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
+		CustomItem customItem = javaPlugin.customItems().getItem(event.getItem().getItemMeta().getDisplayName());
+		if (customItem != null && customItem.hasClickEvent() && isLeftClick(event.getAction())) {
+			Block target = event.getPlayer().getTargetBlockExact(MAX_RANGE);
+			if (target != null) {
+				for (double d = 0; d <= target.getLocation().distance(event.getPlayer().getLocation()); d += 0.1) {
+					event.getPlayer().getWorld().spawnParticle(Particle.TOTEM, event.getPlayer().getEyeLocation()
+							.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
+				}
+				customItem.clickEvent().accept(event);
+			} else {
+				for (double d = 0; d <= MAX_RANGE; d += 0.1) {
+					event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
+							.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
+				}
 			}
 		}
 	}
@@ -94,6 +99,20 @@ public final class CustomItemListener implements Listener {
 			if (event.getEntity() != null && item != null && item.getItemMeta() != null) {
 				event.getEntity().setCustomName(item.getItemMeta().getDisplayName());
 			}
+		}
+	}
+
+	private final boolean isLeftClick(Action action) {
+		switch (action) {
+			case LEFT_CLICK_AIR:
+				return true;
+			case LEFT_CLICK_BLOCK:
+				return true;
+			case PHYSICAL:
+			case RIGHT_CLICK_AIR:
+			case RIGHT_CLICK_BLOCK:
+			default:
+				return false;
 		}
 	}
 }
