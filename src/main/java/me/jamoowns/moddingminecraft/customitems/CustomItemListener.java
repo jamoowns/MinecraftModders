@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.customitems;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -57,7 +58,9 @@ public final class CustomItemListener implements Listener {
 							.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
 				}
 				customItem.clickEvent().accept(new SpellCastEvent(target.getLocation(), event.getPlayer()));
-				event.getItem().setAmount(event.getItem().getAmount() - 1);
+				if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+					event.getItem().setAmount(event.getItem().getAmount() - 1);
+				}
 			} else {
 				for (double d = 0; d <= MAX_RANGE; d += 0.1) {
 					event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
