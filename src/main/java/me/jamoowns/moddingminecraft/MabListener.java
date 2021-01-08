@@ -110,18 +110,22 @@ public class MabListener implements Listener {
 
 			switch (linearFace(event.getPlayer().getLocation().getYaw())) {
 			case NORTH:
-				for (int i = 0; i < 20; i++) {
-					Location loc = event.getBlockPlaced().getLocation();
-					loc.getWorld().getBlockAt(loc.add(4, i, 0)).setType(Material.STONE_BRICKS);
 
-					Location locTwo = event.getBlockPlaced().getLocation();
-					loc.getWorld().getBlockAt(locTwo.add(12, i, 0)).setType(Material.STONE_BRICKS);
-
-					Location locThree = event.getBlockPlaced().getLocation();
-					loc.getWorld().getBlockAt(locThree.add(15, i, 0)).setType(Material.STONE_BRICKS);
-				}
 				break;
 			case EAST:
+				for (int k = 0; k < 10; k++) {
+					for (int i = 0; i < 20; i++) {
+						Location loc = event.getBlockPlaced().getLocation();
+						loc.getWorld().getBlockAt(loc.add(3, i, 0 + k)).setType(Material.STONE_BRICKS);
+
+						Location locTwo = event.getBlockPlaced().getLocation();
+						loc.getWorld().getBlockAt(locTwo.add(11, i, 0 + k)).setType(Material.STONE_BRICKS);
+
+						Location locThree = event.getBlockPlaced().getLocation();
+						loc.getWorld().getBlockAt(locThree.add(14, i, 0 + k)).setType(Material.STONE_BRICKS);
+					}
+				}
+
 				break;
 			case WEST:
 				break;
