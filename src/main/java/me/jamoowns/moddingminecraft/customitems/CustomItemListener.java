@@ -1,6 +1,7 @@
 package me.jamoowns.moddingminecraft.customitems;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -10,10 +11,12 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 
 public final class CustomItemListener implements Listener {
 
@@ -38,6 +41,12 @@ public final class CustomItemListener implements Listener {
 				&& event.getConsumable().getItemMeta() != null) {
 			event.getProjectile().setCustomName(event.getConsumable().getItemMeta().getDisplayName());
 		}
+	}
+
+	@EventHandler
+	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
+		Block target = event.getPlayer().getTargetBlockExact(30);
+		Broadcaster.sendInfo(event.getPlayer(), "You are looking at: " + target);
 	}
 
 	@EventHandler
