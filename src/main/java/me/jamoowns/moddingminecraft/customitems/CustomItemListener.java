@@ -102,6 +102,8 @@ public final class CustomItemListener implements Listener {
 
 	private final List<Location> lineBetween(Location loc1, Location loc2, double ticksBetween) {
 		ArrayList<Location> locations = new ArrayList<>();
+		loc1.add(0.5, 0.5, 0.5);
+		loc2.add(0.5, 0.5, 0.5);
 		for (double d = 0; d <= loc2.distance(loc1); d += 0.1) {
 			locations.add(loc1.clone().add(loc2.clone().subtract(loc1).toVector().multiply(d)));
 		}
