@@ -126,9 +126,9 @@ public class MabListener implements Listener {
 								world.getBlockAt(loc).setBlockData(blockData);
 							}
 
-							blockData = world.getBlockAt(loc).getBlockData();
+							blockData = world.getBlockAt(locThree).getBlockData();
 							if (blockData instanceof Directional) {
-								((Directional) blockData).setFacing(BlockFace.EAST);
+								((Directional) blockData).setFacing(BlockFace.NORTH);
 								world.getBlockAt(loc).setBlockData(blockData);
 							}
 						} else {
