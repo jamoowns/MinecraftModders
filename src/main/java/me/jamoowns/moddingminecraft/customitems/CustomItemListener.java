@@ -1,9 +1,5 @@
 package me.jamoowns.moddingminecraft.customitems;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -11,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -51,15 +48,21 @@ public final class CustomItemListener implements Listener {
 
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
-		Block target = event.getPlayer().getTargetBlockExact(MAX_RANGE);
-		if (target != null) {
-			lineBetween(event.getPlayer().getLocation(), target.getLocation(), 0.1).forEach(loc -> {
-				event.getPlayer().getWorld().spawnParticle(Particle.TOTEM, loc, 1, 0, 0, 0, 0);
-			});
-		} else {
-			for (double d = 0; d <= MAX_RANGE; d += 0.1) {
-				event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
-						.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
+		CustomItem customItem = javaPlugin.customItems().getItem(event.getItem().getItemMeta().getDisplayName());
+		if (customItem != null && customItem.hasClickEvent() && isLeftClick(event.getAction())) {
+			Block target = event.getPlayer().getTargetBlockExact(MAX_RANGE);
+			if (target != null) {
+				for (double d = 0; d <= target.getLocation().distance(event.getPlayer().getLocation()); d += 0.1) {
+					event.getPlayer().getWorld().spawnParticle(Particle.TOTEM, event.getPlayer().getEyeLocation()
+							.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
+				}
+				customItem.clickEvent().accept(event);
+				event.getItem().setAmount(event.getItem().getAmount() - 1);
+			} else {
+				for (double d = 0; d <= MAX_RANGE; d += 0.1) {
+					event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
+							.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
+				}
 			}
 		}
 	}
@@ -100,13 +103,17 @@ public final class CustomItemListener implements Listener {
 		}
 	}
 
-	private final List<Location> lineBetween(Location loc1, Location loc2, double ticksBetween) {
-		ArrayList<Location> locations = new ArrayList<>();
-		loc1.add(0.5, 0.5, 0.5);
-		loc2.add(0.5, 0.5, 0.5);
-		for (double d = 0; d <= loc2.distance(loc1); d += 0.1) {
-			locations.add(loc1.clone().add(loc2.clone().subtract(loc1).toVector().multiply(d)));
+	private final boolean isLeftClick(Action action) {
+		switch (action) {
+			case LEFT_CLICK_AIR:
+				return true;
+			case LEFT_CLICK_BLOCK:
+				return true;
+			case PHYSICAL:
+			case RIGHT_CLICK_AIR:
+			case RIGHT_CLICK_BLOCK:
+			default:
+				return false;
 		}
-		return locations;
 	}
 }
