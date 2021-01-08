@@ -131,16 +131,6 @@ public class MabListener implements Listener {
 								world.getBlockAt(locThree).setBlockData(blockData);
 							}
 
-							Location locFive = event.getBlockPlaced().getLocation();
-							world.getBlockAt(locFive.add(1, i, 0 + k)).setType(Material.OAK_SLAB);
-							world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
-							world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
-
-							Location locSix = event.getBlockPlaced().getLocation();
-							world.getBlockAt(locSix.add(13, i, 0 + k)).setType(Material.OAK_SLAB);
-							world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
-							world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
-
 						} else {
 							loc.getWorld().getBlockAt(loc.add(0, i, 0 + k)).setType(Material.STONE_BRICKS);
 							loc.getWorld().getBlockAt(locThree.add(14, i, 0 + k)).setType(Material.STONE_BRICKS);
@@ -150,6 +140,17 @@ public class MabListener implements Listener {
 						world.getBlockAt(locTwo.add(11, i, 0 + k)).setType(Material.STONE_BRICKS);
 						Location locFour = event.getBlockPlaced().getLocation();
 						world.getBlockAt(locFour.add(3, i, 0 + k)).setType(Material.STONE_BRICKS);
+					}
+					for (int i = 21; i < 22; i++) {
+						Location locFive = event.getBlockPlaced().getLocation();
+						world.getBlockAt(locFive.add(1, i, 0 + k)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+
+						Location locSix = event.getBlockPlaced().getLocation();
+						world.getBlockAt(locSix.add(13, i, 0 + k)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
 					}
 				}
 
