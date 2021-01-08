@@ -103,7 +103,6 @@ public class MabListener implements Listener {
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
 		if (event.getBlock().getType().equals(Material.WARPED_HYPHAE)) {
-
 			switch (linearFace(event.getPlayer().getLocation().getYaw())) {
 			case NORTH:
 
@@ -112,7 +111,7 @@ public class MabListener implements Listener {
 				for (int k = 0; k < 10; k++) {
 					for (int i = 0; i < 20; i++) {
 						Location loc = event.getBlockPlaced().getLocation();
-						loc.getWorld().getBlockAt(loc.add(0, i, 0)).setType(Material.STONE_BRICKS);
+						loc.getWorld().getBlockAt(loc.add(0, i, 0 + k)).setType(Material.STONE_BRICKS);
 
 						Location locTwo = event.getBlockPlaced().getLocation();
 						loc.getWorld().getBlockAt(locTwo.add(11, i, 0 + k)).setType(Material.STONE_BRICKS);
