@@ -20,6 +20,8 @@ import me.jamoowns.moddingminecraft.ModdingMinecraft;
 
 public final class CustomItemListener implements Listener {
 
+	private static int MAX_RANGE = 30;
+
 	private ModdingMinecraft javaPlugin;
 
 	public CustomItemListener(ModdingMinecraft aJavaPlugin) {
@@ -45,10 +47,15 @@ public final class CustomItemListener implements Listener {
 
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
-		Block target = event.getPlayer().getTargetBlockExact(30);
+		Block target = event.getPlayer().getTargetBlockExact(MAX_RANGE);
 		if (target != null) {
-			for (double d = 0; d <= 30; d += 0.1) {
-				target.getWorld().spawnParticle(Particle.TOTEM, event.getPlayer().getEyeLocation()
+			for (double d = 0; d <= target.getLocation().distance(event.getPlayer().getLocation()); d += 0.1) {
+				event.getPlayer().getWorld().spawnParticle(Particle.TOTEM, event.getPlayer().getEyeLocation()
+						.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
+			}
+		} else {
+			for (double d = 0; d <= MAX_RANGE; d += 0.1) {
+				event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
 						.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
 			}
 		}
