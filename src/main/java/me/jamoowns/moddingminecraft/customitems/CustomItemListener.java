@@ -48,8 +48,9 @@ public final class CustomItemListener implements Listener {
 		Block target = event.getPlayer().getTargetBlockExact(30);
 		if (target != null) {
 			for (double d = 0; d <= 30; d += 0.1) {
-				target.getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
-						.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1);
+				target.getWorld().spawnParticle(Particle.FLAME,
+						event.getPlayer().getLocation().add(event.getPlayer().getLocation().getDirection().multiply(d)),
+						1, 0, 0, 0);
 			}
 		}
 	}
