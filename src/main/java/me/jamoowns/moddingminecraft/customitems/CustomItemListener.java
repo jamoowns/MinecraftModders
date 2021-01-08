@@ -55,7 +55,7 @@ public final class CustomItemListener implements Listener {
 			}
 		} else {
 			for (double d = 0; d <= MAX_RANGE; d += 0.1) {
-				event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
+				event.getPlayer().getWorld().spawnParticle(Particle.LAVA, event.getPlayer().getEyeLocation()
 						.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
 			}
 		}
