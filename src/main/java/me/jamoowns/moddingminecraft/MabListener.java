@@ -204,6 +204,66 @@ public class MabListener implements Listener {
 					}
 				}
 
+				heightTracker++;
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
+					for (int r = 0; r < buildGrid.length; r++) {
+						if (r == 15 || r == 1) {
+							if (c % 2 == 1) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+							}
+						} else if (r == 0) {
+							if (c % 2 == 0) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+							} else {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
+							}
+						} else if (r == 16) {
+							if (c % 2 == 0) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+							} else {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
+							}
+						} else if ((r == 5 || r == 11)) {
+							if (c == 1 || c == 8) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0, 0);
+							} else if (c == 0 || c == 2 || c == 7 || c == 9) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+							} else if (c == 3 || c == 6) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
+							}
+						}
+					}
+				}
+
+				heightTracker++;
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
+					for (int r = 0; r < buildGrid.length; r++) {
+						if (r == 1 || r == 5 || r == 11 || r == 15) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+						} else if (r == 3 || r == 7 || r == 8 || r == 9 || r == 13) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+						} else if (r == 4 || r == 10 || r == 14) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
+						} else if (r == 2 || r == 6 || r == 12) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
+						} else if (r == 3 || r == 6 || r == 12) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
+						} else if (r == 0) {
+							if (c % 2 == 0) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
+							} else {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
+							}
+						} else if (r == 16) {
+							if (c % 2 == 0) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
+							} else {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
+							}
+						}
+					}
+				}
+
 			} else {
 				for (; heightTracker < 19; heightTracker++) {
 					for (int c = 0; c < buildGrid[0][0].length; c++) {
