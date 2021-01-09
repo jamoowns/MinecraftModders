@@ -274,6 +274,8 @@ public class MabListener implements Listener {
 					} else if (c == 4 || c == 10 || c == 15) {
 						if (c == 4 && r == 3) {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 1);
+						} else if (c == 6 && r == 3) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 1);
 						} else {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 						}
