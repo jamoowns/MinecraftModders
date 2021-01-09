@@ -258,7 +258,7 @@ public class MabListener implements Listener {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0);
 					} else if ((r == 4 || r == 5) && c > 1 && c < 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0);
-					} else if (c == 5 || c == 11) {
+					} else if ((c == 5 || c == 11) && r != 4 || r != 7) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
 					} else if (c == 4 || c == 10 || c == 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0);
@@ -328,6 +328,9 @@ public class MabListener implements Listener {
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
+		if (event.getBlock().getType().equals(Material.STONE_BRICK_STAIRS)) {
+			event.getPlayer().sendMessage(event.getBlock().getBlockData().getAsString());
+		}
 		if (event.getBlock().getType().equals(Material.WARPED_HYPHAE)) {
 			event.getPlayer().sendMessage("Building");
 			BuildGrid(1, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
