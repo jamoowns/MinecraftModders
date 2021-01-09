@@ -2,7 +2,10 @@ package me.jamoowns.moddingminecraft;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -22,13 +25,19 @@ public class MabSchematic implements Listener {
 
 			Material[][][] buildGrid = new Material[10][15][20];
 
-			/
-			  for (int x = 0; x < buildGrid[0].length; x++) { for (int y = 0; y <
-			  buildGrid[1].length; y++) { for (int z = 0; z < buildGrid[2].length; z++) {
-			  if (x < 1 && x > buildGrid[0].length) { if (y < 1 && y > buildGrid[1].length)
-			  { if (z < 1 && z > buildGrid[2].length) { buildGrid[x][y][z] = buildList[1];
-			  } } } } } }
-			 /
+			for (int x = 0; x < buildGrid[0].length; x++) {
+				for (int y = 0; y < buildGrid[1].length; y++) {
+					for (int z = 0; z < buildGrid[2].length; z++) {
+						if (x < 1 && x > buildGrid[0].length) {
+							if (y < 1 && y > buildGrid[1].length) {
+								if (z < 1 && z > buildGrid[2].length) {
+									buildGrid[x][y][z] = buildList[1];
+								}
+							}
+						}
+					}
+				}
+			}
 
 			for (int r = 0; r < buildGrid[0].length; r++) {
 				for (int c = 0; c < buildGrid[1].length; c++) {
