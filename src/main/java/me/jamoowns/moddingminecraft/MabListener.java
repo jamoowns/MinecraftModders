@@ -94,6 +94,10 @@ public class MabListener implements Listener {
 	private int[][][] upDownGrid;
 	private int[][][] cornerGrid;
 
+	Player mabmo;
+
+	boolean mabmoSet;
+
 	public MabListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
@@ -1068,6 +1072,10 @@ public class MabListener implements Listener {
 		if (event.getMessage().contains("SwapNearMe")) {
 			SwitchAllPlayersInAnArea(event.getPlayer().getLocation(), 20, 5, 20);
 		}
+		if (event.getMessage().contains("Iammabmo")) {
+			mabmo = event.getPlayer();
+			mabmoSet = true;
+		}
 	}
 
 	public void PotionAllPlayersInAnArea(Location loc, int x, int y, int z, PotionEffectType potionEffectType,
@@ -1120,6 +1128,9 @@ public class MabListener implements Listener {
 				for (int c = 0; c < shape[0][0].length; c++) {
 					int newR = newShape[0][0].length - r - 1;
 					int newC = newShape.length - c - 1;
+
+					sendMabmoMsg("newR:" + newR + "-oldR:" + r + "|-|newC:" + newC + "-oldC:" + c);
+
 					newShape[newC][0][newR] = shape[r][0][c];
 				}
 			}
@@ -1143,6 +1154,14 @@ public class MabListener implements Listener {
 		}
 
 		return shape;
+	}
+
+	public void sendMabmoMsg(String str) {
+		if (mabmoSet) {
+			if (mabmo.isOnline()) {
+				mabmo.sendMessage(str);
+			}
+		}
 	}
 
 	public void SwitchAllPlayers(World world) {
