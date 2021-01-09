@@ -98,7 +98,7 @@ public class MabListener implements Listener {
 
 	public void BuildGrid(int grid, BlockFace direction, Location loc) {
 		if (grid == 1) {
-			Material[] buildList = new Material[] { Material.DIRT, Material.STONE_BRICKS, Material.OAK_SLAB,
+			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS, Material.DIRT };
 			createGrids(10, 30, 17);
 
