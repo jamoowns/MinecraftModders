@@ -998,47 +998,6 @@ public class MabListener implements Listener {
 				}
 			}
 		}
-
-		if (direction != BlockFace.EAST) {
-			for (int i = 0; i < buildGrid[0].length; i++) {
-				Material[][] multi = new Material[buildGrid.length][buildGrid[0][0].length];
-
-				for (int j = 0; j < buildGrid.length; j++) {
-					for (int k = 0; k < buildGrid[0][0].length; k++) {
-						Location newloc = loc.clone();
-						newloc.add(k, i, j);
-						if (!loc.getWorld().getBlockAt(newloc).getType().name().contains("WATER") || loc.getY() < 63) {
-							multi[j][k] = loc.getWorld().getBlockAt(newloc).getType();
-						} else {
-							multi[j][k] = Material.AIR;
-						}
-					}
-				}
-				if (direction == BlockFace.SOUTH) {
-					multi = RotateShapeSquareGrid(multi, 90);
-				} else if (direction == BlockFace.WEST) {
-					multi = RotateShapeSquareGrid(multi, 180);
-				} else if (direction == BlockFace.NORTH) {
-					multi = RotateShapeSquareGrid(multi, 270);
-				}
-
-				for (int j = 0; j < multi.length; j++) {
-					for (int k = 0; k < multi[0].length; k++) {
-						Location newloc = loc.clone();
-						newloc.add(k, i, j);
-						if (!loc.getWorld().getBlockAt(newloc).getType().name().contains("WATER")
-								&& !loc.getWorld().getBlockAt(loc).getType().name().contains("LAVA")
-								|| loc.getY() < 63) {
-							loc.getWorld().getBlockAt(newloc).setType(multi[j][k]);
-						} else {
-							loc.getWorld().getBlockAt(newloc).setType(Material.AIR);
-						}
-
-					}
-				}
-			}
-		}
-
 	}
 
 	@EventHandler
