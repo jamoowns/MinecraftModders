@@ -127,7 +127,7 @@ public class MabListener implements Listener {
 					if (c > 1 && c < 5 || c > 6 && c < 10 || c > 11 && c < 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0);
 					} else if ((r == 4 || r == 5) && c > 1 && c < 15) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0);
 					} else if (c == 5 || c == 11) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
 					} else if (c == 6) {
@@ -160,8 +160,28 @@ public class MabListener implements Listener {
 			}
 
 			heightTracker++;
-			loc.getWorld().getPlayers().get(0).sendMessage("" + heightTracker);
-//			insert(0, 0, 0, buildList[3], 3, 1);
+
+			for (int c = 0; c < buildGrid[0][0].length; c++) {
+				for (int r = 0; r < buildGrid.length; r++) {
+					if (c == 15 || c == 1) {
+						if (r % 2 == 1) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+						}
+					} else if (c == 0) {
+						if (r % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0);
+						}
+					} else if (c == 16) {
+						if (r % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 2, 0);
+						}
+					}
+				}
+			}
 
 			placeGrid(loc);
 		}
