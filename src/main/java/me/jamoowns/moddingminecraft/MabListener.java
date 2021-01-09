@@ -106,6 +106,44 @@ public class MabListener implements Listener {
 	}
 
 	public void BuildGrid(int grid, BlockFace direction, Location loc) {
+		if (grid == 2) {
+			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
+					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
+			createGrids(17, 30, 17);
+
+			for (int l = 0; l < buildGrid[0].length; l++) {
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
+					for (int r = 0; r < buildGrid.length; r++) {
+						insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0, 0);
+					}
+				}
+			}
+
+			int heightTracker = 0;
+
+			for (; heightTracker < 19; heightTracker++) {
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
+					for (int r = 0; r < buildGrid.length; r++) {
+
+						int newC = 0;
+						int newR = 0;
+						if (direction == BlockFace.SOUTH || direction == BlockFace.NORTH) {
+							newC = r;
+							newR = c;
+						} else {
+							newC = c;
+							newR = r;
+						}
+						if ((newC == 1 && newR < 3) || (newC == 4 && newR < 5) || newC == 12 || newC == 15) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+						}
+					}
+				}
+			}
+
+			placeGrid(loc, direction);
+		}
+
 		if (grid == 1) {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
@@ -562,8 +600,11 @@ public class MabListener implements Listener {
 	public void onBlockPlace(BlockPlaceEvent event) {
 
 		if (event.getBlock().getType().equals(Material.WARPED_HYPHAE)) {
-			event.getPlayer().sendMessage("Building");
 			BuildGrid(1, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
+		}
+		if (event.getBlock().getType().equals(Material.CRIMSON_HYPHAE)) {
+			event.getPlayer().sendMessage("Building");
+			BuildGrid(2, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
