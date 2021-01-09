@@ -105,6 +105,45 @@ public class MabListener implements Listener {
 		if (grid == 1) {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
+			createGrids(5, 5, 5);
+
+			for (int l = 0; l < buildGrid[0].length; l++) {
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
+					for (int r = 0; r < buildGrid.length; r++) {
+						insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0, 0);
+					}
+				}
+			}
+			int heightTracker = 0;
+
+			for (; heightTracker < 19; heightTracker++) {
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
+					for (int r = 0; r < buildGrid.length; r++) {
+						if (c == 1 || c == 4 || c == 12 || c == 15) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+						}
+					}
+				}
+			}
+			if (direction == BlockFace.WEST) {
+				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 180);
+				directionGrid = RotateShapeSquareGridInt(directionGrid, 180);
+				upDownGrid = RotateShapeSquareGridInt(directionGrid, 180);
+				cornerGrid = RotateShapeSquareGridInt(directionGrid, 180);
+			}
+			if (direction == BlockFace.SOUTH) {
+				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 90);
+//				directionGrid = RotateShapeSquareGridInt(directionGrid, 90);
+//				upDownGrid = RotateShapeSquareGridInt(directionGrid, 90);
+//				cornerGrid = RotateShapeSquareGridInt(directionGrid, 90);
+			}
+			placeGrid(loc);
+
+		}
+
+		if (grid == 2) {
+			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
+					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
 			createGrids(10, 30, 17);
 
 			for (int l = 0; l < buildGrid[0].length; l++) {
@@ -402,9 +441,9 @@ public class MabListener implements Listener {
 			}
 			if (direction == BlockFace.SOUTH) {
 				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 90);
-				directionGrid = RotateShapeSquareGridInt(directionGrid, 90);
-				upDownGrid = RotateShapeSquareGridInt(directionGrid, 90);
-				cornerGrid = RotateShapeSquareGridInt(directionGrid, 90);
+//				directionGrid = RotateShapeSquareGridInt(directionGrid, 90);
+//				upDownGrid = RotateShapeSquareGridInt(directionGrid, 90);
+//				cornerGrid = RotateShapeSquareGridInt(directionGrid, 90);
 			}
 			placeGrid(loc);
 
