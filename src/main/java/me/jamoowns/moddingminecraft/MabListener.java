@@ -126,11 +126,7 @@ public class MabListener implements Listener {
 					for (int r = 0; r < buildGrid.length; r++) {
 
 						if ((c == 2 && r < 2) || (r == 2 && c < 2) || (c == 5 && r < 5) || (r == 5 && c < 5)) {
-							if (direction == BlockFace.SOUTH || direction == BlockFace.NORTH) {
-								insert(0 + c, 0 + heightTracker, 0 + r, buildList[1], 0, 0, 0);
-							} else {
-								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-							}
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 						}
 
 					}
