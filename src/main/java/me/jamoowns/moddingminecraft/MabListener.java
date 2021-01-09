@@ -82,6 +82,10 @@ public class MabListener implements Listener {
 
 	private CustomItem explosiveSnowBallItem;
 
+	private Material[][][] buildGrid;
+	private int[][][] directionGrid;
+	private int[][][] upDownGrid;
+
 	public MabListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
@@ -93,16 +97,15 @@ public class MabListener implements Listener {
 		if (grid == 1) {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS };
-
-			Material[][][] buildGrid = new Material[10][20][15];
+			createGrids(10, 20, 15);
 
 			for (int l = 0; l < buildGrid[0].length; l++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
 						if (c == 0 || c == 3 || c == 11 || c == 14) {
-							buildGrid[0 + r][0 + l][0 + c] = buildList[1];
+							insert(0 + r, 0 + l, 0 + c, buildList[1], 0, 0);
 						} else {
-							buildGrid[0 + r][0 + l][0 + c] = buildList[0];
+							insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0);
 						}
 					}
 				}
@@ -129,6 +132,22 @@ public class MabListener implements Listener {
 			});
 		});
 		trailByPlayer.clear();
+	}
+
+	public void createGrids(int width, int height, int depth) {
+		buildGrid = new Material[width][height][depth];
+
+		directionGrid = new int[buildGrid.length][buildGrid[0].length][buildGrid[0][0].length];
+
+		upDownGrid = new int[buildGrid.length][buildGrid[0].length][buildGrid[0][0].length];
+	}
+
+	public void insert(int width, int height, int depth, Material material, int blockface, int updown) {
+		buildGrid[0 + width][0 + height][0 + depth] = material;
+
+		directionGrid[0 + width][0 + height][0 + depth] = blockface;
+
+		upDownGrid[0 + width][0 + height][0 + depth] = updown;
 	}
 
 	@EventHandler
@@ -162,6 +181,7 @@ public class MabListener implements Listener {
 						event.getPlayer().getServer()
 								.broadcastMessage("'I can polish that for you right now'-" + ent.getName());
 						Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+
 							@Override
 							public void run() {
 								event.getBlockPlaced().setType(Material.POLISHED_BASALT);
@@ -173,7 +193,9 @@ public class MabListener implements Listener {
 		}
 
 		if (event.getBlock().getType().equals(Material.POLISHED_BASALT)) {
-			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+			for (
+
+			Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Villager) {
 					if (ent.getName().contains("Bob")) {
 
@@ -519,11 +541,13 @@ public class MabListener implements Listener {
 
 				p.teleport(playerLoc2);
 				Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+
 					@Override
 					public void run() {
 						p.setFallDistance(0);
 						p.teleport(playerLoc.add(0, -2, 0));
 					}
+
 				}, 230);
 			}
 		}
