@@ -1126,7 +1126,7 @@ public class MabListener implements Listener {
 			for (int r = 0; r < shape.length; r++) {
 				String row = "";
 				for (int c = 0; c < shape[0][0].length; c++) {
-					row += shape[r][0][c];
+					row = row + shape[r][0][c] + " , ";
 				}
 				sendMabmoMsg(row);
 			}
