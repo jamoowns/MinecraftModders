@@ -101,50 +101,37 @@ public class MabListener implements Listener {
 		if (grid == 1) {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS };
-			createGrids(10, 20, 15);
+			createGrids(10, 30, 17);
 
-			for (int l = 0; l < buildGrid[0].length; l++) {
+			int heightTracker = 0;
+
+			for (heightTracker; heightTracker < 19; heightTracker++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
-						if (c == 0 || c == 3 || c == 11 || c == 14) {
-							insert(0 + r, 0 + l, 0 + c, buildList[1], 0, 0);
+						if (c == 1 || c == 4 || c == 12 || c == 15) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
 						} else {
-							insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[0], 0, 0);
 						}
+					}
+				}
+			}
+			heightTracker++;
+			for (int c = 0; c < buildGrid[0][0].length; c++) {
+				for (int r = 0; r < buildGrid.length; r++) {
+					if (c != 1 || c != 5 || c != 11 || c != 15) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[0], 0, 0);
 					}
 				}
 			}
 
 			insert(0, 0, 0, buildList[3], 3, 1);
 
-			for (int l = 0; l < buildGrid[0].length; l++) {
-				for (int c = 0; c < buildGrid[0][0].length; c++) {
-					for (int r = 0; r < buildGrid.length; r++) {
-						Location temploc = loc.clone();
-						loc.getWorld().getBlockAt(temploc.add(0 + r, 0 + l, 0 + c)).setType(buildGrid[r][l][c]);
-						if (directionGrid[r][l][c] > 0) {
-							BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
-							if (blockData instanceof Directional) {
-								((Directional) blockData).setFacing(getBlockface(directionGrid[r][l][c]));
-								loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
-							}
-						}
-						if (upDownGrid[r][l][c] > 0) {
-							BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
-							loc.getWorld().getPlayers().get(0).sendMessage(blockData.toString());
-							if (blockData instanceof Bisected) {
-								((Bisected) blockData).setHalf(Half.TOP);
-								loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
-							}
-							loc.getWorld().getPlayers().get(0).sendMessage("-----------");
-							loc.getWorld().getPlayers().get(0).sendMessage(blockData.toString());
-
-						}
-					}
-				}
-			}
-
+			placeGrid(loc);
 		}
+
 	}
 
 	public void cleanup() {
@@ -697,6 +684,32 @@ public class MabListener implements Listener {
 		boolean rain = event.toWeatherState();
 		if (rain) {
 			event.setCancelled(true);
+		}
+	}
+
+	public void placeGrid(Location loc) {
+		for (int l = 0; l < buildGrid[0].length; l++) {
+			for (int c = 0; c < buildGrid[0][0].length; c++) {
+				for (int r = 0; r < buildGrid.length; r++) {
+					Location temploc = loc.clone();
+					loc.getWorld().getBlockAt(temploc.add(0 + r, 0 + l, 0 + c)).setType(buildGrid[r][l][c]);
+					if (directionGrid[r][l][c] > 0) {
+						BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
+						if (blockData instanceof Directional) {
+							((Directional) blockData).setFacing(getBlockface(directionGrid[r][l][c]));
+							loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
+						}
+					}
+					if (upDownGrid[r][l][c] > 0) {
+						BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
+						if (blockData instanceof Bisected) {
+							((Bisected) blockData).setHalf(Half.TOP);
+							loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
+						}
+
+					}
+				}
+			}
 		}
 	}
 
