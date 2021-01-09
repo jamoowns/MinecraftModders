@@ -15,6 +15,8 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
@@ -111,11 +113,22 @@ public class MabListener implements Listener {
 				}
 			}
 
+			insert(0, 0, 0, buildList[4], 1, 0);
+
 			for (int l = 0; l < buildGrid[0].length; l++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
 						Location temploc = loc.clone();
 						loc.getWorld().getBlockAt(temploc.add(0 + r, 0 + l, 0 + c)).setType(buildGrid[r][l][c]);
+						if (directionGrid[r][l][c] > 0) {
+							BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
+							loc.getWorld().getPlayers().get(0).sendMessage(blockData.toString());
+							if (blockData instanceof Directional) {
+								((Directional) blockData).setFacing(getBlockface(directionGrid[r][l][c]));
+								loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
+
+							}
+						}
 					}
 				}
 			}
@@ -140,6 +153,20 @@ public class MabListener implements Listener {
 		directionGrid = new int[buildGrid.length][buildGrid[0].length][buildGrid[0][0].length];
 
 		upDownGrid = new int[buildGrid.length][buildGrid[0].length][buildGrid[0][0].length];
+	}
+
+	public BlockFace getBlockface(int val) {
+		if (val == 1) {
+			return BlockFace.WEST;
+		} else if (val == 2) {
+			return BlockFace.NORTH;
+		} else if (val == 3) {
+			return BlockFace.EAST;
+		} else if (val == 4) {
+			return BlockFace.SOUTH;
+		} else {
+			return BlockFace.EAST;
+		}
 	}
 
 	public void insert(int width, int height, int depth, Material material, int blockface, int updown) {
