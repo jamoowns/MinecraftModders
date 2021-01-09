@@ -127,16 +127,27 @@ public class MabListener implements Listener {
 
 						int newC = 0;
 						int newR = 0;
-						if (direction == BlockFace.SOUTH || direction == BlockFace.NORTH) {
+						int otherC = 0;
+						int otherR = 0;
+						if (direction == BlockFace.SOUTH) {
 							newC = r;
 							newR = c;
+							otherC = c;
+							otherR = r;
+						} else if (direction == BlockFace.NORTH) {
+							newC = r;
+							newR = c;
+							otherC = r;
+							otherR = c;
 						} else {
 							newC = c;
 							newR = r;
+							otherC = c;
+							otherR = r;
 						}
 						if ((newC == 2 && newR < 2) || (newR == 2 && newC < 2) || (newC == 5 && newR < 5)
 								|| (newR == 5 && newC < 5)) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+							insert(0 + otherR, 0 + heightTracker, 0 + otherC, buildList[1], 0, 0, 0);
 						}
 					}
 				}
