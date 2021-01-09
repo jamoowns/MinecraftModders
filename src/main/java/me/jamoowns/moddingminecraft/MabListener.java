@@ -98,16 +98,18 @@ public class MabListener implements Listener {
 			String output = "0 " + buildGrid.length;
 			loc.getWorld().getPlayers().get(0).sendMessage(output);
 
-			output = "1 " + buildGrid[1].length;
+			output = "1 " + buildGrid[0].length;
 			loc.getWorld().getPlayers().get(0).sendMessage(output);
 
-			output = "2 " + buildGrid[2][2].length;
+			output = "2 " + buildGrid[0][0].length;
 			loc.getWorld().getPlayers().get(0).sendMessage(output);
 
 			for (int l = 0; l < buildGrid[0][0].length; l++) {
 				for (int c = 0; c < buildGrid[0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
-						buildGrid[r][l][c] = buildList[1];
+						buildGrid[0 + r][0 + l][0 + c] = buildList[1];
+						output = r + "|" + l + "|" + c;
+						loc.getWorld().getPlayers().get(0).sendMessage(output);
 					}
 				}
 			}
