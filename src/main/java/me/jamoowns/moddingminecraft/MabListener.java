@@ -148,14 +148,20 @@ public class MabListener implements Listener {
 						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
 						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
 
-						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.STONE_BRICKS);
-						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.STONE_BRICK_STAIRS);
+						if (k == 4 || k == 5) {
+							world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.STONE_BRICKS);
+							world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.STONE_BRICK_STAIRS);
 
-						BlockData blockData = world.getBlockAt(locFive).getBlockData();
-						if (blockData instanceof Directional) {
-							((Directional) blockData).setFacing(BlockFace.WEST);
-							world.getBlockAt(locFive).setBlockData(blockData);
+							BlockData blockData = world.getBlockAt(locFive).getBlockData();
+							if (blockData instanceof Directional) {
+								((Directional) blockData).setFacing(BlockFace.WEST);
+								world.getBlockAt(locFive).setBlockData(blockData);
+							}
+						} else {
+							world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+							world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
 						}
+
 						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
 						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
 
@@ -163,13 +169,19 @@ public class MabListener implements Listener {
 						world.getBlockAt(locSix.add(13, i, 0 + k)).setType(Material.OAK_SLAB);
 						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
 						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
-						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.STONE_BRICKS);
-						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.STONE_BRICK_STAIRS);
 
-						blockData = world.getBlockAt(locSix).getBlockData();
-						if (blockData instanceof Directional) {
-							((Directional) blockData).setFacing(BlockFace.EAST);
-							world.getBlockAt(locSix).setBlockData(blockData);
+						if (k == 4 || k == 5) {
+							world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.STONE_BRICKS);
+							world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.STONE_BRICK_STAIRS);
+
+							BlockData blockData = world.getBlockAt(locSix).getBlockData();
+							if (blockData instanceof Directional) {
+								((Directional) blockData).setFacing(BlockFace.EAST);
+								world.getBlockAt(locSix).setBlockData(blockData);
+							}
+						} else {
+							world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
+							world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
 						}
 
 						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
