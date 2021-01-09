@@ -105,7 +105,7 @@ public class MabListener implements Listener {
 
 			int heightTracker = 0;
 
-			for (heightTracker; heightTracker < 19; heightTracker++) {
+			for (; heightTracker < 19; heightTracker++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
 						if (c == 1 || c == 4 || c == 12 || c == 15) {
