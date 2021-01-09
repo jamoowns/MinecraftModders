@@ -1114,15 +1114,15 @@ public class MabListener implements Listener {
 		if (rotate == 90) {
 			int[][][] newShape = new int[shape[0][0].length][shape[0].length][shape.length];
 			for (int l = 0; l < shape[0].length; l++) {
-				for (int r = 0; r < shape.length; r++) {
-					for (int c = 0; c < shape[0][0].length; c++) {
-						int newR = newShape[0][0].length - r - 1;
-						int newC = newShape.length - c - 1;
-						newShape[newC][l][newR] = shape[r][l][c];
-					}
+
+			}
+			for (int r = 0; r < shape.length; r++) {
+				for (int c = 0; c < shape[0][0].length; c++) {
+					int newR = newShape[0][0].length - r - 1;
+					int newC = newShape.length - c - 1;
+					newShape[newC][0][newR] = shape[r][0][c];
 				}
 			}
-
 			return newShape;
 		} else if (rotate == 180) {
 
