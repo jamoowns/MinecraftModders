@@ -153,7 +153,7 @@ public class MabListener implements Listener {
 
 						BlockData blockData = world.getBlockAt(locFive).getBlockData();
 						if (blockData instanceof Directional) {
-							((Directional) blockData).setFacing(BlockFace.EAST);
+							((Directional) blockData).setFacing(BlockFace.WEST);
 							world.getBlockAt(locFive).setBlockData(blockData);
 						}
 						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
@@ -166,7 +166,7 @@ public class MabListener implements Listener {
 						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.STONE_BRICKS);
 						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.STONE_BRICK_STAIRS);
 
-						blockData = world.getBlockAt(locFive).getBlockData();
+						blockData = world.getBlockAt(locSix).getBlockData();
 						if (blockData instanceof Directional) {
 							((Directional) blockData).setFacing(BlockFace.EAST);
 							world.getBlockAt(locSix).setBlockData(blockData);
