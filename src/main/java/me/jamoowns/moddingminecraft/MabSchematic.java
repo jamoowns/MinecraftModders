@@ -22,13 +22,13 @@ public class MabSchematic implements Listener {
 
 			Material[][][] buildGrid = new Material[10][15][20];
 
-			/*
-			 * for (int x = 0; x < buildGrid[0].length; x++) { for (int y = 0; y <
-			 * buildGrid[1].length; y++) { for (int z = 0; z < buildGrid[2].length; z++) {
-			 * if (x < 1 && x > buildGrid[0].length) { if (y < 1 && y > buildGrid[1].length)
-			 * { if (z < 1 && z > buildGrid[2].length) { buildGrid[x][y][z] = buildList[1];
-			 * } } } } } }
-			 */
+			/
+			  for (int x = 0; x < buildGrid[0].length; x++) { for (int y = 0; y <
+			  buildGrid[1].length; y++) { for (int z = 0; z < buildGrid[2].length; z++) {
+			  if (x < 1 && x > buildGrid[0].length) { if (y < 1 && y > buildGrid[1].length)
+			  { if (z < 1 && z > buildGrid[2].length) { buildGrid[x][y][z] = buildList[1];
+			  } } } } } }
+			 /
 
 			for (int r = 0; r < buildGrid[0].length; r++) {
 				for (int c = 0; c < buildGrid[1].length; c++) {
@@ -48,81 +48,98 @@ public class MabSchematic implements Listener {
 			event.getPlayer().sendMessage("Building");
 			BuildGrid(1, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 
-			/*
-			 * World world = event.getBlockPlaced().getLocation().getWorld(); switch
-			 * (linearFace(event.getPlayer().getLocation().getYaw())) { case NORTH:
-			 * 
-			 * break; case EAST: for (int k = 0; k < 10; k++) { for (int i = 0; i < 21; i++)
-			 * {
-			 * 
-			 * Location loc = event.getBlockPlaced().getLocation(); Location locThree =
-			 * event.getBlockPlaced().getLocation(); if (i == 20 && k % 2 == 0) {
-			 * world.getBlockAt(loc.add(0, i, 0 + k)).setType(Material.STONE_BRICK_STAIRS);
-			 * world.getBlockAt(locThree.add(14, i, 0 +
-			 * k)).setType(Material.STONE_BRICK_STAIRS);
-			 * 
-			 * BlockData blockData = world.getBlockAt(loc).getBlockData(); if (blockData
-			 * instanceof Directional) { ((Directional)
-			 * blockData).setFacing(BlockFace.EAST);
-			 * world.getBlockAt(loc).setBlockData(blockData); } blockData =
-			 * world.getBlockAt(locThree).getBlockData(); if (blockData instanceof
-			 * Directional) { ((Directional) blockData).setFacing(BlockFace.WEST);
-			 * world.getBlockAt(locThree).setBlockData(blockData); }
-			 * 
-			 * } else { loc.getWorld().getBlockAt(loc.add(0, i, 0 +
-			 * k)).setType(Material.STONE_BRICKS);
-			 * loc.getWorld().getBlockAt(locThree.add(14, i, 0 +
-			 * k)).setType(Material.STONE_BRICKS);
-			 * 
-			 * Location locTwo = event.getBlockPlaced().getLocation();
-			 * world.getBlockAt(locTwo.add(11, i, 0 + k)).setType(Material.STONE_BRICKS);
-			 * Location locFour = event.getBlockPlaced().getLocation();
-			 * world.getBlockAt(locFour.add(3, i, 0 + k)).setType(Material.STONE_BRICKS); }
-			 * 
-			 * } for (int i = 20; i < 21; i++) { Location locFive =
-			 * event.getBlockPlaced().getLocation(); world.getBlockAt(locFive.add(1, i, 0 +
-			 * k)).setType(Material.OAK_SLAB); world.getBlockAt(locFive.add(1, 0,
-			 * 0)).setType(Material.OAK_SLAB); world.getBlockAt(locFive.add(1, 0,
-			 * 0)).setType(Material.OAK_SLAB);
-			 * 
-			 * if (k == 4 || k == 5) { world.getBlockAt(locFive.add(1, 0,
-			 * 0)).setType(Material.OAK_SLAB); world.getBlockAt(locFive.add(1, 0,
-			 * 0)).setType(Material.OAK_SLAB); } else { world.getBlockAt(locFive.add(1, 0,
-			 * 0)).setType(Material.STONE_BRICKS); world.getBlockAt(locFive.add(1, 0,
-			 * 0)).setType(Material.STONE_BRICK_STAIRS);
-			 * 
-			 * BlockData blockData = world.getBlockAt(locFive).getBlockData(); if (blockData
-			 * instanceof Directional) { ((Directional)
-			 * blockData).setFacing(BlockFace.WEST);
-			 * world.getBlockAt(locFive).setBlockData(blockData); }
-			 * 
-			 * }
-			 * 
-			 * world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
-			 * world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
-			 * 
-			 * Location locSix = event.getBlockPlaced().getLocation();
-			 * world.getBlockAt(locSix.add(13, i, 0 + k)).setType(Material.OAK_SLAB);
-			 * world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
-			 * world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
-			 * 
-			 * if (k == 4 || k == 5) { world.getBlockAt(locSix.add(-1, 0,
-			 * 0)).setType(Material.OAK_SLAB); world.getBlockAt(locSix.add(-1, 0,
-			 * 0)).setType(Material.OAK_SLAB); } else { world.getBlockAt(locSix.add(-1, 0,
-			 * 0)).setType(Material.STONE_BRICKS); world.getBlockAt(locSix.add(-1, 0,
-			 * 0)).setType(Material.STONE_BRICK_STAIRS);
-			 * 
-			 * BlockData blockData = world.getBlockAt(locSix).getBlockData(); if (blockData
-			 * instanceof Directional) { ((Directional)
-			 * blockData).setFacing(BlockFace.EAST);
-			 * world.getBlockAt(locSix).setBlockData(blockData); }
-			 * 
-			 * }
-			 * 
-			 * world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB); } }
-			 * 
-			 * break; case WEST: break; case SOUTH: default: }
-			 */
+			World world = event.getBlockPlaced().getLocation().getWorld();
+			switch (linearFace(event.getPlayer().getLocation().getYaw())) {
+			case NORTH:
+
+				break;
+			case EAST:
+				for (int k = 0; k < 10; k++) {
+					for (int i = 0; i < 21; i++) {
+
+						Location loc = event.getBlockPlaced().getLocation();
+						Location locThree = event.getBlockPlaced().getLocation();
+						if (i == 20 && k % 2 == 0) {
+							world.getBlockAt(loc.add(0, i, 0 + k)).setType(Material.STONE_BRICK_STAIRS);
+							world.getBlockAt(locThree.add(14, i, 0 + k)).setType(Material.STONE_BRICK_STAIRS);
+
+							BlockData blockData = world.getBlockAt(loc).getBlockData();
+							if (blockData instanceof Directional) {
+								((Directional) blockData).setFacing(BlockFace.EAST);
+								world.getBlockAt(loc).setBlockData(blockData);
+							}
+							blockData = world.getBlockAt(locThree).getBlockData();
+							if (blockData instanceof Directional) {
+								((Directional) blockData).setFacing(BlockFace.WEST);
+								world.getBlockAt(locThree).setBlockData(blockData);
+							}
+
+						} else {
+							loc.getWorld().getBlockAt(loc.add(0, i, 0 + k)).setType(Material.STONE_BRICKS);
+							loc.getWorld().getBlockAt(locThree.add(14, i, 0 + k)).setType(Material.STONE_BRICKS);
+
+							Location locTwo = event.getBlockPlaced().getLocation();
+							world.getBlockAt(locTwo.add(11, i, 0 + k)).setType(Material.STONE_BRICKS);
+							Location locFour = event.getBlockPlaced().getLocation();
+							world.getBlockAt(locFour.add(3, i, 0 + k)).setType(Material.STONE_BRICKS);
+						}
+
+					}
+					for (int i = 20; i < 21; i++) {
+						Location locFive = event.getBlockPlaced().getLocation();
+						world.getBlockAt(locFive.add(1, i, 0 + k)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+
+						if (k == 4 || k == 5) {
+							world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+							world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+						} else {
+							world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.STONE_BRICKS);
+							world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.STONE_BRICK_STAIRS);
+
+							BlockData blockData = world.getBlockAt(locFive).getBlockData();
+							if (blockData instanceof Directional) {
+								((Directional) blockData).setFacing(BlockFace.WEST);
+								world.getBlockAt(locFive).setBlockData(blockData);
+							}
+
+						}
+
+						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+
+						Location locSix = event.getBlockPlaced().getLocation();
+						world.getBlockAt(locSix.add(13, i, 0 + k)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
+
+						if (k == 4 || k == 5) {
+							world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
+							world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
+						} else {
+							world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.STONE_BRICKS);
+							world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.STONE_BRICK_STAIRS);
+
+							BlockData blockData = world.getBlockAt(locSix).getBlockData();
+							if (blockData instanceof Directional) {
+								((Directional) blockData).setFacing(BlockFace.EAST);
+								world.getBlockAt(locSix).setBlockData(blockData);
+							}
+
+						}
+
+						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
+					}
+				}
+
+				break;
+			case WEST:
+				break;
+			case SOUTH:
+			default:
+			}
+
 		}
 	}
 
