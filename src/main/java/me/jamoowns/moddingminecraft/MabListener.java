@@ -105,7 +105,7 @@ public class MabListener implements Listener {
 			 */
 			for (int r = 0; r < buildGrid[0].length; r++) {
 				Location temploc = loc;
-				loc.getWorld().getBlockAt(temploc.add(1, 0, 0)).setType(Material.STONE_BRICKS);
+				loc.getWorld().getBlockAt(temploc.add(0 + r, 0, 0)).setType(Material.STONE_BRICKS);
 			}
 			for (int c = 0; c < buildGrid[1].length; c++) {
 				Location temploc = loc;
