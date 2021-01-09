@@ -122,12 +122,16 @@ public class MabListener implements Listener {
 						loc.getWorld().getBlockAt(temploc.add(0 + r, 0 + l, 0 + c)).setType(buildGrid[r][l][c]);
 						if (directionGrid[r][l][c] > 0) {
 							BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
-							loc.getWorld().getPlayers().get(0).sendMessage(blockData.toString());
 							if (blockData instanceof Directional) {
 								((Directional) blockData).setFacing(getBlockface(directionGrid[r][l][c]));
 								loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
-
 							}
+						}
+						if (upDownGrid[r][l][c] > 0) {
+							BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
+							loc.getWorld().getPlayers().get(0).sendMessage(blockData.toString());
+							blockData.getAsString().replace("bottom", "top");
+
 						}
 					}
 				}
