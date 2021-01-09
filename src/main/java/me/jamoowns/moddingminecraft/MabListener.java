@@ -694,6 +694,9 @@ public class MabListener implements Listener {
 	}
 
 	public void placeGrid(Location loc) {
+
+		loc.getWorld().getPlayers().get(0).sendMessage(
+				"c " + buildGrid[0][0].length + "|| l " + buildGrid[0].length + "|| r " + buildGrid.length);
 		for (int l = 0; l < buildGrid[0].length; l++) {
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
 				for (int r = 0; r < buildGrid.length; r++) {
