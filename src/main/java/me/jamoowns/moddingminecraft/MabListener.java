@@ -1022,7 +1022,6 @@ public class MabListener implements Listener {
 					multi = RotateShapeSquareGrid(multi, 270);
 				}
 
-				sendMabmoMsg(direction.toString());
 				for (int j = 0; j < multi.length; j++) {
 					for (int k = 0; k < multi[0].length; k++) {
 						Location newloc = loc.clone();
@@ -1084,12 +1083,12 @@ public class MabListener implements Listener {
 
 	public Material[][] RotateShapeSquareGrid(Material[][] shape, int rotate) {
 		if (rotate == 90) {
-			Material[][] newShape = new Material[shape[1].length][shape[0].length];
+			Material[][] newShape = new Material[shape[0].length][shape.length];
 
-			for (int r = 0; r < shape[0].length; r++) {
-				for (int c = 0; c < shape[1].length; c++) {
-					int newR = newShape[1].length - r - 1;
-					int newC = newShape[0].length - c - 1;
+			for (int r = 0; r < shape.length; r++) {
+				for (int c = 0; c < shape[0].length; c++) {
+					int newR = newShape[0].length - r - 1;
+					int newC = newShape.length - c - 1;
 					newShape[newC][newR] = shape[r][c];
 				}
 			}
@@ -1098,10 +1097,10 @@ public class MabListener implements Listener {
 		} else if (rotate == 180) {
 			Material[][] newShape = new Material[shape[0].length][shape[1].length];
 
-			for (int r = 0; r < shape[0].length; r++) {
-				for (int c = 0; c < shape[1].length; c++) {
-					int newR = newShape[0].length - r - 1;
-					int newC = newShape[1].length - c - 1;
+			for (int r = 0; r < shape.length; r++) {
+				for (int c = 0; c < shape[0].length; c++) {
+					int newR = newShape.length - r - 1;
+					int newC = newShape[0].length - c - 1;
 					newShape[newR][newC] = shape[r][c];
 				}
 			}
