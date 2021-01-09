@@ -103,8 +103,7 @@ public class MabListener implements Listener {
 
 	public void BuildGrid(int grid, BlockFace direction, Location loc) {
 		if (grid == 1) {
-			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
-					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
+			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.DIRT };
 			createGrids(10, 30, 17);
 
 			for (int l = 0; l < buildGrid[0].length; l++) {
@@ -114,12 +113,13 @@ public class MabListener implements Listener {
 					}
 				}
 			}
-			int heightTracker = 0;
 
-			for (; heightTracker < 19; heightTracker++) {
+			for (int heightTracker = 0; heightTracker < buildGrid[0].length; heightTracker++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
-						if (c == 1 || c == 4 || c == 12 || c == 15) {
+						if (c % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
+						} else {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 						}
 					}
