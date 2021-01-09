@@ -94,13 +94,12 @@ public class MabListener implements Listener {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS };
 
-			Material[][][] buildGrid = new Material[10][15][20];
+			Material[][][] buildGrid = new Material[10][20][15];
 
 			for (int l = 0; l < buildGrid[0].length; l++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
-						if (l == 0 || l == buildGrid[0].length - 1 || c == 0 || c == buildGrid[0][0].length - 1
-								|| r == 0 || r == buildGrid.length - 1) {
+						if (r == 0 || r == 3 || r == 11 || r == 14) {
 							buildGrid[0 + r][0 + l][0 + c] = buildList[1];
 						} else {
 							buildGrid[0 + r][0 + l][0 + c] = buildList[0];
