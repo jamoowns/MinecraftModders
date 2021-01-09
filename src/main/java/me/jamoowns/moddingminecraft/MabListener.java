@@ -1120,18 +1120,6 @@ public class MabListener implements Listener {
 
 	public int[][][] RotateShapeSquareGridInt(int[][][] shape, int rotate) {
 		if (rotate == 90) {
-
-			shape = new int[][][] { { { 1, 2, 3, 4, 5 }, { 6, 7, 8, 9, 10 } },
-					{ { 11, 12, 13, 14, 15 }, { 16, 17, 18, 19, 20 } } };
-			for (int r = 0; r < shape.length; r++) {
-				String row = "";
-				for (int c = 0; c < shape[0][0].length; c++) {
-					row = row + shape[r][0][c] + " , ";
-				}
-				sendMabmoMsg(row);
-			}
-
-			sendMabmoMsg("----------------");
 			int[][][] newShape = new int[shape[0][0].length][shape[0].length][shape.length];
 			for (int l = 0; l < shape[0].length; l++) {
 
@@ -1142,7 +1130,7 @@ public class MabListener implements Listener {
 
 					int newR = newShape[0][0].length - r - 1;
 					int newC = newShape.length - c - 1;
-					row += newShape[r][0][c];
+					row = row + newShape[r][0][c] + " , ";
 					newShape[newC][0][newR] = shape[r][0][c];
 				}
 				sendMabmoMsg(row);
