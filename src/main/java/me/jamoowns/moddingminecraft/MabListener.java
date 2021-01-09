@@ -96,18 +96,23 @@ public class MabListener implements Listener {
 
 			Material[][][] buildGrid = new Material[10][15][20];
 
-			/*
-			 * for (int x = 0; x < buildGrid[0].length; x++) { for (int y = 0; y <
-			 * buildGrid[1].length; y++) { for (int z = 0; z < buildGrid[2].length; z++) {
-			 * if (x < 1 && x > buildGrid[0].length) { if (y < 1 && y > buildGrid[1].length)
-			 * { if (z < 1 && z > buildGrid[2].length) { buildGrid[x][y][z] = buildList[1];
-			 * } } } } } }
-			 */
+			for (int l = 0; l < buildGrid[2].length; l++) {
+				for (int c = 0; c < buildGrid[1].length; c++) {
+					for (int r = 0; r < buildGrid[0].length; r++) {
+						if (r < 1 && r > buildGrid[0].length&&c < 1 && c > buildGrid[1].length &&l < 1 && l > buildGrid[2].length) { if ()
+							buildGrid[r][l][c] = buildList[1];
+						}else {
+							buildGrid[r][l][c] = buildList[0];
+						}
+					}
+				}
+			}
+			 
 			for (int l = 0; l < buildGrid[2].length; l++) {
 				for (int c = 0; c < buildGrid[1].length; c++) {
 					for (int r = 0; r < buildGrid[0].length; r++) {
 						Location temploc = loc.clone();
-						loc.getWorld().getBlockAt(temploc.add(0 + r, 0 + l, 0 + c)).setType(Material.STONE_BRICKS);
+						loc.getWorld().getBlockAt(temploc.add(0 + r, 0 + l, 0 + c)).setType(buildGrid[r][l][c]);
 					}
 				}
 			}
