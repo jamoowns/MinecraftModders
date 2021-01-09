@@ -317,6 +317,7 @@ public class MabListener implements Listener {
 		directionGrid = new int[buildGrid.length][buildGrid[0].length][buildGrid[0][0].length];
 
 		upDownGrid = new int[buildGrid.length][buildGrid[0].length][buildGrid[0][0].length];
+		cornerGrid = new int[buildGrid.length][buildGrid[0].length][buildGrid[0][0].length];
 	}
 
 	public BlockFace getBlockface(int val) {
