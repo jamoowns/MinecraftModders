@@ -1190,17 +1190,12 @@ public class MabListener implements Listener {
 	private Material[][][] RotateShapeSquareGridMaterial(Material[][][] shape, int rotate) {
 		if (rotate == 90) {
 			Material[][][] newShape = new Material[shape[0][0].length][shape[0].length][shape.length];
-			for (int l = 0; l < shape[0].length; l++) {
-				sendMabmoMsg("l=" + l);
-				for (int r = 0; r < shape.length; r++) {
-
-					sendMabmoMsg("r=" + r);
-					for (int c = 0; c < shape[0][0].length; c++) {
-						sendMabmoMsg("c=" + c);
-						int newR = newShape[0][0].length - r - 1;
-						int newC = newShape.length - c - 1;
-						newShape[newC][l][newR] = shape[r][l][c];
-					}
+			for (int r = 0; r < shape.length; r++) {
+				for (int c = 0; c < shape[0][0].length; c++) {
+					sendMabmoMsg("c=" + c);
+					int newR = newShape[0][0].length - r - 1;
+					int newC = newShape.length - c - 1;
+					newShape[newC][0][newR] = shape[r][0][c];
 				}
 			}
 
