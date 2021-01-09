@@ -999,8 +999,6 @@ public class MabListener implements Listener {
 			}
 		}
 
-		sendMabmoMsg("Test");
-		sendMabmoMsg(direction.toString());
 		if (direction != BlockFace.EAST) {
 			for (int i = 0; i < buildGrid[0].length; i++) {
 				Material[][] multi = new Material[buildGrid.length][buildGrid[0][0].length];
@@ -1023,6 +1021,8 @@ public class MabListener implements Listener {
 				} else if (direction == BlockFace.NORTH) {
 					multi = RotateShapeSquareGrid(multi, 270);
 				}
+
+				sendMabmoMsg(direction.toString());
 				for (int j = 0; j < multi.length; j++) {
 					for (int k = 0; k < multi[0].length; k++) {
 						Location newloc = loc.clone();
