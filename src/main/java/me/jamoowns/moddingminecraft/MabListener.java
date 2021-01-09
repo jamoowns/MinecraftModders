@@ -19,6 +19,8 @@ import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.type.Slab;
+import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
@@ -201,13 +203,13 @@ public class MabListener implements Listener {
 						if (r % 2 == 0) {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
 						}
 					} else if (c == 16) {
 						if (r % 2 == 0) {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
 						}
 					} else if ((c == 5 || c == 11)) {
 						if (r == 1 || r == 8) {
@@ -793,6 +795,9 @@ public class MabListener implements Listener {
 						BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
 						if (blockData instanceof Bisected) {
 							((Bisected) blockData).setHalf(Half.TOP);
+							loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
+						} else if (blockData instanceof Slab) {
+							((Slab) blockData).setType(Type.TOP);
 							loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
 						}
 
