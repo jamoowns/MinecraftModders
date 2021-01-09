@@ -393,7 +393,11 @@ public class MabListener implements Listener {
 					}
 				}
 			}
-			placeGrid(loc);
+
+			if (direction == BlockFace.EAST) {
+				placeGrid(loc);
+			}
+
 		}
 
 	}
@@ -444,9 +448,7 @@ public class MabListener implements Listener {
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if (event.getBlock().getType().equals(Material.STONE_BRICK_STAIRS)) {
-			event.getPlayer().sendMessage(event.getBlock().getBlockData().getAsString());
-		}
+
 		if (event.getBlock().getType().equals(Material.WARPED_HYPHAE)) {
 			event.getPlayer().sendMessage("Building");
 			BuildGrid(1, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
@@ -1033,7 +1035,38 @@ public class MabListener implements Listener {
 		}
 	}
 
-	public Material[][] RotateShapeSquareGrid(Material[][] shape, int rotate) {
+	public int[][] RotateShapeSquareGridInt(int[][] shape, int rotate) {
+		if (rotate == 90) {
+			int[][] newShape = new int[shape[1].length][shape[0].length];
+
+			for (int r = 0; r < shape[0].length; r++) {
+				for (int c = 0; c < shape[1].length; c++) {
+					int newR = newShape[1].length - r - 1;
+					int newC = newShape[0].length - c - 1;
+					newShape[newC][newR] = shape[r][c];
+				}
+			}
+
+			return newShape;
+		} else if (rotate == 180) {
+			int[][] newShape = new int[shape[0].length][shape[1].length];
+
+			for (int r = 0; r < shape[0].length; r++) {
+				for (int c = 0; c < shape[1].length; c++) {
+					int newR = newShape[0].length - r - 1;
+					int newC = newShape[1].length - c - 1;
+					newShape[newR][newC] = shape[r][c];
+				}
+			}
+			return newShape;
+		} else if (rotate == 270) {
+			return RotateShapeSquareGridInt(RotateShapeSquareGridInt(shape, 90), 180);
+		}
+
+		return shape;
+	}
+
+	public Material[][] RotateShapeSquareGridMaterial(Material[][] shape, int rotate) {
 		if (rotate == 90) {
 			Material[][] newShape = new Material[shape[1].length][shape[0].length];
 
@@ -1058,7 +1091,7 @@ public class MabListener implements Listener {
 			}
 			return newShape;
 		} else if (rotate == 270) {
-			return RotateShapeSquareGrid(RotateShapeSquareGrid(shape, 90), 180);
+			return RotateShapeSquareGridMaterial(RotateShapeSquareGridMaterial(shape, 90), 180);
 		}
 
 		return shape;
@@ -1181,7 +1214,7 @@ public class MabListener implements Listener {
 					}
 				}
 
-				multi = RotateShapeSquareGrid(multi, 90 * result);
+				multi = RotateShapeSquareGridMaterial(multi, 90 * result);
 
 				for (int j = 0; j < 21; j++) {
 					for (int k = 0; k < 21; k++) {
