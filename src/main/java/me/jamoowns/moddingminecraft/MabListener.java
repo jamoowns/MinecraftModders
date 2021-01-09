@@ -99,8 +99,8 @@ public class MabListener implements Listener {
 			for (int l = 0; l < buildGrid[0].length; l++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
-						if (l == 0 || l == buildGrid[0].length - 1 && c == 0
-								|| c == buildGrid[0][0].length - 1 && r == 0 || r == buildGrid.length - 1) {
+						if (l == 0 || l == buildGrid[0].length - 1 || c == 0 || c == buildGrid[0][0].length - 1
+								|| r == 0 || r == buildGrid.length - 1) {
 							buildGrid[0 + r][0 + l][0 + c] = buildList[1];
 						} else {
 							buildGrid[0 + r][0 + l][0 + c] = buildList[0];
