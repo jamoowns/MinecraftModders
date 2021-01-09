@@ -115,7 +115,7 @@ public class MabListener implements Listener {
 				}
 			}
 
-			insert(0, 0, 0, buildList[3], 1, 1);
+			insert(0, 0, 0, buildList[3], 3, 1);
 
 			for (int l = 0; l < buildGrid[0].length; l++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
