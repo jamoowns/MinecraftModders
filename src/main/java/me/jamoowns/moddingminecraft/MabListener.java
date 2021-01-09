@@ -109,10 +109,12 @@ public class MabListener implements Listener {
 		if (grid == 1) {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
+
 			if (direction == BlockFace.SOUTH || direction == BlockFace.NORTH) {
-				createGrids(10, 30, 17);
-			} else {
 				createGrids(17, 30, 10);
+			} else {
+				createGrids(10, 30, 17);
+
 			}
 
 			for (int l = 0; l < buildGrid[0].length; l++) {
