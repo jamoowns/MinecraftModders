@@ -95,13 +95,13 @@ public class MabListener implements Listener {
 					Material.STONE_BRICK_STAIRS };
 
 			Material[][][] buildGrid = new Material[10][15][20];
-			String output = "0 " + buildGrid[0].length;
+			String output = "0 " + buildGrid.length;
 			loc.getWorld().getPlayers().get(0).sendMessage(output);
 
-			output = "1 " + buildGrid[1].length;
+			output = "1 " + buildGrid[1][1].length;
 			loc.getWorld().getPlayers().get(0).sendMessage(output);
 
-			output = "2 " + buildGrid[2].length;
+			output = "2 " + buildGrid[2][2].length;
 			loc.getWorld().getPlayers().get(0).sendMessage(output);
 
 			for (int r = 0; r < 10; r++) {
