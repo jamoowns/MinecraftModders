@@ -302,6 +302,28 @@ public class MabListener implements Listener {
 
 				}
 			}
+			heightTracker++;
+			for (int c = 0; c < buildGrid[0][0].length; c++) {
+				for (int r = 0; r < buildGrid.length; r++) {
+					if (c == 0) {
+						if (r % 2 == 1) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+						}
+					} else if (c == 16) {
+						if (r % 2 == 1) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+						}
+					} else if ((c == 5 || c == 11)) {
+						if (r < 2 || r > 7) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+						} else if (r == 2) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
+						} else if (r == 7) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
+						}
+					}
+				}
+			}
 
 			placeGrid(loc);
 		}
