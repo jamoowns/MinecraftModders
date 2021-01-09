@@ -148,9 +148,30 @@ public class MabListener implements Listener {
 						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
 						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
 
+						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.STONE_BRICKS);
+						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.STONE_BRICK_STAIRS);
+
+						BlockData blockData = world.getBlockAt(locFive).getBlockData();
+						if (blockData instanceof Directional) {
+							((Directional) blockData).setFacing(BlockFace.EAST);
+							world.getBlockAt(locFive).setBlockData(blockData);
+						}
+						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locFive.add(1, 0, 0)).setType(Material.OAK_SLAB);
+
 						Location locSix = event.getBlockPlaced().getLocation();
 						world.getBlockAt(locSix.add(13, i, 0 + k)).setType(Material.OAK_SLAB);
 						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
+						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.STONE_BRICKS);
+						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.STONE_BRICK_STAIRS);
+
+						blockData = world.getBlockAt(locFive).getBlockData();
+						if (blockData instanceof Directional) {
+							((Directional) blockData).setFacing(BlockFace.EAST);
+							world.getBlockAt(locSix).setBlockData(blockData);
+						}
+
 						world.getBlockAt(locSix.add(-1, 0, 0)).setType(Material.OAK_SLAB);
 					}
 				}
