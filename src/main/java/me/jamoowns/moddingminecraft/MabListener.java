@@ -1214,7 +1214,7 @@ public class MabListener implements Listener {
 					for (int c = 0; c < shape[0][0].length; c++) {
 						int newR = newShape[0][0].length - r - 1;
 						int newC = newShape.length - c - 1;
-						newShape[newC][newR] = shape[r][c];
+						newShape[newC][l][newR] = shape[r][l][c];
 					}
 				}
 			}
