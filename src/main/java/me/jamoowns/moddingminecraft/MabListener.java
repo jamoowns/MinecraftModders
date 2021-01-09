@@ -201,13 +201,13 @@ public class MabListener implements Listener {
 						}
 					} else if (c == 0) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1);
 						} else {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
 						}
 					} else if (c == 16) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1);
 						} else {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
 						}
