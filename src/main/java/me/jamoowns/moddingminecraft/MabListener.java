@@ -48,7 +48,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -103,6 +102,14 @@ public class MabListener implements Listener {
 					Material.STONE_BRICK_STAIRS, Material.DIRT };
 			createGrids(10, 30, 17);
 
+			for (int l = 0; l < buildGrid[0].length; l++) {
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
+					for (int r = 0; r < buildGrid.length; r++) {
+						insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0);
+					}
+				}
+			}
+
 			int heightTracker = 0;
 
 			for (; heightTracker < 19; heightTracker++) {
@@ -110,8 +117,6 @@ public class MabListener implements Listener {
 					for (int r = 0; r < buildGrid.length; r++) {
 						if (c == 1 || c == 4 || c == 12 || c == 15) {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
-						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[0], 0, 0);
 						}
 					}
 				}
@@ -125,8 +130,6 @@ public class MabListener implements Listener {
 
 						loc.getWorld().getPlayers().get(0).sendMessage("" + c);
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0);
-					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
 					}
 				}
 			}
@@ -670,11 +673,6 @@ public class MabListener implements Listener {
 			}
 		});
 		trailByPlayer.remove(event.getPlayer().getUniqueId());
-	}
-
-	@EventHandler
-	public void onProjectileThrownEvent(ProjectileLaunchEvent event) {
-
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
