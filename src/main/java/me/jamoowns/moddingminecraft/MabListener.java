@@ -109,12 +109,26 @@ public class MabListener implements Listener {
 		if (grid == 1) {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
-			createGrids(10, 30, 17);
+			if (direction == BlockFace.SOUTH || direction == BlockFace.NORTH) {
+				createGrids(10, 30, 17);
+			} else {
+				createGrids(17, 30, 10);
+			}
 
-			for (int l = 0; l < buildGrid[0].length; l++) {
-				for (int c = 0; c < buildGrid[0][0].length; c++) {
-					for (int r = 0; r < buildGrid.length; r++) {
-						insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0, 0);
+			if (direction == BlockFace.SOUTH || direction == BlockFace.NORTH) {
+				for (int l = 0; l < buildGrid[0].length; l++) {
+					for (int c = 0; c < buildGrid[0][0].length; c++) {
+						for (int r = 0; r < buildGrid.length; r++) {
+							insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0, 0);
+						}
+					}
+				}
+			} else {
+				for (int l = 0; l < buildGrid[0].length; l++) {
+					for (int c = 0; c < buildGrid[0][0].length; c++) {
+						for (int r = 0; r < buildGrid.length; r++) {
+							insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0, 0);
+						}
 					}
 				}
 			}
@@ -124,9 +138,16 @@ public class MabListener implements Listener {
 			for (; heightTracker < 19; heightTracker++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
-						if (c == 1 || c == 4 || c == 12 || c == 15) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+						if (direction == BlockFace.SOUTH || direction == BlockFace.NORTH) {
+							if (r == 1 || r == 4 || r == 12 || r == 15) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+							}
+						} else {
+							if (c == 1 || c == 4 || c == 12 || c == 15) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+							}
 						}
+
 					}
 				}
 			}
