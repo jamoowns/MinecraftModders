@@ -1020,7 +1020,7 @@ public class MabListener implements Listener {
 				} else if (direction == BlockFace.NORTH) {
 					multi = RotateShapeSquareGrid(multi, 270);
 				}
-
+				sendMabmoMsg("shits Fucked");
 				for (int j = 0; j < multi.length; j++) {
 					for (int k = 0; k < multi[0].length; k++) {
 						Location newloc = loc.clone();
