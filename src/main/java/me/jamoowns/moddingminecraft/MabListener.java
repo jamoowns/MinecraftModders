@@ -15,6 +15,8 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.enchantments.Enchantment;
@@ -113,7 +115,7 @@ public class MabListener implements Listener {
 				}
 			}
 
-			insert(0, 0, 0, buildList[3], 1, 0);
+			insert(0, 0, 0, buildList[3], 1, 1);
 
 			for (int l = 0; l < buildGrid[0].length; l++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
@@ -130,8 +132,10 @@ public class MabListener implements Listener {
 						if (upDownGrid[r][l][c] > 0) {
 							BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
 							loc.getWorld().getPlayers().get(0).sendMessage(blockData.toString());
-							blockData.getAsString().replace("bottom", "top");
-
+							if (blockData instanceof Bisected) {
+								((Bisected) blockData).setHalf(Half.TOP);
+								loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
+							}
 							loc.getWorld().getPlayers().get(0).sendMessage("-----------");
 							loc.getWorld().getPlayers().get(0).sendMessage(blockData.toString());
 
