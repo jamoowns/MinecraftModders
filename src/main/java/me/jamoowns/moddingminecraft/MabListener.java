@@ -291,39 +291,17 @@ public class MabListener implements Listener {
 						}
 					}
 					if (c == 4 && r == 3) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 4);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 4);
 					} else if (c == 4 && r == 6) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 4);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 3);
 					} else if (c == 6 && r == 3) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 2);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 1);
 					} else if (c == 6 && r == 6) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 2);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 2);
 					}
 
 				}
 			}
-			heightTracker++;
-			insert(3, 0 + heightTracker, 4, buildList[3], 1, 0, 1);
-			insert(5, 0 + heightTracker, 4, buildList[3], 1, 0, 2);
-			insert(7, 0 + heightTracker, 4, buildList[3], 1, 0, 3);
-			insert(9, 0 + heightTracker, 4, buildList[3], 1, 0, 4);
-
-			heightTracker++;
-			insert(3, 0 + heightTracker, 4, buildList[3], 2, 0, 1);
-			insert(5, 0 + heightTracker, 4, buildList[3], 2, 0, 2);
-			insert(7, 0 + heightTracker, 4, buildList[3], 2, 0, 3);
-			insert(9, 0 + heightTracker, 4, buildList[3], 2, 0, 4);
-
-			heightTracker++;
-			insert(3, 0 + heightTracker, 4, buildList[3], 3, 0, 1);
-			insert(5, 0 + heightTracker, 4, buildList[3], 3, 0, 2);
-			insert(7, 0 + heightTracker, 4, buildList[3], 3, 0, 3);
-			insert(9, 0 + heightTracker, 4, buildList[3], 3, 0, 4);
-			heightTracker++;
-			insert(3, 0 + heightTracker, 4, buildList[3], 4, 0, 1);
-			insert(5, 0 + heightTracker, 4, buildList[3], 4, 0, 2);
-			insert(7, 0 + heightTracker, 4, buildList[3], 4, 0, 3);
-			insert(9, 0 + heightTracker, 4, buildList[3], 4, 0, 4);
 
 			placeGrid(loc);
 		}
