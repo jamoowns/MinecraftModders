@@ -125,30 +125,14 @@ public class MabListener implements Listener {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
 
-						int newC = 0;
-						int newR = 0;
-						int otherC = 0;
-						int otherR = 0;
-						if (direction == BlockFace.SOUTH) {
-							newC = r;
-							newR = c;
-							otherC = c;
-							otherR = r;
-						} else if (direction == BlockFace.NORTH) {
-							newC = r;
-							newR = c;
-							otherC = r;
-							otherR = c;
-						} else {
-							newC = c;
-							newR = r;
-							otherC = c;
-							otherR = r;
+						if ((c == 2 && r < 2) || (r == 2 && c < 2) || (c == 5 && r < 5) || (r == 5 && c < 5)) {
+							if (direction == BlockFace.SOUTH || direction == BlockFace.NORTH) {
+								insert(0 + c, 0 + heightTracker, 0 + r, buildList[1], 0, 0, 0);
+							} else {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+							}
 						}
-						if ((newC == 2 && newR < 2) || (newR == 2 && newC < 2) || (newC == 5 && newR < 5)
-								|| (newR == 5 && newC < 5)) {
-							insert(0 + otherR, 0 + heightTracker, 0 + otherC, buildList[1], 0, 0, 0);
-						}
+
 					}
 				}
 			}
