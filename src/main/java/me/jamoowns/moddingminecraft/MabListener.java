@@ -221,6 +221,37 @@ public class MabListener implements Listener {
 				}
 			}
 
+			heightTracker++;
+			for (int c = 0; c < buildGrid[0][0].length; c++) {
+				for (int r = 0; r < buildGrid.length; r++) {
+					if (c == 15 || c == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+					} else if (c == 4 || c == 10 || c == 14) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
+					} else if (c == 2 || c == 6 || c == 12) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+					} else if (c == 0) {
+						if (r % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0);
+						}
+					} else if (c == 16) {
+						if (r % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+						}
+					} else if ((c == 5 || c == 11)) {
+						if (r == 1 || r == 8) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0);
+						} else if (r == 0 || r == 2 || r == 7 || r == 9) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+						}
+					}
+				}
+			}
+
 			placeGrid(loc);
 		}
 
@@ -269,9 +300,6 @@ public class MabListener implements Listener {
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if (event.getBlock().getType().equals(Material.STONE_BRICK_SLAB)) {
-			event.getPlayer().sendMessage(event.getBlock().getBlockData().getAsString());
-		}
 		if (event.getBlock().getType().equals(Material.WARPED_HYPHAE)) {
 			event.getPlayer().sendMessage("Building");
 			BuildGrid(1, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
