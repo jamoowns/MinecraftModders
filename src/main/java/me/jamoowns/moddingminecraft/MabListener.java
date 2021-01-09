@@ -999,6 +999,7 @@ public class MabListener implements Listener {
 			}
 		}
 
+		sendMabmoMsg("Test");
 		sendMabmoMsg(direction.toString());
 		if (direction != BlockFace.EAST) {
 			for (int i = 0; i < buildGrid[0].length; i++) {
