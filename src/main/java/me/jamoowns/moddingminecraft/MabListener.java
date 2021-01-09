@@ -104,8 +104,8 @@ public class MabListener implements Listener {
 			output = "2 " + buildGrid[0][0].length;
 			loc.getWorld().getPlayers().get(0).sendMessage(output);
 
-			for (int l = 0; l < buildGrid[0][0].length; l++) {
-				for (int c = 0; c < buildGrid[0].length; c++) {
+			for (int l = 0; l < buildGrid[0].length; l++) {
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
 						buildGrid[0 + r][0 + l][0 + c] = buildList[1];
 						output = r + "|" + l + "|" + c;
@@ -114,8 +114,8 @@ public class MabListener implements Listener {
 				}
 			}
 
-			for (int l = 0; l < buildGrid[0][0].length; l++) {
-				for (int c = 0; c < buildGrid[0].length; c++) {
+			for (int l = 0; l < buildGrid[0].length; l++) {
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
 						Location temploc = loc.clone();
 						loc.getWorld().getBlockAt(temploc.add(0 + r, 0 + l, 0 + c)).setType(buildGrid[r][l][c]);
