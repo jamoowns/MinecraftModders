@@ -46,7 +46,7 @@ public class MabSchematic implements Listener {
 	public void onBlockPlace(BlockPlaceEvent event) {
 		if (event.getBlock().getType().equals(Material.WARPED_HYPHAE)) {
 			BuildGrid(1, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
-
+			event.getPlayer().sendMessage("Building");
 			/*
 			 * World world = event.getBlockPlaced().getLocation().getWorld(); switch
 			 * (linearFace(event.getPlayer().getLocation().getYaw())) { case NORTH:
