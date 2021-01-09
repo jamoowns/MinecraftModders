@@ -103,13 +103,11 @@ public class MabListener implements Listener {
 			 * { if (z < 1 && z > buildGrid[2].length) { buildGrid[x][y][z] = buildList[1];
 			 * } } } } } }
 			 */
-			for (int r = 0; r < buildGrid[0].length; r++) {
-				Location temploc = loc.clone();
-				loc.getWorld().getBlockAt(temploc.add(0 + r, 0, 0)).setType(Material.STONE_BRICKS);
-			}
 			for (int c = 0; c < buildGrid[1].length; c++) {
-				Location temploc = loc.clone();
-				loc.getWorld().getBlockAt(temploc.add(0, 0, 1)).setType(Material.STONE_BRICKS);
+				for (int r = 0; r < buildGrid[0].length; r++) {
+					Location temploc = loc.clone();
+					loc.getWorld().getBlockAt(temploc.add(0 + r, 0, 0 + c)).setType(Material.STONE_BRICKS);
+				}
 			}
 			for (int l = 0; l < buildGrid[2].length; l++) {
 				Location temploc = loc.clone();
