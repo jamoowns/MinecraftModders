@@ -96,13 +96,9 @@ public class MabListener implements Listener {
 
 			Material[][][] buildGrid = new Material[10][15][20];
 
-			for (int l = 0; l < buildGrid[2].length; l++) {
-				for (int c = 0; c < buildGrid[1].length; c++) {
-					for (int r = 0; r < buildGrid[0].length; r++) {
-						buildGrid[r][l][c] = buildList[1];
-					}
-				}
-			}
+			buildGrid[0][0][0] = buildList[1];
+			buildGrid[1][0][0] = buildList[1];
+			buildGrid[2][0][0] = buildList[1];
 
 			for (int l = 0; l < buildGrid[2].length; l++) {
 				for (int c = 0; c < buildGrid[1].length; c++) {
