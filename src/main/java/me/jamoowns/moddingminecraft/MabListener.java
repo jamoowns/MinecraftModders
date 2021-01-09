@@ -394,9 +394,13 @@ public class MabListener implements Listener {
 				}
 			}
 
-			if (direction == BlockFace.EAST) {
-				placeGrid(loc);
+			if (direction == BlockFace.WEST) {
+				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 180);
+				directionGrid = RotateShapeSquareGridInt(directionGrid, 180);
+				upDownGrid = RotateShapeSquareGridInt(directionGrid, 180);
+				cornerGrid = RotateShapeSquareGridInt(directionGrid, 180);
 			}
+			placeGrid(loc);
 
 		}
 
@@ -1035,38 +1039,7 @@ public class MabListener implements Listener {
 		}
 	}
 
-	public int[][] RotateShapeSquareGridInt(int[][] shape, int rotate) {
-		if (rotate == 90) {
-			int[][] newShape = new int[shape[1].length][shape[0].length];
-
-			for (int r = 0; r < shape[0].length; r++) {
-				for (int c = 0; c < shape[1].length; c++) {
-					int newR = newShape[1].length - r - 1;
-					int newC = newShape[0].length - c - 1;
-					newShape[newC][newR] = shape[r][c];
-				}
-			}
-
-			return newShape;
-		} else if (rotate == 180) {
-			int[][] newShape = new int[shape[0].length][shape[1].length];
-
-			for (int r = 0; r < shape[0].length; r++) {
-				for (int c = 0; c < shape[1].length; c++) {
-					int newR = newShape[0].length - r - 1;
-					int newC = newShape[1].length - c - 1;
-					newShape[newR][newC] = shape[r][c];
-				}
-			}
-			return newShape;
-		} else if (rotate == 270) {
-			return RotateShapeSquareGridInt(RotateShapeSquareGridInt(shape, 90), 180);
-		}
-
-		return shape;
-	}
-
-	public Material[][] RotateShapeSquareGridMaterial(Material[][] shape, int rotate) {
+	public Material[][] RotateShapeSquareGrid(Material[][] shape, int rotate) {
 		if (rotate == 90) {
 			Material[][] newShape = new Material[shape[1].length][shape[0].length];
 
@@ -1091,7 +1064,42 @@ public class MabListener implements Listener {
 			}
 			return newShape;
 		} else if (rotate == 270) {
-			return RotateShapeSquareGridMaterial(RotateShapeSquareGridMaterial(shape, 90), 180);
+			return RotateShapeSquareGrid(RotateShapeSquareGrid(shape, 90), 180);
+		}
+
+		return shape;
+	}
+
+	public int[][][] RotateShapeSquareGridInt(int[][][] shape, int rotate) {
+		if (rotate == 90) {
+			int[][][] newShape = new int[shape[0][0].length][shape[0].length][shape.length];
+			for (int l = 0; l < shape[0].length; l++) {
+				for (int r = 0; r < shape.length; r++) {
+					for (int c = 0; c < shape[0][0].length; c++) {
+						int newR = newShape[0][0].length - r - 1;
+						int newC = newShape.length - c - 1;
+						newShape[newC][l][newR] = shape[r][l][c];
+					}
+				}
+			}
+
+			return newShape;
+		} else if (rotate == 180) {
+
+			int[][][] newShape = new int[shape.length][shape[0].length][shape[0][0].length];
+			for (int l = 0; l < shape[0].length; l++) {
+				for (int r = 0; r < shape.length; r++) {
+					for (int c = 0; c < shape[0][0].length; c++) {
+						int newR = newShape.length - r - 1;
+						int newC = newShape[0][0].length - c - 1;
+						newShape[newR][l][newC] = shape[r][l][c];
+					}
+				}
+			}
+
+			return newShape;
+		} else if (rotate == 270) {
+			return RotateShapeSquareGridInt(RotateShapeSquareGridInt(shape, 90), 180);
 		}
 
 		return shape;
@@ -1158,6 +1166,41 @@ public class MabListener implements Listener {
 		}
 	}
 
+	private Material[][][] RotateShapeSquareGridMaterial(Material[][][] shape, int rotate) {
+		if (rotate == 90) {
+			Material[][][] newShape = new Material[shape[0][0].length][shape[0].length][shape.length];
+			for (int l = 0; l < shape[0].length; l++) {
+				for (int r = 0; r < shape.length; r++) {
+					for (int c = 0; c < shape[0][0].length; c++) {
+						int newR = newShape[0][0].length - r - 1;
+						int newC = newShape.length - c - 1;
+						newShape[newC][l][newR] = shape[r][l][c];
+					}
+				}
+			}
+
+			return newShape;
+		} else if (rotate == 180) {
+
+			Material[][][] newShape = new Material[shape.length][shape[0].length][shape[0][0].length];
+			for (int l = 0; l < shape[0].length; l++) {
+				for (int r = 0; r < shape.length; r++) {
+					for (int c = 0; c < shape[0][0].length; c++) {
+						int newR = newShape.length - r - 1;
+						int newC = newShape[0][0].length - c - 1;
+						newShape[newR][l][newC] = shape[r][l][c];
+					}
+				}
+			}
+
+			return newShape;
+		} else if (rotate == 270) {
+			return RotateShapeSquareGridMaterial(RotateShapeSquareGridMaterial(shape, 90), 180);
+		}
+
+		return shape;
+	}
+
 	private void setupCustomItems() {
 		multiShotBowItem = new CustomItem(Material.CROSSBOW, "MultiShot Bow");
 		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
@@ -1214,7 +1257,7 @@ public class MabListener implements Listener {
 					}
 				}
 
-				multi = RotateShapeSquareGridMaterial(multi, 90 * result);
+				multi = RotateShapeSquareGrid(multi, 90 * result);
 
 				for (int j = 0; j < 21; j++) {
 					for (int k = 0; k < 21; k++) {
