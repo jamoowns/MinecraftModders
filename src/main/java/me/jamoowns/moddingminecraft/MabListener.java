@@ -160,7 +160,6 @@ public class MabListener implements Listener {
 			}
 
 			heightTracker++;
-
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
 				for (int r = 0; r < buildGrid.length; r++) {
 					if (c == 15 || c == 1) {
@@ -186,6 +185,33 @@ public class MabListener implements Listener {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0);
 						} else if (r == 6) {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0);
+						}
+					}
+				}
+			}
+
+			heightTracker++;
+			for (int c = 0; c < buildGrid[0][0].length; c++) {
+				for (int r = 0; r < buildGrid.length; r++) {
+					if (c == 15 || c == 1) {
+						if (r % 2 == 1) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+						}
+					} else if (c == 0) {
+						if (r % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 1);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+						}
+					} else if (c == 16) {
+						if (r % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 1);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0);
+						}
+					} else if ((c == 5 || c == 11)) {
+						if (r == 0 || r == 3 || r == 6 || r == 9) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
 						}
 					}
 				}
