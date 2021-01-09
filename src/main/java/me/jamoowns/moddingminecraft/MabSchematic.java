@@ -22,10 +22,10 @@ public class MabSchematic implements Listener {
 
 			Material[][][] buildGrid = new Material[10][15][20];
 
-			for (int x = 0; x < buildGrid.length; x++) {
-				for (int y = 0; y < buildGrid[0].length; y++) {
-					for (int z = 0; z < buildGrid[1].length; z++) {
-						if (x < 1 && x > buildGrid.length) {
+			for (int x = 0; x < buildGrid[0].length; x++) {
+				for (int y = 0; y < buildGrid[1].length; y++) {
+					for (int z = 0; z < buildGrid[2].length; z++) {
+						if (x < 1 && x > buildGrid[0].length) {
 							if (y < 1 && y > buildGrid[1].length) {
 								if (z < 1 && z > buildGrid[2].length) {
 									buildGrid[x][y][z] = buildList[1];
@@ -36,10 +36,10 @@ public class MabSchematic implements Listener {
 				}
 			}
 
-			for (int x = 0; x < buildGrid.length; x++) {
-				for (int y = 0; y < buildGrid[0].length; y++) {
-					for (int z = 0; z < buildGrid[1].length; z++) {
-						if (x < 1 && x > buildGrid.length) {
+			for (int x = 0; x < buildGrid[0].length; x++) {
+				for (int y = 0; y < buildGrid[1].length; y++) {
+					for (int z = 0; z < buildGrid[2].length; z++) {
+						if (x < 1 && x > buildGrid[0].length) {
 							if (y < 1 && y > buildGrid[1].length) {
 								if (z < 1 && z > buildGrid[2].length) {
 									Location temploc = loc;
