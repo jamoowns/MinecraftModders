@@ -21,6 +21,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
+import org.bukkit.block.data.type.Stairs;
+import org.bukkit.block.data.type.Stairs.Shape;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
@@ -90,6 +92,7 @@ public class MabListener implements Listener {
 	private Material[][][] buildGrid;
 	private int[][][] directionGrid;
 	private int[][][] upDownGrid;
+	private int[][][] cornerGrid;
 
 	public MabListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
@@ -107,7 +110,7 @@ public class MabListener implements Listener {
 			for (int l = 0; l < buildGrid[0].length; l++) {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
-						insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0);
+						insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0, 0);
 					}
 				}
 			}
@@ -118,7 +121,7 @@ public class MabListener implements Listener {
 				for (int c = 0; c < buildGrid[0][0].length; c++) {
 					for (int r = 0; r < buildGrid.length; r++) {
 						if (c == 1 || c == 4 || c == 12 || c == 15) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 						}
 					}
 				}
@@ -127,34 +130,34 @@ public class MabListener implements Listener {
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
 				for (int r = 0; r < buildGrid.length; r++) {
 					if (c > 1 && c < 5 || c > 6 && c < 10 || c > 11 && c < 15) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 					} else if ((r == 4 || r == 5) && c > 1 && c < 15) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 					} else if (c == 5 || c == 11) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else if (c == 6) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 					} else if (c == 10) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 					} else if (c == 1) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 						}
 					} else if (c == 15) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 						}
 					} else if (c == 0) {
 						if (r % 2 == 1) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 						}
 					} else if (c == 16) {
 						if (r % 2 == 1) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 						}
 					}
 
@@ -166,27 +169,27 @@ public class MabListener implements Listener {
 				for (int r = 0; r < buildGrid.length; r++) {
 					if (c == 15 || c == 1) {
 						if (r % 2 == 1) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 						}
 					} else if (c == 0) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 						}
 					} else if (c == 16) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 						}
 					} else if ((c == 5 || c == 11)) {
 						if (r < 3 || r > 6) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 						} else if (r == 3) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 						} else if (r == 6) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
 						}
 					}
 				}
@@ -197,27 +200,27 @@ public class MabListener implements Listener {
 				for (int r = 0; r < buildGrid.length; r++) {
 					if (c == 15 || c == 1) {
 						if (r % 2 == 1) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 						}
 					} else if (c == 0) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 						}
 					} else if (c == 16) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 						}
 					} else if ((c == 5 || c == 11)) {
 						if (r == 1 || r == 8) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0, 0);
 						} else if (r == 0 || r == 2 || r == 7 || r == 9) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 						} else if (r == 3 || r == 6) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
 						}
 					}
 				}
@@ -227,26 +230,26 @@ public class MabListener implements Listener {
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
 				for (int r = 0; r < buildGrid.length; r++) {
 					if (c == 1 || c == 5 || c == 11 || c == 15) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else if (c == 3 || c == 7 || c == 8 || c == 9 || c == 13) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
 					} else if (c == 4 || c == 10 || c == 14) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 					} else if (c == 2 || c == 6 || c == 12) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 					} else if (c == 3 || c == 6 || c == 12) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 					} else if (c == 0) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 						}
 					} else if (c == 16) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 						}
 					}
 				}
@@ -255,26 +258,38 @@ public class MabListener implements Listener {
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
 				for (int r = 0; r < buildGrid.length; r++) {
 					if (c > 1 && c < 4 || c > 6 && c < 10 || c > 12 && c < 15) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 					} else if ((r == 4 || r == 5) && c > 1 && c < 15) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0);
-					} else if ((c == 5 || c == 11) && r != 4 || r != 7) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
+					} else if (c == 5 || c == 11) {
+						if (r == 3) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
+						} else if (r == 6) {
+
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
+						} else {
+
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+						}
 					} else if (c == 4 || c == 10 || c == 15) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0);
+						if (c == 4 && r == 3) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 1);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+						}
 					} else if (c == 1 || c == 6 || c == 12) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 					} else if (c == 0) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 						}
 					} else if (c == 16) {
 						if (r % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 						}
 					}
 
@@ -318,12 +333,14 @@ public class MabListener implements Listener {
 		}
 	}
 
-	public void insert(int width, int height, int depth, Material material, int blockface, int updown) {
+	public void insert(int width, int height, int depth, Material material, int blockface, int updown, int corner) {
 		buildGrid[0 + width][0 + height][0 + depth] = material;
 
 		directionGrid[0 + width][0 + height][0 + depth] = blockface;
 
 		upDownGrid[0 + width][0 + height][0 + depth] = updown;
+
+		cornerGrid[0 + width][0 + height][0 + depth] = corner;
 	}
 
 	@EventHandler
@@ -847,6 +864,21 @@ public class MabListener implements Listener {
 						BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
 						if (blockData instanceof Directional) {
 							((Directional) blockData).setFacing(getBlockface(directionGrid[r][l][c]));
+							loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
+						}
+					}
+					if (cornerGrid[r][l][c] > 0) {
+						BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
+						if (blockData instanceof Stairs) {
+							if (cornerGrid[r][l][c] == 0) {
+								((Stairs) blockData).setShape(Shape.OUTER_RIGHT);
+							} else if (cornerGrid[r][l][c] == 1) {
+								((Stairs) blockData).setShape(Shape.OUTER_LEFT);
+							} else if (cornerGrid[r][l][c] == 2) {
+								((Stairs) blockData).setShape(Shape.INNER_RIGHT);
+							} else if (cornerGrid[r][l][c] == 3) {
+								((Stairs) blockData).setShape(Shape.INNER_LEFT);
+							}
 							loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
 						}
 					}
