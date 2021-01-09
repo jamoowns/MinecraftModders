@@ -273,7 +273,7 @@ public class MabListener implements Listener {
 						}
 					} else if (c == 4 || c == 10 || c == 15) {
 						if (c == 4 && r == 3) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 1);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 2, 1);
 						} else {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 						}
@@ -870,13 +870,13 @@ public class MabListener implements Listener {
 					if (cornerGrid[r][l][c] > 0) {
 						BlockData blockData = loc.getWorld().getBlockAt(temploc).getBlockData();
 						if (blockData instanceof Stairs) {
-							if (cornerGrid[r][l][c] == 0) {
+							if (cornerGrid[r][l][c] == 1) {
 								((Stairs) blockData).setShape(Shape.OUTER_RIGHT);
-							} else if (cornerGrid[r][l][c] == 1) {
-								((Stairs) blockData).setShape(Shape.OUTER_LEFT);
 							} else if (cornerGrid[r][l][c] == 2) {
-								((Stairs) blockData).setShape(Shape.INNER_RIGHT);
+								((Stairs) blockData).setShape(Shape.OUTER_LEFT);
 							} else if (cornerGrid[r][l][c] == 3) {
+								((Stairs) blockData).setShape(Shape.INNER_RIGHT);
+							} else if (cornerGrid[r][l][c] == 4) {
 								((Stairs) blockData).setShape(Shape.INNER_LEFT);
 							}
 							loc.getWorld().getBlockAt(temploc).setBlockData(blockData);
