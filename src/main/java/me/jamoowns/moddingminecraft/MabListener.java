@@ -400,6 +400,12 @@ public class MabListener implements Listener {
 				upDownGrid = RotateShapeSquareGridInt(directionGrid, 180);
 				cornerGrid = RotateShapeSquareGridInt(directionGrid, 180);
 			}
+			if (direction == BlockFace.SOUTH) {
+				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 90);
+				directionGrid = RotateShapeSquareGridInt(directionGrid, 90);
+				upDownGrid = RotateShapeSquareGridInt(directionGrid, 90);
+				cornerGrid = RotateShapeSquareGridInt(directionGrid, 90);
+			}
 			placeGrid(loc);
 
 		}
