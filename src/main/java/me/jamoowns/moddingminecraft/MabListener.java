@@ -126,9 +126,8 @@ public class MabListener implements Listener {
 
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
 				for (int r = 0; r < buildGrid.length; r++) {
-					if (c > 1 && c < 4 && c > 5 && c < 11 && c > 12 && c < 16) {
-
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0);
+					if (c > 1 && c < 5) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0);
 					}
 				}
 			}
