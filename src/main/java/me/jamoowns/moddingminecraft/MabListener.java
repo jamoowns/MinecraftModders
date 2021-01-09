@@ -125,6 +125,9 @@ public class MabListener implements Listener {
 					}
 				}
 			}
+			loc.getWorld().getPlayers().get(0).sendMessage(
+					"rows:" + buildGrid.length + "||lvls:" + buildGrid[0].length + "||cols:" + buildGrid[0][0].length);
+
 			if (direction == BlockFace.WEST) {
 				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 180);
 				directionGrid = RotateShapeSquareGridInt(directionGrid, 180);
@@ -137,6 +140,10 @@ public class MabListener implements Listener {
 //				upDownGrid = RotateShapeSquareGridInt(directionGrid, 90);
 //				cornerGrid = RotateShapeSquareGridInt(directionGrid, 90);
 			}
+
+			loc.getWorld().getPlayers().get(0).sendMessage("__rows:" + buildGrid.length + "||lvls:"
+					+ buildGrid[0].length + "||cols:" + buildGrid[0][0].length);
+
 			placeGrid(loc);
 
 		}
@@ -433,18 +440,6 @@ public class MabListener implements Listener {
 				}
 			}
 
-			if (direction == BlockFace.WEST) {
-				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 180);
-				directionGrid = RotateShapeSquareGridInt(directionGrid, 180);
-				upDownGrid = RotateShapeSquareGridInt(directionGrid, 180);
-				cornerGrid = RotateShapeSquareGridInt(directionGrid, 180);
-			}
-			if (direction == BlockFace.SOUTH) {
-				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 90);
-//				directionGrid = RotateShapeSquareGridInt(directionGrid, 90);
-//				upDownGrid = RotateShapeSquareGridInt(directionGrid, 90);
-//				cornerGrid = RotateShapeSquareGridInt(directionGrid, 90);
-			}
 			placeGrid(loc);
 
 		}
