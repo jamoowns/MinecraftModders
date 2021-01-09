@@ -272,15 +272,7 @@ public class MabListener implements Listener {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 						}
 					} else if (c == 4 || c == 10 || c == 15) {
-						if (c == 4 && r == 3) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 1);
-						} else if (c == 4 && r == 5) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
-						} else if (c == 6 && r == 3) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
-						} else if (c == 6 && r == 5) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
-						} else {
+						{
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 						}
 					} else if (c == 1 || c == 6 || c == 12) {
@@ -297,6 +289,15 @@ public class MabListener implements Listener {
 						} else {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 						}
+					}
+					if (c == 4 && r == 3) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[0], 0, 0, 0);
+					} else if (c == 4 && r == 5) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[0], 0, 0, 0);
+					} else if (c == 6 && r == 3) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[0], 0, 0, 0);
+					} else if (c == 6 && r == 5) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[0], 0, 0, 0);
 					}
 
 				}
