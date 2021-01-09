@@ -397,19 +397,7 @@ public class MabListener implements Listener {
 					}
 				}
 			}
-			if (direction == BlockFace.WEST) {
-				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 180);
-				directionGrid = RotateShapeSquareGridInt(directionGrid, 180);
-				upDownGrid = RotateShapeSquareGridInt(directionGrid, 180);
-				cornerGrid = RotateShapeSquareGridInt(directionGrid, 180);
-			}
-			if (direction == BlockFace.SOUTH) {
-				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 90);
-				directionGrid = RotateShapeSquareGridInt(directionGrid, 90);
-				upDownGrid = RotateShapeSquareGridInt(directionGrid, 90);
-				cornerGrid = RotateShapeSquareGridInt(directionGrid, 90);
-			}
-			placeGrid(loc);
+			placeGrid(loc, direction);
 
 		}
 
@@ -967,7 +955,7 @@ public class MabListener implements Listener {
 		}
 	}
 
-	public void placeGrid(Location loc) {
+	public void placeGrid(Location loc, BlockFace direction) {
 
 		for (int l = 0; l < buildGrid[0].length; l++) {
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
@@ -1010,6 +998,46 @@ public class MabListener implements Listener {
 				}
 			}
 		}
+		if (direction != BlockFace.EAST) {
+			for (int i = 0; i < buildGrid[0].length; i++) {
+				Material[][] multi = new Material[buildGrid.length][buildGrid[0][0].length];
+
+				for (int j = 0; j < 21; j++) {
+					for (int k = 0; k < 21; k++) {
+						Location temploc = loc.clone();
+						temploc.add(k, i, j);
+						if (!loc.getWorld().getBlockAt(temploc).getType().name().contains("WATER") || loc.getY() < 63) {
+							multi[j][k] = loc.getWorld().getBlockAt(temploc).getType();
+						} else {
+							multi[j][k] = Material.AIR;
+						}
+					}
+				}
+				if (direction == BlockFace.SOUTH) {
+					multi = RotateShapeSquareGrid(multi, 90);
+				} else if (direction == BlockFace.WEST) {
+					multi = RotateShapeSquareGrid(multi, 180);
+				} else if (direction == BlockFace.NORTH) {
+					multi = RotateShapeSquareGrid(multi, 270);
+				}
+
+				for (int j = 0; j < 21; j++) {
+					for (int k = 0; k < 21; k++) {
+						Location temploc = loc.clone();
+						temploc.add(k, i, j);
+						if (!loc.getWorld().getBlockAt(temploc).getType().name().contains("WATER")
+								&& !loc.getWorld().getBlockAt(loc).getType().name().contains("LAVA")
+								|| loc.getY() < 63) {
+							loc.getWorld().getBlockAt(temploc).setType(multi[j][k]);
+						} else {
+							loc.getWorld().getBlockAt(temploc).setType(Material.AIR);
+						}
+
+					}
+				}
+			}
+		}
+
 	}
 
 	@EventHandler
@@ -1083,41 +1111,6 @@ public class MabListener implements Listener {
 		return shape;
 	}
 
-	public int[][][] RotateShapeSquareGridInt(int[][][] shape, int rotate) {
-		if (rotate == 90) {
-			int[][][] newShape = new int[shape[0][0].length][shape[0].length][shape.length];
-			for (int l = 0; l < shape[0].length; l++) {
-				for (int r = 0; r < shape.length; r++) {
-					for (int c = 0; c < shape[0][0].length; c++) {
-
-						int newR = newShape[0][0].length - r - 1;
-						int newC = newShape.length - c - 1;
-						newShape[newC][0][newR] = shape[r][0][c];
-					}
-				}
-			}
-			return newShape;
-		} else if (rotate == 180) {
-
-			int[][][] newShape = new int[shape.length][shape[0].length][shape[0][0].length];
-			for (int l = 0; l < shape[0].length; l++) {
-				for (int r = 0; r < shape.length; r++) {
-					for (int c = 0; c < shape[0][0].length; c++) {
-						int newR = newShape.length - r - 1;
-						int newC = newShape[0][0].length - c - 1;
-						newShape[newR][l][newC] = shape[r][l][c];
-					}
-				}
-			}
-
-			return newShape;
-		} else if (rotate == 270) {
-			return RotateShapeSquareGridInt(RotateShapeSquareGridInt(shape, 90), 180);
-		}
-
-		return shape;
-	}
-
 	public void sendMabmoMsg(String str) {
 		if (mabmoSet) {
 			if (mabmo.isOnline()) {
@@ -1185,40 +1178,6 @@ public class MabListener implements Listener {
 		} else {
 			return BlockFace.WEST;
 		}
-	}
-
-	private Material[][][] RotateShapeSquareGridMaterial(Material[][][] shape, int rotate) {
-		if (rotate == 90) {
-			Material[][][] newShape = new Material[shape[0][0].length][shape[0].length][shape.length];
-			for (int r = 0; r < shape.length; r++) {
-				for (int c = 0; c < shape[0][0].length; c++) {
-					sendMabmoMsg("c=" + c);
-					int newR = newShape[0][0].length - r - 1;
-					int newC = newShape.length - c - 1;
-					newShape[newC][0][newR] = shape[r][0][c];
-				}
-			}
-
-			return newShape;
-		} else if (rotate == 180) {
-
-			Material[][][] newShape = new Material[shape.length][shape[0].length][shape[0][0].length];
-			for (int l = 0; l < shape[0].length; l++) {
-				for (int r = 0; r < shape.length; r++) {
-					for (int c = 0; c < shape[0][0].length; c++) {
-						int newR = newShape.length - r - 1;
-						int newC = newShape[0][0].length - c - 1;
-						newShape[newR][l][newC] = shape[r][l][c];
-					}
-				}
-			}
-
-			return newShape;
-		} else if (rotate == 270) {
-			return RotateShapeSquareGridMaterial(RotateShapeSquareGridMaterial(shape, 90), 180);
-		}
-
-		return shape;
 	}
 
 	private void setupCustomItems() {
