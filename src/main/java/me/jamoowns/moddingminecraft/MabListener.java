@@ -1002,12 +1002,12 @@ public class MabListener implements Listener {
 			for (int i = 0; i < buildGrid[0].length; i++) {
 				Material[][] multi = new Material[buildGrid.length][buildGrid[0][0].length];
 
-				for (int j = 0; j < 21; j++) {
-					for (int k = 0; k < 21; k++) {
-						Location temploc = loc.clone();
-						temploc.add(k, i, j);
-						if (!loc.getWorld().getBlockAt(temploc).getType().name().contains("WATER") || loc.getY() < 63) {
-							multi[j][k] = loc.getWorld().getBlockAt(temploc).getType();
+				for (int j = 0; j < buildGrid.length; j++) {
+					for (int k = 0; k < buildGrid[0][0].length; k++) {
+						Location newloc = loc.clone();
+						newloc.add(k, i, j);
+						if (!loc.getWorld().getBlockAt(newloc).getType().name().contains("WATER") || loc.getY() < 63) {
+							multi[j][k] = loc.getWorld().getBlockAt(newloc).getType();
 						} else {
 							multi[j][k] = Material.AIR;
 						}
@@ -1021,16 +1021,16 @@ public class MabListener implements Listener {
 					multi = RotateShapeSquareGrid(multi, 270);
 				}
 
-				for (int j = 0; j < 21; j++) {
-					for (int k = 0; k < 21; k++) {
-						Location temploc = loc.clone();
-						temploc.add(k, i, j);
-						if (!loc.getWorld().getBlockAt(temploc).getType().name().contains("WATER")
+				for (int j = 0; j < multi.length; j++) {
+					for (int k = 0; k < multi[0].length; k++) {
+						Location newloc = loc.clone();
+						newloc.add(k, i, j);
+						if (!loc.getWorld().getBlockAt(newloc).getType().name().contains("WATER")
 								&& !loc.getWorld().getBlockAt(loc).getType().name().contains("LAVA")
 								|| loc.getY() < 63) {
-							loc.getWorld().getBlockAt(temploc).setType(multi[j][k]);
+							loc.getWorld().getBlockAt(newloc).setType(multi[j][k]);
 						} else {
-							loc.getWorld().getBlockAt(temploc).setType(Material.AIR);
+							loc.getWorld().getBlockAt(newloc).setType(Material.AIR);
 						}
 
 					}
