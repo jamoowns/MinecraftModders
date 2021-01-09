@@ -107,52 +107,6 @@ public class MabListener implements Listener {
 
 	public void BuildGrid(int grid, BlockFace direction, Location loc) {
 		if (grid == 1) {
-			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.STONE_BRICK_STAIRS };
-			createGrids(10, 30, 17);
-
-			for (int l = 0; l < buildGrid[0].length; l++) {
-				for (int c = 0; c < buildGrid[0][0].length; c++) {
-					for (int r = 0; r < buildGrid.length; r++) {
-						insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0, 0);
-					}
-				}
-			}
-
-			for (int heightTracker = 0; heightTracker < buildGrid[0].length; heightTracker++) {
-				for (int c = 0; c < buildGrid[0][0].length; c++) {
-					for (int r = 0; r < buildGrid.length; r++) {
-						if (c % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 1);
-						}
-					}
-				}
-			}
-			loc.getWorld().getPlayers().get(0).sendMessage(
-					"rows:" + buildGrid.length + "||lvls:" + buildGrid[0].length + "||cols:" + buildGrid[0][0].length);
-
-			if (direction == BlockFace.WEST) {
-				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 180);
-				directionGrid = RotateShapeSquareGridInt(directionGrid, 180);
-				upDownGrid = RotateShapeSquareGridInt(directionGrid, 180);
-				cornerGrid = RotateShapeSquareGridInt(directionGrid, 180);
-			}
-			if (direction == BlockFace.SOUTH) {
-				buildGrid = RotateShapeSquareGridMaterial(buildGrid, 90);
-				directionGrid = RotateShapeSquareGridInt(directionGrid, 90);
-				upDownGrid = RotateShapeSquareGridInt(directionGrid, 90);
-				cornerGrid = RotateShapeSquareGridInt(directionGrid, 90);
-			}
-
-			loc.getWorld().getPlayers().get(0).sendMessage("__rows:" + buildGrid.length + "||lvls:"
-					+ buildGrid[0].length + "||cols:" + buildGrid[0][0].length);
-
-			placeGrid(loc);
-
-		}
-
-		if (grid == 2) {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
 			createGrids(10, 30, 17);
@@ -1125,17 +1079,13 @@ public class MabListener implements Listener {
 
 			}
 			for (int r = 0; r < shape.length; r++) {
-				String row = "";
 				for (int c = 0; c < shape[0][0].length; c++) {
 
 					int newR = newShape[0][0].length - r - 1;
 					int newC = newShape.length - c - 1;
-					row = row + newShape[r][0][c] + " , ";
 					newShape[newC][0][newR] = shape[r][0][c];
 				}
-				sendMabmoMsg(row);
 			}
-			sendMabmoMsg("----------------");
 			return newShape;
 		} else if (rotate == 180) {
 
@@ -1231,6 +1181,7 @@ public class MabListener implements Listener {
 		if (rotate == 90) {
 			Material[][][] newShape = new Material[shape[0][0].length][shape[0].length][shape.length];
 			for (int l = 0; l < shape[0].length; l++) {
+				sendMabmoMsg("" + l);
 				for (int r = 0; r < shape.length; r++) {
 					for (int c = 0; c < shape[0][0].length; c++) {
 						int newR = newShape[0][0].length - r - 1;
