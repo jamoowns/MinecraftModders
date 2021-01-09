@@ -132,6 +132,9 @@ public class MabListener implements Listener {
 							loc.getWorld().getPlayers().get(0).sendMessage(blockData.toString());
 							blockData.getAsString().replace("bottom", "top");
 
+							loc.getWorld().getPlayers().get(0).sendMessage("-----------");
+							loc.getWorld().getPlayers().get(0).sendMessage(blockData.toString());
+
 						}
 					}
 				}
