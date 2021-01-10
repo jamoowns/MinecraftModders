@@ -603,11 +603,11 @@ public class MabListener implements Listener {
 		if (stage == 2) {
 			if ((cCount == 15 && rCount < 16) || (rCount == 15 && cCount < 16) || (cCount == 0 && rCount < 1)
 					|| (rCount == 0 && cCount < 1) || (cCount == 1 && rCount < 2) || (rCount == 1 && cCount < 2)
-					|| (cCount == 7 && rCount < 8) || (rCount == 7 && cCount < 8) || (cCount == 11 && rCount < 12)
+					|| (cCount == 5 && rCount < 6) || (rCount == 5 && cCount < 6) || (cCount == 11 && rCount < 12)
 					|| (rCount == 11 && cCount < 12)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			} else if ((cCount == 8 && rCount < 9) || (rCount == 8 && cCount < 9) || (cCount == 9 && rCount < 10)
-					|| (rCount == 9 && cCount < 10) || (cCount == 10 && rCount < 11) || (rCount == 10 && cCount < 11)) {
+					|| (rCount == 9 && cCount < 10) || (cCount == 7 && rCount < 8) || (rCount == 7 && cCount < 8)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 			} else if ((cCount == 2 && rCount < 3) || (rCount == 2 && cCount < 3) || (cCount == 3 && rCount < 4)
 					|| (rCount == 3 && cCount < 4) || (cCount == 4 && rCount < 5) || (rCount == 4 && cCount < 5)) {
