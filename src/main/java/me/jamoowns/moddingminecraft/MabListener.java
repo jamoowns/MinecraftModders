@@ -609,7 +609,7 @@ public class MabListener implements Listener {
 				if (rCount % 2 == 0) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 				}
 			} else if (rCount == 15 && cCount < 16) {
 				if (cCount % 2 == 0) {
