@@ -152,6 +152,39 @@ public class MabListener implements Listener {
 				}
 			}
 
+			heightTracker++;
+			cCount = 0;
+			for (; heightTracker < 19; heightTracker++) {
+				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+					cCount = buildGrid[0][0].length;
+				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+					cCount = -1;
+				}
+				int rCount = 0;
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
+
+					if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+						cCount--;
+					} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+						cCount++;
+					}
+
+					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+						rCount = buildGrid.length;
+					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+						rCount = -1;
+					}
+					for (int r = 0; r < buildGrid.length; r++) {
+						if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+							rCount--;
+						} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+							rCount++;
+						}
+						CornerGrid(r, c, rCount, cCount, heightTracker, 2, buildList);
+					}
+				}
+			}
+
 			placeGrid(loc, direction);
 		}
 
@@ -568,6 +601,16 @@ public class MabListener implements Listener {
 			if ((cCount == 15 && rCount < 16) || (rCount == 15 && cCount < 16) || (cCount == 12 && rCount < 13)
 					|| (rCount == 12 && cCount < 13)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			}
+		}
+		if (stage == 2) {
+			if ((cCount == 1 && rCount < 2) || (rCount == 1 && cCount < 2) || (cCount == 4 && rCount < 5)
+					|| (rCount == 4 && cCount < 5)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
+			}
+			if ((cCount == 15 && rCount < 16) || (rCount == 15 && cCount < 16) || (cCount == 12 && rCount < 13)
+					|| (rCount == 12 && cCount < 13)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 			}
 		}
 	}
