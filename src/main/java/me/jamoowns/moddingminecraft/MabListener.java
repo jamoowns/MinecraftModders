@@ -601,11 +601,17 @@ public class MabListener implements Listener {
 			}
 		}
 		if (stage == 2) {
-			if ((cCount == 2 && rCount < 3) || (rCount == 2 && cCount < 3) || (cCount == 3 && rCount < 4)
+			if ((cCount == 0 && rCount < 1) || (rCount == 0 && cCount < 1) || (cCount == 1 && rCount < 2)
+					|| (rCount == 1 && cCount < 2) || (cCount == 6 && rCount < 7) || (rCount == 6 && cCount < 7)
+					|| (cCount == 12 && rCount < 13) || (rCount == 12 && cCount < 13)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			} else if ((cCount == 8 && rCount < 9) || (rCount == 8 && cCount < 9) || (cCount == 9 && rCount < 10)
+					|| (rCount == 9 && cCount < 10) || (cCount == 10 && rCount < 11) || (rCount == 10 && cCount < 11)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
+			} else if ((cCount == 2 && rCount < 3) || (rCount == 2 && cCount < 3) || (cCount == 3 && rCount < 4)
 					|| (rCount == 3 && cCount < 4) || (cCount == 4 && rCount < 5) || (rCount == 4 && cCount < 5)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-			}
-			if ((cCount == 14 && rCount < 15) || (rCount == 14 && cCount < 15) || (cCount == 12 && rCount < 13)
+			} else if ((cCount == 14 && rCount < 15) || (rCount == 14 && cCount < 15) || (cCount == 12 && rCount < 13)
 					|| (rCount == 12 && cCount < 13) || (cCount == 13 && rCount < 14)
 					|| (rCount == 13 && cCount < 14)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
