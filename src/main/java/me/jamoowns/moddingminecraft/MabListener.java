@@ -130,7 +130,12 @@ public class MabListener implements Listener {
 							rCount--;
 							if ((cCount == 2 && rCount < 2) || (rCount == 2 && cCount < 2)
 									|| (cCount == 5 && rCount < 5) || (rCount == 5 && cCount < 5)) {
-								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+								if (direction == BlockFace.SOUTH) {
+									insert(0 + rCount, 0 + heightTracker, 0 + cCount, buildList[1], 0, 0, 0);
+								} else {
+									insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+
+								}
 							}
 						}
 					}
