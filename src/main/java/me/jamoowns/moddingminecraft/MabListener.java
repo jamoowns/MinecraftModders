@@ -133,9 +133,8 @@ public class MabListener implements Listener {
 					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
 						rCount = buildGrid.length;
 					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
-						cCount = -1;
+						int rCount = -1;
 					}
-					rCount = buildGrid.length;
 					for (int r = 0; r < buildGrid.length; r++) {
 						rCount--;
 						CornerGrid(r, c, rCount, cCount, heightTracker, 1, buildList);
