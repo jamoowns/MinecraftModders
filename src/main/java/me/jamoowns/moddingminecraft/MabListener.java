@@ -604,6 +604,7 @@ public class MabListener implements Listener {
 			}
 		}
 		if (stage == 2) {
+			heightTracker++;
 			if ((cCount == 1 && rCount < 2) || (rCount == 1 && cCount < 2) || (cCount == 4 && rCount < 5)
 					|| (rCount == 4 && cCount < 5)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
