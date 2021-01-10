@@ -128,11 +128,9 @@ public class MabListener implements Listener {
 						int rCount = buildGrid.length;
 						for (int r = 0; r < buildGrid.length; r++) {
 							rCount--;
-							if (direction == BlockFace.SOUTH) {
-								if ((cCount == 2 && rCount < 2) || (rCount == 2 && cCount < 2)
-										|| (cCount == 5 && rCount < 5) || (rCount == 5 && cCount < 5)) {
-									insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-								}
+							if ((cCount == 2 && rCount < 2) || (rCount == 2 && cCount < 2)
+									|| (cCount == 5 && rCount < 5) || (rCount == 5 && cCount < 5)) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 							}
 						}
 					}
@@ -150,6 +148,21 @@ public class MabListener implements Listener {
 										|| (cCount == 5 && rCount < 5) || (rCount == 5 && cCount < 5)) {
 									insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 								}
+							}
+						}
+					}
+				}
+			} else if (direction == BlockFace.WEST) {
+				for (; heightTracker < 19; heightTracker++) {
+					int cCount = buildGrid[0][0].length;
+					for (int c = 0; c < buildGrid[0][0].length; c++) {
+						cCount--;
+						int rCount = -1;
+						for (int r = 0; r < buildGrid.length; r++) {
+							rCount++;
+							if ((cCount == 2 && rCount < 2) || (rCount == 2 && cCount < 2)
+									|| (cCount == 5 && rCount < 5) || (rCount == 5 && cCount < 5)) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 							}
 						}
 					}
