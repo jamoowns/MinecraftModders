@@ -120,55 +120,27 @@ public class MabListener implements Listener {
 			}
 
 			int heightTracker = 0;
-			if (direction == BlockFace.NORTH) {
-				for (; heightTracker < 19; heightTracker++) {
-					int cCount = buildGrid[0][0].length;
-					for (int c = 0; c < buildGrid[0][0].length; c++) {
-						cCount--;
-						int rCount = buildGrid.length;
-						for (int r = 0; r < buildGrid.length; r++) {
-							rCount--;
-							CornerGrid(r, c, rCount, cCount, heightTracker, 1, buildList);
-						}
+			int cCount = 0;
+			for (; heightTracker < 19; heightTracker++) {
+				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+					cCount = buildGrid[0][0].length;
+				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+					cCount = -1;
+				}
+				int rCount = 0;
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
+					cCount--;
+					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+						rCount = buildGrid.length;
+					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+						cCount = -1;
+					}
+					rCount = buildGrid.length;
+					for (int r = 0; r < buildGrid.length; r++) {
+						rCount--;
+						CornerGrid(r, c, rCount, cCount, heightTracker, 1, buildList);
 					}
 				}
-			} else if (direction == BlockFace.SOUTH) {
-				for (; heightTracker < 19; heightTracker++) {
-					int cCount = 0;
-					for (int c = 0; c < buildGrid[0][0].length; c++) {
-						cCount++;
-						int rCount = buildGrid.length;
-						for (int r = 0; r < buildGrid.length; r++) {
-							rCount--;
-							CornerGrid(r, c, rCount, cCount, heightTracker, 1, buildList);
-						}
-					}
-				}
-			} else if (direction == BlockFace.WEST) {
-				for (; heightTracker < 19; heightTracker++) {
-					int cCount = buildGrid[0][0].length;
-					for (int c = 0; c < buildGrid[0][0].length; c++) {
-						cCount--;
-						int rCount = -1;
-						for (int r = 0; r < buildGrid.length; r++) {
-							rCount++;
-							CornerGrid(r, c, rCount, cCount, heightTracker, 1, buildList);
-						}
-					}
-				}
-			} else {
-				for (; heightTracker < 19; heightTracker++) {
-					int cCount = -1;
-					for (int c = 0; c < buildGrid[0][0].length; c++) {
-						cCount++;
-						int rCount = -1;
-						for (int r = 0; r < buildGrid.length; r++) {
-							rCount++;
-							CornerGrid(r, c, rCount, cCount, heightTracker, 1, buildList);
-						}
-					}
-				}
-
 			}
 
 			placeGrid(loc, direction);
