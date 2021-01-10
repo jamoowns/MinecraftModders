@@ -133,7 +133,7 @@ public class MabListener implements Listener {
 					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
 						rCount = buildGrid.length;
 					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
-						int rCount = -1;
+						rCount = -1;
 					}
 					for (int r = 0; r < buildGrid.length; r++) {
 						rCount--;
