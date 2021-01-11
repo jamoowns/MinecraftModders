@@ -107,7 +107,7 @@ public class MabListener implements Listener {
 	}
 
 	public void BuildGrid(int grid, BlockFace direction, Location loc) {
-		if (grid == 2) {
+		if (grid == 2 || grid == 3 || grid == 4) {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
 			createGrids(17, 30, 17);
@@ -148,7 +148,7 @@ public class MabListener implements Listener {
 						} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
 							rCount++;
 						}
-						CornerGrid(r, c, rCount, cCount, heightTracker, 1, buildList);
+						CornerGrid(r, c, rCount, cCount, heightTracker, 1, buildList, grid, direction);
 					}
 				}
 			}
@@ -179,11 +179,11 @@ public class MabListener implements Listener {
 					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
 						rCount++;
 					}
-					CornerGrid(r, c, rCount, cCount, heightTracker, 2, buildList);
+					CornerGrid(r, c, rCount, cCount, heightTracker, 2, buildList, grid, direction);
 				}
 			}
 
-			placeGrid(loc, direction);
+			placeGrid(loc, BlockFace.EAST);
 		}
 
 		if (grid == 1) {
@@ -590,37 +590,48 @@ public class MabListener implements Listener {
 		trailByPlayer.clear();
 	}
 
-	public void CornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList) {
+	public void CornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
+			int openings, BlockFace leftRight) {
 		if (stage == 1) {
-			if ((cCount == 1 && rCount < 2) || (rCount == 1 && cCount < 2) || (cCount == 4 && rCount < 5)
-					|| (rCount == 4 && cCount < 5)) {
+
+			if (((cCount == 15 || cCount == 1) && rCount < 16 && rCount > 0)
+					|| ((rCount == 15 || rCount == 1) && cCount < 16 && cCount > 0)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
-			if ((cCount == 15 && rCount < 16) || (rCount == 15 && cCount < 16) || (cCount == 12 && rCount < 13)
-					|| (rCount == 12 && cCount < 13)) {
+			if (((cCount == 1 || cCount == 4 || cCount == 12 || cCount == 15) && rCount < 2)
+					|| ((rCount == 1 || rCount == 4 || rCount == 12 || rCount == 15) && cCount < 2)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
+
+			if ((openings == 4 || openings == 3)
+					&& ((rCount == 1 || rCount == 4 || rCount == 12 || rCount == 15) && cCount > 14)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			}
+			if (openings == 4 && ((cCount == 1 || cCount == 4 || cCount == 12 || cCount == 15) && rCount > 14)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			}
+
 		}
 		if (stage == 2) {
-			if (cCount == 15 && rCount < 15 && rCount > 1) {
+			if (openings != 3 && openings != 4 && cCount == 15 && rCount < 15 && rCount > 1) {
 				if (rCount % 2 == 0) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 				}
-			} else if (cCount == 1 && rCount < 15 && rCount > 1) {
+			} else if (openings != 2 && openings != 3 && openings != 4 && cCount == 1 && rCount < 15 && rCount > 1) {
 				if (rCount % 2 == 0) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 				}
-			} else if (rCount == 15 && cCount < 15 && cCount > 1) {
+			} else if (openings != 4 && rCount == 15 && cCount < 15 && cCount > 1) {
 				if (cCount % 2 == 0) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 				}
-			} else if (rCount == 1 && cCount < 15 && cCount > 1) {
+			} else if (openings != 2 && openings != 3 && openings != 4 && rCount == 1 && cCount < 15 && cCount > 1) {
 				if (cCount % 2 == 0) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else {
@@ -692,8 +703,16 @@ public class MabListener implements Listener {
 			BuildGrid(1, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 		}
 		if (event.getBlock().getType().equals(Material.CRIMSON_HYPHAE)) {
-			event.getPlayer().sendMessage("Building");
+			event.getPlayer().sendMessage("Building 2");
 			BuildGrid(2, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
+		}
+		if (event.getBlock().getType().equals(Material.WET_SPONGE)) {
+			event.getPlayer().sendMessage("Building 3");
+			BuildGrid(3, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
+		}
+		if (event.getBlock().getType().equals(Material.CHISELED_SANDSTONE)) {
+			event.getPlayer().sendMessage("Building 4");
+			BuildGrid(4, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
