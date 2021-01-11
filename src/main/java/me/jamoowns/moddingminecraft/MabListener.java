@@ -106,7 +106,7 @@ public class MabListener implements Listener {
 	}
 
 	public void BuildGrid(int grid, BlockFace direction, Location loc) {
-		if (grid == 2) {
+		if (grid == 2 || grid == 3) {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
 			createGrids(17, 30, 17);
@@ -147,7 +147,7 @@ public class MabListener implements Listener {
 						} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
 							rCount++;
 						}
-						CornerGrid(r, c, rCount, cCount, heightTracker, 1, buildList);
+						CornerGrid(r, c, rCount, cCount, heightTracker, 1, buildList, grid, direction);
 					}
 				}
 			}
@@ -178,11 +178,11 @@ public class MabListener implements Listener {
 					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
 						rCount++;
 					}
-					CornerGrid(r, c, rCount, cCount, heightTracker, 2, buildList);
+					CornerGrid(r, c, rCount, cCount, heightTracker, 2, buildList, grid, direction);
 				}
 			}
 
-			placeGrid(loc, direction);
+			placeGrid(loc, BlockFace.EAST);
 		}
 
 		if (grid == 1) {
@@ -589,16 +589,18 @@ public class MabListener implements Listener {
 		trailByPlayer.clear();
 	}
 
-	public void CornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList) {
+	public void CornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
+			int openings, BlockFace leftRight) {
 		if (stage == 1) {
-			if ((cCount == 1 && rCount < 2) || (rCount == 1 && cCount < 2) || (cCount == 4 && rCount < 5)
-					|| (rCount == 4 && cCount < 5)) {
+
+			if (((cCount == 15 || cCount == 1) && rCount < 15 && rCount > 1)
+					|| ((rCount == 15 || rCount == 1) && cCount < 15 && cCount > 1)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
-			if ((cCount == 15 && rCount < 16) || (rCount == 15 && cCount < 16) || (cCount == 12 && rCount < 13)
-					|| (rCount == 12 && cCount < 13)) {
+			if ((cCount == 1 && rCount < 2) || (rCount == 1 && cCount < 2)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
+
 		}
 		if (stage == 2) {
 			if (cCount == 15 && rCount < 15 && rCount > 1) {
