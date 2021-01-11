@@ -10,7 +10,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
-import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.fated.Collections;
 import me.jamoowns.moddingminecraft.features.Feature;
 
@@ -30,57 +29,63 @@ public final class FeaturesMenu implements ICustomMenu {
 							() -> javaPlugin.featureTracker().enable(feature),
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 				case EGG_WITCH:
 					featureMenuItems.add(new CustomMenuItem("Egg Witch", Material.DIAMOND_BLOCK,
 							() -> javaPlugin.featureTracker().enable(feature),
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 				case FUNKY_MOB_DEATH:
 					featureMenuItems.add(new CustomMenuItem("Random mob deaths", Material.LAPIS_BLOCK,
 							() -> javaPlugin.featureTracker().enable(feature),
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 				case IRON_GOLEM:
 					featureMenuItems.add(new CustomMenuItem("Iron golem player death", Material.IRON_BLOCK,
 							() -> javaPlugin.featureTracker().enable(feature),
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 				case PLAYER_TRAIL:
 					featureMenuItems.add(new CustomMenuItem("Player trails", Material.LIME_WOOL,
 							() -> javaPlugin.featureTracker().enable(feature),
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 				case RANDOM_BUCKET:
 					featureMenuItems.add(new CustomMenuItem("Random Buckets", Material.BUCKET,
 							() -> javaPlugin.featureTracker().enable(feature),
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 				case RANDOM_CHESTS:
 					featureMenuItems.add(new CustomMenuItem("Random Chests", Material.CHEST,
 							() -> javaPlugin.featureTracker().enable(feature),
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 				case RANDOM_ENCHANT:
 					featureMenuItems.add(new CustomMenuItem("Random Enchants", Material.ENCHANTING_TABLE,
 							() -> javaPlugin.featureTracker().enable(feature),
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 				case WINFRED:
 					featureMenuItems.add(new CustomMenuItem("Winfred", Material.BREWING_STAND,
 							() -> javaPlugin.featureTracker().enable(feature),
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 				case ZOMBIE_BELL:
 					featureMenuItems.add(new CustomMenuItem("Zombie bell", Material.BELL,
 							() -> javaPlugin.featureTracker().enable(feature),
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 			}
 		}
-		double maxSize = Math.ceil(featureMenuItems.size() / 9.0);
-		Broadcaster.broadcastError(featureMenuItems.size());
-		Broadcaster.broadcastError(maxSize);
-		Broadcaster.broadcastError(maxSize * 9.0);
 		inventory = Bukkit.createInventory(null, (int) (Math.ceil(featureMenuItems.size() / 9.0) * 9.0 + 9),
 				"Features Menu");
 	}
