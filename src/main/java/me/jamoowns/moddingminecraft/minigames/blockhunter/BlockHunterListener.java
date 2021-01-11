@@ -228,7 +228,6 @@ public final class BlockHunterListener implements Listener {
 					() -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK),
 					timer -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK));
 			countDown.scheduleTimer();
-			countdownTimers.add(countDown);
 			stopGame();
 		} else {
 			setChoosingPhase();
