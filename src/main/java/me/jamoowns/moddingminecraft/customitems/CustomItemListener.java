@@ -49,23 +49,25 @@ public final class CustomItemListener implements Listener {
 
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
-		CustomItem customItem = javaPlugin.customItems().getItem(event.getItem().getItemMeta().getDisplayName());
-		if (customItem != null && customItem.hasClickEvent() && isLeftClick(event.getAction())) {
-			Block target = event.getPlayer().getTargetBlockExact(MAX_RANGE);
-			if (target != null) {
-				for (double d = 0; d <= target.getLocation().distance(event.getPlayer().getLocation()); d += 0.1) {
-					event.getPlayer().getWorld().spawnParticle(Particle.TOTEM, event.getPlayer().getEyeLocation()
-							.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
-				}
-				customItem.clickEvent()
-						.accept(new SpellCastEvent(target.getLocation().add(0.5, 0.5, 0.5), event.getPlayer()));
-				if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-					event.getItem().setAmount(event.getItem().getAmount() - 1);
-				}
-			} else {
-				for (double d = 0; d <= MAX_RANGE; d += 0.1) {
-					event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
-							.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
+		if (event.getItem() != null && event.getItem().getItemMeta() != null) {
+			CustomItem customItem = javaPlugin.customItems().getItem(event.getItem().getItemMeta().getDisplayName());
+			if (customItem != null && customItem.hasClickEvent() && isLeftClick(event.getAction())) {
+				Block target = event.getPlayer().getTargetBlockExact(MAX_RANGE);
+				if (target != null) {
+					for (double d = 0; d <= target.getLocation().distance(event.getPlayer().getLocation()); d += 0.1) {
+						event.getPlayer().getWorld().spawnParticle(Particle.TOTEM, event.getPlayer().getEyeLocation()
+								.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
+					}
+					customItem.clickEvent()
+							.accept(new SpellCastEvent(target.getLocation().add(0.5, 0.5, 0.5), event.getPlayer()));
+					if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+						event.getItem().setAmount(event.getItem().getAmount() - 1);
+					}
+				} else {
+					for (double d = 0; d <= MAX_RANGE; d += 0.1) {
+						event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
+								.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
+					}
 				}
 			}
 		}
