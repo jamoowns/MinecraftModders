@@ -15,8 +15,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public final class CustomItem {
 
-	private Material material;
-
 	private Optional<Consumer<BlockPlaceEvent>> blockPlaceEvent;
 
 	private Optional<Consumer<ProjectileHitEvent>> projectileHitEvent;
@@ -31,16 +29,19 @@ public final class CustomItem {
 
 	private Optional<Consumer<PotionSplashEvent>> potionSplashEvent;
 
-	public CustomItem(Material aItem, String aName) {
+	public CustomItem(String aName, ItemStack aItem) {
 		name = aName;
-		material = aItem;
 		blockPlaceEvent = empty();
 		projectileHitEvent = empty();
 		potionSplashEvent = empty();
-		item = new ItemStack(material);
+		item = aItem.clone();
 		ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(aName);
 		item.setItemMeta(itemMeta);
+	}
+
+	public CustomItem(String aName, Material aMaterial) {
+		this(aName, new ItemStack(aMaterial));
 	}
 
 	public final ItemStack asItem() {

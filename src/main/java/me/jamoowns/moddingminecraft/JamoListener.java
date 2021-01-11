@@ -295,7 +295,7 @@ public final class JamoListener implements Listener {
 	}
 
 	private void setupCustomItems() {
-		normalZombieStick = new CustomItem(Material.REDSTONE_TORCH, "Normal Zombie");
+		normalZombieStick = new CustomItem("Normal Zombie", Material.ZOMBIE_HEAD);
 		normalZombieStick.setClickEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Zombie.class);
@@ -304,7 +304,7 @@ public final class JamoListener implements Listener {
 		javaPlugin.customItems().register(normalZombieStick);
 		mobSpawningItems.add(normalZombieStick);
 
-		normalSkeletonStick = new CustomItem(Material.END_ROD, "Normal Skeleton");
+		normalSkeletonStick = new CustomItem("Normal Skeleton", Material.SKELETON_SKULL);
 		normalSkeletonStick.setClickEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Skeleton.class);
@@ -313,7 +313,7 @@ public final class JamoListener implements Listener {
 		javaPlugin.customItems().register(normalSkeletonStick);
 		mobSpawningItems.add(normalSkeletonStick);
 
-		guardSniperStick = new CustomItem(Material.IRON_BARS, "Guard | Sniper");
+		guardSniperStick = new CustomItem("Guard | Sniper", Material.IRON_BARS);
 		guardSniperStick.setClickEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Skeleton.class);
@@ -323,7 +323,7 @@ public final class JamoListener implements Listener {
 		javaPlugin.customItems().register(guardSniperStick);
 		mobSpawningItems.add(guardSniperStick);
 
-		normalCreeperStick = new CustomItem(Material.TWISTING_VINES, "Normal Creeper");
+		normalCreeperStick = new CustomItem("Normal Creeper", Material.CREEPER_HEAD);
 		normalCreeperStick.setClickEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Creeper.class);
@@ -332,7 +332,7 @@ public final class JamoListener implements Listener {
 		javaPlugin.customItems().register(normalCreeperStick);
 		mobSpawningItems.add(normalCreeperStick);
 
-		normalMobStick = new CustomItem(Material.SOUL_TORCH, "Unkown Mob");
+		normalMobStick = new CustomItem("Unkown Mob", Material.SOUL_TORCH);
 		normalMobStick.setClickEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			List<EntityType> mobList = Arrays.asList(EntityType.ZOMBIE, EntityType.SKELETON,
@@ -353,7 +353,7 @@ public final class JamoListener implements Listener {
 		javaPlugin.customItems().register(normalMobStick);
 		mobSpawningItems.add(normalMobStick);
 
-		normalRoomItem = new CustomItem(Material.LECTERN, "Standard Room");
+		normalRoomItem = new CustomItem("Standard Room", Material.LECTERN);
 		normalRoomItem.setBlockPlaceEvent(event -> {
 			Location startPoint = event.getBlockPlaced().getLocation().add(0, 0, 0);
 
@@ -364,13 +364,13 @@ public final class JamoListener implements Listener {
 		});
 		javaPlugin.customItems().register(normalRoomItem);
 
-		skeletonArrowItem = new CustomItem(Material.ARROW, "Skeleton Arrow");
+		skeletonArrowItem = new CustomItem("Skeleton Arrow", Material.ARROW);
 		skeletonArrowItem.setProjectileHitEvent(event -> {
 			event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Skeleton.class);
 		});
 		javaPlugin.customItems().register(skeletonArrowItem);
 
-		lightningAnusItem = new CustomItem(Material.CHAIN, "Lightning Storm");
+		lightningAnusItem = new CustomItem("Lightning Storm", Material.CHAIN);
 		lightningAnusItem.setBlockPlaceEvent(event -> {
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
 

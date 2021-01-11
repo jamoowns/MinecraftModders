@@ -1381,13 +1381,13 @@ public class MabListener implements Listener {
 	}
 
 	private void setupCustomItems() {
-		multiShotBowItem = new CustomItem(Material.CROSSBOW, "MultiShot Bow");
+		multiShotBowItem = new CustomItem("MultiShot Bow", Material.CROSSBOW);
 		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
 		meta.addEnchant(Enchantment.MULTISHOT, 1, true);
 		multiShotBowItem.asItem().setItemMeta(meta);
 		javaPlugin.customItems().register(multiShotBowItem);
 
-		creeperArrowItem = new CustomItem(Material.ARROW, "Creeper Arrow");
+		creeperArrowItem = new CustomItem("Creeper Arrow", Material.ARROW);
 		creeperArrowItem.setProjectileHitEvent(event -> {
 			int result = RANDOM.nextInt(4) + 1;
 			for (int i = 0; i < result; i++) {
@@ -1396,13 +1396,13 @@ public class MabListener implements Listener {
 		});
 		javaPlugin.customItems().register(creeperArrowItem);
 
-		explosiveArrowItem = new CustomItem(Material.ARROW, "Explosive Arrow");
+		explosiveArrowItem = new CustomItem("Explosive Arrow", Material.ARROW);
 		explosiveArrowItem.setProjectileHitEvent(event -> {
 			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
 		});
 		javaPlugin.customItems().register(explosiveArrowItem);
 
-		treeArrowItem = new CustomItem(Material.ARROW, "Tree Arrow");
+		treeArrowItem = new CustomItem("Tree Arrow", Material.ARROW);
 		treeArrowItem.setProjectileHitEvent(event -> {
 			Location loc = event.getEntity().getLocation();
 			if (!event.getEntity().getLocation().getWorld().getBlockAt(loc.add(0, -1, 0)).getType().name()
@@ -1414,7 +1414,7 @@ public class MabListener implements Listener {
 		});
 		javaPlugin.customItems().register(treeArrowItem);
 
-		rotateArrowItem = new CustomItem(Material.ARROW, "Rotate Arrow");
+		rotateArrowItem = new CustomItem("Rotate Arrow", Material.ARROW);
 		rotateArrowItem.setProjectileHitEvent(event -> {
 			Random r = new Random();
 			int low = 1;
@@ -1460,7 +1460,7 @@ public class MabListener implements Listener {
 		});
 		javaPlugin.customItems().register(rotateArrowItem);
 
-		fillArrowItem = new CustomItem(Material.ARROW, "Fill Arrow");
+		fillArrowItem = new CustomItem("Fill Arrow", Material.ARROW);
 		fillArrowItem.setProjectileHitEvent(event -> {
 			for (int i = 0; i < 9; i++) {
 				if (event.getEntity().getLocation().getY() + i < 63) {
@@ -1481,7 +1481,7 @@ public class MabListener implements Listener {
 		});
 		javaPlugin.customItems().register(fillArrowItem);
 
-		swapsiesSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Swapsies When Dropsies");
+		swapsiesSplashPotionItem = new CustomItem("Swapsies When Dropsies", Material.SPLASH_POTION);
 		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
 			SwitchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
 		});
@@ -1490,7 +1490,7 @@ public class MabListener implements Listener {
 		});
 		javaPlugin.customItems().register(swapsiesSplashPotionItem);
 
-		medusaSplashPotionItem = new CustomItem(Material.SPLASH_POTION, "Tears of Medusa");
+		medusaSplashPotionItem = new CustomItem("Tears of Medusa", Material.SPLASH_POTION);
 		medusaSplashPotionItem.setPotionSplashEvent(event -> {
 			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.SLOW, 100, 200);
 			PotionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.JUMP, 100, 100000);
@@ -1500,7 +1500,7 @@ public class MabListener implements Listener {
 		});
 		javaPlugin.customItems().register(medusaSplashPotionItem);
 
-		explosiveSnowBallItem = new CustomItem(Material.SNOWBALL, "Ice Creep");
+		explosiveSnowBallItem = new CustomItem("Ice Creep", Material.SNOWBALL);
 		explosiveSnowBallItem.setProjectileHitEvent(event -> {
 			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
 		});
