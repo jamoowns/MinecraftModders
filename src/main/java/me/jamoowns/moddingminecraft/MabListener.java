@@ -612,8 +612,8 @@ public class MabListener implements Listener {
 
 		}
 		if (stage == 2) {
-			if (cCount == 15 && rCount < 15 && rCount > 1) {
-				if (openings != 3 && openings != 4 && rCount % 2 == 0) {
+			if (openings != 3 && openings != 4 && cCount == 15 && rCount < 15 && rCount > 1) {
+				if (rCount % 2 == 0) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
