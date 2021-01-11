@@ -58,6 +58,11 @@ public class CountdownTimer implements Runnable {
 		return seconds;
 	}
 
+	public void kill() {
+		if (assignedTaskId != null)
+			Bukkit.getScheduler().cancelTask(assignedTaskId);
+	}
+
 	/**
 	 * Runs the timer once, decrements seconds etc... Really wish we could make it
 	 * protected/private so you couldn't access it
@@ -90,8 +95,8 @@ public class CountdownTimer implements Runnable {
 	 */
 	public void scheduleTimer() {
 		// Initialize our assigned task's id, for later use so we can cancel
-		this.assignedTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this,
-				delay * TimeConstants.ONE_SECOND, TimeConstants.ONE_SECOND);
+		assignedTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, delay * TimeConstants.ONE_SECOND,
+				TimeConstants.ONE_SECOND);
 	}
 
 }
