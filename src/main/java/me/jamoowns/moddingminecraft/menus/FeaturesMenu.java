@@ -77,10 +77,10 @@ public final class FeaturesMenu implements ICustomMenu {
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 			}
 		}
-		double maxSize = Math.ceil(featureMenuItems.size() / 9);
+		double maxSize = Math.ceil(featureMenuItems.size() / 9.0);
 		Broadcaster.broadcastError(maxSize);
-		Broadcaster.broadcastError(maxSize * 9);
-		inventory = Bukkit.createInventory(null, (int) (Math.ceil(featureMenuItems.size() / 9) * 9 + 9),
+		Broadcaster.broadcastError(maxSize * 9.0);
+		inventory = Bukkit.createInventory(null, (int) (Math.ceil(featureMenuItems.size() / 9.0) * 9.0 + 9),
 				"Features Menu");
 	}
 
