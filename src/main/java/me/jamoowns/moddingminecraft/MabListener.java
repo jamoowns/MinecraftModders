@@ -67,6 +67,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
+import me.jamoowns.moddingminecraft.features.Feature;
 
 public class MabListener implements Listener {
 
@@ -790,7 +791,7 @@ public class MabListener implements Listener {
 
 	@EventHandler
 	public void onEntityDeathEvent(EntityDeathEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.FUNKY_MOB_DEATH)) {
+		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.FUNKY_MOB_DEATH)) {
 			if (event.getEntity() instanceof Sheep) {
 				Sheep sheepEnt = (Sheep) event.getEntity();
 				Player mcPlayer = sheepEnt.getKiller();
@@ -1032,7 +1033,7 @@ public class MabListener implements Listener {
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.IRON_GOLEM)) {
+		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.IRON_GOLEM)) {
 			Player playerEnt = event.getEntity();
 			Random r = new Random();
 			int low = 0;
@@ -1093,7 +1094,7 @@ public class MabListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMoveEvent(PlayerMoveEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.WINFRED)) {
+		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.WINFRED)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Witch) {
 					if (ent.getName().contains("Winfred")) {
@@ -1119,7 +1120,7 @@ public class MabListener implements Listener {
 			}
 		}
 
-		if (javaPlugin.isFeatureActive(Feature.PLAYER_TRAIL)) {
+		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.PLAYER_TRAIL)) {
 			Location belowPlayer = event.getPlayer().getLocation().add(0, -1, 0);
 
 			if (!belowPlayer.getBlock().isEmpty() && !belowPlayer.getBlock().isLiquid()) {

@@ -1,4 +1,4 @@
-package me.jamoowns.moddingminecraft;
+package me.jamoowns.moddingminecraft.features;
 
 public interface IFeatureListener {
 

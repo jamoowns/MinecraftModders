@@ -47,6 +47,7 @@ import com.google.common.collect.Lists;
 
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
+import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
 import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
@@ -95,7 +96,7 @@ public final class JamoListener implements Listener {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 			@Override
 			public void run() {
-				if (javaPlugin.isFeatureActive(Feature.RANDOM_CHESTS)) {
+				if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.RANDOM_CHESTS)) {
 					randomChestSpawn();
 				}
 			}
@@ -147,7 +148,7 @@ public final class JamoListener implements Listener {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 			@Override
 			public void run() {
-				if (javaPlugin.isFeatureActive(Feature.BATTLE_ROYALE)) {
+				if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.BATTLE_ROYALE)) {
 					Bukkit.getOnlinePlayers().forEach(player -> {
 						ItemStack item = mobSpawningItems.get(RANDOM.nextInt(mobSpawningItems.size())).asItem();
 						item.setAmount(RANDOM.nextInt(15) + 10);
@@ -166,7 +167,7 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onCraftItemEvent(CraftItemEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.RANDOM_ENCHANT)) {
+		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.RANDOM_ENCHANT)) {
 			ItemStack result = event.getRecipe().getResult().clone();
 			ItemMeta meta = result.getItemMeta();
 			for (int i = 0; i < 7; i++) {
@@ -207,21 +208,21 @@ public final class JamoListener implements Listener {
 
 	@EventHandler
 	public void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.RANDOM_BUCKET)) {
+		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.RANDOM_BUCKET)) {
 			event.setItemStack(new ItemStack(BUCKET_TYPES.get(RANDOM.nextInt(BUCKET_TYPES.size()))));
 		}
 	}
 
 	@EventHandler
 	public void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.EGG_WITCH)) {
+		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.EGG_WITCH)) {
 			event.setHatchingType(EntityType.WITCH);
 		}
 	}
 
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent event) {
-		if (javaPlugin.isFeatureActive(Feature.ZOMBIE_BELL)) {
+		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.ZOMBIE_BELL)) {
 			if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.BELL) {
 				Player player = event.getPlayer();
 				Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));

@@ -22,8 +22,4 @@ public class CustomItems {
 	public final void register(CustomItem item) {
 		customItemsByName.put(item.name(), item);
 	}
-
-	public final int totalCustomItems() {
-		return customItemsByName.keySet().size();
-	}
 }
