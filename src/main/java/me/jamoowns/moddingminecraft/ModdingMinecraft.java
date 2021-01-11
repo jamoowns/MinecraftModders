@@ -9,6 +9,11 @@ import me.jamoowns.moddingminecraft.commands.CommandMinecraftModders;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItemListener;
 import me.jamoowns.moddingminecraft.customitems.CustomItems;
+import me.jamoowns.moddingminecraft.features.Feature;
+import me.jamoowns.moddingminecraft.features.FeatureTracker;
+import me.jamoowns.moddingminecraft.features.IFeatureListener;
+import me.jamoowns.moddingminecraft.menus.FeaturesMenu;
+import me.jamoowns.moddingminecraft.menus.MenuListener;
 import me.jamoowns.moddingminecraft.minigames.blockhunter.BlockHunterListener;
 import me.jamoowns.moddingminecraft.teams.Teams;
 
@@ -24,13 +29,17 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private BlockHunterListener blockHunterListener;
 
-	private Map<Feature, Boolean> statusByFeature;
+	public Map<Feature, Boolean> statusByFeature;
 
 	private CommandMinecraftModders commandExecutor;
 
 	private Teams teams;
 
 	private CustomItemListener customItemListener;
+
+	public FeatureTracker featureTracker;
+
+	private MenuListener menuListener;
 
 	public final CommandMinecraftModders commandExecutor() {
 		return commandExecutor;
@@ -52,8 +61,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
 	}
 
-	public final boolean isFeatureActive(Feature feature) {
-		return statusByFeature.getOrDefault(feature, false);
+	public final FeatureTracker featureTracker() {
+		return featureTracker;
 	}
 
 	// Fired when plug-in is disabled
@@ -116,7 +125,15 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		moshyListener = new MoshyListener();
 		blockHunterListener = new BlockHunterListener(this);
 		customItemListener = new CustomItemListener(this);
-		commandExecutor.addListener(this);
+		featureTracker = new FeatureTracker();
+		featureTracker.addListener(this);
+
+		menuListener = new MenuListener();
+		FeaturesMenu featureMenu = new FeaturesMenu(this);
+		menuListener.register(featureMenu);
+
+		commandExecutor().registerCommand(java.util.Collections.emptyList(), "features",
+				p -> p.openInventory(featureMenu.asInventory()));
 
 		this.getCommand("mm").setExecutor(commandExecutor);
 		getServer().getPluginManager().registerEvents(jamoListener, this);
