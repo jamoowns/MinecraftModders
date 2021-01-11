@@ -1,6 +1,7 @@
 package me.jamoowns.moddingminecraft.menus;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
@@ -99,12 +100,14 @@ public final class FeaturesMenu implements ICustomMenu {
 
 	@Override
 	public final Consumer<HumanEntity> getAction(ItemStack item) {
-		return p -> menuItem(item).onClick(p);
+		return p -> menuItem(item).get().onClick(p);
 	}
 
 	@Override
-	public final CustomMenuItem menuItem(ItemStack item) {
-		return Collections.find(featureMenuItems, CustomMenuItem::displayName, item.getItemMeta().getDisplayName())
-				.get();
+	public final Optional<CustomMenuItem> menuItem(ItemStack item) {
+		if (item.getItemMeta() == null) {
+			return Optional.empty();
+		}
+		return Collections.find(featureMenuItems, CustomMenuItem::displayName, item.getItemMeta().getDisplayName());
 	}
 }
