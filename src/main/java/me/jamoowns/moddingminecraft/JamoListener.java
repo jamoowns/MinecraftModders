@@ -388,7 +388,7 @@ public final class JamoListener implements Listener {
 	private void showAllItems(Player player) {
 		List<CustomItem> allItems = Lists.newArrayList(javaPlugin.customItems().allItems());
 
-		Inventory inv = Bukkit.createInventory(null, (int) (Math.ceil(allItems.size() / 9) * 9 + 9), "Custom Items");
+		Inventory inv = Bukkit.createInventory(null, (int) (Math.ceil(allItems.size() / 9.0) * 9.0), "Custom Items");
 
 		allItems.stream().map(CustomItem::asItem).forEach(inv::addItem);
 		player.openInventory(inv);

@@ -2,6 +2,7 @@ package me.jamoowns.moddingminecraft.menus;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,9 +25,12 @@ public final class MenuListener implements Listener {
 
 		if (menus.containsKey(inventory)) {
 			ICustomMenu menu = menus.get(inventory);
-			menu.getAction(event.getCurrentItem()).accept(player);
 			event.setCancelled(true);
-			event.getClickedInventory().setItem(event.getSlot(), menu.menuItem(event.getCurrentItem()).asItem());
+			Optional<CustomMenuItem> customItem = menu.menuItem(event.getCurrentItem());
+			if (customItem.isPresent()) {
+				menu.getAction(event.getCurrentItem()).accept(player);
+				event.getClickedInventory().setItem(event.getSlot(), customItem.get().asItem());
+			}
 		}
 	}
 

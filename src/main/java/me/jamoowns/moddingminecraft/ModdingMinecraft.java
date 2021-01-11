@@ -141,6 +141,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		getServer().getPluginManager().registerEvents(moshyListener, this);
 		getServer().getPluginManager().registerEvents(blockHunterListener, this);
 		getServer().getPluginManager().registerEvents(customItemListener, this);
+		getServer().getPluginManager().registerEvents(menuListener, this);
 	}
 
 	public final Teams teams() {

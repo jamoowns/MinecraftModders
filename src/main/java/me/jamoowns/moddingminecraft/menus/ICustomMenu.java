@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.menus;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.bukkit.entity.HumanEntity;
@@ -14,5 +15,5 @@ interface ICustomMenu {
 		return p -> p.getInventory().addItem(item);
 	}
 
-	CustomMenuItem menuItem(ItemStack item);
+	Optional<CustomMenuItem> menuItem(ItemStack item);
 }
