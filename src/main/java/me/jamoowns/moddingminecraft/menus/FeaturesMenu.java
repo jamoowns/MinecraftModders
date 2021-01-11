@@ -78,6 +78,7 @@ public final class FeaturesMenu implements ICustomMenu {
 			}
 		}
 		double maxSize = Math.ceil(featureMenuItems.size() / 9.0);
+		Broadcaster.broadcastError(featureMenuItems.size());
 		Broadcaster.broadcastError(maxSize);
 		Broadcaster.broadcastError(maxSize * 9.0);
 		inventory = Bukkit.createInventory(null, (int) (Math.ceil(featureMenuItems.size() / 9.0) * 9.0 + 9),
