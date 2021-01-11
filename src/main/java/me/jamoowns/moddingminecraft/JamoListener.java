@@ -107,8 +107,7 @@ public final class JamoListener implements Listener {
 
 		setupCustomItems();
 
-		taskKeeper.addBoardItem("Randomly swapping every 5 mins");
-		taskKeeper.addBoardItem("Get to the nether...");
+		taskKeeper.addBoardItem("Win BLOCKHUNTER");
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 			@Override
