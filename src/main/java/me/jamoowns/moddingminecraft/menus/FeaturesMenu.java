@@ -78,12 +78,12 @@ public final class FeaturesMenu implements ICustomMenu {
 		}
 		inventory = Bukkit.createInventory(null, (int) (Math.ceil(featureMenuItems.size() / 9) * 9 + 9),
 				"Features Menu");
-
-		featureMenuItems.stream().map(CustomMenuItem::asItem).forEach(inventory::addItem);
 	}
 
 	@Override
 	public final Inventory asInventory() {
+		inventory.clear();
+		featureMenuItems.stream().map(CustomMenuItem::asItem).forEach(inventory::addItem);
 		return inventory;
 	}
 
