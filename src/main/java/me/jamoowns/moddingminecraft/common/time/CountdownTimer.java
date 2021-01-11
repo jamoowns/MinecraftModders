@@ -90,7 +90,8 @@ public class CountdownTimer implements Runnable {
 	 */
 	public void scheduleTimer() {
 		// Initialize our assigned task's id, for later use so we can cancel
-		this.assignedTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, delay, 20L);
+		this.assignedTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this,
+				delay * TimeConstants.ONE_SECOND, TimeConstants.ONE_SECOND);
 	}
 
 }

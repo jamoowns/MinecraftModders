@@ -23,17 +23,20 @@ public final class CustomItem {
 
 	private Optional<Consumer<SpellCastEvent>> clickEvent;
 
+	private Optional<Consumer<PotionSplashEvent>> potionSplashEvent;
+
 	private String name;
 
 	private final ItemStack item;
-
-	private Optional<Consumer<PotionSplashEvent>> potionSplashEvent;
 
 	public CustomItem(String aName, ItemStack aItem) {
 		name = aName;
 		blockPlaceEvent = empty();
 		projectileHitEvent = empty();
 		potionSplashEvent = empty();
+		clickEvent = empty();
+		projectileLaunchEvent = empty();
+
 		item = aItem.clone();
 		ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(aName);
