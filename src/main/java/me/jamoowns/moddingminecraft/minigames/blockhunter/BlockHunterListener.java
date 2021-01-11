@@ -147,7 +147,7 @@ public final class BlockHunterListener implements Listener {
 					if (event.getItemInHand().equals(blockStand)) {
 						gp.get().setStand(event.getBlock().getLocation());
 						Broadcaster.sendInfo(event.getPlayer(),
-								"Block stand has been placed at: " + event.getBlock().getLocation().toString());
+								"Block stand has been placed at: " + pretty(event.getBlock().getLocation()));
 					} else {
 						if (gp.get().hasStandPlaced()
 								&& event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
@@ -163,7 +163,7 @@ public final class BlockHunterListener implements Listener {
 					if (event.getItemInHand().equals(blockStand)) {
 						gp.get().setStand(event.getBlock().getLocation());
 						Broadcaster.sendInfo(event.getPlayer(),
-								"Block stand has been placed at: " + event.getBlock().getLocation().toString());
+								"Block stand has been placed at: " + pretty(event.getBlock().getLocation()));
 					} else {
 						if (gp.get().hasStandPlaced()
 								&& event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
@@ -237,6 +237,10 @@ public final class BlockHunterListener implements Listener {
 
 	private Optional<GamePlayer> gamePlayer(UUID player) {
 		return Collections.find(gameplayers, GamePlayer::playerId, player);
+	}
+
+	private String pretty(Location loc) {
+		return "X:" + loc.getX() + ", Y:" + loc.getY() + ", Z:" + loc.getZ();
 	}
 
 	private void removeStand(GamePlayer gp) {
