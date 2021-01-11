@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +20,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import com.google.common.base.Predicates;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
@@ -192,19 +195,27 @@ public final class BlockHunterListener implements Listener {
 	}
 
 	private void checkWinnerPhase() {
-		for (GamePlayer gp : gameplayers) {
-			if (!gp.hasFoundBlock()) {
-				Broadcaster.broadcastInfo(Bukkit.getPlayer(gp.playerId()).getDisplayName() + " has been eliminated");
+		List<GamePlayer> removedGameplayers = gameplayers;
+		removedGameplayers.removeIf(Predicates.not(GamePlayer::hasFoundBlock));
+		if (removedGameplayers.size() != 0) {
+			for (GamePlayer gp : gameplayers) {
+				if (!gp.hasFoundBlock()) {
+					Broadcaster
+							.broadcastInfo(Bukkit.getPlayer(gp.playerId()).getDisplayName() + " has been eliminated");
+				}
 			}
 		}
-		gameplayers.removeIf(gp -> !gp.hasFoundBlock());
 		if (gameplayers.size() == 0) {
 			Broadcaster.broadcastInfo("Stalemate! Round will start again");
 			setChoosingPhase();
 		} else if (gameplayers.size() == 1) {
-			Broadcaster.broadcastInfo(
-					"WINNER!! " + Bukkit.getPlayer(Collections.findFirst(gameplayers).playerId()).getDisplayName()
-							+ " has won block hunter!");
+			Player player = Bukkit.getPlayer(Collections.findFirst(gameplayers).playerId());
+			Broadcaster.broadcastInfo("WINNER!! " + player.getDisplayName() + " has won block hunter!");
+			CountdownTimer countDown = new CountdownTimer(javaPlugin, 0, 5,
+					() -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK),
+					() -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK),
+					timer -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK));
+			countDown.scheduleTimer();
 			stopGame();
 		} else {
 			setChoosingPhase();

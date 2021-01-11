@@ -579,7 +579,7 @@ public class MabListener implements Listener {
 
 	}
 
-	public void cleanup() {
+	public final void cleanup() {
 		trailByPlayer.values().forEach(blocks -> {
 			blocks.forEach(block -> {
 				if (block.getType().name().contains("CARPET")) {
