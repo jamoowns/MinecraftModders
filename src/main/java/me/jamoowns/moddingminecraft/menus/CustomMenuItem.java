@@ -7,8 +7,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
-
 class CustomMenuItem {
 
 	private String title;
@@ -52,10 +50,8 @@ class CustomMenuItem {
 	public final void onClick(HumanEntity p) {
 		if (isEnabled.get()) {
 			disableAction.run();
-			Broadcaster.broadcastInfo("Disabled: " + title);
 		} else {
 			enableAction.run();
-			Broadcaster.broadcastInfo("Enabled: " + title);
 		}
 	}
 }

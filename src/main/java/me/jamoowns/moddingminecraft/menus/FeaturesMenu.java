@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.fated.Collections;
 import me.jamoowns.moddingminecraft.features.Feature;
 
@@ -76,6 +77,9 @@ public final class FeaturesMenu implements ICustomMenu {
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 			}
 		}
+		double maxSize = Math.ceil(featureMenuItems.size() / 9);
+		Broadcaster.broadcastError(maxSize);
+		Broadcaster.broadcastError(maxSize * 9);
 		inventory = Bukkit.createInventory(null, (int) (Math.ceil(featureMenuItems.size() / 9) * 9 + 9),
 				"Features Menu");
 	}
