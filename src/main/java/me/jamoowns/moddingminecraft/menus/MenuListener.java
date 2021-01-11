@@ -26,10 +26,12 @@ public final class MenuListener implements Listener {
 		if (menus.containsKey(inventory)) {
 			ICustomMenu menu = menus.get(inventory);
 			event.setCancelled(true);
-			Optional<CustomMenuItem> customItem = menu.menuItem(event.getCurrentItem());
-			if (customItem.isPresent()) {
-				menu.getAction(event.getCurrentItem()).accept(player);
-				event.getClickedInventory().setItem(event.getSlot(), customItem.get().asItem());
+			if (event.getCurrentItem() != null && event.getClickedInventory().equals(event.getInventory())) {
+				Optional<CustomMenuItem> customItem = menu.menuItem(event.getCurrentItem());
+				if (customItem.isPresent()) {
+					menu.getAction(event.getCurrentItem()).accept(player);
+					event.getClickedInventory().setItem(event.getSlot(), customItem.get().asItem());
+				}
 			}
 		}
 	}
