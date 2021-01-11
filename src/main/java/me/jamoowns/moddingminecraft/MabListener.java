@@ -618,7 +618,7 @@ public class MabListener implements Listener {
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 				}
-			} else if (cCount == 1 && rCount < 15 && rCount > 1) {
+			} else if (openings == 4 && cCount == 1 && rCount < 15 && rCount > 1) {
 				if (rCount % 2 == 0) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else {
@@ -630,7 +630,7 @@ public class MabListener implements Listener {
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 				}
-			} else if (openings == 4 && rCount == 1 && cCount < 15 && cCount > 1) {
+			} else if (rCount == 1 && cCount < 15 && cCount > 1) {
 				if (cCount % 2 == 0) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else {
