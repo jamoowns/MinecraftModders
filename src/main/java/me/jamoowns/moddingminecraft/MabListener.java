@@ -602,6 +602,10 @@ public class MabListener implements Listener {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
+			if (openings == 3 && (cCount == 2 && rCount < 15) || (rCount == 2 && cCount < 15)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			}
+
 		}
 		if (stage == 2) {
 			if (cCount == 15 && rCount < 15 && rCount > 1) {
@@ -694,8 +698,12 @@ public class MabListener implements Listener {
 			BuildGrid(1, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 		}
 		if (event.getBlock().getType().equals(Material.CRIMSON_HYPHAE)) {
-			event.getPlayer().sendMessage("Building");
+			event.getPlayer().sendMessage("Building 2");
 			BuildGrid(2, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
+		}
+		if (event.getBlock().getType().equals(Material.WET_SPONGE)) {
+			event.getPlayer().sendMessage("Building 3");
+			BuildGrid(3, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
