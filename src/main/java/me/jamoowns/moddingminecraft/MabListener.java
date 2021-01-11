@@ -106,7 +106,7 @@ public class MabListener implements Listener {
 	}
 
 	public void BuildGrid(int grid, BlockFace direction, Location loc) {
-		if (grid == 2 || grid == 3) {
+		if (grid == 2 || grid == 3 || grid == 4) {
 			Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 					Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
 			createGrids(17, 30, 17);
@@ -708,6 +708,10 @@ public class MabListener implements Listener {
 		if (event.getBlock().getType().equals(Material.WET_SPONGE)) {
 			event.getPlayer().sendMessage("Building 3");
 			BuildGrid(3, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
+		}
+		if (event.getBlock().getType().equals(Material.CHISELED_SANDSTONE)) {
+			event.getPlayer().sendMessage("Building 4");
+			BuildGrid(4, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
