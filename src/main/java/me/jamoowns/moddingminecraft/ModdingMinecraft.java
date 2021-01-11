@@ -102,8 +102,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 				case PLAYER_TRAIL:
 					statusByFeature.put(Feature.PLAYER_TRAIL, true);
 					break;
-				case Winfred:
-					statusByFeature.put(Feature.Winfred, true);
+				case WINFRED:
+					statusByFeature.put(Feature.WINFRED, true);
 					break;
 				default:
 					break;
