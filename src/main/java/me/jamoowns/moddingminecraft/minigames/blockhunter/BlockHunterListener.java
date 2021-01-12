@@ -209,27 +209,30 @@ public final class BlockHunterListener implements Listener {
 
 	private void checkWinnerPhase() {
 		List<GamePlayer> removedGameplayers = new ArrayList<>(gameplayers);
-		removedGameplayers.removeIf(Predicates.not(GamePlayer::hasFoundBlock));
-		if (removedGameplayers.size() != 0) {
+		List<GamePlayer> playersLeft = new ArrayList<>(gameplayers);
+		playersLeft.removeIf(Predicates.not(GamePlayer::hasFoundBlock));
+		removedGameplayers.removeIf(GamePlayer::hasFoundBlock);
+
+		if (playersLeft.size() != 0) {
 			for (GamePlayer gp : removedGameplayers) {
 				Broadcaster
 						.broadcastGameInfo(Bukkit.getPlayer(gp.playerId()).getDisplayName() + " has been eliminated");
 			}
 		}
-		if (removedGameplayers.size() == 0) {
+		if (playersLeft.size() == 0) {
 			Broadcaster.broadcastGameInfo("Stalemate! Round will start again");
 			setChoosingPhase();
-		} else if (gameplayers.size() == 1) {
+		} else if (playersLeft.size() == 1) {
 			Player player = Bukkit.getPlayer(Collections.findFirst(gameplayers).playerId());
 			Broadcaster.broadcastGameInfo("WINNER!! " + player.getDisplayName() + " has won block hunter!");
-			CountdownTimer countDown = new CountdownTimer(javaPlugin, 0, 5,
+			CountdownTimer countDown = new CountdownTimer(javaPlugin, 5, 0,
 					() -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK),
 					() -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK),
 					timer -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK));
 			countDown.scheduleTimer();
 			stopGame();
 		} else {
-			gameplayers = removedGameplayers;
+			gameplayers = playersLeft;
 			setChoosingPhase();
 		}
 	}
@@ -253,20 +256,20 @@ public final class BlockHunterListener implements Listener {
 		currentGameState = GameState.CHOOSING;
 		for (GamePlayer gp : gameplayers) {
 			Player player = Bukkit.getPlayer(gp.playerId());
-			Broadcaster.sendGameInfo(player, "Choose a block and place it on your stand You have 2 minutes!");
 
 			gp.clearChosenBlock();
 			removeStand(gp);
 			gp.clearStand();
 			player.getInventory().addItem(blockStand);
-
-			CountdownTimer countDown = new CountdownTimer(javaPlugin, 10, CHOOSING_TIME_MINUTES * 60 - 10,
-					() -> Broadcaster.sendGameInfo(player, "You have 10 seconds left to choose your block"),
-					() -> Broadcaster.sendGameInfo(player, "Time's up!"),
-					timer -> Broadcaster.sendGameInfo(player, "Time left to choose: " + timer.getSecondsLeft()));
-			countDown.scheduleTimer();
-			countdownTimers.add(countDown);
 		}
+
+		Broadcaster.broadcastGameInfo("Choose a block and place it on your stand You have 2 minutes!");
+		CountdownTimer countDown = new CountdownTimer(javaPlugin, 10, CHOOSING_TIME_MINUTES * 60 - 10,
+				() -> Broadcaster.broadcastGameInfo("You have 10 seconds left to choose your block"),
+				() -> Broadcaster.broadcastGameInfo("Time's up!"),
+				timer -> Broadcaster.broadcastGameInfo("Time left to choose: " + timer.getSecondsLeft()));
+		countDown.scheduleTimer();
+		countdownTimers.add(countDown);
 		int task = Bukkit.getScheduler()
 				.runTaskLater(javaPlugin, this::setSearchingPhase, CHOOSING_TIME + TimeConstants.ONE_SECOND)
 				.getTaskId();
@@ -302,23 +305,23 @@ public final class BlockHunterListener implements Listener {
 			gp.clearStand();
 			gp.foundBlock(false);
 			player.getInventory().addItem(blockStand);
-
-			int task = Bukkit.getScheduler()
-					.runTaskLater(javaPlugin,
-							() -> Broadcaster.sendGameInfo(player, "You have 1 minute left to search for your block!"),
-							SEARCHING_TIME - TimeConstants.ONE_MINUTE)
-					.getTaskId();
-			timers.add(task);
-
-			CountdownTimer countDown = new CountdownTimer(javaPlugin, 10, SEARCHING_TIME_MINUTES * 60 - 10,
-					() -> Broadcaster.sendGameInfo(player, "You have 10 seconds left to search for your block!"),
-					() -> Broadcaster.sendGameInfo(player, "Time's up!"), timer -> Broadcaster.sendGameInfo(player,
-							"Time left to find the block: " + timer.getSecondsLeft()));
-
-			countDown.scheduleTimer();
-			countdownTimers.add(countDown);
 		}
+
 		int task = Bukkit.getScheduler()
+				.runTaskLater(javaPlugin,
+						() -> Broadcaster.broadcastGameInfo("You have 1 minute left to search for your block!"),
+						SEARCHING_TIME - TimeConstants.ONE_MINUTE)
+				.getTaskId();
+		timers.add(task);
+
+		CountdownTimer countDown = new CountdownTimer(javaPlugin, 10, SEARCHING_TIME_MINUTES * 60 - 10,
+				() -> Broadcaster.broadcastGameInfo("You have 10 seconds left to search for your block!"),
+				() -> Broadcaster.broadcastGameInfo("Time's up!"),
+				timer -> Broadcaster.broadcastGameInfo("Time left to find the block: " + timer.getSecondsLeft()));
+
+		countDown.scheduleTimer();
+		countdownTimers.add(countDown);
+		task = Bukkit.getScheduler()
 				.runTaskLater(javaPlugin, this::checkWinnerPhase, SEARCHING_TIME + TimeConstants.ONE_SECOND)
 				.getTaskId();
 		timers.add(task);
