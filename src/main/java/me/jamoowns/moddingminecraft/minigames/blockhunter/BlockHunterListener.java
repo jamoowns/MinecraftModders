@@ -283,7 +283,8 @@ public final class BlockHunterListener implements Listener {
 						.findFirst(unChosenPlayers.stream().filter(not(gp::equals)).collect(Collectors.toList()));
 			} else {
 				targetPlayer = Collections.findFirst(unChosenPlayers.stream().filter(not(gp::equals))
-						.filter(other -> !other.targetPlayer().equals(gp)).collect(Collectors.toList()));
+						.filter(other -> other.targetPlayer() == null || !other.targetPlayer().equals(gp))
+						.collect(Collectors.toList()));
 			}
 			gp.setTargetPlayer(targetPlayer);
 			Player player = Bukkit.getPlayer(gp.playerId());
