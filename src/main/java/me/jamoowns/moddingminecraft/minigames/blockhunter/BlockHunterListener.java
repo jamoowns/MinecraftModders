@@ -76,8 +76,7 @@ public final class BlockHunterListener implements Listener {
 				Broadcaster.broadcastInfo("Blockhunt has STARTED!");
 				setChoosingPhase();
 			} else {
-				Broadcaster.sendError(host,
-						"Unable to start game. Requires 2 players and all players to have placed stands");
+				Broadcaster.sendError(host, "Unable to start game. Requires 2+ players.");
 			}
 		} else {
 			Broadcaster.sendError(host, "Please initiate the game first");
@@ -85,13 +84,13 @@ public final class BlockHunterListener implements Listener {
 	}
 
 	public final void initiateGame() {
-		Broadcaster.broadcastInfo("Blockhunt has been initiated!");
+		Broadcaster.broadcastGameInfo("Blockhunt has been initiated!");
 		currentGameState = GameState.SETUP;
 	}
 
 	public final void join(Player p) {
 		if (currentGameState == GameState.SETUP) {
-			Broadcaster.broadcastInfo(p.getDisplayName() + " has joined the blockhunt");
+			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the blockhunt");
 
 			GamePlayer gamePlayer = new GamePlayer(p.getUniqueId());
 			gameplayers.add(gamePlayer);
@@ -111,7 +110,7 @@ public final class BlockHunterListener implements Listener {
 				if (gp.isPresent()) {
 					if (gp.get().hasStandPlaced()
 							&& event.getBlock().getLocation().equals(blockAbove(gp.get().standLocation()))) {
-						Broadcaster.sendInfo(event.getPlayer(), "You have removed your choice!");
+						Broadcaster.sendGameInfo(event.getPlayer(), "You have removed your choice!");
 
 						gp.get().clearChosenBlock();
 					}
@@ -122,7 +121,7 @@ public final class BlockHunterListener implements Listener {
 					if (gp.get().hasStandPlaced()
 							&& event.getBlock().getLocation().equals(blockAbove(gp.get().standLocation()))) {
 						if (gp.get().hasFoundBlock()) {
-							Broadcaster.sendInfo(event.getPlayer(), "Woops, you have unfound your block");
+							Broadcaster.sendGameInfo(event.getPlayer(), "Woops, you have unfound your block");
 							Broadcaster
 									.broadcastError(event.getPlayer().getDisplayName() + " has unfound their block??");
 							gp.get().foundBlock(false);
@@ -146,12 +145,13 @@ public final class BlockHunterListener implements Listener {
 				if (gp.isPresent()) {
 					if (event.getItemInHand().equals(blockStand)) {
 						gp.get().setStand(event.getBlock().getLocation());
-						Broadcaster.sendInfo(event.getPlayer(),
+						Broadcaster.sendGameInfo(event.getPlayer(),
 								"Block stand has been placed at: " + pretty(event.getBlock().getLocation()));
 					} else {
 						if (gp.get().hasStandPlaced()
 								&& event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
-							Broadcaster.sendInfo(event.getPlayer(), "You have chosen: " + event.getBlock().getType());
+							Broadcaster.sendGameInfo(event.getPlayer(),
+									"You have chosen: " + event.getBlock().getType());
 
 							gp.get().chosenBlock(event.getBlock().getType());
 						}
@@ -162,16 +162,17 @@ public final class BlockHunterListener implements Listener {
 				if (gp.isPresent()) {
 					if (event.getItemInHand().equals(blockStand)) {
 						gp.get().setStand(event.getBlock().getLocation());
-						Broadcaster.sendInfo(event.getPlayer(),
+						Broadcaster.sendGameInfo(event.getPlayer(),
 								"Block stand has been placed at: " + pretty(event.getBlock().getLocation()));
 					} else {
 						if (gp.get().hasStandPlaced()
 								&& event.getBlockPlaced().getLocation().equals(blockAbove(gp.get().standLocation()))) {
 							Material targetsBlock = gp.get().targetPlayer().chosenBlock();
 							if (targetsBlock.equals(event.getBlock().getType())) {
-								Broadcaster.sendInfo(event.getPlayer(), "Correct! wait for other players to finish");
-								Broadcaster
-										.broadcastInfo(event.getPlayer().getDisplayName() + " has found their block");
+								Broadcaster.sendGameInfo(event.getPlayer(),
+										"Correct! wait for other players to finish");
+								Broadcaster.broadcastGameInfo(
+										event.getPlayer().getDisplayName() + " has found their block");
 								gp.get().foundBlock(true);
 
 								if (gameplayers.stream().allMatch(GamePlayer::hasFoundBlock)) {
@@ -179,7 +180,7 @@ public final class BlockHunterListener implements Listener {
 									setChoosingPhase();
 								}
 							} else {
-								Broadcaster.sendInfo(event.getPlayer(),
+								Broadcaster.sendGameInfo(event.getPlayer(),
 										"Incorrect, keep searching for: " + targetsBlock);
 							}
 						}
@@ -199,7 +200,7 @@ public final class BlockHunterListener implements Listener {
 		gameplayers.clear();
 		stopAllTimers();
 		currentGameState = GameState.STOPPED;
-		Broadcaster.broadcastInfo("Blockhunt has been stopped!");
+		Broadcaster.broadcastGameInfo("Blockhunt has been stopped!");
 	}
 
 	private Location blockAbove(Location loc) {
@@ -211,15 +212,16 @@ public final class BlockHunterListener implements Listener {
 		removedGameplayers.removeIf(Predicates.not(GamePlayer::hasFoundBlock));
 		if (removedGameplayers.size() != 0) {
 			for (GamePlayer gp : removedGameplayers) {
-				Broadcaster.broadcastInfo(Bukkit.getPlayer(gp.playerId()).getDisplayName() + " has been eliminated");
+				Broadcaster
+						.broadcastGameInfo(Bukkit.getPlayer(gp.playerId()).getDisplayName() + " has been eliminated");
 			}
 		}
 		if (removedGameplayers.size() == 0) {
-			Broadcaster.broadcastInfo("Stalemate! Round will start again");
+			Broadcaster.broadcastGameInfo("Stalemate! Round will start again");
 			setChoosingPhase();
 		} else if (gameplayers.size() == 1) {
 			Player player = Bukkit.getPlayer(Collections.findFirst(gameplayers).playerId());
-			Broadcaster.broadcastInfo("WINNER!! " + player.getDisplayName() + " has won block hunter!");
+			Broadcaster.broadcastGameInfo("WINNER!! " + player.getDisplayName() + " has won block hunter!");
 			CountdownTimer countDown = new CountdownTimer(javaPlugin, 0, 5,
 					() -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK),
 					() -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK),
@@ -251,7 +253,7 @@ public final class BlockHunterListener implements Listener {
 		currentGameState = GameState.CHOOSING;
 		for (GamePlayer gp : gameplayers) {
 			Player player = Bukkit.getPlayer(gp.playerId());
-			Broadcaster.sendInfo(player, "Choose a block and place it on your stand You have 2 minutes!");
+			Broadcaster.sendGameInfo(player, "Choose a block and place it on your stand You have 2 minutes!");
 
 			gp.clearChosenBlock();
 			removeStand(gp);
@@ -259,9 +261,9 @@ public final class BlockHunterListener implements Listener {
 			player.getInventory().addItem(blockStand);
 
 			CountdownTimer countDown = new CountdownTimer(javaPlugin, 10, CHOOSING_TIME_MINUTES * 60 - 10,
-					() -> Broadcaster.sendInfo(player, "You have 10 seconds left to choose your block"),
-					() -> Broadcaster.sendInfo(player, "Time's up!"),
-					timer -> Broadcaster.sendInfo(player, "Time left to choose: " + timer.getSecondsLeft()));
+					() -> Broadcaster.sendGameInfo(player, "You have 10 seconds left to choose your block"),
+					() -> Broadcaster.sendGameInfo(player, "Time's up!"),
+					timer -> Broadcaster.sendGameInfo(player, "Time left to choose: " + timer.getSecondsLeft()));
 			countDown.scheduleTimer();
 			countdownTimers.add(countDown);
 		}
@@ -290,10 +292,11 @@ public final class BlockHunterListener implements Listener {
 			Player target = Bukkit.getPlayer(gp.targetPlayer().playerId());
 			Material targetBlock = gp.targetPlayer().chosenBlock();
 			if (targetBlock == null) {
+				gp.targetPlayer().chosenBlock(Material.DIRT);
 				targetBlock = Material.DIRT;
 			}
-			Broadcaster.sendInfo(player, "You are searching for " + target.getDisplayName() + "'s block: " + targetBlock
-					+ ". Place it on your stand. You have 4 minutes!");
+			Broadcaster.sendGameInfo(player, "You are searching for " + target.getDisplayName() + "'s block: "
+					+ targetBlock + ". Place it on your stand. You have 5 minutes!");
 
 			removeStand(gp);
 			gp.clearStand();
@@ -302,15 +305,15 @@ public final class BlockHunterListener implements Listener {
 
 			int task = Bukkit.getScheduler()
 					.runTaskLater(javaPlugin,
-							() -> Broadcaster.sendInfo(player, "You have 1 minute left to search for your block!"),
+							() -> Broadcaster.sendGameInfo(player, "You have 1 minute left to search for your block!"),
 							SEARCHING_TIME - TimeConstants.ONE_MINUTE)
 					.getTaskId();
 			timers.add(task);
 
 			CountdownTimer countDown = new CountdownTimer(javaPlugin, 10, SEARCHING_TIME_MINUTES * 60 - 10,
-					() -> Broadcaster.sendInfo(player, "You have 10 seconds left to search for your block!"),
-					() -> Broadcaster.sendInfo(player, "Time's up!"),
-					timer -> Broadcaster.sendInfo(player, "Time left to find the block: " + timer.getSecondsLeft()));
+					() -> Broadcaster.sendGameInfo(player, "You have 10 seconds left to search for your block!"),
+					() -> Broadcaster.sendGameInfo(player, "Time's up!"), timer -> Broadcaster.sendGameInfo(player,
+							"Time left to find the block: " + timer.getSecondsLeft()));
 
 			countDown.scheduleTimer();
 			countdownTimers.add(countDown);
