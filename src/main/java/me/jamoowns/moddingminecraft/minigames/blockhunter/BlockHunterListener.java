@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -192,6 +193,18 @@ public final class BlockHunterListener implements Listener {
 		}
 	}
 
+	@EventHandler
+	public final void onPlayerDeathEvent(PlayerDeathEvent event) {
+		Player player = event.getEntity();
+		Optional<GamePlayer> gp = gamePlayer(player.getUniqueId());
+		if (gp.isPresent() && player.getInventory().contains(blockStand)) {
+			event.getDrops().remove(blockStand);
+			player.getInventory().clear();
+			player.getInventory().addItem(blockStand);
+			event.setKeepInventory(true);
+		}
+	}
+
 	public final void stopGame() {
 		for (GamePlayer gp : gameplayers) {
 			removeStand(gp);
@@ -223,12 +236,17 @@ public final class BlockHunterListener implements Listener {
 			Broadcaster.broadcastGameInfo("Stalemate! Round will start again");
 			setChoosingPhase();
 		} else if (playersLeft.size() == 1) {
-			Player player = Bukkit.getPlayer(Collections.findFirst(gameplayers).playerId());
-			Broadcaster.broadcastGameInfo("WINNER!! " + player.getDisplayName() + " has won block hunter!");
+			Player winner = Bukkit.getPlayer(Collections.findFirst(playersLeft).playerId());
+			Broadcaster.broadcastGameInfo("WINNER!! " + winner.getDisplayName() + " has won block hunter!");
 			CountdownTimer countDown = new CountdownTimer(javaPlugin, 5, 0,
-					() -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK),
-					() -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK),
-					timer -> player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK));
+					() -> winner.getWorld().spawnEntity(winner.getLocation(), EntityType.FIREWORK),
+					() -> winner.getWorld().spawnEntity(winner.getLocation(), EntityType.FIREWORK),
+					timer -> winner.getWorld().spawnEntity(winner.getLocation(), EntityType.FIREWORK));
+			countDown.scheduleTimer();
+			countDown = new CountdownTimer(javaPlugin, 5, 0.5,
+					() -> winner.getWorld().spawnEntity(winner.getLocation(), EntityType.FIREWORK),
+					() -> winner.getWorld().spawnEntity(winner.getLocation(), EntityType.FIREWORK),
+					timer -> winner.getWorld().spawnEntity(winner.getLocation(), EntityType.FIREWORK));
 			countDown.scheduleTimer();
 			stopGame();
 		} else {
@@ -249,6 +267,11 @@ public final class BlockHunterListener implements Listener {
 		if (gp.hasStandPlaced()) {
 			gp.standLocation().getBlock().setType(Material.AIR);
 			blockAbove(gp.standLocation()).getBlock().setType(Material.AIR);
+		} else {
+			Player player = Bukkit.getPlayer(gp.playerId());
+			if (player != null) {
+				player.getInventory().remove(blockStand);
+			}
 		}
 	}
 
