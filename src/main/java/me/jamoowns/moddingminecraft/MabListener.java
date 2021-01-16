@@ -761,7 +761,7 @@ public class MabListener implements Listener {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
 					}
 				} else if (stage == 7) {
-					if (cCount == 0 || cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15 || cCount == 16) {
+					if (cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				}
@@ -772,7 +772,7 @@ public class MabListener implements Listener {
 					} else {
 					}
 				} else if (stage == 7) {
-					if (cCount == 0 || cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15 || cCount == 16) {
+					if (cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				}
@@ -783,7 +783,7 @@ public class MabListener implements Listener {
 					} else {
 					}
 				} else if (stage == 7) {
-					if (cCount == 0 || cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15 || cCount == 16) {
+					if (cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				}
@@ -799,7 +799,7 @@ public class MabListener implements Listener {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
 					}
 				} else if (stage == 7) {
-					if (cCount == 0 || cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15 || cCount == 16) {
+					if (cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				}
@@ -816,7 +816,7 @@ public class MabListener implements Listener {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
 					}
 				} else if (stage == 7) {
-					if (cCount == 0 || cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15 || cCount == 16) {
+					if (rCount == 1 || rCount == 5 || rCount == 11 || rCount == 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				}
@@ -827,7 +827,7 @@ public class MabListener implements Listener {
 					} else {
 					}
 				} else if (stage == 7) {
-					if (cCount == 0 || cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15 || cCount == 16) {
+					if (rCount == 1 || rCount == 5 || rCount == 11 || rCount == 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				}
@@ -838,7 +838,7 @@ public class MabListener implements Listener {
 					} else {
 					}
 				} else if (stage == 7) {
-					if (cCount == 0 || cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15 || cCount == 16) {
+					if (rCount == 1 || rCount == 5 || rCount == 11 || rCount == 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				}
@@ -855,7 +855,7 @@ public class MabListener implements Listener {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
 					}
 				} else if (stage == 7) {
-					if (cCount == 0 || cCount == 1 || cCount == 5 || cCount == 11 || cCount == 15 || cCount == 16) {
+					if (rCount == 1 || rCount == 5 || rCount == 11 || rCount == 15) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				}
@@ -886,6 +886,8 @@ public class MabListener implements Listener {
 					}
 
 				}
+			} else if ((rCount == 16 && cCount == 16) || (rCount == 0 && cCount == 16)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 		} else if (stage == 4 || stage == 8) {
 			if (rCount == 0 && cCount < 16 && cCount > 0) {
