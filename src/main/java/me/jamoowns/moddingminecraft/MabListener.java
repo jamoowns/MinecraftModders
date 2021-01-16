@@ -772,20 +772,24 @@ public class MabListener implements Listener {
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
 
-		if (event.getBlock().getType().equals(Material.WARPED_HYPHAE)) {
+		if (event.getBlock().getType().equals(Material.WARPED_HYPHAE) && mabmoSet) {
 			BuildGrid(1, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 		}
-		if (event.getBlock().getType().equals(Material.CRIMSON_HYPHAE)) {
+		if (event.getBlock().getType().equals(Material.CRIMSON_HYPHAE) && mabmoSet) {
 			event.getPlayer().sendMessage("Building 2");
 			BuildGrid(2, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 		}
-		if (event.getBlock().getType().equals(Material.WET_SPONGE)) {
+		if (event.getBlock().getType().equals(Material.WET_SPONGE) && mabmoSet) {
 			event.getPlayer().sendMessage("Building 3");
 			BuildGrid(3, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 		}
-		if (event.getBlock().getType().equals(Material.CHISELED_SANDSTONE)) {
+		if (event.getBlock().getType().equals(Material.CHISELED_SANDSTONE) && mabmoSet) {
 			event.getPlayer().sendMessage("Building 4");
 			BuildGrid(4, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
+		}
+		if (event.getBlock().getType().equals(Material.PODZOL) && mabmoSet) {
+			event.getPlayer().sendMessage("Building 5");
+			BuildGrid(5, linearFace(event.getPlayer().getLocation().getYaw()), event.getBlockPlaced().getLocation());
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
