@@ -807,13 +807,13 @@ public class MabListener implements Listener {
 
 	public int getStairFace(int east, BlockFace direction) {
 
-		if (east == 1 && false) {
+		if (east == 1 && (direction == BlockFace.SOUTH)) {
 			return 3;
-		} else if (east == 2 && (direction == BlockFace.SOUTH)) {
+		} else if (east == 2 && false) {
 			return 4;
-		} else if (east == 3 && false) {
+		} else if (east == 3 && (direction == BlockFace.SOUTH)) {
 			return 1;
-		} else if (east == 4 && (direction == BlockFace.SOUTH)) {
+		} else if (east == 4 && false) {
 			return 2;
 		}
 
