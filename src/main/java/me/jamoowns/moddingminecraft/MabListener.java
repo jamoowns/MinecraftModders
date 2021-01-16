@@ -1105,6 +1105,91 @@ public class MabListener implements Listener {
 
 				}
 			}
+		} else if (stage == 7) {
+			if (rCount == 0 && cCount < 16 && cCount > 0) {
+				if (openings != 5 && openings != 2 && openings != 3 && openings != 4) {
+					if (cCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
+					}
+				}
+			} else if (rCount == 1 && cCount < 15 && cCount > 1) {
+				if (openings != 5 && openings != 2 && openings != 3 && openings != 4) {
+					if (cCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					} else {
+					}
+				}
+			} else if (rCount == 15 && cCount < 15 && cCount > 1) {
+				if (openings != 4) {
+					if (cCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					} else {
+					}
+				}
+			} else if (rCount == 16 && cCount < 16 && cCount > 0) {
+				if (openings != 4) {
+					if (cCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
+					}
+				}
+			} else if (cCount == 0 && rCount < 16 && rCount > 0) {
+				if (openings != 2 && openings != 3 && openings != 4) {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+					}
+				}
+			} else if (cCount == 1 && rCount < 15 && rCount > 1) {
+				if (openings != 2 && openings != 3 && openings != 4) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					} else {
+					}
+				}
+			} else if (cCount == 15 && rCount < 15 && rCount > 1) {
+				if (openings != 3 && openings != 4) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					} else {
+					}
+				}
+			} else if (cCount == 16 && rCount < 16 && rCount > 0) {
+				if (openings != 3 && openings != 4) {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
+					}
+				}
+			} else if ((rCount == 15 && cCount == 15) || (rCount == 1 && cCount == 15) || (rCount == 15 && cCount == 1)
+					|| (rCount == 1 && cCount == 1)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			} else if ((rCount > 1 && rCount < 15 && cCount > 1 && cCount < 15)) {
+				if ((rCount == 8 && cCount == 8) || (rCount == 5 && cCount == 5) || (rCount == 11 && cCount == 11)
+						|| (rCount == 11 && cCount == 5) || (rCount == 5 && cCount == 11)) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				} else {
+					if (rCount > 4 && rCount < 12 && cCount > 4 && cCount < 12) {
+						if (cCount == 8 && (rCount == 9 || rCount == 10)) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+						}
+						if (cCount > 8 && cCount < 11 && rCount > 5 && rCount < 11) {
+							if (cCount == 9 && rCount == 6) {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
+							} else {
+								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+							}
+						}
+
+					}
+
+				}
+			}
 		}
 	}
 
