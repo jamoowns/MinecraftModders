@@ -615,16 +615,6 @@ public class MabListener implements Listener {
 		}
 		if (stage == 2) {
 			if (cCount == 16 && rCount < 16 && rCount > 0) {
-				if (openings != 3 && openings != 4) {
-					if (rCount % 2 == 0) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
-					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-				}
-			} else if (cCount == 15 && rCount < 15 && rCount > 1) {
 				if (openings != 5 && openings != 3 && openings != 4) {
 					if (rCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
@@ -634,8 +624,18 @@ public class MabListener implements Listener {
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
 				}
+			} else if (cCount == 15 && rCount < 15 && rCount > 1) {
+				if (openings != 3 && openings != 4) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+					}
+				} else {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
+				}
 			} else if (cCount == 1 && rCount < 15 && rCount > 1) {
-				if (openings != 5 && openings != 2 && openings != 3 && openings != 4) {
+				if (openings != 2 && openings != 3 && openings != 4) {
 					if (rCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else {
@@ -645,7 +645,7 @@ public class MabListener implements Listener {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
 				}
 			} else if (rCount == 15 && cCount < 15 && cCount > 1) {
-				if (openings != 5 && openings != 4) {
+				if (openings != 4) {
 					if (cCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else {
@@ -655,7 +655,7 @@ public class MabListener implements Listener {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
 				}
 			} else if (rCount == 1 && cCount < 15 && cCount > 1) {
-				if (openings != 5 && openings != 2 && openings != 3 && openings != 4) {
+				if (openings != 2 && openings != 3 && openings != 4) {
 					if (cCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else {
