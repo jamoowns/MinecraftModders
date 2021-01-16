@@ -615,7 +615,7 @@ public class MabListener implements Listener {
 		}
 		if (stage == 2) {
 			if (rCount == 0 && cCount < 16 && cCount > 0) {
-				if (openings != 3 && openings != 4) {
+				if (openings != 5 && openings != 2 && openings != 3 && openings != 4) {
 					if (rCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else {
@@ -625,7 +625,7 @@ public class MabListener implements Listener {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
 				}
 			} else if (rCount == 16 && cCount < 16 && cCount > 0) {
-				if (openings != 3 && openings != 4) {
+				if (openings != 4) {
 					if (rCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else {
@@ -635,7 +635,7 @@ public class MabListener implements Listener {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
 				}
 			} else if (cCount == 0 && rCount < 16 && rCount > 0) {
-				if (openings != 3 && openings != 4) {
+				if (openings != 2 && openings != 3 && openings != 4) {
 					if (rCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else {
