@@ -747,6 +747,16 @@ public class MabListener implements Listener {
 				}
 			}
 		}, 80);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+			@Override
+			public void run() {
+				if (PlayerArr.size() > 0) {
+					for (Player player : PlayerArr) {
+						player.sendTitle("", "", 40, 40, 40);
+					}
+				}
+			}
+		}, 120);
 	}
 
 	public void insert(int width, int height, int depth, Material material, int blockface, int updown, int corner) {
