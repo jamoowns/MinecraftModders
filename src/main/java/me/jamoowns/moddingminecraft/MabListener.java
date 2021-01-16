@@ -613,7 +613,17 @@ public class MabListener implements Listener {
 
 		}
 		if (stage == 2) {
-			if (cCount == 15 && rCount < 15 && rCount > 1) {
+			if (cCount == 16 && rCount < 16 && rCount > 0) {
+				if (openings != 3 && openings != 4) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+					}
+				} else {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
+				}
+			} else if (cCount == 15 && rCount < 15 && rCount > 1) {
 				if (openings != 3 && openings != 4) {
 					if (rCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
@@ -703,6 +713,45 @@ public class MabListener implements Listener {
 			}
 		}
 
+	}
+
+	public void GetReady(World world) {
+		List<Player> PlayerArr = new ArrayList<Player>();
+
+		for (Player players : world.getPlayers()) {
+			PlayerArr.add(players);
+		}
+
+		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+			@Override
+			public void run() {
+				if (PlayerArr.size() > 1) {
+					for (Player player : PlayerArr) {
+						player.sendTitle("Ready?", "", 40, 40, 40);
+					}
+				}
+			}
+		}, 40);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+			@Override
+			public void run() {
+				if (PlayerArr.size() > 1) {
+					for (Player player : PlayerArr) {
+						player.sendTitle("Set?", "", 40, 40, 40);
+					}
+				}
+			}
+		}, 80);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+			@Override
+			public void run() {
+				if (PlayerArr.size() > 1) {
+					for (Player player : PlayerArr) {
+						player.sendTitle("Go!", "", 40, 40, 40);
+					}
+				}
+			}
+		}, 120);
 	}
 
 	public void insert(int width, int height, int depth, Material material, int blockface, int updown, int corner) {
