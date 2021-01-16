@@ -721,7 +721,7 @@ public class MabListener implements Listener {
 		for (Player players : world.getPlayers()) {
 			PlayerArr.add(players);
 		}
-
+		sendMabmoMsg("" + PlayerArr.size());
 		if (PlayerArr.size() > 1) {
 			for (Player player : PlayerArr) {
 				player.sendTitle("Ready?", "", 40, 40, 40);
