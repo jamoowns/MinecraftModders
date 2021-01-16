@@ -724,7 +724,7 @@ public class MabListener implements Listener {
 		sendMabmoMsg("" + PlayerArr.size());
 		if (PlayerArr.size() > 0) {
 			for (Player player : PlayerArr) {
-				player.sendTitle("Ready?", "", 40, 40, 40);
+				player.sendTitle("Get Ready?", "", 40, 40, 40);
 			}
 		}
 		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
@@ -732,11 +732,11 @@ public class MabListener implements Listener {
 			public void run() {
 				if (PlayerArr.size() > 0) {
 					for (Player player : PlayerArr) {
-						player.sendTitle("Set?", "", 40, 40, 40);
+						player.sendTitle("Get Set?", "", 40, 40, 40);
 					}
 				}
 			}
-		}, 80);
+		}, 40);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 			@Override
 			public void run() {
@@ -746,7 +746,7 @@ public class MabListener implements Listener {
 					}
 				}
 			}
-		}, 120);
+		}, 80);
 	}
 
 	public void insert(int width, int height, int depth, Material material, int blockface, int updown, int corner) {
