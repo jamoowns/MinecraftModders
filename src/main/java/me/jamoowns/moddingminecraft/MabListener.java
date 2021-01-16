@@ -1353,6 +1353,9 @@ public class MabListener implements Listener {
 		if (event.getMessage().contains("SwapNearMe")) {
 			SwitchAllPlayersInAnArea(event.getPlayer().getLocation(), 20, 5, 20);
 		}
+		if (event.getMessage().contains("GetReady")) {
+			GetReady(event.getPlayer().getLocation().getWorld());
+		}
 		if (event.getMessage().contains("Iammabmo")) {
 			mabmo = event.getPlayer();
 			mabmoSet = true;
