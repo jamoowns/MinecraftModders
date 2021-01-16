@@ -722,16 +722,11 @@ public class MabListener implements Listener {
 			PlayerArr.add(players);
 		}
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-			@Override
-			public void run() {
-				if (PlayerArr.size() > 1) {
-					for (Player player : PlayerArr) {
-						player.sendTitle("Ready?", "", 40, 40, 40);
-					}
-				}
+		if (PlayerArr.size() > 1) {
+			for (Player player : PlayerArr) {
+				player.sendTitle("Ready?", "", 40, 40, 40);
 			}
-		}, 40);
+		}
 		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 			@Override
 			public void run() {
