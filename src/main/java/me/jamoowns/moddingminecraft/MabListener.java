@@ -637,7 +637,7 @@ public class MabListener implements Listener {
 				if (openings != 2 && openings != 3 && openings != 4) {
 					if (cCount % 2 == 1) {
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
 					}
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
@@ -647,7 +647,7 @@ public class MabListener implements Listener {
 					if (cCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
 					}
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
@@ -657,7 +657,7 @@ public class MabListener implements Listener {
 					if (cCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
 					}
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
@@ -666,7 +666,7 @@ public class MabListener implements Listener {
 				if (openings != 4) {
 					if (cCount % 2 == 1) {
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 1, 0);
 					}
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
@@ -675,7 +675,7 @@ public class MabListener implements Listener {
 				if (openings != 2 && openings != 3 && openings != 4) {
 					if (rCount % 2 == 1) {
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
 					}
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
@@ -685,7 +685,7 @@ public class MabListener implements Listener {
 					if (rCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
 					}
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
@@ -695,7 +695,7 @@ public class MabListener implements Listener {
 					if (rCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
 					}
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
@@ -704,7 +704,7 @@ public class MabListener implements Listener {
 				if (openings != 3 && openings != 4) {
 					if (rCount % 2 == 1) {
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
 					}
 				} else {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
@@ -803,6 +803,21 @@ public class MabListener implements Listener {
 				}
 			}
 		}, 120);
+	}
+
+	public int getStairFace(int east, BlockFace direction) {
+
+		if (east == 1 && false) {
+			return 3;
+		} else if (east == 2 && (direction == BlockFace.SOUTH)) {
+			return 4;
+		} else if (east == 3 && false) {
+			return 1;
+		} else if (east == 4 && (direction == BlockFace.SOUTH)) {
+			return 2;
+		}
+
+		return east;
 	}
 
 	public void insert(int width, int height, int depth, Material material, int blockface, int updown, int corner) {
