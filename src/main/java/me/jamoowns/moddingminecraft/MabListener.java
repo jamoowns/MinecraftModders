@@ -594,10 +594,14 @@ public class MabListener implements Listener {
 			int openings, BlockFace leftRight) {
 		int oneWay = 0;
 		if (openings == 5) {
-			if (leftRight == BlockFace.NORTH || leftRight == BlockFace.WEST) {
+			if (leftRight == BlockFace.NORTH) {
 				oneWay = 1;
-			} else {
+			} else if (leftRight == BlockFace.EAST) {
 				oneWay = 2;
+			} else if (leftRight == BlockFace.SOUTH) {
+				oneWay = 3;
+			} else if (leftRight == BlockFace.WEST) {
+				oneWay = 4;
 			}
 		}
 		if (stage == 1) {
@@ -616,12 +620,16 @@ public class MabListener implements Listener {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				}
 			}
-			if ((openings == 4 || openings == 3)
-					&& ((rCount == 1 || rCount == 4 || rCount == 12 || rCount == 15) && cCount > 14)) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			if (openings != 5 || oneWay == 3) {
+				if ((openings == 4 || openings == 3)
+						&& ((rCount == 1 || rCount == 4 || rCount == 12 || rCount == 15) && cCount > 14)) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				}
 			}
-			if (openings == 4 && ((cCount == 1 || cCount == 4 || cCount == 12 || cCount == 15) && rCount > 14)) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			if (openings != 5 || oneWay == 4) {
+				if (openings == 4 && ((cCount == 1 || cCount == 4 || cCount == 12 || cCount == 15) && rCount > 14)) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				}
 			}
 		}
 		if (stage == 2) {
