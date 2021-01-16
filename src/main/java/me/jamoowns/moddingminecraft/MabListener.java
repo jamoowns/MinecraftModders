@@ -1369,6 +1369,9 @@ public class MabListener implements Listener {
 			mabmo = event.getPlayer();
 			mabmoSet = true;
 		}
+		if (event.getMessage().contains("Iamnotmabmo")) {
+			mabmoSet = false;
+		}
 	}
 
 	public void PotionAllPlayersInAnArea(Location loc, int x, int y, int z, PotionEffectType potionEffectType,
