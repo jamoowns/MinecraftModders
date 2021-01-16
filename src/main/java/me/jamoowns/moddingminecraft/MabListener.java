@@ -724,7 +724,7 @@ public class MabListener implements Listener {
 		sendMabmoMsg("" + PlayerArr.size());
 		if (PlayerArr.size() > 0) {
 			for (Player player : PlayerArr) {
-				player.sendTitle("Get Ready?", "", 40, 40, 40);
+				player.sendTitle("Get Ready", "", 40, 40, 40);
 			}
 		}
 		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
@@ -732,7 +732,7 @@ public class MabListener implements Listener {
 			public void run() {
 				if (PlayerArr.size() > 0) {
 					for (Player player : PlayerArr) {
-						player.sendTitle("Get Set?", "", 40, 40, 40);
+						player.sendTitle("Get Set", "", 40, 40, 40);
 					}
 				}
 			}
@@ -1348,7 +1348,7 @@ public class MabListener implements Listener {
 		if (event.getMessage().contains("SwapNearMe")) {
 			SwitchAllPlayersInAnArea(event.getPlayer().getLocation(), 20, 5, 20);
 		}
-		if (event.getMessage().contains("GetReady")) {
+		if (event.getMessage().contains("Ok let's do this")) {
 			GetReady(event.getPlayer().getLocation().getWorld());
 		}
 		if (event.getMessage().contains("Iammabmo")) {
