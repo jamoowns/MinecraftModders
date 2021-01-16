@@ -182,34 +182,36 @@ public class MabListener implements Listener {
 					CornerGrid(r, c, rCount, cCount, heightTracker, 2, buildList, grid, direction);
 				}
 			}
-			heightTracker++;
-			cCount = 0;
-			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
-				cCount = buildGrid[0][0].length;
-			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
-				cCount = -1;
-			}
-			rCount = 0;
-			for (int c = 0; c < buildGrid[0][0].length; c++) {
-
+			for (int i = 0; i < 9; i++) {
+				heightTracker++;
+				cCount = 0;
 				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
-					cCount--;
+					cCount = buildGrid[0][0].length;
 				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
-					cCount++;
+					cCount = -1;
 				}
+				rCount = 0;
+				for (int c = 0; c < buildGrid[0][0].length; c++) {
 
-				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
-					rCount = buildGrid.length;
-				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
-					rCount = -1;
-				}
-				for (int r = 0; r < buildGrid.length; r++) {
-					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
-						rCount--;
-					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
-						rCount++;
+					if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+						cCount--;
+					} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+						cCount++;
 					}
-					CornerGrid(r, c, rCount, cCount, heightTracker, 2, buildList, grid, direction);
+
+					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+						rCount = buildGrid.length;
+					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+						rCount = -1;
+					}
+					for (int r = 0; r < buildGrid.length; r++) {
+						if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+							rCount--;
+						} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+							rCount++;
+						}
+						CornerGrid(r, c, rCount, cCount, heightTracker, 3 + i, buildList, grid, direction);
+					}
 				}
 			}
 
