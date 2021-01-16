@@ -211,7 +211,7 @@ public class MabListener implements Listener {
 						} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
 							rCount++;
 						}
-						CornerGrid(r, c, rCount, cCount, heightTracker, 3 + i, buildList, grid, direction);
+						CornerGrid(r, c, rCount, cCount, heightTracker, 2, buildList, grid, direction);
 					}
 				}
 			}
