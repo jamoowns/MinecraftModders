@@ -594,12 +594,12 @@ public class MabListener implements Listener {
 			int openings, BlockFace leftRight) {
 		if (stage == 1) {
 
-			if ((openings == 1 || openings == 2 || openings == 5 || openings == 4 || openings == 3)
+			if ((openings == 1 || openings == 2 || openings == 4 || openings == 3)
 					&& ((cCount == 15 || cCount == 1) && rCount < 16 && rCount > 0)
 					|| ((rCount == 15 || rCount == 1) && cCount < 16 && cCount > 0)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
-			if ((openings == 1 || openings == 2 || openings == 4 || openings == 3)
+			if ((openings == 1 || openings == 2 || openings == 4 || openings == 3 || openings == 5)
 					&& ((cCount == 1 || cCount == 4 || cCount == 12 || cCount == 15) && rCount < 2)
 					|| ((rCount == 1 || rCount == 4 || rCount == 12 || rCount == 15) && cCount < 2)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
