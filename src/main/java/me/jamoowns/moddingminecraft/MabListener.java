@@ -597,11 +597,11 @@ public class MabListener implements Listener {
 			if (leftRight == BlockFace.NORTH) {
 				oneWay = 1;
 			} else if (leftRight == BlockFace.EAST) {
-				oneWay = 2;
+				oneWay = 1;
 			} else if (leftRight == BlockFace.SOUTH) {
-				oneWay = 3;
+				oneWay = 1;
 			} else if (leftRight == BlockFace.WEST) {
-				oneWay = 4;
+				oneWay = 1;
 			}
 		}
 		if (stage == 1) {
@@ -817,7 +817,6 @@ public class MabListener implements Listener {
 				return 2;
 			}
 		}
-
 		return east;
 	}
 
