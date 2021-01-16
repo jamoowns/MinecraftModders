@@ -183,6 +183,7 @@ public class MabListener implements Listener {
 				}
 			}
 			for (int i = 0; i < 9; i++) {
+				sendMabmoMsg("Line");
 				heightTracker++;
 				cCount = 0;
 				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
