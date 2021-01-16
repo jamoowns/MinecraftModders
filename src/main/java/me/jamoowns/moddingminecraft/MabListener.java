@@ -592,15 +592,26 @@ public class MabListener implements Listener {
 
 	public void CornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
 			int openings, BlockFace leftRight) {
+		int oneWay = 0;
+		if (openings == 5) {
+			if (leftRight == BlockFace.NORTH || leftRight == BlockFace.WEST) {
+				oneWay = 1;
+			} else {
+				oneWay = 2;
+			}
+		}
 		if (stage == 1) {
 			if (((cCount == 15 || cCount == 1) && rCount < 16 && rCount > 0)
 					|| ((rCount == 15 || rCount == 1) && cCount < 16 && cCount > 0)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
-			if (((cCount == 1 || cCount == 4 || cCount == 12 || cCount == 15) && rCount < 2)) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			if (openings != 5 || oneWay == 1) {
+				if (((cCount == 1 || cCount == 4 || cCount == 12 || cCount == 15) && rCount < 2)) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				}
 			}
-			if (openings != 5) {
+
+			if (openings != 5 || oneWay == 2) {
 				if (((rCount == 1 || rCount == 4 || rCount == 12 || rCount == 15) && cCount < 2)) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				}
