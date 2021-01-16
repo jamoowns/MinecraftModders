@@ -822,7 +822,7 @@ public class MabListener implements Listener {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
 						}
 						if (cCount > 8 && cCount < 11 && rCount > 5 && rCount < 11) {
-							if (cCount == 9 && rCount == 5) {
+							if (cCount == 9 && rCount == 6) {
 								insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
 							} else {
 								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
@@ -901,6 +901,17 @@ public class MabListener implements Listener {
 				if ((rCount == 8 && cCount == 8) || (rCount == 5 && cCount == 5) || (rCount == 11 && cCount == 11)
 						|| (rCount == 11 && cCount == 5) || (rCount == 5 && cCount == 11)) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				} else {
+					if (rCount > 4 && rCount < 12 && cCount > 4 && cCount < 12) {
+						if (rCount == 8 && (cCount == 9 || cCount == 10)) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
+						}
+						if (cCount > 8 && cCount < 11 && rCount > 8 && rCount < 11) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+						}
+
+					}
+
 				}
 			}
 		} else if (stage == 5) {
