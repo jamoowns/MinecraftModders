@@ -50,6 +50,7 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.features.Feature;
@@ -661,6 +662,36 @@ public class MabListener implements IGameEventListener {
 				}
 			}
 		}, 120);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+			@Override
+			public void run() {
+				if (PlayerArr.size() > 0) {
+
+					Location loc = PlayerArr.get(0).getLocation();
+					Random r = new Random();
+					int low = 3000;
+					int high = 5000;
+					int count = 10;
+					while (count > 0) {
+						Location newLoc = loc;
+						newLoc.add(r.nextInt(high - low) + low, 0, r.nextInt(high - low) + low);
+						if (!newLoc.getBlock().getBiome().toString().contains("ocean")) {
+							loc = newLoc;
+							count = 0;
+						}
+						count--;
+					}
+					loc.add(0, 80, 0);
+					for (Player player : PlayerArr) {
+						player.setVelocity(new Vector(player.getVelocity().getX(), 1, player.getVelocity().getZ()));
+						player.teleport(loc);
+						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 180, 1));
+
+					}
+				}
+			}
+		}, 120);
+
 	}
 
 	private void potionAllPlayersInAnArea(Location loc, int x, int y, int z, PotionEffectType potionEffectType,
