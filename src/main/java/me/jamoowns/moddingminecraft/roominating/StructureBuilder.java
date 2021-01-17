@@ -28,14 +28,14 @@ public final class StructureBuilder {
 
 	public final void buildGrid(GridType grid, BlockFace direction, Location loc) {
 		switch (grid) {
-			case CORNER:
-			case T_SECTION:
-			case CROSS:
-			case DEAD_END:
-				buildNotStraight(direction, grid, loc);
-				break;
-			case STRAIGHT:
-				buildStraight(direction, loc);
+		case CORNER:
+		case T_SECTION:
+		case CROSS:
+		case DEAD_END:
+			buildNotStraight(direction, grid, loc);
+			break;
+		case STRAIGHT:
+			buildStraight(direction, loc);
 		}
 	}
 
@@ -155,9 +155,9 @@ public final class StructureBuilder {
 				Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
 
 		if (direction == BlockFace.SOUTH || direction == BlockFace.NORTH) {
-			createGrids(17, 30, 10);
+			createGrids(16, 30, 10);
 		} else {
-			createGrids(10, 30, 17);
+			createGrids(10, 30, 16);
 
 		}
 
@@ -181,7 +181,7 @@ public final class StructureBuilder {
 					} else {
 						newC = c;
 					}
-					if (newC == 1 || newC == 4 || newC == 12 || newC == 15) {
+					if (newC == 1 || newC == 4 || newC == 11 || newC == 14) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				}
@@ -198,9 +198,9 @@ public final class StructureBuilder {
 					newC = c;
 					newR = r;
 				}
-				if (newC > 1 && newC < 5 || newC > 6 && newC < 10 || newC > 11 && newC < 15) {
+				if (newC > 1 && newC < 5 || newC > 6 && newC < 9 || newC > 10 && newC < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-				} else if ((newR == 4 || newR == 5) && newC > 1 && newC < 15) {
+				} else if ((newR == 4 || newR == 5) && newC > 1 && newC < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				} else if (newC == 5 || newC == 11) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
@@ -245,7 +245,7 @@ public final class StructureBuilder {
 					newC = c;
 					newR = r;
 				}
-				if (newC == 15 || newC == 1) {
+				if (newC == 14 || newC == 1) {
 					if (newR % 2 == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
@@ -255,13 +255,13 @@ public final class StructureBuilder {
 					} else {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 					}
-				} else if (newC == 16) {
+				} else if (newC == 15) {
 					if (newR % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 					} else {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 					}
-				} else if ((newC == 5 || newC == 11)) {
+				} else if ((newC == 5 || newC == 10)) {
 					if (newR < 3 || newR > 6) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else if (newR == 3) {
@@ -285,7 +285,7 @@ public final class StructureBuilder {
 					newC = c;
 					newR = r;
 				}
-				if (newC == 15 || newC == 1) {
+				if (newC == 14 || newC == 1) {
 					if (newR % 2 == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
@@ -295,13 +295,13 @@ public final class StructureBuilder {
 					} else {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 					}
-				} else if (newC == 16) {
+				} else if (newC == 15) {
 					if (newR % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
 					} else {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 					}
-				} else if ((newC == 5 || newC == 11)) {
+				} else if ((newC == 5 || newC == 10)) {
 					if (newR == 1 || newR == 8) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0, 0);
 					} else if (newR == 0 || newR == 2 || newR == 7 || newR == 9) {
@@ -325,15 +325,15 @@ public final class StructureBuilder {
 					newC = c;
 					newR = r;
 				}
-				if (newC == 1 || newC == 5 || newC == 11 || newC == 15) {
+				if (newC == 1 || newC == 5 || newC == 10 || newC == 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-				} else if (newC == 3 || newC == 7 || newC == 8 || newC == 9 || newC == 13) {
+				} else if (newC == 3 || newC == 7 || newC == 8 || newC == 12) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-				} else if (newC == 4 || newC == 10 || newC == 14) {
+				} else if (newC == 4 || newC == 19 || newC == 13) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
-				} else if (newC == 2 || newC == 6 || newC == 12) {
+				} else if (newC == 2 || newC == 6 || newC == 11) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
-				} else if (newC == 3 || newC == 6 || newC == 12) {
+				} else if (newC == 3 || newC == 6 || newC == 11) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 				} else if (newC == 0) {
 					if (newR % 2 == 0) {
@@ -341,7 +341,7 @@ public final class StructureBuilder {
 					} else {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 					}
-				} else if (newC == 16) {
+				} else if (newC == 15) {
 					if (newR % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 					} else {
@@ -362,19 +362,19 @@ public final class StructureBuilder {
 					newC = c;
 					newR = r;
 				}
-				if ((newC == 4 || newC == 10) && newR == 3) {
+				if ((newC == 4 || newC == 9) && newR == 3) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 4);
-				} else if ((newC == 4 || newC == 10) && newR == 6) {
+				} else if ((newC == 4 || newC == 9) && newR == 6) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 3);
-				} else if ((newC == 6 || newC == 12) && newR == 3) {
+				} else if ((newC == 6 || newC == 11) && newR == 3) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 1);
-				} else if ((newC == 6 || newC == 12) && newR == 6) {
+				} else if ((newC == 6 || newC == 11) && newR == 6) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 2);
-				} else if (newC > 1 && newC < 4 || newC > 6 && newC < 10 || newC > 12 && newC < 15) {
+				} else if (newC > 1 && newC < 4 || newC > 6 && newC < 9 || newC > 11 && newC < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-				} else if ((newR == 4 || newR == 5) && newC > 1 && newC < 15) {
+				} else if ((newR == 4 || newR == 5) && newC > 1 && newC < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-				} else if (newC == 5 || newC == 11) {
+				} else if (newC == 5 || newC == 10) {
 					if (newR == 3) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 					} else if (newR == 6) {
@@ -384,11 +384,11 @@ public final class StructureBuilder {
 
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
-				} else if (newC == 4 || newC == 10 || newC == 15) {
+				} else if (newC == 4 || newC == 9 || newC == 14) {
 					{
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 					}
-				} else if (newC == 1 || newC == 6 || newC == 12) {
+				} else if (newC == 1 || newC == 6 || newC == 11) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 				} else if (newC == 0) {
 					if (newR % 2 == 0) {
@@ -396,7 +396,7 @@ public final class StructureBuilder {
 					} else {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 					}
-				} else if (newC == 16) {
+				} else if (newC == 15) {
 					if (newR % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 					} else {
@@ -422,11 +422,11 @@ public final class StructureBuilder {
 					if (newR % 2 == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 					}
-				} else if (newC == 16) {
+				} else if (newC == 15) {
 					if (newR % 2 == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 					}
-				} else if ((newC == 5 || newC == 11)) {
+				} else if ((newC == 5 || newC == 10)) {
 					if (newR < 2 || newR > 7) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else if (newR == 2) {
@@ -451,14 +451,14 @@ public final class StructureBuilder {
 				}
 				if (newC == 0) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
-				} else if (newC == 16) {
+				} else if (newC == 15) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
-				} else if ((newC == 5 || newC == 11)) {
-					if (newR < 1 || newR > 8) {
+				} else if ((newC == 5 || newC == 10)) {
+					if (newR < 1 || newR > 7) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else if (newR == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
-					} else if (newR == 8) {
+					} else if (newR == 7) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
 					}
 				}
@@ -480,16 +480,16 @@ public final class StructureBuilder {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else if (newC == 1) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
-				} else if (newC == 15) {
+				} else if (newC == 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
-				} else if (newC == 16) {
+				} else if (newC == 15) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else if ((newC == 5 || newC == 11)) {
-					if (newR < 1 || newR > 8) {
+					if (newR < 1 || newR > 7) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else if (newR == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
-					} else if (newR == 8) {
+					} else if (newR == 7) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
 					}
 				}
@@ -505,15 +505,15 @@ public final class StructureBuilder {
 				} else {
 					newC = c;
 				}
-				if (newC == 1 || newC == 11) {
+				if (newC == 1 || newC == 10) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
-				} else if (newC == 2 || newC == 12) {
+				} else if (newC == 2 || newC == 11) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
-				} else if (newC == 3 || newC == 13) {
+				} else if (newC == 3 || newC == 12) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-				} else if (newC == 4 || newC == 14) {
+				} else if (newC == 4 || newC == 13) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
-				} else if (newC == 5 || newC == 15) {
+				} else if (newC == 5 || newC == 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 				}
 			}
@@ -527,11 +527,11 @@ public final class StructureBuilder {
 				} else {
 					newC = c;
 				}
-				if (newC == 2 || newC == 12) {
+				if (newC == 2 || newC == 11) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
-				} else if (newC == 3 || newC == 13) {
+				} else if (newC == 3 || newC == 12) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-				} else if (newC == 4 || newC == 14) {
+				} else if (newC == 4 || newC == 13) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
 				}
 			}
