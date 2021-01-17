@@ -23,9 +23,9 @@ public class ItemMenu implements ICustomMenu {
 	public ItemMenu(ModdingMinecraft javaPlugin) {
 		List<CustomItem> allItems = Lists.newArrayList(javaPlugin.customItems().allItems());
 
-		Inventory inv = Bukkit.createInventory(null, (int) (Math.ceil(allItems.size() / 9.0) * 9.0), "Custom Items");
+		inventory = Bukkit.createInventory(null, (int) (Math.ceil(allItems.size() / 9.0) * 9.0), "Custom Items");
 
-		allItems.stream().map(CustomItem::asItem).forEach(inv::addItem);
+		allItems.stream().map(CustomItem::asItem).forEach(inventory::addItem);
 
 		menuItems = allItems.stream().map(
 				item -> new CustomMenuItem(item.name(), item.material(), p -> p.getInventory().addItem(item.asItem())))
