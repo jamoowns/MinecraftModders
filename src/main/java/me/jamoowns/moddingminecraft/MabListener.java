@@ -44,7 +44,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -137,24 +136,6 @@ public class MabListener implements IGameEventListener {
 			structureBuilder.buildGrid(GridType.DEAD_END,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getBlockPlaced().getLocation());
-		}
-
-		if (event.getBlock().getType().equals(Material.ANVIL) && mabmoSet) {
-
-			ItemStack book = new ItemStack(Material.LEGACY_BOOK_AND_QUILL, 1);
-
-			List<String> abc = new ArrayList<String>();
-			abc.add("asdasdasd");
-			abc.add("fgfgfgfgfg");
-
-			BookMeta meta = (BookMeta) book.getItemMeta();
-			meta.setTitle("Title");
-			meta.setAuthor("Author");
-			meta.setPages(abc);
-
-			event.getPlayer().sendMessage(book.getItemMeta().toString());
-
-			event.getPlayer().getInventory().addItem(book);
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
