@@ -682,7 +682,7 @@ public class MabListener implements IGameEventListener {
 					}
 					loc.add(0, 80, 0);
 					for (Player player : PlayerArr) {
-						player.setFallDistance(-499);
+						player.setFallDistance(-1000);
 						player.teleport(loc);
 						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 120, 5));
 
