@@ -214,7 +214,7 @@ public final class StructureBuilder {
 					} else {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
-				} else if (newC == 15) {
+				} else if (newC == 14) {
 					if (newR % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 					} else {
@@ -224,7 +224,7 @@ public final class StructureBuilder {
 					if (newR % 2 == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 					}
-				} else if (newC == 16) {
+				} else if (newC == 15) {
 					if (newR % 2 == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 					}
