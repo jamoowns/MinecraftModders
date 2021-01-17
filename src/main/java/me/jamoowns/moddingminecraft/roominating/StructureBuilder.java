@@ -484,7 +484,7 @@ public final class StructureBuilder {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 				} else if (newC == 15) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-				} else if ((newC == 5 || newC == 11)) {
+				} else if ((newC == 5 || newC == 10)) {
 					if (newR < 1 || newR > 7) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					} else if (newR == 1) {
