@@ -2,7 +2,7 @@ package me.jamoowns.moddingminecraft.features;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
 
-public class FeatureTracker {
+public final class FeatureTracker {
 
 	private IFeatureListener featureListener;
 

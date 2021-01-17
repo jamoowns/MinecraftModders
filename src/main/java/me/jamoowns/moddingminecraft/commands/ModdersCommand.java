@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 import org.bukkit.entity.Player;
 
-public final class ModdersCommand {
+final class ModdersCommand {
 
 	private String command;
 

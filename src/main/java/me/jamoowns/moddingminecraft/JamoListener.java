@@ -17,7 +17,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Creeper;
@@ -29,7 +28,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -48,12 +46,14 @@ import com.google.common.collect.Lists;
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.features.Feature;
+import me.jamoowns.moddingminecraft.listener.IGameEventListener;
+import me.jamoowns.moddingminecraft.roominating.BuildingFoundations;
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
 import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
 import me.jamoowns.moddingminecraft.teams.Army;
 
-public final class JamoListener implements Listener {
+public final class JamoListener implements IGameEventListener {
 
 	private final static boolean isMob(UUID uuid) {
 		return Bukkit.getEntity(uuid) instanceof Mob;
@@ -160,6 +160,7 @@ public final class JamoListener implements Listener {
 		javaPlugin.commandExecutor().registerCommand(java.util.Collections.emptyList(), "items", this::showAllItems);
 	}
 
+	@Override
 	public void cleanup() {
 		javaPlugin.teams().cleanup();
 	}
@@ -237,25 +238,6 @@ public final class JamoListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
 				event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
-	}
-
-	private BlockFace linearFace(float yaw) {
-		double rotation = (yaw - 90) % 360;
-		if (rotation < 0) {
-			rotation += 360.0;
-		}
-
-		if (0 <= rotation && rotation < 67.5 || 337.5 <= rotation && rotation < 360.0) {
-			return BlockFace.WEST;
-		} else if (67.5 <= rotation && rotation < 157.5) {
-			return BlockFace.NORTH;
-		} else if (157.5 <= rotation && rotation < 247.5) {
-			return BlockFace.EAST;
-		} else if (247.5 <= rotation && rotation < 337.5) {
-			return BlockFace.SOUTH;
-		} else {
-			return BlockFace.WEST;
-		}
 	}
 
 	private void randomChestSpawn() {
@@ -358,7 +340,8 @@ public final class JamoListener implements Listener {
 			Location startPoint = event.getBlockPlaced().getLocation().add(0, 0, 0);
 
 			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, RANDOM.nextInt(5) + 4,
-					RANDOM.nextInt(5) + 4, 5, linearFace(event.getPlayer().getLocation().getYaw()));
+					RANDOM.nextInt(5) + 4, 5,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()));
 
 			Roominator.build(event.getBlockAgainst().getWorld(), standardRoom);
 		});

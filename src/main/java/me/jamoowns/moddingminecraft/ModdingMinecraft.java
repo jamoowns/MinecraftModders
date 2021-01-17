@@ -1,6 +1,7 @@
 package me.jamoowns.moddingminecraft;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,6 +13,8 @@ import me.jamoowns.moddingminecraft.customitems.CustomItems;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.features.FeatureTracker;
 import me.jamoowns.moddingminecraft.features.IFeatureListener;
+import me.jamoowns.moddingminecraft.features.PlayerTrailFeature;
+import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.menus.FeaturesMenu;
 import me.jamoowns.moddingminecraft.menus.MenuListener;
 import me.jamoowns.moddingminecraft.minigames.blockhunter.BlockHunterListener;
@@ -19,11 +22,13 @@ import me.jamoowns.moddingminecraft.teams.Teams;
 
 public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
+	private List<IGameEventListener> listeners;
+
 	private CustomItems customItems;
 
 	private JamoListener jamoListener;
 
-	private MabListener mobListener;
+	private MabListener mabListener;
 
 	private MoshyListener moshyListener;
 
@@ -37,7 +42,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private CustomItemListener customItemListener;
 
-	public FeatureTracker featureTracker;
+	private FeatureTracker featureTracker;
 
 	private MenuListener menuListener;
 
@@ -68,8 +73,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	// Fired when plug-in is disabled
 	@Override
 	public final void onDisable() {
-		jamoListener.cleanup();
-		mobListener.cleanup();
+		listeners.forEach(IGameEventListener::cleanup);
 	}
 
 	// Fired when plug-in is first enabled
@@ -114,30 +118,34 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 				case WINFRED:
 					statusByFeature.put(Feature.WINFRED, true);
 					break;
+				case STABLE_WEATHER:
+					statusByFeature.put(Feature.STABLE_WEATHER, true);
+					break;
 				default:
 					break;
 			}
 		}
 		teams = new Teams(this);
 
-		jamoListener = new JamoListener(this);
-		mobListener = new MabListener(this);
+		addListener(new JamoListener(this));
+		mabListener = new MabListener(this);
 		moshyListener = new MoshyListener();
 		blockHunterListener = new BlockHunterListener(this);
 		customItemListener = new CustomItemListener(this);
 		featureTracker = new FeatureTracker();
 		featureTracker.addListener(this);
-
 		menuListener = new MenuListener();
 		FeaturesMenu featureMenu = new FeaturesMenu(this);
 		menuListener.register(featureMenu);
+
+		addListener(new PlayerTrailFeature(this));
 
 		commandExecutor().registerCommand(java.util.Collections.emptyList(), "features",
 				p -> p.openInventory(featureMenu.asInventory()));
 
 		this.getCommand("mm").setExecutor(commandExecutor);
 		getServer().getPluginManager().registerEvents(jamoListener, this);
-		getServer().getPluginManager().registerEvents(mobListener, this);
+		getServer().getPluginManager().registerEvents(mabListener, this);
 		getServer().getPluginManager().registerEvents(moshyListener, this);
 		getServer().getPluginManager().registerEvents(blockHunterListener, this);
 		getServer().getPluginManager().registerEvents(customItemListener, this);
@@ -146,5 +154,10 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	public final Teams teams() {
 		return teams;
+	}
+
+	private void addListener(IGameEventListener listener) {
+		listeners.add(listener);
+		getServer().getPluginManager().registerEvents(listener, this);
 	}
 }
