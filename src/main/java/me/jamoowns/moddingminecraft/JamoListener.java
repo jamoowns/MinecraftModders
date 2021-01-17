@@ -96,7 +96,7 @@ public final class JamoListener implements IGameEventListener {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 			@Override
 			public void run() {
-				if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.RANDOM_CHESTS)) {
+				if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.RANDOM_CHESTS)) {
 					randomChestSpawn();
 				}
 			}
@@ -147,7 +147,7 @@ public final class JamoListener implements IGameEventListener {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 			@Override
 			public void run() {
-				if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.BATTLE_ROYALE)) {
+				if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.BATTLE_ROYALE)) {
 					Bukkit.getOnlinePlayers().forEach(player -> {
 						ItemStack item = mobSpawningItems.get(RANDOM.nextInt(mobSpawningItems.size())).asItem();
 						item.setAmount(RANDOM.nextInt(15) + 10);
@@ -161,13 +161,13 @@ public final class JamoListener implements IGameEventListener {
 	}
 
 	@Override
-	public void cleanup() {
+	public final void cleanup() {
 		javaPlugin.teams().cleanup();
 	}
 
 	@EventHandler
-	public void onCraftItemEvent(CraftItemEvent event) {
-		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.RANDOM_ENCHANT)) {
+	public final void onCraftItemEvent(CraftItemEvent event) {
+		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.RANDOM_ENCHANT)) {
 			ItemStack result = event.getRecipe().getResult().clone();
 			ItemMeta meta = result.getItemMeta();
 			for (int i = 0; i < 7; i++) {
@@ -182,7 +182,7 @@ public final class JamoListener implements IGameEventListener {
 	}
 
 	@EventHandler
-	public void onEntityDeathEvent(EntityDeathEvent event) {
+	public final void onEntityDeathEvent(EntityDeathEvent event) {
 		UUID entityUuid = event.getEntity().getUniqueId();
 		if (event.getEntity().getType() == EntityType.PIG) {
 			if (event.getEntity().getKiller() != null) {
@@ -200,29 +200,29 @@ public final class JamoListener implements IGameEventListener {
 	}
 
 	@EventHandler
-	public void onEntitySpawnEvent(BlockDropItemEvent event) {
+	public final void onEntitySpawnEvent(BlockDropItemEvent event) {
 		if (event.getBlock().getType().name().contains("CARPET")) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
-	public void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
-		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.RANDOM_BUCKET)) {
+	public final void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
+		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.RANDOM_BUCKET)) {
 			event.setItemStack(new ItemStack(BUCKET_TYPES.get(RANDOM.nextInt(BUCKET_TYPES.size()))));
 		}
 	}
 
 	@EventHandler
-	public void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
-		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.EGG_WITCH)) {
+	public final void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
+		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.EGG_WITCH)) {
 			event.setHatchingType(EntityType.WITCH);
 		}
 	}
 
 	@EventHandler
-	public void onPlayerInteractEvent(PlayerInteractEvent event) {
-		if (javaPlugin.featureTracker.isFeatureActive(javaPlugin, Feature.ZOMBIE_BELL)) {
+	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
+		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.ZOMBIE_BELL)) {
 			if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.BELL) {
 				Player player = event.getPlayer();
 				Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
@@ -235,7 +235,7 @@ public final class JamoListener implements IGameEventListener {
 	}
 
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
+	public final void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
 				event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
 	}
