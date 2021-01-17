@@ -71,6 +71,9 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		commandExecutor = new CommandMinecraftModders();
 		statusByFeature = new HashMap<>();
 
+		featureTracker = new FeatureTracker();
+		featureTracker.addListener(this);
+
 		customItems = new CustomItems();
 
 		Feature[] features = Feature.values();
@@ -117,24 +120,21 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		teams = new Teams(this);
 
 		listeners = new ArrayList<>();
-		addListener(new JamoListener(this));
-		addListener(new MabListener(this));
-		addListener(new MoshyListener());
-		addListener(new BlockHunterListener(this));
-		addListener(new CustomItemListener(this));
+		addGameListener(new JamoListener(this));
+		addGameListener(new MabListener(this));
+		addGameListener(new MoshyListener());
+		addGameListener(new BlockHunterListener(this));
+		addGameListener(new CustomItemListener(this));
 
 		MenuListener menuListener = new MenuListener();
 		FeaturesMenu featureMenu = new FeaturesMenu(this);
 		menuListener.register(featureMenu);
-		addListener(menuListener);
+		addGameListener(menuListener);
 
-		addListener(new PlayerTrailFeatureListener(this));
+		addGameListener(new PlayerTrailFeatureListener(this));
 
 		commandExecutor().registerCommand(java.util.Collections.emptyList(), "features",
 				p -> p.openInventory(featureMenu.asInventory()));
-
-		featureTracker = new FeatureTracker();
-		featureTracker.addListener(this);
 
 		this.getCommand("mm").setExecutor(commandExecutor);
 	}
@@ -143,7 +143,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		return teams;
 	}
 
-	private void addListener(IGameEventListener listener) {
+	private void addGameListener(IGameEventListener listener) {
 		listeners.add(listener);
 		getServer().getPluginManager().registerEvents(listener, this);
 	}
