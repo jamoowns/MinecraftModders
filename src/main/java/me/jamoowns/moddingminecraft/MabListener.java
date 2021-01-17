@@ -141,6 +141,9 @@ public class MabListener implements IGameEventListener {
 		if (event.getBlock().getType().equals(Material.ANVIL) && mabmoSet) {
 
 			ItemStack book = new ItemStack(Material.LEGACY_BOOK_AND_QUILL, 1);
+
+			event.getPlayer().sendMessage(book.getItemMeta().toString());
+
 			event.getPlayer().getInventory().addItem(book);
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
