@@ -40,12 +40,12 @@ public final class BlockHunterListener implements Listener {
 
 	private static final int SEARCHING_TIME_MINUTES = 10;
 
-	private static final long CHOOSING_TIME = TimeConstants.ONE_MINUTE * CHOOSING_TIME_MINUTES;
-
 	private static final long SEARCHING_TIME = TimeConstants.ONE_MINUTE * SEARCHING_TIME_MINUTES;
+
 	private final ItemStack blockStand;
 
 	private List<GamePlayer> gameplayers;
+
 	private GameState currentGameState = GameState.STOPPED;
 
 	private ModdingMinecraft javaPlugin;
