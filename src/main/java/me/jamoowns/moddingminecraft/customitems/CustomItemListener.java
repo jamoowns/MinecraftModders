@@ -1,5 +1,7 @@
 package me.jamoowns.moddingminecraft.customitems;
 
+import java.util.Optional;
+
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -35,11 +37,11 @@ public final class CustomItemListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
-		CustomItem customItem = javaPlugin.customItems().getItem(event.getItemInHand().getItemMeta().getDisplayName());
-		if (customItem != null && customItem.hasBlockPlaceEvent()) {
-			event.getBlockPlaced().setType(Material.AIR);
-			customItem.blockPlaceEvent().accept(event);
-		}
+		javaPlugin.customItems().getItem(event.getItemInHand()).filter(CustomItem::hasBlockPlaceEvent)
+				.map(CustomItem::blockPlaceEvent).ifPresent(c -> {
+					event.getBlockPlaced().setType(Material.AIR);
+					c.accept(event);
+				});
 	}
 
 	@EventHandler
@@ -52,22 +54,25 @@ public final class CustomItemListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
-		if (event.getItem() != null && event.getItem().getItemMeta() != null) {
-			CustomItem customItem = javaPlugin.customItems().getItem(event.getItem().getItemMeta().getDisplayName());
-			if (customItem != null && customItem.hasSpellCastEvent() && isLeftClick(event.getAction())) {
-				Block target = event.getPlayer().getTargetBlockExact(customItem.maxRange());
+		if (event.getItem() != null) {
+			Optional<CustomItem> customItem = javaPlugin.customItems().getItem(event.getItem())
+					.filter(CustomItem::hasSpellCastEvent);
+
+			if (customItem.isPresent() && isLeftClick(event.getAction())) {
+				CustomItem item = customItem.get();
+				Block target = event.getPlayer().getTargetBlockExact(item.maxRange());
 				if (target != null) {
 					for (double d = 0; d <= target.getLocation().distance(event.getPlayer().getLocation()); d += 0.1) {
 						event.getPlayer().getWorld().spawnParticle(Particle.TOTEM, event.getPlayer().getEyeLocation()
 								.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
 					}
-					customItem.spellCastEvent()
+					item.spellCastEvent()
 							.accept(new SpellCastEvent(target.getLocation().add(0.5, 0.5, 0.5), event.getPlayer()));
 					if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
 						event.getItem().setAmount(event.getItem().getAmount() - 1);
 					}
 				} else {
-					for (double d = 0; d <= customItem.maxRange(); d += 0.1) {
+					for (double d = 0; d <= item.maxRange(); d += 0.1) {
 						event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
 								.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
 					}
@@ -78,31 +83,27 @@ public final class CustomItemListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onPotionSplashEvent(PotionSplashEvent event) {
-		Projectile entity = event.getEntity();
-		CustomItem customItem = javaPlugin.customItems().getItem(entity.getCustomName());
-		if (customItem != null && customItem.hasPotionSplashEvent()) {
-			customItem.potionSplashEvent().accept(event);
-			event.getEntity().remove();
-		}
+		javaPlugin.customItems().getItem(event.getEntity()).filter(CustomItem::hasPotionSplashEvent)
+				.map(CustomItem::potionSplashEvent).ifPresent(c -> {
+					c.accept(event);
+					event.getEntity().remove();
+				});
 	}
 
 	@EventHandler
 	public final void onProjectileHit(ProjectileHitEvent event) {
-		Projectile entity = event.getEntity();
-		CustomItem customItem = javaPlugin.customItems().getItem(entity.getCustomName());
-		if (customItem != null && customItem.hasProjectileHitEvent()) {
-			customItem.projectileHitEvent().accept(event);
-			event.getEntity().remove();
-		}
+		javaPlugin.customItems().getItem(event.getEntity()).filter(CustomItem::hasProjectileHitEvent)
+				.map(CustomItem::projectileHitEvent).ifPresent(c -> {
+					c.accept(event);
+					event.getEntity().remove();
+				});
 	}
 
 	@EventHandler
 	public final void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
 		Projectile entity = event.getEntity();
-		CustomItem customItem = javaPlugin.customItems().getItem(entity.getCustomName());
-		if (customItem != null && customItem.hasProjectileLaunchEvent()) {
-			customItem.projectileLaunchEvent().accept(event);
-		}
+		javaPlugin.customItems().getItem(entity).filter(CustomItem::hasProjectileLaunchEvent)
+				.map(CustomItem::projectileLaunchEvent).ifPresent(c -> c.accept(event));
 		ProjectileSource shooter = event.getEntity().getShooter();
 		if (shooter instanceof Player) {
 			ItemStack item = ((Player) shooter).getInventory().getItemInMainHand();
