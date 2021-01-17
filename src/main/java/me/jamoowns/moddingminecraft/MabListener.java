@@ -1171,6 +1171,7 @@ public class MabListener implements Listener {
 		if (PlayerArr.size() > 0) {
 			for (Player player : PlayerArr) {
 				player.sendTitle("Get Ready", "", 40, 40, 40);
+				player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 120, 255));
 			}
 		}
 		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
