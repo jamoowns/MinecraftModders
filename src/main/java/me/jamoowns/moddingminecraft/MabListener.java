@@ -44,6 +44,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -142,11 +143,16 @@ public class MabListener implements IGameEventListener {
 
 			ItemStack book = new ItemStack(Material.LEGACY_BOOK_AND_QUILL, 1);
 
-			List<String> test = null;
-			test.add("TEST");
-			test.add("TEST2");
-			book.getItemMeta().setLore(test);
-			event.getPlayer().sendMessage(book.getItemMeta().getLore().toString());
+			List<String> abc = new ArrayList<String>();
+			abc.add("asdasdasd");
+			abc.add("fgfgfgfgfg");
+
+			BookMeta meta = (BookMeta) book.getItemMeta();
+			meta.setTitle("Title");
+			meta.setAuthor("Author");
+			meta.setPages(abc);
+
+			event.getPlayer().sendMessage(book.getItemMeta().toString());
 
 			event.getPlayer().getInventory().addItem(book);
 		}
