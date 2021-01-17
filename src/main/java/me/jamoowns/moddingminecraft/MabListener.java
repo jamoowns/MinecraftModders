@@ -670,7 +670,7 @@ public class MabListener implements IGameEventListener {
 					Random r = new Random();
 					int low = 3000;
 					int high = 5000;
-					int count = 0;
+					int count = 3;
 					while (count > 0) {
 						Location newLoc = loc;
 						newLoc.add(r.nextInt(high - low) + low, 0, r.nextInt(high - low) + low);
@@ -678,6 +678,7 @@ public class MabListener implements IGameEventListener {
 							loc = newLoc;
 							count = 0;
 						}
+						count--;
 					}
 					loc.add(0, 80, 0);
 					for (Player player : PlayerArr) {
