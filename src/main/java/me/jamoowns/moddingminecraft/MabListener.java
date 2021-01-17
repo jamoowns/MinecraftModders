@@ -661,6 +661,35 @@ public class MabListener implements IGameEventListener {
 				}
 			}
 		}, 120);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+			@Override
+			public void run() {
+				if (PlayerArr.size() > 0) {
+
+					Location loc = PlayerArr.get(0).getLocation();
+					Random r = new Random();
+					int low = 3000;
+					int high = 5000;
+					int count = 0;
+					while (count > 0) {
+						Location newLoc = loc;
+						newLoc.add(r.nextInt(high - low) + low, 0, r.nextInt(high - low) + low);
+						if (!newLoc.getBlock().getBiome().toString().contains("ocean")) {
+							loc = newLoc;
+							count = 0;
+						}
+					}
+					loc.add(0, 80, 0);
+					for (Player player : PlayerArr) {
+						player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL, 1));
+						player.teleport(loc);
+						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 120, 5));
+
+					}
+				}
+			}
+		}, 120);
+
 	}
 
 	private void potionAllPlayersInAnArea(Location loc, int x, int y, int z, PotionEffectType potionEffectType,
