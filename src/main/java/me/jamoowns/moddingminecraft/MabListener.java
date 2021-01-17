@@ -234,7 +234,7 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onEntityDeathEvent(EntityDeathEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.FUNKY_MOB_DEATH)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.FUNKY_MOB_DEATH)) {
 			if (event.getEntity() instanceof Sheep) {
 				Sheep sheepEnt = (Sheep) event.getEntity();
 				Player mcPlayer = sheepEnt.getKiller();
@@ -476,7 +476,7 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onPlayerDeath(PlayerDeathEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.IRON_GOLEM)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.IRON_GOLEM)) {
 			Player playerEnt = event.getEntity();
 			Random r = new Random();
 			int low = 0;
@@ -537,7 +537,7 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onPlayerMoveEvent(PlayerMoveEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.WINFRED)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.WINFRED)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Witch) {
 					if (ent.getName().contains("Winfred")) {
@@ -566,7 +566,7 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onThunderChange(ThunderChangeEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.STABLE_WEATHER)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.STABLE_WEATHER)) {
 			if (event.toThunderState()) {
 				event.setCancelled(true);
 			}
@@ -575,7 +575,7 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onWeatherChange(WeatherChangeEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.STABLE_WEATHER)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.STABLE_WEATHER)) {
 			if (event.toWeatherState()) {
 				event.setCancelled(true);
 			}

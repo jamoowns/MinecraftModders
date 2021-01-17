@@ -1,9 +1,7 @@
 package me.jamoowns.moddingminecraft;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +13,7 @@ import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.features.FeatureTracker;
 import me.jamoowns.moddingminecraft.features.IFeatureListener;
 import me.jamoowns.moddingminecraft.features.PlayerTrailFeatureListener;
+import me.jamoowns.moddingminecraft.features.RandomChestsFeatureListener;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.menus.FeaturesMenu;
 import me.jamoowns.moddingminecraft.menus.ItemMenu;
@@ -24,11 +23,9 @@ import me.jamoowns.moddingminecraft.teams.Teams;
 
 public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
-	private List<IGameEventListener> listeners;
+	private List<IGameEventListener> gameListeners;
 
 	private CustomItems customItems;
-
-	public Map<Feature, Boolean> statusByFeature;
 
 	private CommandMinecraftModders commandExecutor;
 
@@ -37,6 +34,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	private FeatureTracker featureTracker;
 
 	private PlayerTrailFeatureListener playerTrailFeatureListener;
+
+	private RandomChestsFeatureListener randomChestsFeatureListener;
 
 	public final CommandMinecraftModders commandExecutor() {
 		return commandExecutor;
@@ -48,13 +47,39 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	@Override
 	public final void featureActivated(Feature feature) {
-		statusByFeature.put(feature, true);
 		Broadcaster.broadcastInfo("Activated: " + feature.name());
+		switch (feature) {
+			case BATTLE_ROYALE:
+				break;
+			case EGG_WITCH:
+				break;
+			case FUNKY_MOB_DEATH:
+				break;
+			case IRON_GOLEM:
+				break;
+			case PLAYER_TRAIL:
+				break;
+			case RANDOM_BUCKET:
+				break;
+			case RANDOM_CHESTS:
+				randomChestsFeatureListener.start();
+				break;
+			case RANDOM_ENCHANT:
+				break;
+			case STABLE_WEATHER:
+				break;
+			case WINFRED:
+				break;
+			case ZOMBIE_BELL:
+				break;
+			default:
+				break;
+		}
 	}
 
 	@Override
 	public final void featureDeactivated(Feature feature) {
-		statusByFeature.put(feature, false);
+		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
 		switch (feature) {
 			case BATTLE_ROYALE:
 				break;
@@ -70,6 +95,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 			case RANDOM_BUCKET:
 				break;
 			case RANDOM_CHESTS:
+				randomChestsFeatureListener.stop();
 				break;
 			case RANDOM_ENCHANT:
 				break;
@@ -82,7 +108,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 			default:
 				break;
 		}
-		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
 	}
 
 	public final FeatureTracker featureTracker() {
@@ -92,64 +117,30 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	// Fired when plug-in is disabled
 	@Override
 	public final void onDisable() {
-		listeners.forEach(IGameEventListener::cleanup);
+		gameListeners.forEach(IGameEventListener::cleanup);
 	}
 
 	// Fired when plug-in is first enabled
 	@Override
 	public final void onEnable() {
 		commandExecutor = new CommandMinecraftModders();
-		statusByFeature = new HashMap<>();
+		customItems = new CustomItems();
+		teams = new Teams(this);
 
 		featureTracker = new FeatureTracker();
 		featureTracker.addListener(this);
 
-		customItems = new CustomItems();
+		featureTracker().enable(Feature.RANDOM_ENCHANT);
+		featureTracker().enable(Feature.ZOMBIE_BELL);
+		featureTracker().enable(Feature.EGG_WITCH);
+		featureTracker().enable(Feature.RANDOM_BUCKET);
+		featureTracker().enable(Feature.FUNKY_MOB_DEATH);
+		featureTracker().enable(Feature.IRON_GOLEM);
+		featureTracker().enable(Feature.PLAYER_TRAIL);
+		featureTracker().enable(Feature.WINFRED);
+		featureTracker().enable(Feature.STABLE_WEATHER);
 
-		Feature[] features = Feature.values();
-
-		for (Feature feature : features) {
-			switch (feature) {
-				case BATTLE_ROYALE:
-					statusByFeature.put(Feature.BATTLE_ROYALE, false);
-					break;
-				case RANDOM_CHESTS:
-					statusByFeature.put(Feature.RANDOM_CHESTS, false);
-					break;
-				case RANDOM_ENCHANT:
-					statusByFeature.put(Feature.RANDOM_ENCHANT, true);
-					break;
-				case ZOMBIE_BELL:
-					statusByFeature.put(Feature.ZOMBIE_BELL, true);
-					break;
-				case EGG_WITCH:
-					statusByFeature.put(Feature.EGG_WITCH, true);
-					break;
-				case RANDOM_BUCKET:
-					statusByFeature.put(Feature.RANDOM_BUCKET, true);
-					break;
-				case FUNKY_MOB_DEATH:
-					statusByFeature.put(Feature.FUNKY_MOB_DEATH, true);
-					break;
-				case IRON_GOLEM:
-					statusByFeature.put(Feature.IRON_GOLEM, true);
-					break;
-				case PLAYER_TRAIL:
-					statusByFeature.put(Feature.PLAYER_TRAIL, true);
-					break;
-				case WINFRED:
-					statusByFeature.put(Feature.WINFRED, true);
-					break;
-				case STABLE_WEATHER:
-					statusByFeature.put(Feature.STABLE_WEATHER, true);
-					break;
-				default:
-					break;
-			}
-		}
-		teams = new Teams(this);
-
-		listeners = new ArrayList<>();
+		gameListeners = new ArrayList<>();
 		addGameListener(new JamoListener(this));
 		addGameListener(new MabListener(this));
 		addGameListener(new MoshyListener());
@@ -158,6 +149,9 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 		playerTrailFeatureListener = new PlayerTrailFeatureListener(this);
 		addGameListener(playerTrailFeatureListener);
+
+		randomChestsFeatureListener = new RandomChestsFeatureListener(this);
+		addGameListener(randomChestsFeatureListener);
 
 		MenuListener menuListener = new MenuListener();
 		addGameListener(menuListener);
@@ -181,7 +175,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	}
 
 	private void addGameListener(IGameEventListener listener) {
-		listeners.add(listener);
+		gameListeners.add(listener);
 		getServer().getPluginManager().registerEvents(listener, this);
 	}
 }

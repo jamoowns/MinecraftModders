@@ -42,7 +42,7 @@ public final class PlayerTrailFeatureListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onPlayerMoveEvent(PlayerMoveEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.PLAYER_TRAIL)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.PLAYER_TRAIL)) {
 			Location belowPlayer = event.getPlayer().getLocation().add(0, -1, 0);
 
 			if (!belowPlayer.getBlock().isEmpty() && !belowPlayer.getBlock().isLiquid()) {

@@ -16,8 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
@@ -90,16 +88,6 @@ public final class JamoListener implements IGameEventListener {
 
 		enchantments = Arrays.asList(Enchantment.values());
 
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
-			@Override
-			public void run() {
-				if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.RANDOM_CHESTS)) {
-					randomChestSpawn();
-				}
-			}
-		}, RANDOM.nextInt((int) (TimeConstants.ONE_MINUTE * 2)) + TimeConstants.ONE_MINUTE,
-				RANDOM.nextInt((int) (TimeConstants.ONE_MINUTE * 2)) + TimeConstants.ONE_MINUTE);
-
 		taskKeeper = new TaskKeeper(javaPlugin);
 
 		setupCustomItems();
@@ -144,7 +132,7 @@ public final class JamoListener implements IGameEventListener {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 			@Override
 			public void run() {
-				if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.BATTLE_ROYALE)) {
+				if (javaPlugin.featureTracker().isFeatureActive(Feature.BATTLE_ROYALE)) {
 					Bukkit.getOnlinePlayers().forEach(player -> {
 						ItemStack item = mobSpawningItems.get(RANDOM.nextInt(mobSpawningItems.size())).asItem();
 						item.setAmount(RANDOM.nextInt(15) + 10);
@@ -162,7 +150,7 @@ public final class JamoListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onCraftItemEvent(CraftItemEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.RANDOM_ENCHANT)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.RANDOM_ENCHANT)) {
 			ItemStack result = event.getRecipe().getResult().clone();
 			ItemMeta meta = result.getItemMeta();
 			for (int i = 0; i < 7; i++) {
@@ -203,21 +191,21 @@ public final class JamoListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.RANDOM_BUCKET)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.RANDOM_BUCKET)) {
 			event.setItemStack(new ItemStack(BUCKET_TYPES.get(RANDOM.nextInt(BUCKET_TYPES.size()))));
 		}
 	}
 
 	@EventHandler
 	public final void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.EGG_WITCH)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.EGG_WITCH)) {
 			event.setHatchingType(EntityType.WITCH);
 		}
 	}
 
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.ZOMBIE_BELL)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.ZOMBIE_BELL)) {
 			if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.BELL) {
 				Player player = event.getPlayer();
 				Location dundundun = player.getLocation().add(player.getLocation().getDirection().multiply(-15));
@@ -233,42 +221,6 @@ public final class JamoListener implements IGameEventListener {
 	public final void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
 				event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
-	}
-
-	private void randomChestSpawn() {
-		List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
-		Player p = players.get(RANDOM.nextInt(players.size()));
-
-		int attempts = 0;
-		boolean done = false;
-		while (attempts < 30 && !done) {
-			Location chestLocation = p.getLocation().add(RANDOM.nextInt(40) - 20, RANDOM.nextInt(6),
-					RANDOM.nextInt(40) - 20);
-
-			// Location chestLocation = p.getLocation().add(0, 3, 0);
-			if (p.getWorld().getBlockAt(chestLocation).isEmpty()) {
-				done = true;
-				p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 20, 1);
-				p.getWorld().playSound(chestLocation, Sound.BLOCK_GLASS_BREAK, 25, 1);
-
-				p.getWorld().getBlockAt(chestLocation).setType(Material.CHEST);
-
-				Chest chest = (Chest) p.getWorld().getBlockAt(chestLocation).getState();
-
-				List<Material> materials = Arrays.asList(Material.values());
-
-				List<Material> itemsForChest = new ArrayList<>();
-
-				for (int i = 0; i < RANDOM.nextInt(5) + 1; i++) {
-					itemsForChest.add(materials.get(RANDOM.nextInt(materials.size())));
-				}
-
-				List<ItemStack> forChest = itemsForChest.stream().map(ItemStack::new).collect(Collectors.toList());
-
-				chest.getInventory().setContents(forChest.toArray(new ItemStack[forChest.size()]));
-				p.getWorld().spawnEntity(chest.getLocation(), EntityType.FIREWORK);
-			}
-		}
 	}
 
 	private void setupCustomItems() {
