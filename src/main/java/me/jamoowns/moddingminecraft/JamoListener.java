@@ -178,8 +178,8 @@ public final class JamoListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onEntitySpawnEvent(EntitySpawnEvent event) {
-		Broadcaster.broadcastError(event.getEntity());
-		if (event.getEntity().getType().name().contains("CARPET")) {
+		Broadcaster.broadcastError(event.getEntity().getName());
+		if (event.getEntity().getName().contains("CARPET")) {
 			event.setCancelled(true);
 		}
 	}
