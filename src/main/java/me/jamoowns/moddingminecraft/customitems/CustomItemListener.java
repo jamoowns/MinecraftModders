@@ -7,7 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -19,8 +18,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
-public final class CustomItemListener implements Listener {
+public final class CustomItemListener implements IGameEventListener {
 
 	private static int MAX_RANGE = 30;
 
@@ -28,6 +28,11 @@ public final class CustomItemListener implements Listener {
 
 	public CustomItemListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
+	}
+
+	@Override
+	public final void cleanup() {
+		/* Empty. */
 	}
 
 	@EventHandler

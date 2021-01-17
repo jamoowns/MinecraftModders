@@ -17,13 +17,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
-public final class PlayerTrailFeature implements IGameEventListener {
+public final class PlayerTrailFeatureListener implements IGameEventListener {
 
 	private Map<UUID, List<Block>> trailByPlayer;
 
 	private ModdingMinecraft javaPlugin;
 
-	public PlayerTrailFeature(ModdingMinecraft aJavaPlugin) {
+	public PlayerTrailFeatureListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		trailByPlayer = new HashMap<>();
 	}

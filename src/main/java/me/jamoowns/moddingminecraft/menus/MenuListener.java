@@ -6,16 +6,22 @@ import java.util.Optional;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-public final class MenuListener implements Listener {
+import me.jamoowns.moddingminecraft.listener.IGameEventListener;
+
+public final class MenuListener implements IGameEventListener {
 
 	private Map<Inventory, ICustomMenu> menus;
 
 	public MenuListener() {
 		menus = new HashMap<>();
+	}
+
+	@Override
+	public final void cleanup() {
+		/* Empty. */
 	}
 
 	@EventHandler

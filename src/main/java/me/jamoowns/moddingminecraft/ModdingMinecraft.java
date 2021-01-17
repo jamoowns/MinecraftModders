@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ import me.jamoowns.moddingminecraft.customitems.CustomItems;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.features.FeatureTracker;
 import me.jamoowns.moddingminecraft.features.IFeatureListener;
-import me.jamoowns.moddingminecraft.features.PlayerTrailFeature;
+import me.jamoowns.moddingminecraft.features.PlayerTrailFeatureListener;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.menus.FeaturesMenu;
 import me.jamoowns.moddingminecraft.menus.MenuListener;
@@ -26,25 +27,13 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private CustomItems customItems;
 
-	private JamoListener jamoListener;
-
-	private MabListener mabListener;
-
-	private MoshyListener moshyListener;
-
-	private BlockHunterListener blockHunterListener;
-
 	public Map<Feature, Boolean> statusByFeature;
 
 	private CommandMinecraftModders commandExecutor;
 
 	private Teams teams;
 
-	private CustomItemListener customItemListener;
-
 	private FeatureTracker featureTracker;
-
-	private MenuListener menuListener;
 
 	public final CommandMinecraftModders commandExecutor() {
 		return commandExecutor;
@@ -127,29 +116,27 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		}
 		teams = new Teams(this);
 
+		listeners = new ArrayList<>();
 		addListener(new JamoListener(this));
-		mabListener = new MabListener(this);
-		moshyListener = new MoshyListener();
-		blockHunterListener = new BlockHunterListener(this);
-		customItemListener = new CustomItemListener(this);
-		featureTracker = new FeatureTracker();
-		featureTracker.addListener(this);
-		menuListener = new MenuListener();
+		addListener(new MabListener(this));
+		addListener(new MoshyListener());
+		addListener(new BlockHunterListener(this));
+		addListener(new CustomItemListener(this));
+
+		MenuListener menuListener = new MenuListener();
 		FeaturesMenu featureMenu = new FeaturesMenu(this);
 		menuListener.register(featureMenu);
+		addListener(menuListener);
 
-		addListener(new PlayerTrailFeature(this));
+		addListener(new PlayerTrailFeatureListener(this));
 
 		commandExecutor().registerCommand(java.util.Collections.emptyList(), "features",
 				p -> p.openInventory(featureMenu.asInventory()));
 
+		featureTracker = new FeatureTracker();
+		featureTracker.addListener(this);
+
 		this.getCommand("mm").setExecutor(commandExecutor);
-		getServer().getPluginManager().registerEvents(jamoListener, this);
-		getServer().getPluginManager().registerEvents(mabListener, this);
-		getServer().getPluginManager().registerEvents(moshyListener, this);
-		getServer().getPluginManager().registerEvents(blockHunterListener, this);
-		getServer().getPluginManager().registerEvents(customItemListener, this);
-		getServer().getPluginManager().registerEvents(menuListener, this);
 	}
 
 	public final Teams teams() {

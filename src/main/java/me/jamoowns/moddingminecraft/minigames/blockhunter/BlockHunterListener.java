@@ -15,7 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -29,8 +28,9 @@ import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.fated.Collections;
 import me.jamoowns.moddingminecraft.common.time.CountdownTimer;
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
+import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
-public final class BlockHunterListener implements Listener {
+public final class BlockHunterListener implements IGameEventListener {
 
 	private enum GameState {
 		SETUP, SEARCHING, CHOOSING, STOPPED
@@ -82,6 +82,18 @@ public final class BlockHunterListener implements Listener {
 		} else {
 			Broadcaster.sendError(host, "Please initiate the game first");
 		}
+	}
+
+	@Override
+	public final void cleanup() {
+		for (GamePlayer gp : gameplayers) {
+			removeStand(gp);
+			gp.clearStand();
+		}
+		gameplayers.clear();
+		stopAllTimers();
+		currentGameState = GameState.STOPPED;
+		Broadcaster.broadcastGameInfo("Blockhunt has been stopped!");
 	}
 
 	public final void initiateGame() {
@@ -206,14 +218,7 @@ public final class BlockHunterListener implements Listener {
 	}
 
 	public final void stopGame() {
-		for (GamePlayer gp : gameplayers) {
-			removeStand(gp);
-			gp.clearStand();
-		}
-		gameplayers.clear();
-		stopAllTimers();
-		currentGameState = GameState.STOPPED;
-		Broadcaster.broadcastGameInfo("Blockhunt has been stopped!");
+		cleanup();
 	}
 
 	private Location blockAbove(Location loc) {
