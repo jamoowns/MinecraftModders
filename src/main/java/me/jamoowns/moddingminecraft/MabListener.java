@@ -50,6 +50,7 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.features.Feature;
@@ -682,7 +683,7 @@ public class MabListener implements IGameEventListener {
 					}
 					loc.add(0, 80, 0);
 					for (Player player : PlayerArr) {
-						player.setFallDistance(-1000);
+						player.setVelocity(new Vector(player.getVelocity().getX(), 1, player.getVelocity().getZ()));
 						player.teleport(loc);
 						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 120, 5));
 
