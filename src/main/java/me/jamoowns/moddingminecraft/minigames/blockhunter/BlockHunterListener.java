@@ -38,7 +38,7 @@ public final class BlockHunterListener implements Listener {
 
 	private static final int CHOOSING_TIME_MINUTES = 2;
 
-	private static final int SEARCHING_TIME_MINUTES = 5;
+	private static final int SEARCHING_TIME_MINUTES = 10;
 
 	private static final long CHOOSING_TIME = TimeConstants.ONE_MINUTE * CHOOSING_TIME_MINUTES;
 
@@ -289,14 +289,10 @@ public final class BlockHunterListener implements Listener {
 		Broadcaster.broadcastGameInfo("Choose a block and place it on your stand You have 2 minutes!");
 		CountdownTimer countDown = new CountdownTimer(javaPlugin, 10, CHOOSING_TIME_MINUTES * 60 - 10,
 				() -> Broadcaster.broadcastGameInfo("You have 10 seconds left to choose your block"),
-				() -> Broadcaster.broadcastGameInfo("Time's up!"),
+				this::setSearchingPhase,
 				timer -> Broadcaster.broadcastGameInfo("Time left to choose: " + timer.getSecondsLeft()));
 		countDown.scheduleTimer();
 		countdownTimers.add(countDown);
-		int task = Bukkit.getScheduler()
-				.runTaskLater(javaPlugin, this::setSearchingPhase, CHOOSING_TIME + TimeConstants.ONE_SECOND)
-				.getTaskId();
-		timers.add(task);
 	}
 
 	private void setSearchingPhase() {
@@ -339,15 +335,11 @@ public final class BlockHunterListener implements Listener {
 
 		CountdownTimer countDown = new CountdownTimer(javaPlugin, 10, SEARCHING_TIME_MINUTES * 60 - 10,
 				() -> Broadcaster.broadcastGameInfo("You have 10 seconds left to search for your block!"),
-				() -> Broadcaster.broadcastGameInfo("Time's up!"),
+				this::checkWinnerPhase,
 				timer -> Broadcaster.broadcastGameInfo("Time left to find the block: " + timer.getSecondsLeft()));
 
 		countDown.scheduleTimer();
 		countdownTimers.add(countDown);
-		task = Bukkit.getScheduler()
-				.runTaskLater(javaPlugin, this::checkWinnerPhase, SEARCHING_TIME + TimeConstants.ONE_SECOND)
-				.getTaskId();
-		timers.add(task);
 	}
 
 	private void stopAllTimers() {
