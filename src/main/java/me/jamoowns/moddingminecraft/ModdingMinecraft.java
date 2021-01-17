@@ -36,6 +36,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private FeatureTracker featureTracker;
 
+	private PlayerTrailFeatureListener playerTrailFeatureListener;
+
 	public final CommandMinecraftModders commandExecutor() {
 		return commandExecutor;
 	}
@@ -53,6 +55,33 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	@Override
 	public final void featureDeactivated(Feature feature) {
 		statusByFeature.put(feature, false);
+		switch (feature) {
+			case BATTLE_ROYALE:
+				break;
+			case EGG_WITCH:
+				break;
+			case FUNKY_MOB_DEATH:
+				break;
+			case IRON_GOLEM:
+				break;
+			case PLAYER_TRAIL:
+				playerTrailFeatureListener.cleanup();
+				break;
+			case RANDOM_BUCKET:
+				break;
+			case RANDOM_CHESTS:
+				break;
+			case RANDOM_ENCHANT:
+				break;
+			case STABLE_WEATHER:
+				break;
+			case WINFRED:
+				break;
+			case ZOMBIE_BELL:
+				break;
+			default:
+				break;
+		}
 		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
 	}
 
@@ -126,7 +155,9 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		addGameListener(new MoshyListener());
 		addGameListener(new BlockHunterListener(this));
 		addGameListener(new CustomItemListener(this));
-		addGameListener(new PlayerTrailFeatureListener(this));
+
+		playerTrailFeatureListener = new PlayerTrailFeatureListener(this);
+		addGameListener(playerTrailFeatureListener);
 
 		MenuListener menuListener = new MenuListener();
 		addGameListener(menuListener);
