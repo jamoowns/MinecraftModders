@@ -671,7 +671,7 @@ public class MabListener implements IGameEventListener {
 					Random r = new Random();
 					int low = 3000;
 					int high = 5000;
-					int count = 3;
+					int count = 10;
 					while (count > 0) {
 						Location newLoc = loc;
 						newLoc.add(r.nextInt(high - low) + low, 0, r.nextInt(high - low) + low);
