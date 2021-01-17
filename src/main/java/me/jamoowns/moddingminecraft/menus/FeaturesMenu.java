@@ -85,6 +85,18 @@ public final class FeaturesMenu implements ICustomMenu {
 							() -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
+				case STABLE_WEATHER:
+					featureMenuItems.add(new CustomMenuItem("Stable Weather", Material.GOLDEN_HELMET,
+							() -> javaPlugin.featureTracker().enable(feature),
+							() -> javaPlugin.featureTracker().disable(feature),
+							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
+				default:
+					featureMenuItems.add(new CustomMenuItem(feature.toString(), Material.TARGET,
+							() -> javaPlugin.featureTracker().enable(feature),
+							() -> javaPlugin.featureTracker().disable(feature),
+							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
+					break;
 			}
 		}
 		inventory = Bukkit.createInventory(null, (int) (Math.ceil(featureMenuItems.size() / 9.0) * 9.0 + 9),

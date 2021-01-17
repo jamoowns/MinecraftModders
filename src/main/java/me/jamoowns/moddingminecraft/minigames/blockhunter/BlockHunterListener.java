@@ -92,8 +92,10 @@ public final class BlockHunterListener implements IGameEventListener {
 		}
 		gameplayers.clear();
 		stopAllTimers();
-		currentGameState = GameState.STOPPED;
-		Broadcaster.broadcastGameInfo("Blockhunt has been stopped!");
+		if (currentGameState != GameState.STOPPED) {
+			currentGameState = GameState.STOPPED;
+			Broadcaster.broadcastGameInfo("Blockhunt has been stopped!");
+		}
 	}
 
 	public final void initiateGame() {

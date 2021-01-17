@@ -43,7 +43,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.Lists;
 
-import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.features.Feature;
@@ -148,8 +147,6 @@ public final class JamoListener implements IGameEventListener {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
 			@Override
 			public void run() {
-				Broadcaster.broadcastInfo(javaPlugin);
-				Broadcaster.broadcastInfo(javaPlugin.featureTracker());
 				if (javaPlugin.featureTracker().isFeatureActive(javaPlugin, Feature.BATTLE_ROYALE)) {
 					Bukkit.getOnlinePlayers().forEach(player -> {
 						ItemStack item = mobSpawningItems.get(RANDOM.nextInt(mobSpawningItems.size())).asItem();
