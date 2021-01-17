@@ -1,6 +1,7 @@
 package me.jamoowns.moddingminecraft.menus;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -16,7 +17,7 @@ import me.jamoowns.moddingminecraft.features.Feature;
 
 public final class FeaturesMenu implements ICustomMenu {
 
-	private ArrayList<CustomMenuItem> featureMenuItems;
+	private List<CustomMenuItem> featureMenuItems;
 	private Inventory inventory;
 
 	public FeaturesMenu(ModdingMinecraft javaPlugin) {
@@ -26,75 +27,75 @@ public final class FeaturesMenu implements ICustomMenu {
 		for (Feature feature : features) {
 			switch (feature) {
 				case BATTLE_ROYALE:
-					featureMenuItems.add(new CustomMenuItem("Battle Royale", Material.GOLD_BLOCK,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+					featureMenuItems.add(new CustomMenuItem("Battle Royale", Material.DIAMOND_SWORD,
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				case EGG_WITCH:
-					featureMenuItems.add(new CustomMenuItem("Egg Witch", Material.DIAMOND_BLOCK,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+					featureMenuItems.add(new CustomMenuItem("Egg Witch", Material.EGG,
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				case FUNKY_MOB_DEATH:
-					featureMenuItems.add(new CustomMenuItem("Random mob deaths", Material.LAPIS_BLOCK,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+					featureMenuItems.add(new CustomMenuItem("Random mob deaths", Material.REDSTONE_WIRE,
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				case IRON_GOLEM:
 					featureMenuItems.add(new CustomMenuItem("Iron golem player death", Material.IRON_BLOCK,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				case PLAYER_TRAIL:
 					featureMenuItems.add(new CustomMenuItem("Player trails", Material.LIME_WOOL,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				case RANDOM_BUCKET:
 					featureMenuItems.add(new CustomMenuItem("Random Buckets", Material.BUCKET,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				case RANDOM_CHESTS:
 					featureMenuItems.add(new CustomMenuItem("Random Chests", Material.CHEST,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				case RANDOM_ENCHANT:
 					featureMenuItems.add(new CustomMenuItem("Random Enchants", Material.ENCHANTING_TABLE,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				case WINFRED:
 					featureMenuItems.add(new CustomMenuItem("Winfred", Material.BREWING_STAND,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				case ZOMBIE_BELL:
 					featureMenuItems.add(new CustomMenuItem("Zombie bell", Material.BELL,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				case STABLE_WEATHER:
 					featureMenuItems.add(new CustomMenuItem("Stable Weather", Material.GOLDEN_HELMET,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 				default:
 					featureMenuItems.add(new CustomMenuItem(feature.toString(), Material.TARGET,
-							() -> javaPlugin.featureTracker().enable(feature),
-							() -> javaPlugin.featureTracker().disable(feature),
+							p -> javaPlugin.featureTracker().enable(feature),
+							p -> javaPlugin.featureTracker().disable(feature),
 							() -> javaPlugin.featureTracker().isFeatureActive(javaPlugin, feature)));
 					break;
 			}

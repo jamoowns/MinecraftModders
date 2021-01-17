@@ -17,6 +17,7 @@ import me.jamoowns.moddingminecraft.features.IFeatureListener;
 import me.jamoowns.moddingminecraft.features.PlayerTrailFeatureListener;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.menus.FeaturesMenu;
+import me.jamoowns.moddingminecraft.menus.ItemMenu;
 import me.jamoowns.moddingminecraft.menus.MenuListener;
 import me.jamoowns.moddingminecraft.minigames.blockhunter.BlockHunterListener;
 import me.jamoowns.moddingminecraft.teams.Teams;
@@ -125,16 +126,21 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		addGameListener(new MoshyListener());
 		addGameListener(new BlockHunterListener(this));
 		addGameListener(new CustomItemListener(this));
+		addGameListener(new PlayerTrailFeatureListener(this));
 
 		MenuListener menuListener = new MenuListener();
-		FeaturesMenu featureMenu = new FeaturesMenu(this);
-		menuListener.register(featureMenu);
 		addGameListener(menuListener);
 
-		addGameListener(new PlayerTrailFeatureListener(this));
+		FeaturesMenu featureMenu = new FeaturesMenu(this);
+		ItemMenu itemMenu = new ItemMenu(this);
+		menuListener.register(featureMenu);
+		menuListener.register(itemMenu);
 
 		commandExecutor().registerCommand(java.util.Collections.emptyList(), "features",
 				p -> p.openInventory(featureMenu.asInventory()));
+
+		commandExecutor().registerCommand(java.util.Collections.emptyList(), "items",
+				p -> p.openInventory(itemMenu.asInventory()));
 
 		this.getCommand("mm").setExecutor(commandExecutor);
 	}

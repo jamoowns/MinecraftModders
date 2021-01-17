@@ -35,13 +35,10 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import com.google.common.collect.Lists;
 
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
@@ -156,8 +153,6 @@ public final class JamoListener implements IGameEventListener {
 				}
 			}
 		}, TimeConstants.ONE_MINUTE / 2, TimeConstants.ONE_MINUTE / 2);
-
-		javaPlugin.commandExecutor().registerCommand(java.util.Collections.emptyList(), "items", this::showAllItems);
 	}
 
 	@Override
@@ -365,14 +360,5 @@ public final class JamoListener implements IGameEventListener {
 			}, TimeConstants.ONE_SECOND * 5, TimeConstants.ONE_SECOND * 5);
 		});
 		javaPlugin.customItems().register(lightningAnusItem);
-	}
-
-	private void showAllItems(Player player) {
-		List<CustomItem> allItems = Lists.newArrayList(javaPlugin.customItems().allItems());
-
-		Inventory inv = Bukkit.createInventory(null, (int) (Math.ceil(allItems.size() / 9.0) * 9.0), "Custom Items");
-
-		allItems.stream().map(CustomItem::asItem).forEach(inv::addItem);
-		player.openInventory(inv);
 	}
 }
