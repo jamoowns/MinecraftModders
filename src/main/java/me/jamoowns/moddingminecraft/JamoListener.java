@@ -26,8 +26,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -94,51 +94,44 @@ public final class JamoListener implements IGameEventListener {
 
 		taskKeeper.addBoardItem("Win BLOCKHUNTER");
 
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
-			@Override
-			public void run() {
-				javaPlugin.teams().allTeams().stream().map(Army::teamMembers).flatMap(Collection::stream)
-						.filter(JamoListener::isMob).forEach(uuid -> {
-							Entity entity = Bukkit.getEntity(uuid);
-							if (entity instanceof Mob) {
-								Mob mob = (Mob) entity;
-								Collection<Entity> nearbyEntities = mob.getWorld().getNearbyEntities(mob.getLocation(),
-										15, 15, 15, e -> e instanceof LivingEntity);
-								List<Entity> teamedEntitiesNearby = nearbyEntities.stream()
-										.filter(e -> !javaPlugin.teams().hasTeam(e.getUniqueId())
-												|| !javaPlugin.teams().getTeamName(e.getUniqueId()).equalsIgnoreCase(
-														javaPlugin.teams().getTeamName(mob.getUniqueId())))
-										.filter(ent -> {
-											if (ent instanceof Player) {
-												GameMode gameMode = ((Player) ent).getGameMode();
-												return gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE;
-											}
-											return true;
-										}).collect(Collectors.toList());
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, () -> {
+			javaPlugin.teams().allTeams().stream().map(Army::teamMembers).flatMap(Collection::stream)
+					.filter(JamoListener::isMob).forEach(uuid -> {
+						Entity entity = Bukkit.getEntity(uuid);
+						if (entity instanceof Mob) {
+							Mob mob = (Mob) entity;
+							Collection<Entity> nearbyEntities = mob.getWorld().getNearbyEntities(mob.getLocation(), 15,
+									15, 15, e -> e instanceof LivingEntity);
+							List<Entity> teamedEntitiesNearby = nearbyEntities.stream()
+									.filter(e -> !javaPlugin.teams().hasTeam(e.getUniqueId())
+											|| !javaPlugin.teams().getTeamName(e.getUniqueId()).equalsIgnoreCase(
+													javaPlugin.teams().getTeamName(mob.getUniqueId())))
+									.filter(ent -> {
+										if (ent instanceof Player) {
+											GameMode gameMode = ((Player) ent).getGameMode();
+											return gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE;
+										}
+										return true;
+									}).collect(Collectors.toList());
 
-								Optional<Entity> target = teamedEntitiesNearby.stream()
-										.sorted((o1, o2) -> Double.compare(
-												entity.getLocation().distance(o1.getLocation()),
-												entity.getLocation().distance(o2.getLocation())))
-										.findFirst();
-								if (target.isPresent()) {
-									mob.setTarget((LivingEntity) target.get());
-								}
+							Optional<Entity> target = teamedEntitiesNearby.stream()
+									.sorted((o1, o2) -> Double.compare(entity.getLocation().distance(o1.getLocation()),
+											entity.getLocation().distance(o2.getLocation())))
+									.findFirst();
+							if (target.isPresent()) {
+								mob.setTarget((LivingEntity) target.get());
 							}
-						});
-			}
+						}
+					});
 		}, 4 * TimeConstants.ONE_SECOND, 4 * TimeConstants.ONE_SECOND);
 
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
-			@Override
-			public void run() {
-				if (javaPlugin.featureTracker().isFeatureActive(Feature.BATTLE_ROYALE)) {
-					Bukkit.getOnlinePlayers().forEach(player -> {
-						ItemStack item = mobSpawningItems.get(RANDOM.nextInt(mobSpawningItems.size())).asItem();
-						item.setAmount(RANDOM.nextInt(15) + 10);
-						player.getInventory().addItem(item);
-					});
-				}
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, () -> {
+			if (javaPlugin.featureTracker().isFeatureActive(Feature.BATTLE_ROYALE)) {
+				Bukkit.getOnlinePlayers().forEach(player -> {
+					ItemStack item = mobSpawningItems.get(RANDOM.nextInt(mobSpawningItems.size())).asItem();
+					item.setAmount(RANDOM.nextInt(15) + 10);
+					player.getInventory().addItem(item);
+				});
 			}
 		}, TimeConstants.ONE_MINUTE / 2, TimeConstants.ONE_MINUTE / 2);
 	}
@@ -183,8 +176,8 @@ public final class JamoListener implements IGameEventListener {
 	}
 
 	@EventHandler
-	public final void onEntitySpawnEvent(BlockDropItemEvent event) {
-		if (event.getBlock().getType().name().contains("CARPET")) {
+	public final void onEntitySpawnEvent(EntitySpawnEvent event) {
+		if (event.getEntity().getType().name().contains("CARPET")) {
 			event.setCancelled(true);
 		}
 	}
