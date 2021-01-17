@@ -685,6 +685,7 @@ public class MabListener implements IGameEventListener {
 					for (Player player : PlayerArr) {
 						player.setVelocity(new Vector(player.getVelocity().getX(), 1, player.getVelocity().getZ()));
 						player.teleport(loc);
+						player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 400, 255));
 						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 180, 1));
 
 					}
