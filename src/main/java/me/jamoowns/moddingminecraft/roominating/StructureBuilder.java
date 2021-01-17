@@ -329,7 +329,7 @@ public final class StructureBuilder {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else if (newC == 3 || newC == 7 || newC == 8 || newC == 12) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-				} else if (newC == 4 || newC == 19 || newC == 13) {
+				} else if (newC == 4 || newC == 9 || newC == 13) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 				} else if (newC == 2 || newC == 6 || newC == 11) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
