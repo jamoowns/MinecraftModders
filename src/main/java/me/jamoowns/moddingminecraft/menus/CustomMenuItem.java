@@ -56,7 +56,7 @@ class CustomMenuItem {
 	}
 
 	public final ItemStack asItem() {
-		if (isEnabled.get()) {
+		if (!isToggle || isEnabled.get()) {
 			return item.clone();
 		} else {
 			return disabledItem.clone();
