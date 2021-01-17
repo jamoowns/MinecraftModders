@@ -38,7 +38,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.features.Feature;
@@ -178,7 +177,6 @@ public final class JamoListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onEntitySpawnEvent(EntitySpawnEvent event) {
-		Broadcaster.broadcastError(event.getEntity().getName());
 		if (event.getEntity().getName().contains("Carpet")) {
 			event.setCancelled(true);
 		}
