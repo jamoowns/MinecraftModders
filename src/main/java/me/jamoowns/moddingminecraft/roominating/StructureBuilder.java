@@ -202,11 +202,11 @@ public final class StructureBuilder {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				} else if ((newR == 4 || newR == 5) && newC > 1 && newC < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-				} else if (newC == 5 || newC == 11) {
+				} else if (newC == 5 || newC == 10) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 				} else if (newC == 6) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
-				} else if (newC == 10) {
+				} else if (newC == 9) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 				} else if (newC == 1) {
 					if (newR % 2 == 0) {
