@@ -225,44 +225,44 @@ public final class JamoListener implements IGameEventListener {
 
 	private void setupCustomItems() {
 		normalZombieStick = new CustomItem("Normal Zombie", Material.ZOMBIE_HEAD);
-		normalZombieStick.setClickEvent(event -> {
+		normalZombieStick.setSpellCastEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Zombie.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
-		});
+		}, 30);
 		javaPlugin.customItems().register(normalZombieStick);
 		mobSpawningItems.add(normalZombieStick);
 
 		normalSkeletonStick = new CustomItem("Normal Skeleton", Material.SKELETON_SKULL);
-		normalSkeletonStick.setClickEvent(event -> {
+		normalSkeletonStick.setSpellCastEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Skeleton.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
-		});
+		}, 30);
 		javaPlugin.customItems().register(normalSkeletonStick);
 		mobSpawningItems.add(normalSkeletonStick);
 
 		guardSniperStick = new CustomItem("Guard | Sniper", Material.IRON_BARS);
-		guardSniperStick.setClickEvent(event -> {
+		guardSniperStick.setSpellCastEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Skeleton.class);
 			mob.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999, 99999));
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
-		});
+		}, 30);
 		javaPlugin.customItems().register(guardSniperStick);
 		mobSpawningItems.add(guardSniperStick);
 
 		normalCreeperStick = new CustomItem("Normal Creeper", Material.CREEPER_HEAD);
-		normalCreeperStick.setClickEvent(event -> {
+		normalCreeperStick.setSpellCastEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Creeper.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
-		});
+		}, 30);
 		javaPlugin.customItems().register(normalCreeperStick);
 		mobSpawningItems.add(normalCreeperStick);
 
 		normalMobStick = new CustomItem("Unkown Mob", Material.SOUL_TORCH);
-		normalMobStick.setClickEvent(event -> {
+		normalMobStick.setSpellCastEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			List<EntityType> mobList = Arrays.asList(EntityType.ZOMBIE, EntityType.SKELETON,
 					EntityType.ZOMBIFIED_PIGLIN);
@@ -278,7 +278,7 @@ public final class JamoListener implements IGameEventListener {
 				javaPlugin.teams().register(event.getPlayer().getUniqueId(), (Mob) mob);
 			}
 
-		});
+		}, 30);
 		javaPlugin.customItems().register(normalMobStick);
 		mobSpawningItems.add(normalMobStick);
 

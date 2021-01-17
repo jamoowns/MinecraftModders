@@ -22,8 +22,6 @@ import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
 public final class CustomItemListener implements IGameEventListener {
 
-	private static int MAX_RANGE = 30;
-
 	private ModdingMinecraft javaPlugin;
 
 	public CustomItemListener(ModdingMinecraft aJavaPlugin) {
@@ -56,20 +54,20 @@ public final class CustomItemListener implements IGameEventListener {
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
 		if (event.getItem() != null && event.getItem().getItemMeta() != null) {
 			CustomItem customItem = javaPlugin.customItems().getItem(event.getItem().getItemMeta().getDisplayName());
-			if (customItem != null && customItem.hasClickEvent() && isLeftClick(event.getAction())) {
-				Block target = event.getPlayer().getTargetBlockExact(MAX_RANGE);
+			if (customItem != null && customItem.hasSpellCastEvent() && isLeftClick(event.getAction())) {
+				Block target = event.getPlayer().getTargetBlockExact(customItem.maxRange());
 				if (target != null) {
 					for (double d = 0; d <= target.getLocation().distance(event.getPlayer().getLocation()); d += 0.1) {
 						event.getPlayer().getWorld().spawnParticle(Particle.TOTEM, event.getPlayer().getEyeLocation()
 								.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
 					}
-					customItem.clickEvent()
+					customItem.spellCastEvent()
 							.accept(new SpellCastEvent(target.getLocation().add(0.5, 0.5, 0.5), event.getPlayer()));
 					if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
 						event.getItem().setAmount(event.getItem().getAmount() - 1);
 					}
 				} else {
-					for (double d = 0; d <= MAX_RANGE; d += 0.1) {
+					for (double d = 0; d <= customItem.maxRange(); d += 0.1) {
 						event.getPlayer().getWorld().spawnParticle(Particle.FLAME, event.getPlayer().getEyeLocation()
 								.add(event.getPlayer().getEyeLocation().getDirection().multiply(d)), 1, 0, 0, 0, 0);
 					}
@@ -117,7 +115,6 @@ public final class CustomItemListener implements IGameEventListener {
 	private final boolean isLeftClick(Action action) {
 		switch (action) {
 			case LEFT_CLICK_AIR:
-				return true;
 			case LEFT_CLICK_BLOCK:
 				return true;
 			case PHYSICAL:
