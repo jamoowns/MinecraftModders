@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.menus;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.bukkit.Material;
@@ -11,14 +12,32 @@ class CustomMenuItem {
 
 	private String title;
 
-	private Runnable enableAction;
-	private Runnable disableAction;
+	private boolean isToggle;
+	private Consumer<HumanEntity> enableAction;
+	private Consumer<HumanEntity> disableAction;
 	private Supplier<Boolean> isEnabled;
 	private ItemStack item;
 	private ItemStack disabledItem;
+	private Consumer<HumanEntity> onClickAction;
 
-	public CustomMenuItem(final String aTitle, Material icon, Runnable aEnableAction, Runnable aDisableAction,
-			Supplier<Boolean> aIsEnabled) {
+	public CustomMenuItem(final String aTitle, Material icon, Consumer<HumanEntity> aOnClickAction) {
+		title = aTitle;
+		item = new ItemStack(icon);
+		ItemMeta itemMeta = item.getItemMeta();
+		itemMeta.setDisplayName(title);
+		item.setItemMeta(itemMeta);
+
+		disabledItem = new ItemStack(Material.STONE);
+		ItemMeta disabledItemMeta = disabledItem.getItemMeta();
+		disabledItemMeta.setDisplayName(title);
+		disabledItem.setItemMeta(disabledItemMeta);
+
+		onClickAction = aOnClickAction;
+		isToggle = false;
+	}
+
+	public CustomMenuItem(final String aTitle, Material icon, Consumer<HumanEntity> aEnableAction,
+			Consumer<HumanEntity> aDisableAction, Supplier<Boolean> aIsEnabled) {
 		title = aTitle;
 		item = new ItemStack(icon);
 		ItemMeta itemMeta = item.getItemMeta();
@@ -33,6 +52,7 @@ class CustomMenuItem {
 		enableAction = aEnableAction;
 		disableAction = aDisableAction;
 		isEnabled = aIsEnabled;
+		isToggle = true;
 	}
 
 	public final ItemStack asItem() {
@@ -48,10 +68,14 @@ class CustomMenuItem {
 	}
 
 	public final void onClick(HumanEntity p) {
-		if (isEnabled.get()) {
-			disableAction.run();
+		if (isToggle) {
+			if (isEnabled.get()) {
+				disableAction.accept(p);
+			} else {
+				enableAction.accept(p);
+			}
 		} else {
-			enableAction.run();
+			onClickAction.accept(p);
 		}
 	}
 }

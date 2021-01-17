@@ -79,6 +79,10 @@ public final class CustomItem {
 		return projectileLaunchEvent.isPresent();
 	}
 
+	public final Material material() {
+		return item.getType();
+	}
+
 	public final String name() {
 		return name;
 	}
