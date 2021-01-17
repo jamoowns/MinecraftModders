@@ -582,7 +582,7 @@ public class MabListener implements IGameEventListener {
 	}
 
 	@EventHandler
-	public final void PlayerChatEvent(PlayerChatEvent event) {
+	public final void playerChatEvent(PlayerChatEvent event) {
 		if (event.getMessage().contains("Winfred the Weak")) {
 			Witch witch = event.getPlayer().getLocation().getWorld().spawn(event.getPlayer().getLocation(),
 					Witch.class);
