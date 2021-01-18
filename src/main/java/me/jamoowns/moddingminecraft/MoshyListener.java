@@ -17,6 +17,6 @@ public class MoshyListener implements IGameEventListener {
 	@EventHandler
 	public final void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
 		Player flyingPlayer = event.getPlayer();
-		Broadcaster.sendInfo(flyingPlayer, "In the good ole days this used to make you fly...");
+		Broadcaster.sendInfo(flyingPlayer, "Pullteest");
 	}
 }
