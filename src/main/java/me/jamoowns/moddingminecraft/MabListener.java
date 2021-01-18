@@ -161,7 +161,7 @@ public class MabListener implements IGameEventListener {
 			Material mat = block.getType();
 			block.setType(Material.AIR);
 			Location loc = block.getLocation();
-			loc.add(.5, .5, .5);
+			loc.add(.5, 0, .5);
 			block.getLocation().getWorld().spawnFallingBlock(loc, mat, (byte) 0);
 
 		}
