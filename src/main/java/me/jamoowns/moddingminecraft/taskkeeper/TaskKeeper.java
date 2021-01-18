@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -78,6 +79,7 @@ public final class TaskKeeper {
 			taskKeeper.register(event.getPlayer());
 		}
 	}
+
 	private class Task implements IBoardItem {
 		private String taskName;
 
@@ -189,18 +191,18 @@ public final class TaskKeeper {
 	public final void incrementTask(UUID player, String taskName) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
 
-		Task task = Collections.find(tasks, Task::id, taskName).get();
+		Optional<Task> task = Collections.find(tasks, Task::id, taskName);
 
-		if (!task.isComplete(player)) {
-			Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
-			score.getScoreboard().resetScores(task.describe(player));
+		if (task.isPresent() && !task.get().isComplete(player)) {
+			Score score = scoreboard.getObjective("tasks").getScore(task.get().describe(player));
+			score.getScoreboard().resetScores(task.get().describe(player));
 
-			task.incrementTask(player);
-			Score updatedScore = scoreboard.getObjective("tasks").getScore(task.describe(player));
-			updatedScore.setScore(tasks.indexOf(task));
+			task.get().incrementTask(player);
+			Score updatedScore = scoreboard.getObjective("tasks").getScore(task.get().describe(player));
+			updatedScore.setScore(tasks.indexOf(task.get()));
 
-			if (task.isComplete(player)) {
-				task.reward.accept(player);
+			if (task.get().isComplete(player)) {
+				task.get().reward.accept(player);
 			}
 		}
 	}

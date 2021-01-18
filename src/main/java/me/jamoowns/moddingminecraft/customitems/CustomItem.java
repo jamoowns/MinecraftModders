@@ -21,7 +21,7 @@ public final class CustomItem {
 
 	private Optional<Consumer<ProjectileLaunchEvent>> projectileLaunchEvent;
 
-	private Optional<Consumer<SpellCastEvent>> clickEvent;
+	private Optional<Consumer<SpellCastEvent>> spellCastEvent;
 
 	private Optional<Consumer<PotionSplashEvent>> potionSplashEvent;
 
@@ -29,12 +29,14 @@ public final class CustomItem {
 
 	private final ItemStack item;
 
+	private Integer maxRange;
+
 	public CustomItem(String aName, ItemStack aItem) {
 		name = aName;
 		blockPlaceEvent = empty();
 		projectileHitEvent = empty();
 		potionSplashEvent = empty();
-		clickEvent = empty();
+		spellCastEvent = empty();
 		projectileLaunchEvent = empty();
 
 		item = aItem.clone();
@@ -55,16 +57,8 @@ public final class CustomItem {
 		return blockPlaceEvent.get();
 	}
 
-	public final Consumer<SpellCastEvent> clickEvent() {
-		return clickEvent.get();
-	}
-
 	public final boolean hasBlockPlaceEvent() {
 		return blockPlaceEvent.isPresent();
-	}
-
-	public final boolean hasClickEvent() {
-		return clickEvent.isPresent();
 	}
 
 	public final boolean hasPotionSplashEvent() {
@@ -79,8 +73,16 @@ public final class CustomItem {
 		return projectileLaunchEvent.isPresent();
 	}
 
+	public final boolean hasSpellCastEvent() {
+		return spellCastEvent.isPresent();
+	}
+
 	public final Material material() {
 		return item.getType();
+	}
+
+	public final Integer maxRange() {
+		return maxRange;
 	}
 
 	public final String name() {
@@ -103,10 +105,6 @@ public final class CustomItem {
 		blockPlaceEvent = Optional.of(event);
 	}
 
-	public final void setClickEvent(Consumer<SpellCastEvent> event) {
-		clickEvent = Optional.of(event);
-	}
-
 	public final void setPotionSplashEvent(Consumer<PotionSplashEvent> event) {
 		potionSplashEvent = Optional.of(event);
 	}
@@ -117,5 +115,14 @@ public final class CustomItem {
 
 	public final void setProjectileLaunchEvent(Consumer<ProjectileLaunchEvent> event) {
 		projectileLaunchEvent = Optional.of(event);
+	}
+
+	public final void setSpellCastEvent(Consumer<SpellCastEvent> event, Integer aMaxRange) {
+		spellCastEvent = Optional.of(event);
+		maxRange = aMaxRange;
+	}
+
+	public final Consumer<SpellCastEvent> spellCastEvent() {
+		return spellCastEvent.get();
 	}
 }
