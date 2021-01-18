@@ -37,11 +37,13 @@ public final class CustomItemListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
-		javaPlugin.customItems().getItem(event.getItemInHand()).filter(CustomItem::hasBlockPlaceEvent)
-				.map(CustomItem::blockPlaceEvent).ifPresent(c -> {
-					event.getBlockPlaced().setType(Material.AIR);
-					c.accept(event);
-				});
+		if (event.getItemInHand() != null) {
+			javaPlugin.customItems().getItem(event.getItemInHand()).filter(CustomItem::hasBlockPlaceEvent)
+					.map(CustomItem::blockPlaceEvent).ifPresent(c -> {
+						event.getBlockPlaced().setType(Material.AIR);
+						c.accept(event);
+					});
+		}
 	}
 
 	@EventHandler
