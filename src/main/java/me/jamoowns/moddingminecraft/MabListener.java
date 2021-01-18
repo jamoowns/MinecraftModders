@@ -156,11 +156,11 @@ public class MabListener implements IGameEventListener {
 				}
 			}
 		}
-		if (event.getBlock().getType().equals(Material.STONE)) {
+		if (mabmoSet) {
 			Block block = event.getBlockPlaced();
+			Material mat = block.getType();
 			block.setType(Material.AIR);
-			Byte blockData = 0x0;
-			block.getLocation().getWorld().spawnFallingBlock(block.getLocation(), Material.STONE, blockData);
+			block.getLocation().getWorld().spawnFallingBlock(block.getLocation(), mat, (byte) 0);
 
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
