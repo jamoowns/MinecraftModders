@@ -651,7 +651,7 @@ public final class StructureBuilder {
 			}
 		}
 
-		placeGrid(loc, BlockFace.EAST);
+		placeGrid(loc, direction);
 	}
 
 	private void cornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
