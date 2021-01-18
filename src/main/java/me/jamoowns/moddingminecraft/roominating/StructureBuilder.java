@@ -1273,11 +1273,11 @@ public final class StructureBuilder {
 			BlockFace leftRight) {
 		int chunkSize = 16;
 		if (stage == 1) {
-			if (cCount == 1 || cCount == 4 || cCount == 11 || cCount == 14) {
+			if (cCount == 1 || cCount == 5 || cCount == 10 || cCount == 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
-		} else if (stage == 2) {
+		} else if (stage == 2 || stage == 10) {
 			if (cCount > 1 && cCount < 5 || cCount > 6 && cCount < 9 || cCount > 10 && cCount < 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 			} else if ((rCount == 4 || rCount == 5 || rCount == chunkSize - 5 || rCount == chunkSize - 6) && cCount > 1
