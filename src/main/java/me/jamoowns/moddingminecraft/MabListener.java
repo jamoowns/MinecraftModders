@@ -156,7 +156,7 @@ public class MabListener implements IGameEventListener {
 				}
 			}
 		}
-		if (mabmoSet) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.HEAVY_BLOCKS)) {
 			Block block = event.getBlockPlaced();
 			Material mat = block.getType();
 			block.setType(Material.AIR);
