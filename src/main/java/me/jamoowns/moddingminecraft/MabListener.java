@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
@@ -154,6 +155,12 @@ public class MabListener implements IGameEventListener {
 					}
 				}
 			}
+		}
+		if (event.getBlock().getType().equals(Material.ACACIA_LOG)) {
+			Block block = event.getBlockPlaced();
+			Byte blockData = 0x0;
+			block.getLocation().getWorld().spawnFallingBlock(block.getLocation(), Material.ACACIA_LOG, blockData);
+
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
