@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.roominating;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -540,8 +541,11 @@ public final class StructureBuilder {
 				}
 			}
 		}
+		Chunk chunk = loc.getChunk();
+		
+		Location newLoc = chunk.getBlock(0,(int) loc.getY(),0).getLocation():
 
-		placeGrid(loc.getChunk().getBlock(0, loc.getBlockY(), 0).getLocation(), direction);
+		placeGrid(newLoc, direction);
 	}
 
 	private void buildStraightChunk(BlockFace direction, Location loc) {
