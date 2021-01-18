@@ -1272,12 +1272,7 @@ public final class StructureBuilder {
 	private void straightGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
 			BlockFace leftRight) {
 		if (stage == 1) {
-
-			if (((cCount == 15 || cCount == 1) && rCount < 16 && rCount > 0)
-					|| ((rCount == 15 || rCount == 1) && cCount < 16 && cCount > 0)) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-			}
-			if (((cCount == 1 || cCount == 4 || cCount == 12 || cCount == 15) && rCount < 2)) {
+			if (cCount == 1 || cCount == 4 || cCount == 11 || cCount == 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
