@@ -15,7 +15,7 @@ import org.bukkit.block.data.type.Stairs.Shape;
 public final class StructureBuilder {
 
 	public enum GridType {
-		CORNER, T_SECTION, CROSS, DEAD_END, STRAIGHT
+		CORNER, T_SECTION, CROSS, DEAD_END, STRAIGHT, STRAIGHTCHUNK
 	}
 
 	private Material[][][] buildGrid;
@@ -36,7 +36,11 @@ public final class StructureBuilder {
 			break;
 		case STRAIGHT:
 			buildStraight(direction, loc);
+			break;
+		case STRAIGHTCHUNK:
+			buildStraightChunk(direction, loc);
 		}
+
 	}
 
 	private void buildNotStraight(BlockFace direction, GridType grid, Location loc) {
@@ -543,109 +547,109 @@ public final class StructureBuilder {
 	private void buildStraightChunk(BlockFace direction, Location loc) {
 		Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 				Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
-//		createGrids(16, 30, 16);
-//		for (int l = 0; l < buildGrid[0].length; l++) {
-//			for (int c = 0; c < buildGrid[0][0].length; c++) {
-//				for (int r = 0; r < buildGrid.length; r++) {
-//					insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0, 0);
-//				}
-//			}
-//		}
-//
-//		int heightTracker = 0;
-//		int cCount = 0;
-//		for (; heightTracker < 19; heightTracker++) {
-//			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
-//				cCount = buildGrid[0][0].length;
-//			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
-//				cCount = -1;
-//			}
-//			int rCount = 0;
-//			for (int c = 0; c < buildGrid[0][0].length; c++) {
-//
-//				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
-//					cCount--;
-//				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
-//					cCount++;
-//				}
-//
-//				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
-//					rCount = buildGrid.length;
-//				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
-//					rCount = -1;
-//				}
-//				for (int r = 0; r < buildGrid.length; r++) {
-//					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
-//						rCount--;
-//					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
-//						rCount++;
-//					}
-//					straightGrid(r, c, rCount, cCount, heightTracker, 1, buildList, direction);
-//				}
-//			}
-//		}
-//
-//		cCount = 0;
-//		if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
-//			cCount = buildGrid[0][0].length;
-//		} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
-//			cCount = -1;
-//		}
-//		int rCount = 0;
-//		for (int c = 0; c < buildGrid[0][0].length; c++) {
-//
-//			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
-//				cCount--;
-//			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
-//				cCount++;
-//			}
-//
-//			if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
-//				rCount = buildGrid.length;
-//			} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
-//				rCount = -1;
-//			}
-//			for (int r = 0; r < buildGrid.length; r++) {
-//				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
-//					rCount--;
-//				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
-//					rCount++;
-//				}
-//				straightGrid(r, c, rCount, cCount, heightTracker, 2, buildList, direction);
-//			}
-//		}
-//		for (int i = 0; i < 9; i++) {
-//			heightTracker++;
-//			cCount = 0;
-//			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
-//				cCount = buildGrid[0][0].length;
-//			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
-//				cCount = -1;
-//			}
-//			rCount = 0;
-//			for (int c = 0; c < buildGrid[0][0].length; c++) {
-//
-//				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
-//					cCount--;
-//				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
-//					cCount++;
-//				}
-//
-//				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
-//					rCount = buildGrid.length;
-//				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
-//					rCount = -1;
-//				}
-//				for (int r = 0; r < buildGrid.length; r++) {
-//					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
-//						rCount--;
-//					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
-//						rCount++;
-//					}
-//					straightGrid(r, c, rCount, cCount, heightTracker, 3 + i, buildList, direction);
-//				}
-//			}
-//		}
+		createGrids(16, 30, 16);
+		for (int l = 0; l < buildGrid[0].length; l++) {
+			for (int c = 0; c < buildGrid[0][0].length; c++) {
+				for (int r = 0; r < buildGrid.length; r++) {
+					insert(0 + r, 0 + l, 0 + c, buildList[0], 0, 0, 0);
+				}
+			}
+		}
+
+		int heightTracker = 0;
+		int cCount = 0;
+		for (; heightTracker < 19; heightTracker++) {
+			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+				cCount = buildGrid[0][0].length;
+			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+				cCount = -1;
+			}
+			int rCount = 0;
+			for (int c = 0; c < buildGrid[0][0].length; c++) {
+
+				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+					cCount--;
+				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+					cCount++;
+				}
+
+				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+					rCount = buildGrid.length;
+				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+					rCount = -1;
+				}
+				for (int r = 0; r < buildGrid.length; r++) {
+					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+						rCount--;
+					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+						rCount++;
+					}
+					straightGrid(r, c, rCount, cCount, heightTracker, 1, buildList, direction);
+				}
+			}
+		}
+
+		cCount = 0;
+		if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+			cCount = buildGrid[0][0].length;
+		} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+			cCount = -1;
+		}
+		int rCount = 0;
+		for (int c = 0; c < buildGrid[0][0].length; c++) {
+
+			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+				cCount--;
+			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+				cCount++;
+			}
+
+			if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+				rCount = buildGrid.length;
+			} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+				rCount = -1;
+			}
+			for (int r = 0; r < buildGrid.length; r++) {
+				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+					rCount--;
+				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+					rCount++;
+				}
+				straightGrid(r, c, rCount, cCount, heightTracker, 2, buildList, direction);
+			}
+		}
+		for (int i = 0; i < 9; i++) {
+			heightTracker++;
+			cCount = 0;
+			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+				cCount = buildGrid[0][0].length;
+			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+				cCount = -1;
+			}
+			rCount = 0;
+			for (int c = 0; c < buildGrid[0][0].length; c++) {
+
+				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+					cCount--;
+				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+					cCount++;
+				}
+
+				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+					rCount = buildGrid.length;
+				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+					rCount = -1;
+				}
+				for (int r = 0; r < buildGrid.length; r++) {
+					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+						rCount--;
+					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+						rCount++;
+					}
+					straightGrid(r, c, rCount, cCount, heightTracker, 3 + i, buildList, direction);
+				}
+			}
+		}
 
 		placeGrid(loc, BlockFace.EAST);
 	}
@@ -1264,512 +1268,30 @@ public final class StructureBuilder {
 			}
 		}
 	}
-//
-//	private void straightGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
-//			BlockFace leftRight) {
-//		if (stage == 1) {
-//
-//			for (; heightTracker < 19; heightTracker++) {
-//				for (int c = 0; c < buildGrid[0][0].length; c++) {
-//					for (int r = 0; r < buildGrid.length; r++) {
-//
-//						int newC = 0;
-//						if (leftRight == BlockFace.SOUTH || leftRight == BlockFace.NORTH) {
-//							newC = r;
-//						} else {
-//							newC = c;
-//						}
-//						if (newC == 1 || newC == 4 || newC == 11 || newC == 14) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//						}
-//					}
-//				}
-//			}
-//		} else if (stage == 2) {
-//			if (rCount == 0 && cCount < 16 && cCount > 0) {
-//				if (grid != GridType.DEAD_END && grid != GridType.CORNER && grid != GridType.T_SECTION
-//						&& grid != GridType.CROSS) {
-//					if (cCount % 2 == 1) {
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (rCount == 1 && cCount < 15 && cCount > 1) {
-//				if (grid != GridType.DEAD_END && grid != GridType.CORNER && grid != GridType.T_SECTION
-//						&& grid != GridType.CROSS) {
-//					if (cCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (rCount == 15 && cCount < 15 && cCount > 1) {
-//				if (grid != GridType.CROSS) {
-//					if (cCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (rCount == 16 && cCount < 16 && cCount > 0) {
-//				if (grid != GridType.CROSS) {
-//					if (cCount % 2 == 1) {
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 1, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (cCount == 0 && rCount < 16 && rCount > 0) {
-//				if (grid != GridType.CORNER && grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 1) {
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (cCount == 1 && rCount < 15 && rCount > 1) {
-//				if (grid != GridType.CORNER && grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (cCount == 15 && rCount < 15 && rCount > 1) {
-//				if (grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (cCount == 16 && rCount < 16 && rCount > 0) {
-//				if (grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 1) {
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if ((rCount > 1 && rCount < 15 && cCount > 1 && cCount < 15)) {
-//				if ((rCount == 8 && cCount == 8) || (rCount == 5 && cCount == 5) || (rCount == 11 && cCount == 11)
-//						|| (rCount == 11 && cCount == 5) || (rCount == 5 && cCount == 11)) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else {
-//					if (rCount > 4 && rCount < 12 && cCount > 4 && cCount < 12) {
-//						if (rCount == 8 && (cCount == 6 || cCount == 7)) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
-//						} else if (rCount > 8 && rCount < 11 && cCount > 5 && cCount < 11) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//						} else if (cCount > 8 && cCount < 11 && rCount > 5 && rCount < 11) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//						} else {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
-//						}
-//
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-//					}
-//
-//				}
-//			}
-//
-//		} else if (stage == 3 || stage == 7) {
-//			if (rCount == 0 && cCount < 16 && cCount > 0) {
-//				if (grid != GridType.DEAD_END && grid != GridType.CORNER && grid != GridType.T_SECTION
-//						&& grid != GridType.CROSS) {
-//					if (cCount % 2 == 1) {
-//						if (stage == 3) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
-//						} else {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
-//						}
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
-//					}
-//				}
-//			} else if (rCount == 1 && cCount < 15 && cCount > 1) {
-//				if (grid != GridType.DEAD_END && grid != GridType.CORNER && grid != GridType.T_SECTION
-//						&& grid != GridType.CROSS) {
-//					if (cCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//					}
-//				}
-//			} else if (rCount == 15 && cCount < 15 && cCount > 1) {
-//				if (grid != GridType.CROSS) {
-//					if (cCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//					}
-//				}
-//			} else if (rCount == 16 && cCount < 16 && cCount > 0) {
-//				if (grid != GridType.CROSS) {
-//					if (cCount % 2 == 1) {
-//						if (stage == 3) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
-//						} else {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
-//						}
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
-//					}
-//				}
-//			} else if (cCount == 0 && rCount < 16 && rCount > 0) {
-//				if (grid != GridType.CORNER && grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 1) {
-//						if (stage == 3) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
-//						} else {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
-//						}
-//
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
-//					}
-//				}
-//			} else if (cCount == 1 && rCount < 15 && rCount > 1) {
-//				if (grid != GridType.CORNER && grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//					}
-//				}
-//			} else if (cCount == 15 && rCount < 15 && rCount > 1) {
-//				if (grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//					}
-//				}
-//			} else if (cCount == 16 && rCount < 16 && rCount > 0) {
-//				if (grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 1) {
-//						if (stage == 3) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
-//						} else {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
-//						}
-//					} else {
-//
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
-//					}
-//				}
-//			} else if ((rCount > 1 && rCount < 15 && cCount > 1 && cCount < 15)) {
-//				if ((rCount == 8 && cCount == 8) || (rCount == 5 && cCount == 5) || (rCount == 11 && cCount == 11)
-//						|| (rCount == 11 && cCount == 5) || (rCount == 5 && cCount == 11)) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else {
-//					if (rCount > 4 && rCount < 12 && cCount > 4 && cCount < 12) {
-//						if (cCount == 8 && (rCount == 9 || rCount == 10)) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
-//						}
-//						if (cCount > 8 && cCount < 11 && rCount > 5 && rCount < 11) {
-//							if (stage == 3 && cCount == 9 && rCount == 6) {
-//								insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
-//							} else {
-//								if (rCount < 9 && stage == 7) {
-//
-//								} else {
-//									insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//								}
-//							}
-//						}
-//
-//					}
-//
-//				}
-//			}
-//		} else if (stage == 4 || stage == 8) {
-//			if (rCount == 0 && cCount < 16 && cCount > 0) {
-//				if (grid != GridType.DEAD_END && grid != GridType.CORNER && grid != GridType.T_SECTION
-//						&& grid != GridType.CROSS) {
-//					if (cCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
-//					} else {
-//						if (stage == 4) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-//						}
-//					}
-//				}
-//			} else if (rCount == 1 && cCount < 15 && cCount > 1) {
-//				if (grid != GridType.DEAD_END && grid != GridType.CORNER && grid != GridType.T_SECTION
-//						&& grid != GridType.CROSS) {
-//					if (cCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//					}
-//				}
-//			} else if (rCount == 15 && cCount < 15 && cCount > 1) {
-//				if (grid != GridType.CROSS) {
-//					if (cCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//					}
-//				}
-//			} else if (rCount == 16 && cCount < 16 && cCount > 0) {
-//				if (grid != GridType.CROSS) {
-//					if (cCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 1, 0);
-//					} else {
-//						if (stage == 4) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-//						}
-//					}
-//				}
-//			} else if (cCount == 0 && rCount < 16 && rCount > 0) {
-//				if (grid != GridType.CORNER && grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
-//					} else {
-//						if (stage == 4) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-//						}
-//					}
-//				}
-//			} else if (cCount == 1 && rCount < 15 && rCount > 1) {
-//				if (grid != GridType.CORNER && grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//					}
-//				}
-//			} else if (cCount == 15 && rCount < 15 && rCount > 1) {
-//				if (grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//					} else {
-//					}
-//				}
-//			} else if (cCount == 16 && rCount < 16 && rCount > 0) {
-//				if (grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
-//					} else {
-//						if (stage == 4) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-//						}
-//					}
-//				}
-//			} else if ((rCount > 1 && rCount < 15 && cCount > 1 && cCount < 15)) {
-//				if ((rCount == 8 && cCount == 8) || (rCount == 5 && cCount == 5) || (rCount == 11 && cCount == 11)
-//						|| (rCount == 11 && cCount == 5) || (rCount == 5 && cCount == 11)) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else {
-//					if (rCount > 4 && rCount < 12 && cCount > 4 && cCount < 12) {
-//						if (rCount == 8 && (cCount == 9 || cCount == 10)) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
-//						}
-//						if (cCount > 8 && cCount < 11 && rCount > 5 && rCount < 8) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//						}
-//					}
-//
-//				}
-//			}
-//
-//		} else if (stage == 5 || stage == 9) {
-//			if (rCount == 0 && cCount < 16 && cCount > 0) {
-//				if (grid != GridType.DEAD_END && grid != GridType.CORNER && grid != GridType.T_SECTION
-//						&& grid != GridType.CROSS) {
-//					if (cCount % 2 == 1) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
-//					}
-//				} else if (stage == 5) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 2, 1, 0);
-//				}
-//			} else if (rCount == 1 && cCount < 15 && cCount > 1) {
-//				if (grid != GridType.DEAD_END && grid != GridType.CORNER && grid != GridType.T_SECTION
-//						&& grid != GridType.CROSS) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else if (stage == 5) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 2, 1, 0);
-//				}
-//			} else if (rCount == 15 && cCount < 15 && cCount > 1) {
-//				if (grid != GridType.CROSS) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else if (stage == 5) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 2, 1, 0);
-//				}
-//			} else if (rCount == 16 && cCount < 16 && cCount > 0) {
-//				if (grid != GridType.CROSS) {
-//					if (cCount % 2 == 1) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 1, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
-//					}
-//				} else if (stage == 5) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 2, 1, 0);
-//				}
-//			} else if (cCount == 0 && rCount < 16 && rCount > 0) {
-//				if (grid != GridType.CORNER && grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 1) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
-//					}
-//				} else if (stage == 5) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 2, 1, 0);
-//				}
-//			} else if (cCount == 1 && rCount < 15 && rCount > 1) {
-//				if (grid != GridType.CORNER && grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else if (stage == 5) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 2, 1, 0);
-//				}
-//			} else if (cCount == 15 && rCount < 15 && rCount > 1) {
-//				if (grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else if (stage == 5) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 2, 1, 0);
-//				}
-//			} else if (cCount == 16 && rCount < 16 && rCount > 0) {
-//				if (grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 1) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
-//					}
-//				} else if (stage == 5) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 2, 1, 0);
-//				}
-//			} else if ((rCount > 1 && rCount < 15 && cCount > 1 && cCount < 15)) {
-//				if ((rCount == 8 && cCount == 8) || (rCount == 5 && cCount == 5) || (rCount == 11 && cCount == 11)
-//						|| (rCount == 11 && cCount == 5) || (rCount == 5 && cCount == 11)) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else {
-//
-//					if (rCount == 5 && cCount > 5 && cCount < 11) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
-//					} else if (rCount == 11 && cCount > 5 && cCount < 11) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 1, 0);
-//					} else if (cCount == 5 && rCount > 5 && rCount < 11) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
-//					} else if (cCount == 11 && rCount > 5 && rCount < 11) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
-//					} else if (cCount == 8 && (rCount == 7 || rCount == 6)) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
-//					} else if (rCount > 8 && rCount < 11 && cCount > 5 && cCount < 11) {
-//						if (cCount == 6) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 2, 1, 0);
-//						}
-//					} else if (cCount > 8 && cCount < 11 && rCount > 5 && rCount < 11) {
-//					} else if (stage == 5) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 2, 1, 0);
-//					}
-//
-//				}
-//			}
-//
-//		} else if (stage == 6) {
-//			if (rCount == 0 && cCount < 16 && cCount > 0) {
-//				if (grid != GridType.DEAD_END && grid != GridType.CORNER && grid != GridType.T_SECTION
-//						&& grid != GridType.CROSS) {
-//					if (cCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (rCount == 1 && cCount < 15 && cCount > 1) {
-//				if (grid != GridType.DEAD_END && grid != GridType.CORNER && grid != GridType.T_SECTION
-//						&& grid != GridType.CROSS) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (rCount == 15 && cCount < 15 && cCount > 1) {
-//				if (grid != GridType.CROSS) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (rCount == 16 && cCount < 16 && cCount > 0) {
-//				if (grid != GridType.CROSS) {
-//					if (cCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 1, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (cCount == 0 && rCount < 16 && rCount > 0) {
-//				if (grid != GridType.CORNER && grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (cCount == 1 && rCount < 15 && rCount > 1) {
-//				if (grid != GridType.CORNER && grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (cCount == 15 && rCount < 15 && rCount > 1) {
-//				if (grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if (cCount == 16 && rCount < 16 && rCount > 0) {
-//				if (grid != GridType.T_SECTION && grid != GridType.CROSS) {
-//					if (rCount % 2 == 0) {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
-//					}
-//				} else {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 2, 0, 0);
-//				}
-//			} else if ((rCount > 1 && rCount < 15 && cCount > 1 && cCount < 15)) {
-//				if ((rCount == 8 && cCount == 8) || (rCount == 5 && cCount == 5) || (rCount == 11 && cCount == 11)
-//						|| (rCount == 11 && cCount == 5) || (rCount == 5 && cCount == 11)) {
-//					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//				} else {
-//					if (rCount > 4 && rCount < 12 && cCount > 4 && cCount < 12) {
-//						if (rCount == 8 && (cCount == 6 || cCount == 7)) {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
-//						} else if (cCount == 8 && (rCount == 6 || rCount == 7)) {
-//						} else if (rCount > 8 && rCount < 11 && cCount > 5 && cCount < 11) {
-//							if (cCount < 9) {
-//								insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-//							} else if (rCount == 10) {
-//								insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-//							}
-//
-//						} else if (cCount > 8 && cCount < 11 && rCount > 5 && rCount < 11) {
-//						} else {
-//							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
-//						}
-//
-//					} else {
-//						insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-//					}
-//				}
-//			}
-//		}
-//	}
+
+	private void straightGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
+			BlockFace leftRight) {
+		if (stage == 1) {
+
+			if (((cCount == 15 || cCount == 1) && rCount < 16 && rCount > 0)
+					|| ((rCount == 15 || rCount == 1) && cCount < 16 && cCount > 0)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			}
+			if (((cCount == 1 || cCount == 4 || cCount == 12 || cCount == 15) && rCount < 2)) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			}
+
+		} else if (stage == 2) {
+
+		} else if (stage == 3 || stage == 7) {
+
+		} else if (stage == 4 || stage == 8) {
+
+		} else if (stage == 5 || stage == 9) {
+
+		} else if (stage == 6) {
+
+		}
+	}
 
 }

@@ -140,6 +140,12 @@ public class MabListener implements IGameEventListener {
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getBlockPlaced().getLocation());
 		}
+		if (event.getBlock().getType().equals(Material.COBWEB) && mabmoSet) {
+			event.getPlayer().sendMessage("Building 5");
+			structureBuilder.buildGrid(GridType.STRAIGHTCHUNK,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getBlockPlaced().getLocation());
+		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Villager) {
