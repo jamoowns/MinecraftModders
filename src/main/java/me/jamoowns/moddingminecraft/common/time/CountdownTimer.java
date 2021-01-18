@@ -66,14 +66,15 @@ public class CountdownTimer implements Runnable {
 			afterTimer.run();
 
 			if (assignedTaskId != null) {
-				assignedTaskId = null;
 				Bukkit.getScheduler().cancelTask(assignedTaskId);
+				assignedTaskId = null;
 			}
 			return;
 		}
 
-		if (secondsLeft == seconds)
+		if (secondsLeft == seconds) {
 			beforeTimer.run();
+		}
 
 		everySecond.accept(this);
 
