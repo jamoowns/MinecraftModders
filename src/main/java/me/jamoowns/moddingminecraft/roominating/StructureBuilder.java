@@ -1,9 +1,7 @@
 package me.jamoowns.moddingminecraft.roominating;
 
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.Bisected.Half;
@@ -652,12 +650,7 @@ public final class StructureBuilder {
 				}
 			}
 		}
-		Chunk chunk = loc.getChunk();
-		Block corner = chunk.getBlock(0, (int) loc.getY(), 0);
-		corner.setType(Material.BEDROCK);
-		Location newLoc = corner.getLocation();
-
-		placeGrid(newLoc, BlockFace.EAST);
+		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
 	}
 
 	private void cornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
