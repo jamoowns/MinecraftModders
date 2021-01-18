@@ -1342,11 +1342,11 @@ public final class StructureBuilder {
 		} else if (stage == 3 || stage == 7) {
 			if (cCount == 14 || cCount == 1) {
 				if (rCount < chunkSize / 2) {
-					if (rCount % 2 == 0) {
+					if (rCount % 2 == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				} else {
-					if (rCount % 2 == 1) {
+					if (rCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 					}
 				}
