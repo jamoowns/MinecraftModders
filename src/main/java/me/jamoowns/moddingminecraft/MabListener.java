@@ -11,6 +11,7 @@ import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
@@ -158,11 +159,9 @@ public class MabListener implements IGameEventListener {
 		}
 		if (javaPlugin.featureTracker().isFeatureActive(Feature.HEAVY_BLOCKS)) {
 			Block block = event.getBlockPlaced();
-			Material mat = block.getType();
+			BlockData blockData = block.getBlockData();
 			block.setType(Material.AIR);
-			Location loc = block.getLocation();
-			loc.add(.5, 0, .5);
-			block.getLocation().getWorld().spawnFallingBlock(loc, mat, (byte) 0);
+			block.getLocation().getWorld().spawnFallingBlock(block.getLocation().add(0.5, 0, 0.5), blockData);
 
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
