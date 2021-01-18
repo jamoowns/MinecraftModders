@@ -651,7 +651,7 @@ public final class StructureBuilder {
 			}
 		}
 
-		placeGrid(loc, direction);
+		placeGrid(loc, BlockFace.EAST);
 	}
 
 	private void cornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
@@ -1271,6 +1271,7 @@ public final class StructureBuilder {
 
 	private void straightGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
 			BlockFace leftRight) {
+		int chunkSize = 16;
 		if (stage == 1) {
 			if (cCount == 1 || cCount == 4 || cCount == 11 || cCount == 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
@@ -1279,9 +1280,10 @@ public final class StructureBuilder {
 		} else if (stage == 2) {
 			if (cCount > 1 && cCount < 5 || cCount > 6 && cCount < 9 || cCount > 10 && cCount < 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-			} else if ((rCount == 4 || rCount == 5) && cCount > 1 && cCount < 14) {
+			} else if ((rCount == 4 || rCount == 5 || rCount == chunkSize - 5 || rCount == chunkSize - 6) && cCount > 1
+					&& cCount < 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-			} else if (cCount == 5 || cCount == 10) {
+			} else if (cCount == 5 || cCount == chunkSize - 6) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			} else if (cCount == 6) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
