@@ -1290,16 +1290,32 @@ public final class StructureBuilder {
 			} else if (cCount == 9) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
 			} else if (cCount == 1) {
-				if (rCount % 2 == 0) {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
 				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
 				}
 			} else if (cCount == 14) {
-				if (rCount % 2 == 0) {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
 				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
 				}
 			} else if (cCount == 0) {
 				if (rCount % 2 == 1) {
