@@ -542,8 +542,8 @@ public final class StructureBuilder {
 			}
 		}
 		Chunk chunk = loc.getChunk();
-		
-		Location newLoc = chunk.getBlock(0,(int) loc.getY(),0).getLocation():
+
+		Location newLoc = chunk.getBlock(0, (int) loc.getY(), 0).getLocation();
 
 		placeGrid(newLoc, direction);
 	}
