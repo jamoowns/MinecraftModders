@@ -1285,7 +1285,7 @@ public final class StructureBuilder {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 			} else if (cCount == 5 || cCount == chunkSize - 6) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-			} else if (cCount == 6 || cCount == 10) {
+			} else if (cCount == 6 || cCount == 11) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
 			} else if (cCount == 9 || cCount == 4) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
