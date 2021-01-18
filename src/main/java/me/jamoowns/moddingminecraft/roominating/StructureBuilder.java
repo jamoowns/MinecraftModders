@@ -541,7 +541,7 @@ public final class StructureBuilder {
 			}
 		}
 
-		placeGrid(loc, direction);
+		placeGrid(loc.getChunk().getBlock(0, loc.getBlockY(), 0).getLocation(), direction);
 	}
 
 	private void buildStraightChunk(BlockFace direction, Location loc) {
