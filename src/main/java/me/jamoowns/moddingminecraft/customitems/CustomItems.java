@@ -20,13 +20,17 @@ public final class CustomItems {
 	}
 
 	public final Optional<CustomItem> getItem(ItemStack item) {
-		return item.getItemMeta() == null ? Optional.empty()
-				: Optional.of(customItemsByName.get(item.getItemMeta().getDisplayName()));
+		if (item.getItemMeta() == null) {
+			return Optional.empty();
+		}
+		return Optional.of(customItemsByName.get(item.getItemMeta().getDisplayName()));
 	}
 
 	public final Optional<CustomItem> getItem(Projectile projectile) {
-		return projectile.getCustomName() == null ? Optional.empty()
-				: Optional.of(customItemsByName.get(projectile.getCustomName()));
+		if (projectile.getCustomName() == null) {
+			return Optional.empty();
+		}
+		return Optional.of(customItemsByName.get(projectile.getCustomName()));
 	}
 
 	public final void register(CustomItem item) {
