@@ -542,12 +542,8 @@ public final class StructureBuilder {
 				}
 			}
 		}
-		Chunk chunk = loc.getChunk();
-		Block corner = chunk.getBlock(0, (int) loc.getY(), 0);
-		corner.setType(Material.BEDROCK);
-		Location newLoc = corner.getLocation();
 
-		placeGrid(newLoc, direction);
+		placeGrid(loc, direction);
 	}
 
 	private void buildStraightChunk(BlockFace direction, Location loc) {
@@ -656,8 +652,12 @@ public final class StructureBuilder {
 				}
 			}
 		}
+		Chunk chunk = loc.getChunk();
+		Block corner = chunk.getBlock(0, (int) loc.getY(), 0);
+		corner.setType(Material.BEDROCK);
+		Location newLoc = corner.getLocation();
 
-		placeGrid(loc, BlockFace.EAST);
+		placeGrid(newLoc, BlockFace.EAST);
 	}
 
 	private void cornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
