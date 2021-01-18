@@ -684,7 +684,7 @@ public class MabListener implements IGameEventListener {
 					while (count > 0) {
 						Location newLoc = loc;
 						newLoc.add(r.nextInt(high - low) + low, 0, r.nextInt(high - low) + low);
-						if (!newLoc.getBlock().getBiome().toString().contains("cean")) {
+						if (!newLoc.getBlock().getBiome().toString().contains("OCEAN")) {
 							loc = newLoc;
 							count = 0;
 						}
