@@ -1590,7 +1590,7 @@ public final class StructureBuilder {
 			} else if (cCount == 4 || cCount == 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
 			}
-		} else if (stage == 10) {
+		} else if (stage == 11) {
 
 			if (cCount == 1 || cCount == 12) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
@@ -1599,6 +1599,11 @@ public final class StructureBuilder {
 			} else if (cCount == 3 || cCount == 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
 			} else if (cCount == 4 || cCount == 11) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
+			}
+		} else if (stage == 12) {
+
+			if (cCount == 2 || cCount == 13) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
 			}
 		}
