@@ -651,7 +651,12 @@ public final class StructureBuilder {
 				}
 			}
 		}
-		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
+		if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+			placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.NORTH);
+		} else {
+			placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
+		}
+
 	}
 
 	private void cornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
