@@ -74,6 +74,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 			break;
 		case HEAVY_BLOCKS:
 			break;
+		case LIGHT_BLOCKS:
+			break;
 		default:
 			break;
 		}
@@ -108,6 +110,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		case ZOMBIE_BELL:
 			break;
 		case HEAVY_BLOCKS:
+			break;
+		case LIGHT_BLOCKS:
 			break;
 		default:
 			break;

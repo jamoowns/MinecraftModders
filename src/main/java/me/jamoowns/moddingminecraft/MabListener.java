@@ -20,6 +20,7 @@ import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Husk;
 import org.bukkit.entity.IronGolem;
@@ -159,12 +160,16 @@ public class MabListener implements IGameEventListener {
 				}
 			}
 		}
-		if (javaPlugin.featureTracker().isFeatureActive(Feature.HEAVY_BLOCKS)) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.HEAVY_BLOCKS)
+				|| javaPlugin.featureTracker().isFeatureActive(Feature.LIGHT_BLOCKS)) {
 			Block block = event.getBlockPlaced();
 			BlockData blockData = block.getBlockData();
 			block.setType(Material.AIR);
-			block.getLocation().getWorld().spawnFallingBlock(block.getLocation().add(0.5, 0, 0.5), blockData);
-
+			FallingBlock fb = block.getLocation().getWorld().spawnFallingBlock(block.getLocation().add(0.5, 0, 0.5),
+					blockData);
+			if (javaPlugin.featureTracker().isFeatureActive(Feature.LIGHT_BLOCKS)) {
+				fb.setVelocity(new Vector(0, 5, 0));
+			}
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
