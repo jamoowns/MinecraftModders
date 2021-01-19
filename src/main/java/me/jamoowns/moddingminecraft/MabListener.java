@@ -168,7 +168,7 @@ public class MabListener implements IGameEventListener {
 			FallingBlock fb = block.getLocation().getWorld().spawnFallingBlock(block.getLocation().add(0.5, 0, 0.5),
 					blockData);
 			if (javaPlugin.featureTracker().isFeatureActive(Feature.LIGHT_BLOCKS)) {
-				fb.setVelocity(new Vector(0, 5, 0));
+				fb.setVelocity(new Vector(0, 1, 0));
 			}
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
