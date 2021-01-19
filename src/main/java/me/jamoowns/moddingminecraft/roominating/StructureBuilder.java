@@ -1581,11 +1581,11 @@ public final class StructureBuilder {
 			}
 		} else if (stage == 10) {
 
-			if (cCount == 0 || cCount == 11) {
+			if (cCount == 0 || cCount == 10) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
 			} else if (cCount == 5 || cCount == 15) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
-			} else if (cCount == 1 || cCount == 12) {
+			} else if (cCount == 1 || cCount == 11) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
 			} else if (cCount == 4 || cCount == 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
