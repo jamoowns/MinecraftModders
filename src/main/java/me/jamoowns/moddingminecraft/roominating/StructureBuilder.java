@@ -560,17 +560,17 @@ public final class StructureBuilder {
 		int heightTracker = 0;
 		int cCount = 0;
 		for (; heightTracker < 19; heightTracker++) {
-			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+			if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
 				cCount = buildGrid[0][0].length;
-			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+			} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
 				cCount = -1;
 			}
 			int rCount = 0;
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
 
-				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
 					cCount--;
-				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
 					cCount++;
 				}
 
@@ -651,7 +651,7 @@ public final class StructureBuilder {
 				}
 			}
 		}
-		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.NORTH);
+		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
 	}
 
 	private void cornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
