@@ -1273,6 +1273,9 @@ public final class StructureBuilder {
 			BlockFace leftRight) {
 		int chunkSize = 16;
 		if (stage == 1) {
+			if (heightTracker == 0) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
+			}
 			if (cCount == 1 || cCount == 5 || cCount == 10 || cCount == 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 
