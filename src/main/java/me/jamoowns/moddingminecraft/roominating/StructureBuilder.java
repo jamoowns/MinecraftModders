@@ -1390,27 +1390,49 @@ public final class StructureBuilder {
 			}
 		} else if (stage == 4 || stage == 8) {
 			if (cCount == 14 || cCount == 1) {
-				if (rCount % 2 == 1) {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
+				} else {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
 				}
 			} else if (cCount == 0) {
-				if (rCount % 2 == 0) {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
+					}
 				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
+					}
 				}
 			} else if (cCount == 15) {
-				if (rCount % 2 == 0) {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
+					}
 				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
+					}
 				}
 			} else if ((cCount == 5 || cCount == 10)) {
-				if (rCount == 1 || rCount == 8) {
+				if (rCount == 1 || rCount == 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0, 0);
-				} else if (rCount == 0 || rCount == 2 || rCount == 7 || rCount == 9) {
+				} else if (rCount == 0 || rCount == 2 || rCount == 7 || rCount == 8 || rCount == 13 || rCount == 15) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-				} else if (rCount == 3 || rCount == 6) {
+				} else if (rCount == 3 || rCount == 6 || rCount == 9 || rCount == 12) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
 				}
 			}
