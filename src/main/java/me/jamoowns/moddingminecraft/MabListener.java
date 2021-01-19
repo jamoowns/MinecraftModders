@@ -169,6 +169,7 @@ public class MabListener implements IGameEventListener {
 					blockData);
 			if (javaPlugin.featureTracker().isFeatureActive(Feature.LIGHT_BLOCKS)) {
 				fb.setVelocity(new Vector(0, 1, 0));
+				fb.setGravity(false);
 			}
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
