@@ -1277,7 +1277,7 @@ public final class StructureBuilder {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
-		} else if (stage == 2 || stage == 6) {
+		} else if (stage == 2) {
 			if (cCount > 1 && cCount < 4 || cCount > 6 && cCount < 9 || cCount > 11 && cCount < 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 			} else if ((rCount == 4 || rCount == 5 || rCount == chunkSize - 5 || rCount == chunkSize - 6) && cCount > 1
@@ -1339,7 +1339,7 @@ public final class StructureBuilder {
 					}
 				}
 			}
-		} else if (stage == 3 || stage == 7) {
+		} else if (stage == 3 ) {
 			if (cCount == 14 || cCount == 1) {
 				if (rCount < chunkSize / 2) {
 					if (rCount % 2 == 1) {
@@ -1389,7 +1389,7 @@ public final class StructureBuilder {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
 				}
 			}
-		} else if (stage == 4 || stage == 8) {
+		} else if (stage == 4) {
 			if (cCount == 14 || cCount == 1) {
 				if (rCount < chunkSize / 2) {
 					if (rCount % 2 == 1) {
@@ -1476,6 +1476,166 @@ public final class StructureBuilder {
 					} else {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
 					}
+				}
+			}
+		} else if (stage == 6) {
+			if (cCount > 1 && cCount < 4 || cCount > 6 && cCount < 9 || cCount > 11 && cCount < 14) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
+			} else if ((rCount == 3 ||rCount == 4 || rCount == 5 || rCount == chunkSize - 4)|| rCount == chunkSize - 5 || rCount == chunkSize - 6) && cCount > 1
+					&& cCount < 14) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
+			} else if (cCount == 5 || cCount == chunkSize - 6) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			} else if (cCount == 6 || cCount == 11) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
+			} else if (cCount == 9 || cCount == 4) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+			} else if (cCount == 1) {
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
+				} else {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
+				}
+			} else if (cCount == 14) {
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
+				} else {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
+				}
+			} else if (cCount == 0) {
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
+					}
+				} else {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
+					}
+				}
+
+			} else if (cCount == 15) {
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
+					}
+				} else {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
+					}
+				}
+			}
+		} else if ( stage == 7) {
+			if (cCount == 14 || cCount == 1) {
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
+				} else {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
+				}
+			} else if (cCount == 0) {
+
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+					}
+				} else {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+					}
+				}
+			} else if (cCount == 15) {
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
+					}
+				} else {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
+					}
+				}
+
+			} else if ((cCount == 5 || cCount == 10)) {
+				if ((rCount < 3 || rCount > 6 && rCount < chunkSize - 7 || rCount > chunkSize - 4)) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				} else if (rCount == 3 || rCount == chunkSize - 7) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
+				} else if (rCount == 6 || rCount == chunkSize - 4) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
+				}
+			}
+		} else if ( stage == 8) {
+			if (cCount == 14 || cCount == 1) {
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
+				} else {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+					}
+				}
+			} else if (cCount == 0) {
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
+					}
+				} else {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 1, 0);
+					}
+				}
+			} else if (cCount == 15) {
+				if (rCount < chunkSize / 2) {
+					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
+					}
+				} else {
+					if (rCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 1, 0);
+					}
+				}
+			} else if ((cCount == 5 || cCount == 10)) {
+				if (rCount == 1 || rCount == 14) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0, 0);
+				} else if (rCount == 0 || rCount == 2 || rCount == 7 || rCount == 8 || rCount == 13 || rCount == 15) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				} else if (rCount == 3 || rCount == 6 || rCount == 9 || rCount == 12) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
 				}
 			}
 		} else if (stage == 9) {
