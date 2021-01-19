@@ -179,9 +179,9 @@ public class MabListener implements IGameEventListener {
 						Random r = new Random();
 						int low = -50;
 						int high = 50;
-						double x = (r.nextInt(high - low) + low) / 10 / 10;
-						double z = (r.nextInt(high - low) + low) / 10 / 10;
-						fb.setVelocity(new Vector(x, 0, z));
+						double x = (r.nextInt(high - low) + low) / 10;
+						double z = (r.nextInt(high - low) + low) / 10;
+						fb.setVelocity(new Vector(x / 10, 0, z / 10));
 					}
 				}, 10);
 
