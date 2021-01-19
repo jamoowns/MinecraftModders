@@ -180,7 +180,8 @@ public class MabListener implements IGameEventListener {
 						int low = -20;
 						int high = 20;
 						double x = (r.nextInt(high - low) + low);
-						double y = (r.nextInt(high - low) + low) / 100;
+						double y = (r.nextInt(high - low) + low) / 10;
+						y = y / 10;
 						fb.setVelocity(new Vector(.5, 0, .5));
 						event.getPlayer().getServer().broadcastMessage("'x'-" + x + "'y'-" + y);
 					}
