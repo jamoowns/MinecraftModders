@@ -651,7 +651,7 @@ public final class StructureBuilder {
 				}
 			}
 		}
-		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
+		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.NORTH);
 	}
 
 	private void cornerGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
