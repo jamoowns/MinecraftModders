@@ -1277,14 +1277,14 @@ public final class StructureBuilder {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 
 			}
-			if (heightTracker < 13 && (cCount == 0 || cCount == 15)) {
+			if (heightTracker < 16 && (cCount == 0 || cCount == 15)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
-			if (heightTracker == 14 && (cCount == 0 || cCount == 15)) {
+			if (heightTracker == 16 && (cCount == 0 || cCount == 15)) {
 				if (cCount == 0) {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
-				} else if (cCount == 15) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(4, leftRight), 0, 0);
+				} else if (cCount == 15) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
 				}
 			}
 
