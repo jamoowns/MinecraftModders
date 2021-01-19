@@ -39,6 +39,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -486,6 +487,13 @@ public class MabListener implements IGameEventListener {
 					}
 				}
 			}
+		}
+	}
+
+	@EventHandler
+	public final void onEntitySpawnEvent(EntitySpawnEvent event) {
+		if (event.getEntity().getName().contains("Lantern")) {
+			event.setCancelled(true);
 		}
 	}
 
