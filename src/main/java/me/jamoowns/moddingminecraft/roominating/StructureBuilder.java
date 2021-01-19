@@ -353,7 +353,6 @@ public final class StructureBuilder {
 				}
 			}
 		}
-		// dede
 		heightTracker++;
 		for (int c = 0; c < buildGrid[0][0].length; c++) {
 			for (int r = 0; r < buildGrid.length; r++) {
@@ -441,6 +440,8 @@ public final class StructureBuilder {
 				}
 			}
 		}
+
+		// dede
 		heightTracker++;
 		for (int c = 0; c < buildGrid[0][0].length; c++) {
 			for (int r = 0; r < buildGrid.length; r++) {
@@ -1475,6 +1476,20 @@ public final class StructureBuilder {
 					} else {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(2, leftRight), 0, 0);
 					}
+				}
+			}
+		} else if (stage == 9) {
+			if (cCount == 0) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+			} else if (cCount == 15) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+			} else if ((cCount == 5 || cCount == 10)) {
+				if (rCount < 1 || rCount > 7) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				} else if (rCount == 1) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
+				} else if (rCount == 7) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
 				}
 			}
 		}
