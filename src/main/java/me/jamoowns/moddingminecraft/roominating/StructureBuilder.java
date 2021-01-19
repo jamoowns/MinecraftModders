@@ -315,7 +315,6 @@ public final class StructureBuilder {
 				}
 			}
 		}
-		// dede
 
 		heightTracker++;
 		for (int c = 0; c < buildGrid[0][0].length; c++) {
@@ -354,6 +353,7 @@ public final class StructureBuilder {
 				}
 			}
 		}
+		// dede
 		heightTracker++;
 		for (int c = 0; c < buildGrid[0][0].length; c++) {
 			for (int r = 0; r < buildGrid.length; r++) {
@@ -1436,8 +1436,30 @@ public final class StructureBuilder {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[6], 0, 0, 0);
 				}
 			}
-		} else if (stage == 5 || stage == 9) {
-
+		} else if (stage == 5) {
+			if (cCount == 1 || cCount == 5 || cCount == 10 || cCount == 14) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			} else if (cCount == 3 || cCount == 7 || cCount == 8 || cCount == 12) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+			} else if (cCount == 4 || cCount == 9 || cCount == 13) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+			} else if (cCount == 2 || cCount == 6 || cCount == 11) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+			} else if (cCount == 3 || cCount == 6 || cCount == 11) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+			} else if (cCount == 0) {
+				if (rCount % 2 == 0) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+				} else {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+				}
+			} else if (cCount == 15) {
+				if (rCount % 2 == 0) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+				} else {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+				}
+			}
 		}
 	}
 
