@@ -560,17 +560,17 @@ public final class StructureBuilder {
 		int heightTracker = 0;
 		int cCount = 0;
 		for (; heightTracker < 19; heightTracker++) {
-			if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
 				cCount = buildGrid[0][0].length;
-			} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
 				cCount = -1;
 			}
 			int rCount = 0;
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
 
-				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
 					cCount--;
-				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
 					cCount++;
 				}
 
@@ -1272,6 +1272,11 @@ public final class StructureBuilder {
 	private void straightGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage, Material[] buildList,
 			BlockFace leftRight) {
 		int chunkSize = 16;
+		if (leftRight == BlockFace.NORTH || leftRight == BlockFace.SOUTH) {
+			int temp = r;
+			r = c;
+			c = temp;
+		}
 		if (stage == 1) {
 			if (heightTracker == 0) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
