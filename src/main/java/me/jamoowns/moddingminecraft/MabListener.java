@@ -176,13 +176,7 @@ public class MabListener implements IGameEventListener {
 					public void run() {
 
 						fb.setGravity(true);
-						Random r = new Random();
-						int low = -50;
-						int high = 50;
-						float x = r.nextInt(high - low) + low / 100;
-
-						float y = r.nextInt(high - low) + low / 100;
-						fb.setVelocity(new Vector(x, 0, y));
+						fb.setVelocity(new Vector(.5, 0, .5));
 					}
 				}, 10);
 
