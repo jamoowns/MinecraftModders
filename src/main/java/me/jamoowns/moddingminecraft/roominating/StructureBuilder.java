@@ -1576,6 +1576,8 @@ public final class StructureBuilder {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 1, 0);
 				} else if (rCount == 6 || rCount == chunkSize - 3) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 1, 0);
+				} else {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
 				}
 			}
 		}
