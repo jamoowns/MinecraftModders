@@ -172,10 +172,10 @@ public class MabListener implements IGameEventListener {
 				Random r = new Random();
 				int low = -2000;
 				int high = 2000;
-				float x =  r.nextInt(high - low) + low/1000;
+				float x = r.nextInt(high - low) + low / 1000;
 
-				float y =  r.nextInt(high - low) + low/1000;
-				fb.setVelocity(new Vector(x, 2,y );
+				float y = r.nextInt(high - low) + low / 1000;
+				fb.setVelocity(new Vector(x, 2, y));
 			}
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
