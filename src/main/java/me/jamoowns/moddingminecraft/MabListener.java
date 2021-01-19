@@ -170,11 +170,11 @@ public class MabListener implements IGameEventListener {
 			if (javaPlugin.featureTracker().isFeatureActive(Feature.LIGHT_BLOCKS)) {
 				fb.setVelocity(new Vector(0, 1, 0));
 				Random r = new Random();
-				int low = -200;
-				int high = 200;
-				float x = r.nextInt(high - low) + low / 100;
+				int low = -10;
+				int high = 10;
+				float x = r.nextInt(high - low) + low / 10;
 
-				float y = r.nextInt(high - low) + low / 100;
+				float y = r.nextInt(high - low) + low / 10;
 				fb.setVelocity(new Vector(x, 2, y));
 			}
 		}
