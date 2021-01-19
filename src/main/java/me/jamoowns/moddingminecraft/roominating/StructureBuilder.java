@@ -619,7 +619,7 @@ public final class StructureBuilder {
 				straightGrid(r, c, rCount, cCount, heightTracker, 2, buildList, direction);
 			}
 		}
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 10; i++) {
 			heightTracker++;
 			cCount = 0;
 			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
