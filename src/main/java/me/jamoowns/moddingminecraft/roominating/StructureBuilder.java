@@ -227,26 +227,105 @@ public final class StructureBuilder {
 		}
 
 		if (buildGrid[15][16][15] == buildList[0]) {
+			int x = 15;
+			int newX = x - 1;
+			int z = 15;
+			int newZ = z - 1;
+
 			for (int i = 0; i < 10; i++) {
 
-				buildGrid[15][16 + i][15] = buildList[1];
+				buildGrid[x][16 + i][z] = buildList[1];
 			}
-			buildGrid[14][19][14] = buildList[2];
-			buildGrid[14][19][15] = buildList[2];
-			buildGrid[15][19][14] = buildList[2];
+			buildGrid[newX][19][newZ] = buildList[2];
+			buildGrid[newX][19][z] = buildList[2];
+			buildGrid[x][19][newZ] = buildList[2];
 
-			buildGrid[14][21][14] = buildList[5];
-			buildGrid[14][21][15] = buildList[5];
-			buildGrid[15][21][14] = buildList[5];
-			upDownGrid[14][21][14] = 1;
-			upDownGrid[14][21][15] = 1;
-			upDownGrid[15][21][14] = 1;
+			buildGrid[newX][22][newZ] = buildList[5];
+			buildGrid[newX][22][z] = buildList[5];
+			buildGrid[x][22][14] = buildList[5];
+			upDownGrid[newX][22][newZ] = 1;
+			upDownGrid[newX][22][z] = 1;
+			upDownGrid[x][22][14] = 1;
 
-			buildGrid[14][23][14] = buildList[2];
-			buildGrid[14][23][15] = buildList[2];
-			buildGrid[15][23][14] = buildList[2];
+			buildGrid[newX][23][newZ] = buildList[2];
+			buildGrid[newX][23][z] = buildList[2];
+			buildGrid[x][23][newZ] = buildList[2];
 		}
+		if (buildGrid[15][16][0] == buildList[0]) {
+			int x = 15;
+			int newX = x - 1;
+			int z = 0;
+			int newZ = z + 1;
 
+			for (int i = 0; i < 10; i++) {
+
+				buildGrid[x][16 + i][z] = buildList[1];
+			}
+			buildGrid[newX][19][newZ] = buildList[2];
+			buildGrid[newX][19][z] = buildList[2];
+			buildGrid[x][19][newZ] = buildList[2];
+
+			buildGrid[newX][22][newZ] = buildList[5];
+			buildGrid[newX][22][z] = buildList[5];
+			buildGrid[x][22][14] = buildList[5];
+			upDownGrid[newX][22][newZ] = 1;
+			upDownGrid[newX][22][z] = 1;
+			upDownGrid[x][22][14] = 1;
+
+			buildGrid[newX][23][newZ] = buildList[2];
+			buildGrid[newX][23][z] = buildList[2];
+			buildGrid[x][23][newZ] = buildList[2];
+		}
+		if (buildGrid[0][16][15] == buildList[0]) {
+			int x = 0;
+			int newX = 0 + 1;
+			int z = 15;
+			int newZ = z - 1;
+
+			for (int i = 0; i < 10; i++) {
+
+				buildGrid[x][16 + i][z] = buildList[1];
+			}
+			buildGrid[newX][19][newZ] = buildList[2];
+			buildGrid[newX][19][z] = buildList[2];
+			buildGrid[x][19][newZ] = buildList[2];
+
+			buildGrid[newX][22][newZ] = buildList[5];
+			buildGrid[newX][22][z] = buildList[5];
+			buildGrid[x][22][14] = buildList[5];
+			upDownGrid[newX][22][newZ] = 1;
+			upDownGrid[newX][22][z] = 1;
+			upDownGrid[x][22][14] = 1;
+
+			buildGrid[newX][23][newZ] = buildList[2];
+			buildGrid[newX][23][z] = buildList[2];
+			buildGrid[x][23][newZ] = buildList[2];
+		}
+		if (buildGrid[0][16][0] == buildList[0]) {
+			int x = 0;
+			int newX = x + 1;
+			int z = 0;
+			int newZ = z + 1;
+
+			for (int i = 0; i < 10; i++) {
+
+				buildGrid[x][16 + i][z] = buildList[1];
+			}
+			buildGrid[newX][19][newZ] = buildList[2];
+			buildGrid[newX][19][z] = buildList[2];
+			buildGrid[x][19][newZ] = buildList[2];
+
+			buildGrid[newX][22][newZ] = buildList[5];
+			buildGrid[newX][22][z] = buildList[5];
+			buildGrid[x][22][14] = buildList[5];
+			upDownGrid[newX][22][newZ] = 1;
+			upDownGrid[newX][22][z] = 1;
+			upDownGrid[x][22][14] = 1;
+
+			buildGrid[newX][23][newZ] = buildList[2];
+			buildGrid[newX][23][z] = buildList[2];
+			buildGrid[x][23][newZ] = buildList[2];
+		}
 		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
 
 	}
