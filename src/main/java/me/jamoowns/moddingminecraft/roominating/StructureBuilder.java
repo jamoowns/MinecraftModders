@@ -226,25 +226,25 @@ public final class StructureBuilder {
 			}
 		}
 
-		if (buildGrid[16][16][16] == buildList[0]) {
+		if (buildGrid[15][16][15] == buildList[0]) {
 			for (int i = 0; i < 10; i++) {
 
 				buildGrid[16][16 + i][16] = buildList[1];
 			}
-			buildGrid[15][19][15] = buildList[1];
-			buildGrid[15][19][16] = buildList[1];
-			buildGrid[16][19][15] = buildList[1];
+			buildGrid[14][19][14] = buildList[1];
+			buildGrid[14][19][15] = buildList[1];
+			buildGrid[15][19][14] = buildList[1];
 
-			buildGrid[15][24][15] = buildList[5];
-			buildGrid[15][24][16] = buildList[5];
-			buildGrid[16][24][15] = buildList[5];
-			upDownGrid[15][24][15] = 1;
-			upDownGrid[15][24][16] = 1;
-			upDownGrid[16][24][15] = 1;
+			buildGrid[14][24][14] = buildList[5];
+			buildGrid[14][24][15] = buildList[5];
+			buildGrid[15][24][14] = buildList[5];
+			upDownGrid[14][24][14] = 1;
+			upDownGrid[14][24][15] = 1;
+			upDownGrid[15][24][14] = 1;
 
-			buildGrid[15][25][15] = buildList[1];
-			buildGrid[15][25][16] = buildList[1];
-			buildGrid[16][25][15] = buildList[1];
+			buildGrid[14][25][14] = buildList[1];
+			buildGrid[14][25][15] = buildList[1];
+			buildGrid[15][25][14] = buildList[1];
 		}
 
 		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
