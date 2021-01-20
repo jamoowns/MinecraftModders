@@ -118,6 +118,12 @@ public class MabListener implements IGameEventListener {
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getBlockPlaced().getLocation());
 		}
+		if (event.getBlock().getType().equals(Material.COAL_ORE) && mabmoSet) {
+			event.getPlayer().sendMessage("Building 0");
+			structureBuilder.buildGrid(GridType.TOWER,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getBlockPlaced().getLocation());
+		}
 		if (event.getBlock().getType().equals(Material.CRIMSON_HYPHAE) && mabmoSet) {
 			event.getPlayer().sendMessage("Building 2");
 			structureBuilder.buildGrid(GridType.CORNER,
