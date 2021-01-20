@@ -775,6 +775,11 @@ public class MabListener implements IGameEventListener {
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getBlockPlaced().getLocation());
 		});
+		straightChunkItem.setSpellCastEvent(event -> {
+			structureBuilder.buildGrid(GridType.STRAIGHT,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getLocation());
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(straightChunkItem);
 
 		towerChunkItem = new CustomItem("Tower Chunk", Material.END_STONE_BRICK_WALL);
@@ -796,6 +801,11 @@ public class MabListener implements IGameEventListener {
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getBlockPlaced().getLocation());
 		});
+		cornerChunkItem.setSpellCastEvent(event -> {
+			structureBuilder.buildGrid(GridType.CORNER,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getLocation());
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(cornerChunkItem);
 
 		tSectionChunkItem = new CustomItem("T Section Chunk", Material.NETHER_BRICK_WALL);
@@ -804,6 +814,11 @@ public class MabListener implements IGameEventListener {
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getBlockPlaced().getLocation());
 		});
+		tSectionChunkItem.setSpellCastEvent(event -> {
+			structureBuilder.buildGrid(GridType.T_SECTION,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getLocation());
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(tSectionChunkItem);
 
 		crossChunkItem = new CustomItem("Cross Chunk", Material.DIORITE_WALL);
@@ -812,6 +827,11 @@ public class MabListener implements IGameEventListener {
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getBlockPlaced().getLocation());
 		});
+		crossChunkItem.setSpellCastEvent(event -> {
+			structureBuilder.buildGrid(GridType.CROSS,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getLocation());
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(crossChunkItem);
 
 		deadEndChunkItem = new CustomItem("Dead End Chunk", Material.PRISMARINE_WALL);
@@ -820,6 +840,11 @@ public class MabListener implements IGameEventListener {
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getBlockPlaced().getLocation());
 		});
+		deadEndChunkItem.setSpellCastEvent(event -> {
+			structureBuilder.buildGrid(GridType.DEAD_END,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getLocation());
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(deadEndChunkItem);
 
 		multiShotBowItem = new CustomItem("MultiShot Bow", Material.CROSSBOW);
