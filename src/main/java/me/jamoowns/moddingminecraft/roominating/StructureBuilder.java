@@ -164,6 +164,10 @@ public final class StructureBuilder {
 		createGrids(16, 30, 16);
 		switch (grid) {
 		case TOWER:
+			WallOne = true;
+			WallTwo = true;
+			WallThree = true;
+			WallFour = true;
 			break;
 		case CORNER:
 		case T_SECTION:
@@ -1122,13 +1126,17 @@ public final class StructureBuilder {
 				}
 			}
 		} else if (stage == 6) {
-			if (cCount > 1 && cCount < 14) {
+			if (cCount > 1 && cCount < 14 && rCount > 1 && rCount < 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
-			} else if (cCount == 1) {
+			} else if (cCount == 1 && WallThree) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
-			} else if (cCount == 14) {
+			} else if (cCount == 14 && WallFour) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
-			} else if (cCount == 0) {
+			} else if (rCount == 1 && WallTwo) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
+			} else if (rCount == 14 && WallOne) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
+			} else if (cCount == 0 && WallThree) {
 				if (rCount < chunkSize / 2) {
 					if (rCount % 2 == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
@@ -1143,7 +1151,7 @@ public final class StructureBuilder {
 					}
 				}
 
-			} else if (cCount == 15) {
+			} else if (cCount == 15 && WallFour) {
 				if (rCount < chunkSize / 2) {
 					if (rCount % 2 == 1) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
@@ -1152,6 +1160,35 @@ public final class StructureBuilder {
 					}
 				} else {
 					if (rCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+					}
+				}
+			} else if (rCount == 0 && WallTwo) {
+				if (cCount < chunkSize / 2) {
+					if (cCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+					}
+				} else {
+					if (cCount % 2 == 0) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+					}
+				}
+
+			} else if (rCount == 15 && WallOne) {
+				if (cCount < chunkSize / 2) {
+					if (cCount % 2 == 1) {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+					} else {
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+					}
+				} else {
+					if (cCount % 2 == 0) {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 					} else {
 						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
