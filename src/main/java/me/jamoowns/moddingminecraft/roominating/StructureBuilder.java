@@ -1193,9 +1193,9 @@ public final class StructureBuilder {
 
 			}
 		} else if (stage == 8) {
-			if (cCount == 0 && grid != grid.DEAD_END) {
+			if (cCount == 0) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
-			} else if (cCount == 15) {
+			} else if (cCount == 15 && grid != grid.DEAD_END) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
 			} else if (rCount == 0) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
