@@ -176,10 +176,10 @@ public final class StructureBuilder {
 			WallFour = !(direction == BlockFace.SOUTH);
 			break;
 		case CORNER:
-			WallOne = (!(direction == BlockFace.EAST) || !(direction == BlockFace.SOUTH));
-			WallTwo = (!(direction == BlockFace.WEST) || !(direction == BlockFace.EAST));
-			WallThree = (!(direction == BlockFace.NORTH) || !(direction == BlockFace.WEST));
-			WallFour = (!(direction == BlockFace.SOUTH) || !(direction == BlockFace.NORTH));
+			WallOne = !((direction == BlockFace.EAST) || (direction == BlockFace.SOUTH));
+			WallTwo = !((direction == BlockFace.WEST) || (direction == BlockFace.EAST));
+			WallThree = !((direction == BlockFace.NORTH) || (direction == BlockFace.WEST));
+			WallFour = !((direction == BlockFace.SOUTH) || (direction == BlockFace.NORTH));
 			break;
 		case T_SECTION:
 			WallOne = !(direction == BlockFace.EAST) || !(direction == BlockFace.SOUTH)
