@@ -65,6 +65,8 @@ import me.jamoowns.moddingminecraft.roominating.StructureBuilder.GridType;
 
 public class MabListener implements IGameEventListener {
 
+	private static final Integer MOB_STICK_RANGE = 50;
+
 	public static void switchPlayers(Player one, Player other) {
 		Location otherLocation = other.getLocation();
 		other.teleport(one.getLocation());
@@ -781,6 +783,11 @@ public class MabListener implements IGameEventListener {
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getBlockPlaced().getLocation());
 		});
+		towerChunkItem.setSpellCastEvent(event -> {
+			structureBuilder.buildGrid(GridType.TOWER,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getLocation());
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(towerChunkItem);
 
 		cornerChunkItem = new CustomItem("Corner Chunk", Material.BRICK_WALL);
