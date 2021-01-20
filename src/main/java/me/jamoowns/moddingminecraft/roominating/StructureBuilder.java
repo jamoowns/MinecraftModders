@@ -910,8 +910,8 @@ public final class StructureBuilder {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
 			}
 
-			if ((cCount == 1 && WallThree) || (cCount == 14 && WallFour)
-					|| (rCount == 1 && WallTwo || (rCount == 14 && WallOne))) {
+			if ((cCount == 1 && !WallThree) || (cCount == 14 && !WallFour)
+					|| (rCount == 1 && !WallTwo || (rCount == 14 && !WallOne))) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
