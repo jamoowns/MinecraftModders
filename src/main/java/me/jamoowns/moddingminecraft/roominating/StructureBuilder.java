@@ -170,26 +170,22 @@ public final class StructureBuilder {
 			WallFour = true;
 			break;
 		case DEAD_END:
-			WallOne = !(direction == BlockFace.EAST);
-			WallTwo = !(direction == BlockFace.WEST);
 			WallThree = !(direction == BlockFace.NORTH);
+			WallOne = !(direction == BlockFace.EAST);
 			WallFour = !(direction == BlockFace.SOUTH);
+			WallTwo = !(direction == BlockFace.WEST);
 			break;
 		case CORNER:
-			WallOne = !((direction == BlockFace.EAST) || (direction == BlockFace.SOUTH));
-			WallTwo = !((direction == BlockFace.WEST) || (direction == BlockFace.EAST));
-			WallThree = !((direction == BlockFace.NORTH) || (direction == BlockFace.WEST));
-			WallFour = !((direction == BlockFace.SOUTH) || (direction == BlockFace.NORTH));
+			WallThree = !(direction == BlockFace.NORTH || direction == BlockFace.WEST);
+			WallOne = !(direction == BlockFace.EAST || direction == BlockFace.NORTH);
+			WallFour = !(direction == BlockFace.SOUTH || direction == BlockFace.EAST);
+			WallTwo = !(direction == BlockFace.WEST || direction == BlockFace.SOUTH);
 			break;
 		case T_SECTION:
-			WallOne = !(direction == BlockFace.EAST) || !(direction == BlockFace.SOUTH)
-					|| !(direction == BlockFace.WEST);
-			WallTwo = !(direction == BlockFace.WEST) || !(direction == BlockFace.EAST)
-					|| !(direction == BlockFace.NORTH);
-			WallThree = !(direction == BlockFace.NORTH) || !(direction == BlockFace.WEST)
-					|| !(direction == BlockFace.SOUTH);
-			WallFour = !(direction == BlockFace.SOUTH) || !(direction == BlockFace.NORTH)
-					|| !(direction == BlockFace.EAST);
+			WallThree = !(direction == BlockFace.NORTH || direction == BlockFace.WEST || direction == BlockFace.EAST);
+			WallOne = !(direction == BlockFace.EAST || direction == BlockFace.NORTH || direction == BlockFace.SOUTH);
+			WallFour = !(direction == BlockFace.SOUTH || direction == BlockFace.EAST || direction == BlockFace.WEST);
+			WallTwo = !(direction == BlockFace.WEST || direction == BlockFace.SOUTH || direction == BlockFace.NORTH);
 			break;
 		case CROSS:
 			WallOne = false;
@@ -228,6 +224,27 @@ public final class StructureBuilder {
 					notStraightGrid(r, c, r, c, heightTracker, 3 + i, buildList, direction, grid);
 				}
 			}
+		}
+
+		if (buildGrid[16][16][16] == buildList[0]) {
+			for (int i = 0; i < 10; i++) {
+
+				buildGrid[16][16 + i][16] = buildList[1];
+			}
+			buildGrid[15][19][15] = buildList[1];
+			buildGrid[15][19][16] = buildList[1];
+			buildGrid[16][19][15] = buildList[1];
+
+			buildGrid[15][24][15] = buildList[5];
+			buildGrid[15][24][16] = buildList[5];
+			buildGrid[16][24][15] = buildList[5];
+			upDownGrid[15][24][15] = 1;
+			upDownGrid[15][24][16] = 1;
+			upDownGrid[16][24][15] = 1;
+
+			buildGrid[15][25][15] = buildList[1];
+			buildGrid[15][25][16] = buildList[1];
+			buildGrid[16][25][15] = buildList[1];
 		}
 
 		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
