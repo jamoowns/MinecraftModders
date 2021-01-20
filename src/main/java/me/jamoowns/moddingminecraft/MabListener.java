@@ -767,7 +767,7 @@ public class MabListener implements IGameEventListener {
 
 	private void setupCustomItems() {
 
-		straightChunkItem = new CustomItem("Straight Chunk", Material.COBBLESTONE_WALL);
+		straightChunkItem = new CustomItem("Straight Chunk", Material.RED_SANDSTONE_WALL);
 		straightChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.STRAIGHT,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
@@ -775,7 +775,7 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(straightChunkItem);
 
-		towerChunkItem = new CustomItem("Tower Chunk", Material.MOSSY_COBBLESTONE_WALL);
+		towerChunkItem = new CustomItem("Tower Chunk", Material.END_STONE_BRICK_WALL);
 		towerChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.TOWER,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
@@ -791,7 +791,7 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(cornerChunkItem);
 
-		tSectionChunkItem = new CustomItem("T Section Chunk", Material.BRICK_WALL);
+		tSectionChunkItem = new CustomItem("T Section Chunk", Material.NETHER_BRICK_WALL);
 		tSectionChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.T_SECTION,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
@@ -799,7 +799,7 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(tSectionChunkItem);
 
-		crossChunkItem = new CustomItem("Cross Chunk", Material.PRISMARINE_WALL);
+		crossChunkItem = new CustomItem("Cross Chunk", Material.DIORITE_WALL);
 		crossChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.CROSS,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
