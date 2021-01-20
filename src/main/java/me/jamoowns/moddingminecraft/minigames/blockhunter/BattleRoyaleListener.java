@@ -118,6 +118,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				}
 				break;
 			case SETUP:
+				Broadcaster.sendInfo(event.getPlayer(), "Do we get here atleast?");
+				Broadcaster.sendInfo(event.getPlayer(), event.getItemInHand());
 				if (event.getItemInHand().equals(goalBlockStand)) {
 					Broadcaster.sendGameInfo(event.getPlayer(), "Set a goal block location");
 					goalStands.add(event.getBlock().getLocation());

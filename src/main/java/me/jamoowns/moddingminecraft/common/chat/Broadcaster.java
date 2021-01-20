@@ -37,6 +37,10 @@ public final class Broadcaster {
 		player.sendMessage(ChatColourStyles.GAME_INFO_COLOUR + "" + ChatColor.BOLD + message);
 	}
 
+	public static final void sendInfo(final CommandSender player, final Object message) {
+		sendInfo(player, message.toString());
+	}
+
 	public static final void sendInfo(final CommandSender player, final String message) {
 		player.sendMessage(ChatColourStyles.INFO_COLOUR + message);
 	}
