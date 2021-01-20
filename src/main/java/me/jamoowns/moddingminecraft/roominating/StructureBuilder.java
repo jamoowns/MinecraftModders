@@ -189,7 +189,7 @@ public final class StructureBuilder {
 			}
 		}
 
-		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), direction);
+		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
 
 	}
 
