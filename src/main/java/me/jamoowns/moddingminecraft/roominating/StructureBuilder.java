@@ -229,7 +229,7 @@ public final class StructureBuilder {
 		if (buildGrid[15][16][15] == buildList[0]) {
 			for (int i = 0; i < 10; i++) {
 
-				buildGrid[16][16 + i][16] = buildList[1];
+				buildGrid[15][16 + i][15] = buildList[1];
 			}
 			buildGrid[14][19][14] = buildList[1];
 			buildGrid[14][19][15] = buildList[1];
