@@ -113,7 +113,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 					Broadcaster.sendGameInfo(event.getPlayer(), "Home sweet home has been set");
 				}
 			});
-			javaPlugin.customItems().register(goalBlock);
+			javaPlugin.customItems().register(homeStand);
 
 			playerHomeItemById.put(p.getUniqueId(), homeStand);
 		} else {
