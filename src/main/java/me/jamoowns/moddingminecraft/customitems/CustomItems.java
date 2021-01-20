@@ -26,14 +26,22 @@ public final class CustomItems {
 		if (item.getItemMeta() == null) {
 			return Optional.empty();
 		}
-		return Optional.of(allCustomItemsByName.get(item.getItemMeta().getDisplayName()));
+		CustomItem customItem = allCustomItemsByName.get(item.getItemMeta().getDisplayName());
+		if (customItem == null) {
+			return Optional.empty();
+		}
+		return Optional.of(customItem);
 	}
 
 	public final Optional<CustomItem> getItem(Projectile projectile) {
 		if (projectile.getCustomName() == null) {
 			return Optional.empty();
 		}
-		return Optional.of(allCustomItemsByName.get(projectile.getCustomName()));
+		CustomItem customItem = allCustomItemsByName.get(projectile.getCustomName());
+		if (customItem == null) {
+			return Optional.empty();
+		}
+		return Optional.of(customItem);
 	}
 
 	public final void register(CustomItem item) {
