@@ -87,7 +87,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	}
 
 	public final void join(Player p) {
-		if (currentGameState == GameState.LOBBY) {
+		boolean alreadyPlaying = playerScoreById.containsKey(p.getUniqueId());
+		if (currentGameState == GameState.LOBBY && !alreadyPlaying) {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME);
 			playerScoreById.put(p.getUniqueId(), 0);
 
@@ -118,6 +119,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				break;
 			case SETUP:
 				if (event.getItemInHand().equals(goalBlockStand)) {
+					Broadcaster.sendGameInfo(event.getPlayer(), "Set a goal block location");
 					goalStands.add(event.getBlock().getLocation());
 				} else {
 					if (event.getItemInHand().equals(playerHomeItemById.get(event.getPlayer().getUniqueId()))) {

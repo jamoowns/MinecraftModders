@@ -104,7 +104,8 @@ public final class BlockHunterListener implements IGameEventListener {
 	}
 
 	public final void join(Player p) {
-		if (currentGameState == GameState.SETUP) {
+		boolean alreadyPlaying = gameplayers.stream().map(GamePlayer::playerId).anyMatch(p.getUniqueId()::equals);
+		if (currentGameState == GameState.SETUP && !alreadyPlaying) {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the Blockhunt");
 
 			GamePlayer gamePlayer = new GamePlayer(p.getUniqueId());
