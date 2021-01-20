@@ -1173,21 +1173,21 @@ public final class StructureBuilder {
 
 				if (cCount < chunkSize / 2) {
 					if (cCount % 2 == 1) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 					}
 				} else {
 					if (cCount % 2 == 0) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 					}
 				}
 			} else if (rCount == 15 && grid == grid.TOWER) {
 				if (cCount < chunkSize / 2) {
 					if (cCount % 2 == 1) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
 					}
 				} else {
 					if (cCount % 2 == 0) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
 					}
 				}
 
