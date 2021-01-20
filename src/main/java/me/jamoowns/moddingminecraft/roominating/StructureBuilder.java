@@ -156,6 +156,7 @@ public final class StructureBuilder {
 		Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 				Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
 		createGrids(16, 30, 16);
+
 		for (int l = 0; l < buildGrid[0].length; l++) {
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
 				for (int r = 0; r < buildGrid.length; r++) {
@@ -165,32 +166,101 @@ public final class StructureBuilder {
 		}
 
 		int heightTracker = 0;
+		int cCount = 0;
 		for (; heightTracker < 19; heightTracker++) {
+			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+				cCount = buildGrid[0][0].length;
+			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+				cCount = -1;
+			}
+			int rCount = 0;
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
+
+				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+					cCount--;
+				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+					cCount++;
+				}
+
+				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+					rCount = buildGrid.length;
+				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+					rCount = -1;
+				}
 				for (int r = 0; r < buildGrid.length; r++) {
-					notStraightGrid(r, c, r, c, heightTracker, 1, buildList, direction, grid);
+					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+						rCount--;
+					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+						rCount++;
+					}
+					notStraightGrid(r, c, rCount, cCount, heightTracker, 1, buildList, direction, grid);
 				}
 			}
 		}
+
+		cCount = 0;
+		if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+			cCount = buildGrid[0][0].length;
+		} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+			cCount = -1;
+		}
+		int rCount = 0;
 		for (int c = 0; c < buildGrid[0][0].length; c++) {
-			for (int r = 0; r < buildGrid.length; r++) {
 
-				notStraightGrid(r, c, r, c, heightTracker, 2, buildList, direction, grid);
+			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+				cCount--;
+			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+				cCount++;
+			}
+
+			if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+				rCount = buildGrid.length;
+			} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+				rCount = -1;
+			}
+			for (int r = 0; r < buildGrid.length; r++) {
+				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+					rCount--;
+				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+					rCount++;
+				}
+				notStraightGrid(r, c, rCount, cCount, heightTracker, 2, buildList, direction, grid);
 			}
 		}
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 9; i++) {
 			heightTracker++;
-
+			cCount = 0;
+			if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+				cCount = buildGrid[0][0].length;
+			} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+				cCount = -1;
+			}
+			rCount = 0;
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
 
-				for (int r = 0; r < buildGrid.length; r++) {
+				if (direction == BlockFace.NORTH || direction == BlockFace.WEST) {
+					cCount--;
+				} else if (direction == BlockFace.SOUTH || direction == BlockFace.EAST) {
+					cCount++;
+				}
 
-					notStraightGrid(r, c, r, c, heightTracker, 3 + i, buildList, direction, grid);
+				if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+					rCount = buildGrid.length;
+				} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+					rCount = -1;
+				}
+				for (int r = 0; r < buildGrid.length; r++) {
+					if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
+						rCount--;
+					} else if (direction == BlockFace.WEST || direction == BlockFace.EAST) {
+						rCount++;
+					}
+					notStraightGrid(r, c, rCount, cCount, heightTracker, 3 + i, buildList, direction, grid);
 				}
 			}
 		}
 
-		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), direction);
+		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
 
 	}
 
@@ -883,11 +953,7 @@ public final class StructureBuilder {
 	private void notStraightGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage,
 			Material[] buildList, BlockFace leftRight, GridType grid) {
 		int chunkSize = 16;
-		if (leftRight == BlockFace.NORTH || leftRight == BlockFace.SOUTH) {
-			int temp = r;
-			r = c;
-			c = temp;
-		}
+
 		if (leftRight == BlockFace.WEST || leftRight == BlockFace.SOUTH) {
 			int temp = rCount;
 			rCount = cCount;
