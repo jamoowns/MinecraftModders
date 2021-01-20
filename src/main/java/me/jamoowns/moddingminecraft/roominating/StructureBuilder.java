@@ -936,7 +936,7 @@ public final class StructureBuilder {
 				}
 			}
 
-			if ((cCount == 1 || cCount == 14) && rCount == 0) {
+			if ((cCount == 1 || cCount == 14) && rCount == 0 && WallTwo) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
