@@ -231,20 +231,20 @@ public final class StructureBuilder {
 
 				buildGrid[15][16 + i][15] = buildList[1];
 			}
-			buildGrid[14][19][14] = buildList[1];
-			buildGrid[14][19][15] = buildList[1];
-			buildGrid[15][19][14] = buildList[1];
+			buildGrid[14][19][14] = buildList[2];
+			buildGrid[14][19][15] = buildList[2];
+			buildGrid[15][19][14] = buildList[2];
 
-			buildGrid[14][24][14] = buildList[5];
-			buildGrid[14][24][15] = buildList[5];
-			buildGrid[15][24][14] = buildList[5];
-			upDownGrid[14][24][14] = 1;
-			upDownGrid[14][24][15] = 1;
-			upDownGrid[15][24][14] = 1;
+			buildGrid[14][21][14] = buildList[5];
+			buildGrid[14][21][15] = buildList[5];
+			buildGrid[15][21][14] = buildList[5];
+			upDownGrid[14][21][14] = 1;
+			upDownGrid[14][21][15] = 1;
+			upDownGrid[15][21][14] = 1;
 
-			buildGrid[14][25][14] = buildList[1];
-			buildGrid[14][25][15] = buildList[1];
-			buildGrid[15][25][14] = buildList[1];
+			buildGrid[14][23][14] = buildList[2];
+			buildGrid[14][23][15] = buildList[2];
+			buildGrid[15][23][14] = buildList[2];
 		}
 
 		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
