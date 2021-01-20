@@ -1088,6 +1088,35 @@ public final class StructureBuilder {
 			if (cCount > 1 && cCount < 14 && rCount > 1 && rCount < 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
 			}
+			if (cCount == 1) {
+				if (WallThree) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				} else if (rCount > 1 && rCount < 14) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+				}
+			}
+			if (cCount == 14) {
+				if (WallFour) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				} else if (rCount > 1 && rCount < 14) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+				}
+			}
+			if (rCount == 1) {
+				if (WallTwo) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				} else if (rCount > 1 && rCount < 14) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+				}
+
+			}
+			if (rCount == 14) {
+				if (WallOne) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				} else if (rCount > 1 && rCount < 14) {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+				}
+			}
 			if (cCount == 0) {
 				if (WallThree) {
 					if (rCount < chunkSize / 2) {
@@ -1132,15 +1161,15 @@ public final class StructureBuilder {
 				if (WallTwo) {
 					if (cCount < chunkSize / 2) {
 						if (cCount % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
 						}
 					} else {
 						if (cCount % 2 == 1) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
 						}
 					}
 				} else if (cCount > 1 && cCount < 14) {
@@ -1152,15 +1181,15 @@ public final class StructureBuilder {
 				if (WallOne) {
 					if (cCount < chunkSize / 2) {
 						if (cCount % 2 == 0) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 						}
 					} else {
 						if (cCount % 2 == 1) {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
 						} else {
-							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 						}
 					}
 				} else if (cCount > 1 && cCount < 14) {
