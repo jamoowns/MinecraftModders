@@ -1245,6 +1245,10 @@ public final class StructureBuilder {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 			} else if (cCount == 15) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+			} else if (rCount == 0) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
+			} else if (rCount == 15) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
 			}
 		}
 	}
