@@ -62,11 +62,11 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		goalMeta.setDisplayName("Goal Block");
 		goalBlockStand.setItemMeta(goalMeta);
 
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "init", p -> initiate());
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "join", this::join);
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "setup", this::setup);
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "start", this::start);
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "stop", p -> cleanup());
+		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "init", p -> initiate());
+		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "join", this::join);
+		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "setup", this::setup);
+		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "start", this::start);
+		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "stop", p -> cleanup());
 	}
 
 	@Override
