@@ -169,14 +169,33 @@ public final class StructureBuilder {
 			WallThree = true;
 			WallFour = true;
 			break;
-		case CORNER:
-		case T_SECTION:
-		case CROSS:
 		case DEAD_END:
 			WallOne = !(direction == BlockFace.EAST);
 			WallTwo = !(direction == BlockFace.WEST);
 			WallThree = !(direction == BlockFace.NORTH);
 			WallFour = !(direction == BlockFace.SOUTH);
+			break;
+		case CORNER:
+			WallOne = !(direction == BlockFace.EAST) || !(direction == BlockFace.SOUTH);
+			WallTwo = !(direction == BlockFace.WEST) || !(direction == BlockFace.EAST);
+			WallThree = !(direction == BlockFace.NORTH) || !(direction == BlockFace.WEST);
+			WallFour = !(direction == BlockFace.SOUTH) || !(direction == BlockFace.NORTH);
+			break;
+		case T_SECTION:
+			WallOne = !(direction == BlockFace.EAST) || !(direction == BlockFace.SOUTH)
+					|| !(direction == BlockFace.WEST);
+			WallTwo = !(direction == BlockFace.WEST) || !(direction == BlockFace.EAST)
+					|| !(direction == BlockFace.NORTH);
+			WallThree = !(direction == BlockFace.NORTH) || !(direction == BlockFace.WEST)
+					|| !(direction == BlockFace.SOUTH);
+			WallFour = !(direction == BlockFace.SOUTH) || !(direction == BlockFace.NORTH)
+					|| !(direction == BlockFace.EAST);
+			break;
+		case CROSS:
+			WallOne = false;
+			WallTwo = false;
+			WallThree = false;
+			WallFour = false;
 			break;
 		}
 		for (int l = 0; l < buildGrid[0].length; l++) {
@@ -935,12 +954,12 @@ public final class StructureBuilder {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 				}
 			}
-			if ((rCount == 1 || rCount == 14) && cCount == 14 && !WallFour) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
+			if ((rCount == 1 || rCount == 14) && cCount == 15 && !WallFour) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			} else if ((rCount == 1 || rCount == 14) && cCount == 0 && !WallThree) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-			} else if ((cCount == 1 || cCount == 14) && rCount == 14 && !WallOne) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0, 0);
+			} else if ((cCount == 1 || cCount == 14) && rCount == 15 && !WallOne) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			} else if ((cCount == 1 || cCount == 14) && rCount == 0 && !WallTwo) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
