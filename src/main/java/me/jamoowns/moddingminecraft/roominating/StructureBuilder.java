@@ -1160,27 +1160,19 @@ public final class StructureBuilder {
 			} else if (cCount == 1) {
 				if (WallThree) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 			} else if (cCount == 14) {
 				if (WallFour) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 			} else if (rCount == 1) {
 				if (WallTwo) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
 			} else if (rCount == 14) {
 				if (WallOne) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 			} else if (cCount == 0) {
 				if (WallThree) {
@@ -1197,8 +1189,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
 			} else if (cCount == 15) {
@@ -1216,8 +1206,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
 			} else if (rCount == 0) {
@@ -1235,8 +1223,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
 			} else if (rCount == 15) {
@@ -1255,8 +1241,6 @@ public final class StructureBuilder {
 						}
 					}
 				}
-			} else {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 			}
 		} else if (stage == 7) {
 			if (cCount == 0) {
