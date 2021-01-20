@@ -277,6 +277,7 @@ public final class JamoListener implements IGameEventListener {
 
 		normalRoomItem = new CustomItem("Standard Room", Material.LECTERN);
 		normalRoomItem.setBlockPlaceEvent(event -> {
+			event.getBlockPlaced().setType(Material.AIR);
 			Location startPoint = event.getBlockPlaced().getLocation().add(0, 0, 0);
 
 			List<PlannedBlock> standardRoom = Roominator.standardRoom(startPoint, RANDOM.nextInt(5) + 4,
@@ -295,6 +296,7 @@ public final class JamoListener implements IGameEventListener {
 
 		lightningAnusItem = new CustomItem("Lightning Storm", Material.CHAIN);
 		lightningAnusItem.setBlockPlaceEvent(event -> {
+			event.getBlockPlaced().setType(Material.AIR);
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
 
 			Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {

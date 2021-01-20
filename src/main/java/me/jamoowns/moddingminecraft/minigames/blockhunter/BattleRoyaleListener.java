@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
+import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
 public final class BattleRoyaleListener implements IGameEventListener {
@@ -34,9 +35,9 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private List<Location> goalStands;
 
-	private ItemStack goalBlockStand;
+	private CustomItem goalBlockStand;
 
-	private ItemStack goalBlock;
+	private CustomItem goalBlock;
 
 	private Map<UUID, Integer> playerScoreById;
 
@@ -52,15 +53,26 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		playerHomeItemById = new HashMap<>();
 		playerHomeLocationById = new HashMap<>();
 
-		goalBlockStand = new ItemStack(Material.OBSIDIAN);
-		ItemMeta meta = goalBlockStand.getItemMeta();
-		meta.setDisplayName("Goal block stand");
-		goalBlockStand.setItemMeta(meta);
+		goalBlock = new CustomItem("Goal Block", Material.DIAMOND_BLOCK);
+		goalBlock.setBlockPlaceEvent(event -> {
+			if (currentGameState == GameState.PLAYING) {
+				for (Location goalStandLoc : goalStands) {
+					if (event.getBlock().getLocation().distance(goalStandLoc) < 3) {
+						Integer currentScore = playerScoreById.get(event.getPlayer().getUniqueId());
+						playerScoreById.put(event.getPlayer().getUniqueId(), currentScore + 1);
+						checkForVictory(event.getPlayer());
+					}
+				}
+			}
+		});
 
-		goalBlock = new ItemStack(Material.DIAMOND_BLOCK);
-		ItemMeta goalMeta = goalBlockStand.getItemMeta();
-		goalMeta.setDisplayName("Goal Block");
-		goalBlockStand.setItemMeta(goalMeta);
+		goalBlockStand = new CustomItem("Goal Block Stand", Material.OBSIDIAN);
+		goalBlockStand.setBlockPlaceEvent(event -> {
+			if (currentGameState == GameState.SETUP) {
+				Broadcaster.sendGameInfo(event.getPlayer(), "Set a goal block location");
+				goalStands.add(event.getBlock().getLocation());
+			}
+		});
 
 		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "init", p -> initiate());
 		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "join", this::join);
@@ -107,28 +119,12 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	public final void onBlockPlaceEvent(BlockPlaceEvent event) {
 		switch (currentGameState) {
 			case PLAYING:
-				if (event.getItemInHand().equals(goalBlock)) {
-					for (Location goalStandLoc : goalStands) {
-						if (event.getBlock().getLocation().distance(goalStandLoc) < 3) {
-							Integer currentScore = playerScoreById.get(event.getPlayer().getUniqueId());
-							playerScoreById.put(event.getPlayer().getUniqueId(), currentScore + 1);
-							checkForVictory(event.getPlayer());
-						}
-					}
-				}
 				break;
 			case SETUP:
-				Broadcaster.sendInfo(event.getPlayer(), "Do we get here atleast?");
-				Broadcaster.sendInfo(event.getPlayer(), event.getItemInHand());
-				if (event.getItemInHand().equals(goalBlockStand)) {
-					Broadcaster.sendGameInfo(event.getPlayer(), "Set a goal block location");
-					goalStands.add(event.getBlock().getLocation());
-				} else {
-					if (event.getItemInHand().equals(playerHomeItemById.get(event.getPlayer().getUniqueId()))) {
-						playerHomeLocationById.put(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
+				if (event.getItemInHand().equals(playerHomeItemById.get(event.getPlayer().getUniqueId()))) {
+					playerHomeLocationById.put(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
 
-						Broadcaster.sendGameInfo(event.getPlayer(), "Home sweet home has been set");
-					}
+					Broadcaster.sendGameInfo(event.getPlayer(), "Home sweet home has been set");
 				}
 				break;
 			case LOBBY:
@@ -142,7 +138,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			Broadcaster.broadcastGameInfo("Setting up " + GAME_NAME);
 			Broadcaster.sendGameInfo(host, "Place all of the goal stands on the battle field");
 			currentGameState = GameState.SETUP;
-			ItemStack goal = goalBlockStand.clone();
+			ItemStack goal = goalBlockStand.asItem();
 			goal.setAmount(GOAL_STAND_LOCATIONS);
 			host.getInventory().addItem(goal);
 
