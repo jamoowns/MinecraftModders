@@ -789,6 +789,7 @@ public class MabListener implements IGameEventListener {
 	}
 
 	private void setupCustomItems() {
+
 		multiShotBowItem = new CustomItem("MultiShot Bow", Material.CROSSBOW);
 		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
 		meta.addEnchant(Enchantment.MULTISHOT, 1, true);
