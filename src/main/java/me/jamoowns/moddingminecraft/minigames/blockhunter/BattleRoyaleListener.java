@@ -11,10 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
@@ -43,11 +40,14 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private Map<UUID, Location> playerHomeLocationById;
 
-	private Map<UUID, ItemStack> playerHomeItemById;
+	private Map<UUID, CustomItem> playerHomeItemById;
 
 	private GameState currentGameState;
 
-	public BattleRoyaleListener(ModdingMinecraft javaPlugin) {
+	private ModdingMinecraft javaPlugin;
+
+	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
+		javaPlugin = aJavaPlugin;
 		currentGameState = GameState.STOPPED;
 		playerScoreById = new HashMap<>();
 		playerHomeItemById = new HashMap<>();
@@ -69,18 +69,18 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		goalBlockStand = new CustomItem("Goal Block Stand", Material.OBSIDIAN);
 		goalBlockStand.setBlockPlaceEvent(event -> {
 			if (currentGameState == GameState.SETUP) {
-				Broadcaster.sendGameInfo(event.getPlayer(), "Set a goal block location");
+				Broadcaster.sendGameInfo(event.getPlayer(), "Added a goal location to the game");
 				goalStands.add(event.getBlock().getLocation());
 			}
 		});
-		javaPlugin.customItems().register(goalBlock);
-		javaPlugin.customItems().register(goalBlockStand);
+		aJavaPlugin.customItems().register(goalBlock);
+		aJavaPlugin.customItems().register(goalBlockStand);
 
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "init", p -> initiate());
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "join", this::join);
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "setup", this::setup);
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "start", this::start);
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "stop", p -> cleanup());
+		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "init", p -> initiate());
+		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "join", this::join);
+		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "setup", this::setup);
+		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "start", this::start);
+		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "stop", p -> cleanup());
 	}
 
 	@Override
@@ -106,32 +106,18 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME);
 			playerScoreById.put(p.getUniqueId(), 0);
 
-			ItemStack homeStand = new ItemStack(Material.GREEN_BED);
-			ItemMeta meta = homeStand.getItemMeta();
-			meta.setDisplayName(p.getDisplayName() + "'s Home Stand");
-			homeStand.setItemMeta(meta);
+			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", Material.GREEN_BED);
+			homeStand.setBlockPlaceEvent(event -> {
+				if (currentGameState == GameState.SETUP) {
+					playerHomeLocationById.put(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
+					Broadcaster.sendGameInfo(event.getPlayer(), "Home sweet home has been set");
+				}
+			});
+			javaPlugin.customItems().register(goalBlock);
 
 			playerHomeItemById.put(p.getUniqueId(), homeStand);
 		} else {
 			Broadcaster.sendError(p, "Game must be in the lobby");
-		}
-	}
-
-	@EventHandler
-	public final void onBlockPlaceEvent(BlockPlaceEvent event) {
-		switch (currentGameState) {
-			case PLAYING:
-				break;
-			case SETUP:
-				if (event.getItemInHand().equals(playerHomeItemById.get(event.getPlayer().getUniqueId()))) {
-					playerHomeLocationById.put(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
-
-					Broadcaster.sendGameInfo(event.getPlayer(), "Home sweet home has been set");
-				}
-				break;
-			case LOBBY:
-			case STOPPED:
-				break;
 		}
 	}
 
@@ -144,9 +130,9 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			goal.setAmount(GOAL_STAND_LOCATIONS);
 			host.getInventory().addItem(goal);
 
-			for (Entry<UUID, ItemStack> playerHomeItem : playerHomeItemById.entrySet()) {
+			for (Entry<UUID, CustomItem> playerHomeItem : playerHomeItemById.entrySet()) {
 				Player player = Bukkit.getPlayer(playerHomeItem.getKey());
-				player.getInventory().addItem(playerHomeItem.getValue());
+				player.getInventory().addItem(playerHomeItem.getValue().asItem());
 			}
 		} else {
 			Broadcaster.sendError(host, "Game must be in the lobby and atleast two players joined");
@@ -158,7 +144,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			Broadcaster.broadcastGameInfo(GAME_NAME + " has started!");
 			for (Entry<UUID, Location> entry : playerHomeLocationById.entrySet()) {
 				Player player = Bukkit.getPlayer(entry.getKey());
-				player.getInventory().clear();
+				// player.getInventory().clear();
 
 				player.teleport(entry.getValue().add(0, 3, 0));
 			}
