@@ -29,13 +29,11 @@ public final class StructureBuilder {
 	public final void buildGrid(GridType grid, BlockFace direction, Location loc) {
 		switch (grid) {
 		case TOWER:
-			buildNotStraightChunk(direction, grid, loc);
-			break;
 		case CORNER:
 		case T_SECTION:
 		case CROSS:
 		case DEAD_END:
-			buildNotStraight(direction, grid, loc);
+			buildNotStraightChunk(direction, grid, loc);
 			break;
 		case STRAIGHT:
 			buildStraightChunk(direction, loc);
@@ -1195,7 +1193,7 @@ public final class StructureBuilder {
 
 			}
 		} else if (stage == 8) {
-			if (cCount == 0) {
+			if (cCount == 0 && grid != grid.DEAD_END) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 			} else if (cCount == 15) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
