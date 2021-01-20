@@ -1101,63 +1101,73 @@ public final class StructureBuilder {
 					}
 				}
 			}
-			if (cCount == 0 && WallThree) {
-				if (rCount < chunkSize / 2) {
-					if (rCount % 2 == 0) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+			if (cCount == 0) {
+				if (WallThree) {
+					if (rCount < chunkSize / 2) {
+						if (rCount % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+						}
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+						if (rCount % 2 == 1) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+						}
 					}
-				} else {
-					if (rCount % 2 == 1) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+				}
+
+			}
+			if (cCount == 15) {
+				if (WallFour) {
+					if (rCount < chunkSize / 2) {
+						if (rCount % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+						}
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
+						if (rCount % 2 == 1) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
+						}
+					}
+				}
+
+			}
+			if (rCount == 0) {
+				if (WallTwo) {
+					if (cCount < chunkSize / 2) {
+						if (cCount % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
+						}
+					} else {
+						if (cCount % 2 == 1) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
+						}
 					}
 				}
 			}
-			if (cCount == 15 && WallFour) {
-				if (rCount < chunkSize / 2) {
-					if (rCount % 2 == 0) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+			if (rCount == 15) {
+				if (WallOne) {
+					if (cCount < chunkSize / 2) {
+						if (cCount % 2 == 0) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
+						}
 					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
-					}
-				} else {
-					if (rCount % 2 == 1) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
-					}
-				}
-			}
-			if (cCount == 0 && WallTwo) {
-				if (rCount < chunkSize / 2) {
-					if (rCount % 2 == 0) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
-					}
-				} else {
-					if (rCount % 2 == 1) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 1, 0);
-					}
-				}
-			}
-			if (cCount == 15 && WallOne) {
-				if (rCount < chunkSize / 2) {
-					if (rCount % 2 == 0) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
-					}
-				} else {
-					if (rCount % 2 == 1) {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
-					} else {
-						insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
+						if (cCount % 2 == 1) {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
+						} else {
+							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 1, 0);
+						}
 					}
 				}
 			}
