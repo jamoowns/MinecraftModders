@@ -104,14 +104,13 @@ public final class Teams {
 		}
 		Army army = getTeam(teamName);
 		army.add(player);
-		board.getTeam(army.getTeamName()).addEntry(player.toString());
+		board.getTeam(army.getTeamName()).addEntry(Bukkit.getPlayer(player).getDisplayName());
 	}
 
 	public final void register(UUID owner, Mob mob) {
 		Player player = Bukkit.getPlayer(owner);
 		mob.setCustomName(player.getName() + "'s minion");
 		mob.setCustomNameVisible(true);
-		mob.setGlowing(true);
 		Army army = getTeam(owner);
 		Material headType = army.getTeamColour().getHead();
 		mob.getEquipment().setHelmet(new ItemStack(headType));
