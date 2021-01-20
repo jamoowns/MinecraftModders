@@ -75,6 +75,18 @@ public class MabListener implements IGameEventListener {
 
 	private final Random RANDOM;
 
+	private CustomItem straightChunkItem;
+
+	private CustomItem towerChunkItem;
+
+	private CustomItem deadEndChunkItem;
+
+	private CustomItem cornerChunkItem;
+
+	private CustomItem tSectionChunkItem;
+
+	private CustomItem crossChunkItem;
+
 	private CustomItem multiShotBowItem;
 
 	private CustomItem creeperArrowItem;
@@ -113,41 +125,6 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
-		if (event.getBlock().getType().equals(Material.WARPED_HYPHAE) && mabmoSet) {
-			structureBuilder.buildGrid(GridType.STRAIGHT,
-					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
-					event.getBlockPlaced().getLocation());
-		}
-		if (event.getBlock().getType().equals(Material.COAL_ORE) && mabmoSet) {
-			event.getPlayer().sendMessage("Building 0");
-			structureBuilder.buildGrid(GridType.TOWER,
-					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
-					event.getBlockPlaced().getLocation());
-		}
-		if (event.getBlock().getType().equals(Material.CRIMSON_HYPHAE) && mabmoSet) {
-			event.getPlayer().sendMessage("Building 2");
-			structureBuilder.buildGrid(GridType.CORNER,
-					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
-					event.getBlockPlaced().getLocation());
-		}
-		if (event.getBlock().getType().equals(Material.WET_SPONGE) && mabmoSet) {
-			event.getPlayer().sendMessage("Building 3");
-			structureBuilder.buildGrid(GridType.T_SECTION,
-					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
-					event.getBlockPlaced().getLocation());
-		}
-		if (event.getBlock().getType().equals(Material.CHISELED_SANDSTONE) && mabmoSet) {
-			event.getPlayer().sendMessage("Building 4");
-			structureBuilder.buildGrid(GridType.CROSS,
-					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
-					event.getBlockPlaced().getLocation());
-		}
-		if (event.getBlock().getType().equals(Material.PODZOL) && mabmoSet) {
-			event.getPlayer().sendMessage("Building 5");
-			structureBuilder.buildGrid(GridType.DEAD_END,
-					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
-					event.getBlockPlaced().getLocation());
-		}
 
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
@@ -789,6 +766,54 @@ public class MabListener implements IGameEventListener {
 	}
 
 	private void setupCustomItems() {
+
+		straightChunkItem = new CustomItem("Straight Chunk", Material.COBBLESTONE_WALL);
+		straightChunkItem.setBlockPlaceEvent(event -> {
+			structureBuilder.buildGrid(GridType.STRAIGHT,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getBlockPlaced().getLocation());
+		});
+		javaPlugin.customItems().register(straightChunkItem);
+
+		towerChunkItem = new CustomItem("Tower Chunk", Material.MOSSY_COBBLESTONE_WALL);
+		towerChunkItem.setBlockPlaceEvent(event -> {
+			structureBuilder.buildGrid(GridType.TOWER,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getBlockPlaced().getLocation());
+		});
+		javaPlugin.customItems().register(towerChunkItem);
+
+		cornerChunkItem = new CustomItem("Corner Chunk", Material.BRICK_WALL);
+		cornerChunkItem.setBlockPlaceEvent(event -> {
+			structureBuilder.buildGrid(GridType.CORNER,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getBlockPlaced().getLocation());
+		});
+		javaPlugin.customItems().register(cornerChunkItem);
+
+		tSectionChunkItem = new CustomItem("T Section Chunk", Material.BRICK_WALL);
+		tSectionChunkItem.setBlockPlaceEvent(event -> {
+			structureBuilder.buildGrid(GridType.T_SECTION,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getBlockPlaced().getLocation());
+		});
+		javaPlugin.customItems().register(tSectionChunkItem);
+
+		crossChunkItem = new CustomItem("Cross Chunk", Material.PRISMARINE_WALL);
+		crossChunkItem.setBlockPlaceEvent(event -> {
+			structureBuilder.buildGrid(GridType.CROSS,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getBlockPlaced().getLocation());
+		});
+		javaPlugin.customItems().register(crossChunkItem);
+
+		deadEndChunkItem = new CustomItem("Dead End Chunk", Material.PRISMARINE_WALL);
+		deadEndChunkItem.setBlockPlaceEvent(event -> {
+			structureBuilder.buildGrid(GridType.DEAD_END,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getBlockPlaced().getLocation());
+		});
+		javaPlugin.customItems().register(deadEndChunkItem);
 
 		multiShotBowItem = new CustomItem("MultiShot Bow", Material.CROSSBOW);
 		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
