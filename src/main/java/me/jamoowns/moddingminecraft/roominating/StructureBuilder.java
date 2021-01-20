@@ -1105,7 +1105,7 @@ public final class StructureBuilder {
 			if (rCount == 1) {
 				if (WallTwo) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-				} else if (rCount > 1 && rCount < 14) {
+				} else if (cCount > 1 && cCount < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
 				}
 
@@ -1113,7 +1113,7 @@ public final class StructureBuilder {
 			if (rCount == 14) {
 				if (WallOne) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-				} else if (rCount > 1 && rCount < 14) {
+				} else if (cCount > 1 && cCount < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 1, 0);
 				}
 			}
