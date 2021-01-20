@@ -1262,9 +1262,9 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 						}
 					}
+				} else {
+					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
-			} else {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 			}
 		} else if (stage == 7) {
 			if (cCount == 0) {
