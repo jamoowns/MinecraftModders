@@ -936,11 +936,11 @@ public final class StructureBuilder {
 				}
 			}
 
-			if ((cCount == 1 || cCount == 14) && rCount == 0 && WallTwo) {
+			if ((cCount == 1 || cCount == 14) && rCount == 1 && WallTwo) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
-			if ((cCount == 1 || cCount == 14) && rCount == 15 && WallOne) {
+			if ((cCount == 1 || cCount == 14) && rCount == 0 && WallOne) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
