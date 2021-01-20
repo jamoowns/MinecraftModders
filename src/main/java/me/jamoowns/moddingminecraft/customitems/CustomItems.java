@@ -42,6 +42,6 @@ public final class CustomItems {
 	}
 
 	public final void silentRegister(CustomItem item) {
-		publicCustomItemsByName.put(item.name(), item);
+		allCustomItemsByName.put(item.name(), item);
 	}
 }
