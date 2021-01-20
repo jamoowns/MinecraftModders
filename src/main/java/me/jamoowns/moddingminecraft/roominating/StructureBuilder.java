@@ -1248,24 +1248,12 @@ public final class StructureBuilder {
 					}
 				}
 
-			} else if ((cCount == 5 || cCount == 10)) {
-				if ((rCount < 2 || rCount > 6 && rCount < chunkSize - 7 || rCount > chunkSize - 3)) {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-				} else if (rCount == 2 || rCount == chunkSize - 7) {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(1, leftRight), 0, 0);
-				} else if (rCount == 6 || rCount == chunkSize - 3) {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], getStairFace(3, leftRight), 0, 0);
-				}
 			}
 		} else if (stage == 8) {
 			if (cCount == 0) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 1, 0);
 			} else if (cCount == 15) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 1, 0);
-			} else if ((cCount == 5 || cCount == 10)) {
-				if (rCount == 0 || rCount == 1 || rCount == 7 || rCount == 8 || rCount == 14 || rCount == 15) {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-				}
 			}
 		}
 	}
