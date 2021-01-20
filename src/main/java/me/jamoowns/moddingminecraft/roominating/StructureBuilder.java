@@ -910,10 +910,10 @@ public final class StructureBuilder {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
 			}
 
-			if ((cCount == 1 && WallThree && rCount > 1 && rCount < 14)
-					|| (cCount == 14 && WallFour && rCount > 1 && rCount < 14)
-					|| (rCount == 1 && WallTwo && cCount > 1 && cCount < 14)
-					|| (rCount == 14 && WallOne && cCount > 1 && cCount < 14)) {
+			if ((cCount == 1 && WallThree && rCount > 0 && rCount < 15)
+					|| (cCount == 14 && WallFour && rCount > 0 && rCount < 15)
+					|| (rCount == 1 && WallTwo && cCount > 0 && cCount < 15)
+					|| (rCount == 14 && WallOne && cCount > 0 && cCount < 15)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
