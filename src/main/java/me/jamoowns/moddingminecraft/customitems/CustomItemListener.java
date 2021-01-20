@@ -3,7 +3,6 @@ package me.jamoowns.moddingminecraft.customitems;
 import java.util.Optional;
 
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -38,10 +37,7 @@ public final class CustomItemListener implements IGameEventListener {
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
 		javaPlugin.customItems().getItem(event.getItemInHand()).filter(CustomItem::hasBlockPlaceEvent)
-				.map(CustomItem::blockPlaceEvent).ifPresent(c -> {
-					event.getBlockPlaced().setType(Material.AIR);
-					c.accept(event);
-				});
+				.map(CustomItem::blockPlaceEvent).ifPresent(c -> c.accept(event));
 	}
 
 	@EventHandler
