@@ -916,9 +916,6 @@ public final class StructureBuilder {
 					|| (rCount == 14 && WallOne && cCount > 0 && cCount < 15)) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
-			if ((cCount == 1 || cCount == 14) && rCount == 0 && WallThree) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-			}
 
 			if (heightTracker < 16) {
 				if ((cCount == 0 && WallThree) || (cCount == 15 && WallFour)
@@ -937,6 +934,10 @@ public final class StructureBuilder {
 				} else if (rCount == 15 && WallOne) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 				}
+			}
+
+			if ((cCount == 1 || cCount == 14) && rCount == 0) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
 		} else if (stage == 2) {
