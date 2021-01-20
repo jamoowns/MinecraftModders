@@ -118,6 +118,12 @@ public class MabListener implements IGameEventListener {
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getBlockPlaced().getLocation());
 		}
+		if (event.getBlock().getType().equals(Material.COAL_ORE) && mabmoSet) {
+			event.getPlayer().sendMessage("Building 0");
+			structureBuilder.buildGrid(GridType.TOWER,
+					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
+					event.getBlockPlaced().getLocation());
+		}
 		if (event.getBlock().getType().equals(Material.CRIMSON_HYPHAE) && mabmoSet) {
 			event.getPlayer().sendMessage("Building 2");
 			structureBuilder.buildGrid(GridType.CORNER,
@@ -169,13 +175,22 @@ public class MabListener implements IGameEventListener {
 					blockData);
 			if (javaPlugin.featureTracker().isFeatureActive(Feature.LIGHT_BLOCKS)) {
 				fb.setVelocity(new Vector(0, 1, 0));
-				Random r = new Random();
-				int low = -50;
-				int high = 50;
-				float x = r.nextInt(high - low) + low / 100;
+				fb.setGravity(false);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 
-				float y = r.nextInt(high - low) + low / 100;
-				fb.setVelocity(new Vector(x, 2, y));
+					@Override
+					public void run() {
+
+						fb.setGravity(true);
+						Random r = new Random();
+						int low = -50;
+						int high = 50;
+						double x = (r.nextInt(high - low) + low) / 10;
+						double z = (r.nextInt(high - low) + low) / 10;
+						fb.setVelocity(new Vector(x / 10, 0, z / 10));
+					}
+				}, 10);
+
 			}
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
@@ -774,6 +789,7 @@ public class MabListener implements IGameEventListener {
 	}
 
 	private void setupCustomItems() {
+
 		multiShotBowItem = new CustomItem("MultiShot Bow", Material.CROSSBOW);
 		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
 		meta.addEnchant(Enchantment.MULTISHOT, 1, true);
