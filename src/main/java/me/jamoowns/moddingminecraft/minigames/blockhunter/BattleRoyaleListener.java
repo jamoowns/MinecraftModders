@@ -73,8 +73,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				goalStands.add(event.getBlock().getLocation());
 			}
 		});
-		aJavaPlugin.customItems().register(goalBlock);
-		aJavaPlugin.customItems().register(goalBlockStand);
+		aJavaPlugin.customItems().silentRegister(goalBlock);
+		aJavaPlugin.customItems().silentRegister(goalBlockStand);
 
 		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "init", p -> initiate());
 		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "join", this::join);
@@ -113,7 +113,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 					Broadcaster.sendGameInfo(event.getPlayer(), "Home sweet home has been set");
 				}
 			});
-			javaPlugin.customItems().register(homeStand);
+			javaPlugin.customItems().silentRegister(homeStand);
 
 			playerHomeItemById.put(p.getUniqueId(), homeStand);
 		} else {
