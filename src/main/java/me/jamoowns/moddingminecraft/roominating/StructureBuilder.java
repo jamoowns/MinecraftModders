@@ -953,7 +953,11 @@ public final class StructureBuilder {
 	private void notStraightGrid(int r, int c, int rCount, int cCount, int heightTracker, int stage,
 			Material[] buildList, BlockFace leftRight, GridType grid) {
 		int chunkSize = 16;
-
+		if (leftRight == BlockFace.NORTH || leftRight == BlockFace.SOUTH) {
+			int temp = r;
+			r = c;
+			c = temp;
+		}
 		if (stage == 1) {
 			if (heightTracker == 0) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
