@@ -7,8 +7,6 @@ import java.util.Optional;
 import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 
-import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
-
 public final class CustomItems {
 
 	private Map<String, CustomItem> publicCustomItemsByName;
@@ -28,17 +26,22 @@ public final class CustomItems {
 		if (item.getItemMeta() == null) {
 			return Optional.empty();
 		}
-		Broadcaster.broadcastInfo(allCustomItemsByName);
-		Broadcaster.broadcastInfo(item.getItemMeta());
-		Broadcaster.broadcastInfo(item.getItemMeta().getDisplayName());
-		return Optional.of(allCustomItemsByName.get(item.getItemMeta().getDisplayName()));
+		CustomItem customItem = allCustomItemsByName.get(item.getItemMeta().getDisplayName());
+		if (customItem == null) {
+			return Optional.empty();
+		}
+		return Optional.of(customItem);
 	}
 
 	public final Optional<CustomItem> getItem(Projectile projectile) {
 		if (projectile.getCustomName() == null) {
 			return Optional.empty();
 		}
-		return Optional.of(allCustomItemsByName.get(projectile.getCustomName()));
+		CustomItem customItem = allCustomItemsByName.get(projectile.getCustomName());
+		if (customItem == null) {
+			return Optional.empty();
+		}
+		return Optional.of(customItem);
 	}
 
 	public final void register(CustomItem item) {
