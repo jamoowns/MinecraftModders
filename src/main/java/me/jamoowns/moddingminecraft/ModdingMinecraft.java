@@ -137,7 +137,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		teams = new Teams(this);
 
 		featureTracker = new FeatureTracker();
-		featureTracker.addListener(this);
 
 		featureTracker().enable(Feature.RANDOM_ENCHANT);
 		featureTracker().enable(Feature.ZOMBIE_BELL);
@@ -145,9 +144,10 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		featureTracker().enable(Feature.RANDOM_BUCKET);
 		featureTracker().enable(Feature.FUNKY_MOB_DEATH);
 		featureTracker().enable(Feature.IRON_GOLEM);
-		featureTracker().enable(Feature.PLAYER_TRAIL);
 		featureTracker().enable(Feature.WINFRED);
 		featureTracker().enable(Feature.STABLE_WEATHER);
+
+		featureTracker.addListener(this);
 
 		gameListeners = new ArrayList<>();
 		addGameListener(new JamoListener(this));
