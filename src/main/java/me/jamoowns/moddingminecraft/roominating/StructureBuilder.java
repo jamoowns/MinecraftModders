@@ -940,6 +940,10 @@ public final class StructureBuilder {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
 			}
 
+			if ((cCount == 1 || cCount == 14) && rCount == 15 && WallOne) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+			}
+
 		} else if (stage == 2) {
 			if (cCount > 1 && cCount < 14 && rCount > 1 && rCount < 14) {
 				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
