@@ -170,26 +170,22 @@ public final class StructureBuilder {
 			WallFour = true;
 			break;
 		case DEAD_END:
-			WallOne = !(direction == BlockFace.EAST);
-			WallTwo = !(direction == BlockFace.WEST);
 			WallThree = !(direction == BlockFace.NORTH);
+			WallOne = !(direction == BlockFace.EAST);
 			WallFour = !(direction == BlockFace.SOUTH);
+			WallTwo = !(direction == BlockFace.WEST);
 			break;
 		case CORNER:
-			WallOne = !((direction == BlockFace.EAST) || (direction == BlockFace.SOUTH));
-			WallTwo = !((direction == BlockFace.WEST) || (direction == BlockFace.EAST));
-			WallThree = !((direction == BlockFace.NORTH) || (direction == BlockFace.WEST));
-			WallFour = !((direction == BlockFace.SOUTH) || (direction == BlockFace.NORTH));
+			WallThree = !(direction == BlockFace.NORTH || direction == BlockFace.WEST);
+			WallOne = !(direction == BlockFace.EAST || direction == BlockFace.NORTH);
+			WallFour = !(direction == BlockFace.SOUTH || direction == BlockFace.EAST);
+			WallTwo = !(direction == BlockFace.WEST || direction == BlockFace.SOUTH);
 			break;
 		case T_SECTION:
-			WallOne = !(direction == BlockFace.EAST) || !(direction == BlockFace.SOUTH)
-					|| !(direction == BlockFace.WEST);
-			WallTwo = !(direction == BlockFace.WEST) || !(direction == BlockFace.EAST)
-					|| !(direction == BlockFace.NORTH);
-			WallThree = !(direction == BlockFace.NORTH) || !(direction == BlockFace.WEST)
-					|| !(direction == BlockFace.SOUTH);
-			WallFour = !(direction == BlockFace.SOUTH) || !(direction == BlockFace.NORTH)
-					|| !(direction == BlockFace.EAST);
+			WallThree = !(direction == BlockFace.NORTH || direction == BlockFace.WEST || direction == BlockFace.EAST);
+			WallOne = !(direction == BlockFace.EAST || direction == BlockFace.NORTH || direction == BlockFace.SOUTH);
+			WallFour = !(direction == BlockFace.SOUTH || direction == BlockFace.EAST || direction == BlockFace.WEST);
+			WallTwo = !(direction == BlockFace.WEST || direction == BlockFace.SOUTH || direction == BlockFace.NORTH);
 			break;
 		case CROSS:
 			WallOne = false;
