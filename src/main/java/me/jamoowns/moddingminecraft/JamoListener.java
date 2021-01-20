@@ -50,6 +50,8 @@ import me.jamoowns.moddingminecraft.teams.Army;
 
 public final class JamoListener implements IGameEventListener {
 
+	private static final Integer MOB_STICK_RANGE = 50;
+
 	private final static boolean isMob(UUID uuid) {
 		return Bukkit.getEntity(uuid) instanceof Mob;
 	}
@@ -222,7 +224,7 @@ public final class JamoListener implements IGameEventListener {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Zombie.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
-		}, 30);
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(normalZombieStick);
 		mobSpawningItems.add(normalZombieStick);
 
@@ -231,7 +233,7 @@ public final class JamoListener implements IGameEventListener {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Skeleton.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
-		}, 30);
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(normalSkeletonStick);
 		mobSpawningItems.add(normalSkeletonStick);
 
@@ -241,7 +243,7 @@ public final class JamoListener implements IGameEventListener {
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Skeleton.class);
 			mob.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999, 99999));
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
-		}, 30);
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(guardSniperStick);
 		mobSpawningItems.add(guardSniperStick);
 
@@ -250,7 +252,7 @@ public final class JamoListener implements IGameEventListener {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Creeper.class);
 			javaPlugin.teams().register(event.getPlayer().getUniqueId(), mob);
-		}, 30);
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(normalCreeperStick);
 		mobSpawningItems.add(normalCreeperStick);
 
@@ -271,7 +273,7 @@ public final class JamoListener implements IGameEventListener {
 				javaPlugin.teams().register(event.getPlayer().getUniqueId(), (Mob) mob);
 			}
 
-		}, 30);
+		}, MOB_STICK_RANGE);
 		javaPlugin.customItems().register(normalMobStick);
 		mobSpawningItems.add(normalMobStick);
 
