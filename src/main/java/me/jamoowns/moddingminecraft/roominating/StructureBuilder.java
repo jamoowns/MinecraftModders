@@ -29,6 +29,8 @@ public final class StructureBuilder {
 	public final void buildGrid(GridType grid, BlockFace direction, Location loc) {
 		switch (grid) {
 		case TOWER:
+			buildNotStraightChunk(direction, grid, loc);
+			break;
 		case CORNER:
 		case T_SECTION:
 		case CROSS:
