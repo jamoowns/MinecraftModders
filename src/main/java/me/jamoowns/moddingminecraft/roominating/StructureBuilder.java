@@ -1151,8 +1151,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
 			} else if (cCount == 15) {
@@ -1170,8 +1168,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
 			} else if (rCount == 0) {
@@ -1189,8 +1185,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
 			} else if (rCount == 15) {
@@ -1208,8 +1202,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 			}
 		} else if (stage == 7) {
@@ -1225,8 +1217,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 			} else if (cCount == 15) {
 				if (WallFour) {
@@ -1239,8 +1229,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
 			}
@@ -1255,8 +1243,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
 			} else if (rCount == 15) {
@@ -1270,8 +1256,6 @@ public final class StructureBuilder {
 							insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
 						}
 					}
-				} else {
-					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
 			}
