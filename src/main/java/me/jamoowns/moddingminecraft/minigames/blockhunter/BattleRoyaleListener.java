@@ -73,6 +73,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				goalStands.add(event.getBlock().getLocation());
 			}
 		});
+		javaPlugin.customItems().register(goalBlock);
+		javaPlugin.customItems().register(goalBlockStand);
 
 		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "init", p -> initiate());
 		javaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "join", this::join);
@@ -104,7 +106,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME);
 			playerScoreById.put(p.getUniqueId(), 0);
 
-			ItemStack homeStand = new ItemStack(Material.ARMOR_STAND);
+			ItemStack homeStand = new ItemStack(Material.GREEN_BED);
 			ItemMeta meta = homeStand.getItemMeta();
 			meta.setDisplayName(p.getDisplayName() + "'s Home Stand");
 			homeStand.setItemMeta(meta);
