@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.minigames.blockhunter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		currentGameState = GameState.STOPPED;
+		goalStands = new ArrayList<>();
 		playerScoreById = new HashMap<>();
 		playerHomeItemById = new HashMap<>();
 		playerHomeLocationById = new HashMap<>();
