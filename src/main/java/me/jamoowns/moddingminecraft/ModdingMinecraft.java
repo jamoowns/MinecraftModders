@@ -178,6 +178,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 				p -> p.openInventory(itemMenu.asInventory()));
 
 		this.getCommand("mm").setExecutor(commandExecutor);
+
+		Broadcaster.broadcastInfo("Modding Minecraft has been enabled!");
 	}
 
 	public final Teams teams() {
