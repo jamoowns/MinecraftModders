@@ -18,15 +18,17 @@ public final class FeatureTracker {
 	}
 
 	public final void disable(Feature feature) {
-		enabledFeatures.remove(feature);
-		featureListener.featureDeactivated(feature);
+		if (enabledFeatures.contains(feature)) {
+			enabledFeatures.remove(feature);
+			featureListener.featureDeactivated(feature);
+		}
 	}
 
 	public final void enable(Feature feature) {
 		if (!enabledFeatures.contains(feature)) {
 			enabledFeatures.add(feature);
+			featureListener.featureActivated(feature);
 		}
-		featureListener.featureActivated(feature);
 	}
 
 	public final boolean isFeatureActive(Feature feature) {
