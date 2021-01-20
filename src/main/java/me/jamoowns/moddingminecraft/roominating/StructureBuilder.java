@@ -936,18 +936,13 @@ public final class StructureBuilder {
 				}
 			}
 			if ((rCount == 1 || rCount == 14) && cCount == 14 && WallTwo) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-			}
-
-			if ((rCount == 1 || rCount == 14) && cCount == 0 && WallFour) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-			}
-			if ((cCount == 1 || cCount == 14) && rCount == 14 && WallThree) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
-			}
-
-			if ((cCount == 1 || cCount == 14) && rCount == 0 && WallOne) {
-				insert(0 + r, 0 + heightTracker, 0 + c, buildList[1], 0, 0, 0);
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
+			} else if ((rCount == 1 || rCount == 14) && cCount == 0 && WallFour) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 0, 0, 0);
+			} else if ((cCount == 1 || cCount == 14) && rCount == 14 && WallThree) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[4], 0, 0, 0);
+			} else if ((cCount == 1 || cCount == 14) && rCount == 0 && WallOne) {
+				insert(0 + r, 0 + heightTracker, 0 + c, buildList[5], 0, 0, 0);
 			}
 
 		} else if (stage == 2) {
