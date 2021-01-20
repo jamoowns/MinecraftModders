@@ -258,11 +258,8 @@ public final class StructureBuilder {
 				}
 			}
 		}
-		if (direction == BlockFace.NORTH || direction == BlockFace.SOUTH) {
-			placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.NORTH);
-		} else {
-			placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
-		}
+
+		placeGrid(loc.getChunk().getBlock(0, 60, 0).getLocation(), BlockFace.EAST);
 
 	}
 
