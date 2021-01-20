@@ -1161,21 +1161,21 @@ public final class StructureBuilder {
 			if (cCount == 1) {
 				if (WallThree) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 2, 0, 0);
-				} else {
+				} else if (rCount > 1 && rCount < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 			}
 			if (cCount == 14) {
 				if (WallFour) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 4, 0, 0);
-				} else {
+				} else if (rCount > 1 && rCount < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 			}
 			if (rCount == 1) {
 				if (WallTwo) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 1, 0, 0);
-				} else {
+				} else if (cCount > 1 && cCount < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 
@@ -1183,7 +1183,7 @@ public final class StructureBuilder {
 			if (rCount == 14) {
 				if (WallOne) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[3], 3, 0, 0);
-				} else {
+				} else if (cCount > 1 && cCount < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
 			}
