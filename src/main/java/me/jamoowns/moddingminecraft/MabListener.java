@@ -133,7 +133,9 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
-
+		if (event.getBlock().getType().equals(Material.END_STONE)) {
+			event.getBlockPlaced().setType(Material.END_PORTAL);
+		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Villager) {
