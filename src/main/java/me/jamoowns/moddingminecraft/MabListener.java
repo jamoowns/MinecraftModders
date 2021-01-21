@@ -83,6 +83,8 @@ public class MabListener implements IGameEventListener {
 
 	private final Random RANDOM;
 
+	private CustomItem portalPickleItem;
+
 	private CustomItem straightChunkItem;
 
 	private CustomItem towerChunkItem;
@@ -138,58 +140,7 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
-		if (event.getBlock().getType().equals(Material.SEA_PICKLE)) {
-			Block bl = event.getBlockPlaced();
-			if (!InputSet) {
-				InputSet = true;
-				Input = bl.getLocation();
-			} else {
-				OutputSet = true;
-				Output = bl.getLocation();
-			}
-			Location loc = bl.getLocation();
-			bl.setType(Material.END_GATEWAY);
-			loc.add(0, 1, 0);
-			loc.getBlock().setType(Material.END_GATEWAY);
 
-			loc = bl.getLocation();
-			loc.add(0, -1, 0);
-			loc.getBlock().setType(Material.QUARTZ_BLOCK);
-			loc.add(1, 0, 0);
-			loc.getBlock().setType(Material.QUARTZ_BLOCK);
-			loc.add(-2, 0, 0);
-			loc.getBlock().setType(Material.QUARTZ_BLOCK);
-			loc.add(0, 1, 0);
-			loc.getBlock().setType(Material.QUARTZ_PILLAR);
-			loc.add(0, 1, 0);
-			loc.getBlock().setType(Material.QUARTZ_PILLAR);
-			loc.add(0, 1, 0);
-			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
-			loc.add(1, 0, 0);
-			loc.getBlock().setType(Material.QUARTZ_BLOCK);
-			loc.add(1, 0, 0);
-			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
-			loc.add(0, -1, 0);
-			loc.getBlock().setType(Material.QUARTZ_PILLAR);
-			loc.add(0, -1, 0);
-			loc.getBlock().setType(Material.QUARTZ_PILLAR);
-
-			loc = bl.getLocation();
-			loc.add(0, -1, 1);
-			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
-			loc.add(1, 0, 0);
-			loc.getBlock().setType(Material.QUARTZ_BLOCK);
-			loc.add(-2, 0, 0);
-			loc.getBlock().setType(Material.QUARTZ_BLOCK);
-
-			loc = bl.getLocation();
-			loc.add(0, -1, -1);
-			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
-			loc.add(1, 0, 0);
-			loc.getBlock().setType(Material.QUARTZ_BLOCK);
-			loc.add(-2, 0, 0);
-			loc.getBlock().setType(Material.QUARTZ_BLOCK);
-		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Villager) {
@@ -235,7 +186,9 @@ public class MabListener implements IGameEventListener {
 			}
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
-			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+			for (
+
+			Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Villager) {
 					if (ent.getName().contains("Sam")) {
 
@@ -624,7 +577,6 @@ public class MabListener implements IGameEventListener {
 	@EventHandler
 	public final void onPlayerMoveEvent(PlayerMoveEvent event) {
 		if (InputSet && OutputSet) {
-			sendMabmoMsg("" + event.getPlayer().getLocation().getYaw());
 			if ((int) event.getPlayer().getLocation().getX() == (int) Input.getX()
 					&& (int) event.getPlayer().getLocation().getY() == (int) Input.getY()
 					&& (int) event.getPlayer().getLocation().getZ() == (int) Input.getZ()) {
@@ -873,7 +825,61 @@ public class MabListener implements IGameEventListener {
 	}
 
 	private void setupCustomItems() {
+		portalPickleItem = new CustomItem("Straight Chunk", Material.RED_SANDSTONE_WALL);
+		portalPickleItem.setBlockPlaceEvent(event -> {
 
+			Block bl = event.getBlockPlaced();
+			if (!InputSet) {
+				InputSet = true;
+				Input = bl.getLocation();
+			} else {
+				OutputSet = true;
+				Output = bl.getLocation();
+			}
+			Location loc = bl.getLocation();
+			bl.setType(Material.END_GATEWAY);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.END_GATEWAY);
+
+			loc = bl.getLocation();
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(-2, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+
+			loc = bl.getLocation();
+			loc.add(0, -1, 1);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(-2, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+
+			loc = bl.getLocation();
+			loc.add(0, -1, -1);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(-2, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+		});
+		javaPlugin.customItems().register(portalPickleItem);
 		straightChunkItem = new CustomItem("Straight Chunk", Material.RED_SANDSTONE_WALL);
 		straightChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.STRAIGHT,
