@@ -873,7 +873,7 @@ public class MabListener implements IGameEventListener {
 			loc.getBlock().setType(Material.END_GATEWAY);
 			if (loc.getBlock().getState() instanceof EndGateway) {
 				EndGateway eG = (EndGateway) loc.getBlock().getState();
-				eG.setAge(-9223372036854775808L);
+				eG.setAge(Long.MIN_VALUE);
 			}
 
 			loc = bl.getLocation();
