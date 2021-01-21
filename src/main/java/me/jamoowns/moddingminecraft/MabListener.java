@@ -859,13 +859,11 @@ public class MabListener implements IGameEventListener {
 			Input = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
-			BlockData blockData = loc.getBlock().getType().createBlockData("age:0");
-			Ageable ageable = (Ageable) blockData;
+			Ageable ageable = (Ageable) loc.getBlock().getBlockData();
 			ageable.setAge(ageable.getMaximumAge());
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
-			blockData = loc.getBlock().getType().createBlockData("age:0");
-			ageable = (Ageable) blockData;
+			ageable = (Ageable) loc.getBlock().getBlockData();
 			ageable.setAge(ageable.getMaximumAge());
 
 			loc = bl.getLocation();
@@ -916,13 +914,11 @@ public class MabListener implements IGameEventListener {
 			Output = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
-			BlockData blockData = loc.getBlock().getType().createBlockData("age:0");
-			Ageable ageable = (Ageable) blockData;
+			Ageable ageable = (Ageable) loc.getBlock().getBlockData();
 			ageable.setAge(ageable.getMaximumAge());
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
-			blockData = loc.getBlock().getType().createBlockData("age:0");
-			ageable = (Ageable) blockData;
+			ageable = (Ageable) loc.getBlock().getBlockData();
 			ageable.setAge(ageable.getMaximumAge());
 
 			loc = bl.getLocation();
