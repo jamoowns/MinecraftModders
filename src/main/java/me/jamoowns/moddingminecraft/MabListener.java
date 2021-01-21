@@ -625,7 +625,8 @@ public class MabListener implements IGameEventListener {
 	public final void onPlayerMoveEvent(PlayerMoveEvent event) {
 		if (InputSet && OutputSet) {
 
-			sendMabmoMsg("telporting");
+			sendMabmoMsg("2" + event.getPlayer().getLocation().toString());
+			sendMabmoMsg("1" + Input.toString());
 			if (event.getPlayer().getLocation() == Input) {
 
 				sendMabmoMsg("From input");
