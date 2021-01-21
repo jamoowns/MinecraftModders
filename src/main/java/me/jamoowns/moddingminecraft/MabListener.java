@@ -119,6 +119,11 @@ public class MabListener implements IGameEventListener {
 
 	boolean mabmoSet;
 
+	Location Input;
+	boolean InputSet;
+	Location Output;
+	boolean OutputSet;
+
 	public MabListener(ModdingMinecraft aJavaPlugin) {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
@@ -133,9 +138,20 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
-		if (event.getBlock().getType().equals(Material.END_STONE)) {
+		if (event.getBlock().getType().equals(Material.SEA_PICKLE)) {
 			Block bl = event.getBlockPlaced();
+			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.END_GATEWAY);
+
+			loc = bl.getLocation();
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(-2, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
