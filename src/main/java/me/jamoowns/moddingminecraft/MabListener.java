@@ -588,14 +588,14 @@ public class MabListener implements IGameEventListener {
 					Location loc = new Location(Output.getWorld(), (int) Output.getX(), (int) Output.getY(),
 							(int) Output.getZ(), event.getPlayer().getLocation().getYaw(),
 							event.getPlayer().getLocation().getPitch());
-					if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
+					if (loc.add(0, 0, 1).getBlock().getType().equals(Material.END_GATEWAY)) {
 
 						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
 
 						event.getPlayer().teleport(loc);
-					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
+					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.END_GATEWAY)) {
 						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
@@ -620,12 +620,12 @@ public class MabListener implements IGameEventListener {
 					Location loc = new Location(Input.getWorld(), (int) Input.getX(), (int) Input.getY(),
 							(int) Input.getZ(), event.getPlayer().getLocation().getYaw(),
 							event.getPlayer().getLocation().getPitch());
-					if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
+					if (loc.add(0, 0, 1).getBlock().getType().equals(Material.END_GATEWAY)) {
 						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
 						event.getPlayer().teleport(loc);
-					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
+					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.END_GATEWAY)) {
 						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
@@ -858,7 +858,7 @@ public class MabListener implements IGameEventListener {
 			InputSet = true;
 			Input = bl.getLocation();
 			Location loc = bl.getLocation();
-			bl.setType(Material.END_GATEWAY);
+			loc.getBlock().setType(Material.END_GATEWAY);
 			EndGateway eG = (EndGateway) loc.getBlock().getState();
 			eG.setAge(Long.MIN_VALUE);
 			eG.update(true);
@@ -869,6 +869,72 @@ public class MabListener implements IGameEventListener {
 			eG.update(true);
 			loc = bl.getLocation();
 			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(-2, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+
+			loc = bl.getLocation();
+			loc.add(0, 0, 1);
+			loc.getBlock().setType(Material.END_GATEWAY);
+			eG = (EndGateway) loc.getBlock().getState();
+			eG.setAge(Long.MIN_VALUE);
+			eG.update(true);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.END_GATEWAY);
+			eG = (EndGateway) loc.getBlock().getState();
+			eG.setAge(Long.MIN_VALUE);
+			eG.update(true);
+			loc = bl.getLocation();
+			loc.add(0, -1, 1);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(-2, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+
+			loc = bl.getLocation();
+			loc.add(0, 0, -1);
+			loc.getBlock().setType(Material.END_GATEWAY);
+			eG = (EndGateway) loc.getBlock().getState();
+			eG.setAge(Long.MIN_VALUE);
+			eG.update(true);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.END_GATEWAY);
+			eG = (EndGateway) loc.getBlock().getState();
+			eG.setAge(Long.MIN_VALUE);
+			eG.update(true);
+			loc = bl.getLocation();
+			loc.add(0, -1, 1);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
 			loc.add(1, 0, 0);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
@@ -914,7 +980,7 @@ public class MabListener implements IGameEventListener {
 			OutputSet = true;
 			Output = bl.getLocation();
 			Location loc = bl.getLocation();
-			bl.setType(Material.END_GATEWAY);
+			loc.getBlock().setType(Material.END_GATEWAY);
 			EndGateway eG = (EndGateway) loc.getBlock().getState();
 			eG.setAge(Long.MIN_VALUE);
 			eG.update(true);
@@ -925,6 +991,72 @@ public class MabListener implements IGameEventListener {
 			eG.update(true);
 			loc = bl.getLocation();
 			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(-2, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+
+			loc = bl.getLocation();
+			loc.add(0, 0, 1);
+			loc.getBlock().setType(Material.END_GATEWAY);
+			eG = (EndGateway) loc.getBlock().getState();
+			eG.setAge(Long.MIN_VALUE);
+			eG.update(true);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.END_GATEWAY);
+			eG = (EndGateway) loc.getBlock().getState();
+			eG.setAge(Long.MIN_VALUE);
+			eG.update(true);
+			loc = bl.getLocation();
+			loc.add(0, -1, 1);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(-2, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+
+			loc = bl.getLocation();
+			loc.add(0, 0, -1);
+			loc.getBlock().setType(Material.END_GATEWAY);
+			eG = (EndGateway) loc.getBlock().getState();
+			eG.setAge(Long.MIN_VALUE);
+			eG.update(true);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.END_GATEWAY);
+			eG = (EndGateway) loc.getBlock().getState();
+			eG.setAge(Long.MIN_VALUE);
+			eG.update(true);
+			loc = bl.getLocation();
+			loc.add(0, -1, 1);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
 			loc.add(1, 0, 0);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
