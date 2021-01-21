@@ -45,6 +45,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -66,6 +67,11 @@ import me.jamoowns.moddingminecraft.roominating.StructureBuilder.GridType;
 public class MabListener implements IGameEventListener {
 
 	private static final Integer MOB_STICK_RANGE = 50;
+
+	@EventHandler
+	public static void onPortalTravel(PlayerPortalEvent event) {
+		event.setTo(event.getPlayer().getLocation().add(0, 20, 0));
+	}
 
 	public static void switchPlayers(Player one, Player other) {
 		Location otherLocation = other.getLocation();
@@ -835,11 +841,6 @@ public class MabListener implements IGameEventListener {
 		javaPlugin.customItems().register(crossChunkItem);
 
 		deadEndChunkItem = new CustomItem("Dead End Chunk", Material.PRISMARINE_WALL);
-		deadEndChunkItem.setBlockPlaceEvent(event -> {
-			structureBuilder.buildGrid(GridType.DEAD_END,
-					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
-					event.getBlockPlaced().getLocation());
-		});
 		deadEndChunkItem.setSpellCastEvent(event -> {
 			structureBuilder.buildGrid(GridType.DEAD_END,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
