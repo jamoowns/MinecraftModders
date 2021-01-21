@@ -12,7 +12,6 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.EndGateway;
-import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
@@ -860,32 +859,17 @@ public class MabListener implements IGameEventListener {
 			Input = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
-			loc.getBlock().getType().createBlockData("Age:-9223372036854775808L");
-			event.getPlayer().getServer().broadcastMessage("Test-" + loc.getBlock().getMetadata("Age"));
-			if (loc.getBlock().getBlockData() instanceof Ageable) {
-				Ageable eG = (Ageable) loc.getBlock().getBlockData();
-
-				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
-
-				eG.setAge(5555555);
-				loc.getBlock().setBlockData(eG);
-				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
-			}
+			event.getPlayer().getServer().broadcastMessage("Test-" + ((EndGateway) loc.getBlock().getState()).getAge());
+			EndGateway eG = (EndGateway) loc.getBlock().getBlockData();
+			eG.setAge(Long.MIN_VALUE);
+			loc.getBlock().setBlockData(loc.getBlock().getBlockData());
 			event.getPlayer().getServer()
 					.broadcastMessage("ssssAge-" + ((EndGateway) loc.getBlock().getState()).getAge());
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
-			loc.getBlock().getType().createBlockData("Age:-9223372036854775808L");
-			if (loc.getBlock().getBlockData() instanceof Ageable) {
-				Ageable eG = (Ageable) loc.getBlock().getBlockData();
-
-				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
-
-				eG.setAge(5555555);
-				loc.getBlock().setBlockData(eG);
-				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
-			}
-
+			eG = (EndGateway) loc.getBlock().getBlockData();
+			eG.setAge(Long.MIN_VALUE);
+			loc.getBlock().setBlockData(loc.getBlock().getBlockData());
 			loc = bl.getLocation();
 			loc.add(0, -1, 0);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
