@@ -624,7 +624,7 @@ public class MabListener implements IGameEventListener {
 	@EventHandler
 	public final void onPlayerMoveEvent(PlayerMoveEvent event) {
 		if (InputSet && OutputSet) {
-
+			sendMabmoMsg("" + event.getPlayer().getLocation().getYaw());
 			if ((int) event.getPlayer().getLocation().getX() == (int) Input.getX()
 					&& (int) event.getPlayer().getLocation().getY() == (int) Input.getY()
 					&& (int) event.getPlayer().getLocation().getZ() == (int) Input.getZ()) {
