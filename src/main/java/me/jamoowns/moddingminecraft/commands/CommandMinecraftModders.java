@@ -33,26 +33,23 @@ public final class CommandMinecraftModders implements CommandExecutor {
 		Broadcaster.sendInfo(sender, "Available Commands:");
 		for (ModdersCommand c : commands) {
 			if (c.subCommands().isEmpty()) {
-				Broadcaster.sendInfo(sender, "/" + c.command());
-				return true;
+				Broadcaster.sendInfo(sender, "/mm " + c.command());
 			} else {
 				for (ModdersCommand c1 : c.subCommands()) {
 					if (c1.subCommands().isEmpty()) {
-						Broadcaster.sendInfo(sender, "/" + c.command() + " " + c1.command());
-						return true;
+						Broadcaster.sendInfo(sender, "/mm " + c.command() + " " + c1.command());
 					} else {
 						for (ModdersCommand c2 : c.subCommands()) {
 							if (c2.subCommands().isEmpty()) {
 								Broadcaster.sendInfo(sender,
-										"/" + c.command() + " " + c1.command() + " " + c2.command());
-								return true;
+										"/mm " + c.command() + " " + c1.command() + " " + c2.command());
 							}
 						}
 					}
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	public final void registerCommand(List<String> parentChain, String command, Consumer<Player> function) {
