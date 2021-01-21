@@ -861,7 +861,7 @@ public class MabListener implements IGameEventListener {
 			bl.setType(Material.END_GATEWAY);
 
 			event.getPlayer().getServer().broadcastMessage("Test-");
-			if (loc.getBlock().getBlockData() instanceof EndGateway) {
+			if (loc.getBlock().getState() instanceof EndGateway) {
 				EndGateway eG = (EndGateway) bl;
 
 				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
@@ -871,7 +871,7 @@ public class MabListener implements IGameEventListener {
 			}
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
-			if (loc.getBlock().getBlockData() instanceof EndGateway) {
+			if (loc.getBlock().getState() instanceof EndGateway) {
 				EndGateway eG = (EndGateway) bl;
 				eG.setAge(-9223372036854775808L);
 			}
@@ -924,13 +924,13 @@ public class MabListener implements IGameEventListener {
 			Output = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
-			if (loc.getBlock().getBlockData() instanceof EndGateway) {
+			if (loc.getBlock().getState() instanceof EndGateway) {
 				EndGateway eG = (EndGateway) bl;
 				eG.setAge(-9223372036854775808L);
 			}
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
-			if (loc.getBlock().getBlockData() instanceof EndGateway) {
+			if (loc.getBlock().getState() instanceof EndGateway) {
 				EndGateway eG = (EndGateway) bl;
 				eG.setAge(-9223372036854775808L);
 			}
