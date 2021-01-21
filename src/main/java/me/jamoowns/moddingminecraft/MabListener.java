@@ -593,11 +593,14 @@ public class MabListener implements IGameEventListener {
 							loc.setYaw(loc.getYaw() + 180);
 						}
 
+						loc.getChunk().load();
 						event.getPlayer().teleport(loc);
 					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
 						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
+
+						loc.getChunk().load();
 						event.getPlayer().teleport(loc);
 					}
 				} else {
@@ -623,11 +626,14 @@ public class MabListener implements IGameEventListener {
 						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
+						loc.getChunk().load();
 						event.getPlayer().teleport(loc);
 					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
 						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
+
+						loc.getChunk().load();
 						event.getPlayer().teleport(loc);
 					}
 				} else {
