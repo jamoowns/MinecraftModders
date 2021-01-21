@@ -859,12 +859,9 @@ public class MabListener implements IGameEventListener {
 			Input = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
-			event.getPlayer().getServer().broadcastMessage("Test-" + ((EndGateway) loc.getBlock().getState()).getAge());
 			EndGateway eG = (EndGateway) loc.getBlock().getState();
 			eG.setAge(Long.MIN_VALUE);
 			eG.update(true);
-			event.getPlayer().getServer()
-					.broadcastMessage("ssssAge-" + ((EndGateway) loc.getBlock().getState()).getAge());
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
 			eG = (EndGateway) loc.getBlock().getState();
@@ -918,16 +915,14 @@ public class MabListener implements IGameEventListener {
 			Output = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
-			if (loc.getBlock().getState() instanceof EndGateway) {
-				EndGateway eG = (EndGateway) loc.getBlock().getState();
-				eG.setAge(-9223372036854775808L);
-			}
+			EndGateway eG = (EndGateway) loc.getBlock().getState();
+			eG.setAge(Long.MIN_VALUE);
+			eG.update(true);
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
-			if (loc.getBlock().getState() instanceof EndGateway) {
-				EndGateway eG = (EndGateway) loc.getBlock().getState();
-				eG.setAge(-9223372036854775808L);
-			}
+			eG = (EndGateway) loc.getBlock().getState();
+			eG.setAge(Long.MIN_VALUE);
+			eG.update(true);
 			loc = bl.getLocation();
 			loc.add(0, -1, 0);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
