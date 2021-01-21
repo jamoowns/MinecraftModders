@@ -864,6 +864,8 @@ public class MabListener implements IGameEventListener {
 
 				sendMabmoMsg("" + eG.getAge());
 				eG.setAge(-9223372036854775808L);
+
+				sendMabmoMsg("" + eG.getAge());
 			}
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
