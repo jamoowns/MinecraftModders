@@ -11,6 +11,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
+
 public final class CommandMinecraftModders implements CommandExecutor {
 
 	private final List<ModdersCommand> commands;
@@ -28,7 +30,28 @@ public final class CommandMinecraftModders implements CommandExecutor {
 				return true;
 			}
 		}
-		// Show help
+		Broadcaster.sendInfo(sender, "Available Commands:");
+		for (ModdersCommand c : commands) {
+			if (c.subCommands().isEmpty()) {
+				Broadcaster.sendInfo(sender, "/" + c.command());
+				return true;
+			} else {
+				for (ModdersCommand c1 : c.subCommands()) {
+					if (c1.subCommands().isEmpty()) {
+						Broadcaster.sendInfo(sender, "/" + c.command() + " " + c1.command());
+						return true;
+					} else {
+						for (ModdersCommand c2 : c.subCommands()) {
+							if (c2.subCommands().isEmpty()) {
+								Broadcaster.sendInfo(sender,
+										"/" + c.command() + " " + c1.command() + " " + c2.command());
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
 		return false;
 	}
 
