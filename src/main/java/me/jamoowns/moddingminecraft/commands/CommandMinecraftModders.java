@@ -67,9 +67,11 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		}
 		List<String> results = new ArrayList<>();
 
-		results.add("some sting");
-		results.add("another");
-		results.add("and this one");
+		if (c.isPresent()) {
+			for (ModdersCommand com : c.get().subCommands()) {
+				results.add(c.get().command() + "" + com.command());
+			}
+		}
 		return results;
 	}
 
