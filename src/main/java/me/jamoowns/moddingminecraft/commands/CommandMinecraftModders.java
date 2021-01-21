@@ -2,6 +2,7 @@ package me.jamoowns.moddingminecraft.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -9,11 +10,12 @@ import java.util.function.Consumer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 
-public final class CommandMinecraftModders implements CommandExecutor {
+public final class CommandMinecraftModders implements CommandExecutor, TabCompleter {
 
 	private final List<ModdersCommand> commands;
 
@@ -50,6 +52,14 @@ public final class CommandMinecraftModders implements CommandExecutor {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		Broadcaster.broadcastInfo("command: " + command);
+		Broadcaster.broadcastInfo("alias: " + alias);
+		Broadcaster.broadcastInfo("args: " + args);
+		return Collections.emptyList();
 	}
 
 	public final void registerCommand(List<String> parentChain, String command, Consumer<Player> function) {
