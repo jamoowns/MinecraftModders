@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.EndGateway;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
@@ -861,26 +862,27 @@ public class MabListener implements IGameEventListener {
 			bl.setType(Material.END_GATEWAY);
 
 			event.getPlayer().getServer().broadcastMessage("Test-");
-			if (loc.getBlock().getState() instanceof EndGateway) {
-				EndGateway eG = (EndGateway) loc.getBlock().getState();
+			if (loc.getBlock().getBlockData() instanceof Ageable) {
+				Ageable eG = (Ageable) loc.getBlock().getBlockData();
 
 				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
-				eG.setAge(Long.MAX_VALUE);
-				loc.getBlock().setBlockData(eG.getBlockData());
+
+				eG.setAge(5555555);
+				loc.getBlock().setBlockData(eG);
 				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
 			}
 			event.getPlayer().getServer()
 					.broadcastMessage("ssssAge-" + ((EndGateway) loc.getBlock().getState()).getAge());
-			((EndGateway) loc.getBlock().getState()).setAge(Long.MIN_VALUE);
-			event.getPlayer().getServer()
-					.broadcastMessage("zzzzAge-" + ((EndGateway) loc.getBlock().getState()).getAge());
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
-			if (loc.getBlock().getState() instanceof EndGateway) {
-				EndGateway eG = (EndGateway) loc.getBlock().getState();
+			if (loc.getBlock().getBlockData() instanceof Ageable) {
+				Ageable eG = (Ageable) loc.getBlock().getBlockData();
 
-				eG.setAge(Long.MAX_VALUE);
-				loc.getBlock().setBlockData(eG.getBlockData());
+				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
+
+				eG.setAge(5555555);
+				loc.getBlock().setBlockData(eG);
+				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
 			}
 
 			loc = bl.getLocation();
