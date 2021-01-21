@@ -934,7 +934,7 @@ public class MabListener implements IGameEventListener {
 			eG.setAge(Long.MIN_VALUE);
 			eG.update(true);
 			loc = bl.getLocation();
-			loc.add(0, -1, 1);
+			loc.add(0, -1, -1);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
 			loc.add(1, 0, 0);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
@@ -1056,7 +1056,7 @@ public class MabListener implements IGameEventListener {
 			eG.setAge(Long.MIN_VALUE);
 			eG.update(true);
 			loc = bl.getLocation();
-			loc.add(0, -1, 1);
+			loc.add(0, -1, -1);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
 			loc.add(1, 0, 0);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
