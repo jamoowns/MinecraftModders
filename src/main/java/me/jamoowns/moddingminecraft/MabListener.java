@@ -580,44 +580,56 @@ public class MabListener implements IGameEventListener {
 		if (InputSet && OutputSet) {
 			if ((int) event.getPlayer().getLocation().getX() == (int) Input.getX()
 					&& (int) event.getPlayer().getLocation().getY() == (int) Input.getY()
-					&& (int) event.getPlayer().getLocation().getZ() == (int) Input.getZ()
-					&& event.getPlayer().getLocation().getBlock().getType().equals(Material.END_GATEWAY)) {
+					&& (int) event.getPlayer().getLocation().getZ() == (int) Input.getZ()) {
+				Location Newloc = event.getPlayer().getLocation();
+				if (event.getPlayer().getLocation().getBlock().getType().equals(Material.END_GATEWAY)
+						&& Newloc.add(0, 1, 0).getBlock().getType().equals(Material.END_GATEWAY)) {
+					Location loc = new Location(Output.getWorld(), (int) Output.getX(), (int) Output.getY(),
+							(int) Output.getZ(), event.getPlayer().getLocation().getYaw(),
+							event.getPlayer().getLocation().getPitch());
+					if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
 
-				Location loc = new Location(Output.getWorld(), (int) Output.getX(), (int) Output.getY(),
-						(int) Output.getZ(), event.getPlayer().getLocation().getYaw(),
-						event.getPlayer().getLocation().getPitch());
-				if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
+						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
+							loc.setYaw(loc.getYaw() + 180);
+						}
 
-					if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
-						loc.setYaw(loc.getYaw() + 180);
+						event.getPlayer().teleport(loc);
+					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
+						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
+							loc.setYaw(loc.getYaw() + 180);
+						}
+						event.getPlayer().teleport(loc);
 					}
-
-					event.getPlayer().teleport(loc);
-				} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
-					if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
-						loc.setYaw(loc.getYaw() + 180);
-					}
-					event.getPlayer().teleport(loc);
+				} else {
+					event.getPlayer().getLocation().getBlock().setType(Material.AIR);
+					Newloc.getBlock().setType(Material.AIR);
 				}
+
 			} else if ((int) event.getPlayer().getLocation().getX() == (int) Output.getX()
 					&& (int) event.getPlayer().getLocation().getY() == (int) Output.getY()
-					&& (int) event.getPlayer().getLocation().getZ() == (int) Output.getZ()
-					&& event.getPlayer().getLocation().getBlock().getType().equals(Material.END_GATEWAY)) {
-
-				Location loc = new Location(Input.getWorld(), (int) Input.getX(), (int) Input.getY(),
-						(int) Input.getZ(), event.getPlayer().getLocation().getYaw(),
-						event.getPlayer().getLocation().getPitch());
-				if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
-					if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
-						loc.setYaw(loc.getYaw() + 180);
+					&& (int) event.getPlayer().getLocation().getZ() == (int) Output.getZ()) {
+				Location Newloc = event.getPlayer().getLocation();
+				if (event.getPlayer().getLocation().getBlock().getType().equals(Material.END_GATEWAY)
+						&& Newloc.add(0, 1, 0).getBlock().getType().equals(Material.END_GATEWAY)) {
+					Location loc = new Location(Input.getWorld(), (int) Input.getX(), (int) Input.getY(),
+							(int) Input.getZ(), event.getPlayer().getLocation().getYaw(),
+							event.getPlayer().getLocation().getPitch());
+					if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
+						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
+							loc.setYaw(loc.getYaw() + 180);
+						}
+						event.getPlayer().teleport(loc);
+					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
+						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
+							loc.setYaw(loc.getYaw() + 180);
+						}
+						event.getPlayer().teleport(loc);
 					}
-					event.getPlayer().teleport(loc);
-				} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
-					if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
-						loc.setYaw(loc.getYaw() + 180);
-					}
-					event.getPlayer().teleport(loc);
+				} else {
+					event.getPlayer().getLocation().getBlock().setType(Material.AIR);
+					Newloc.getBlock().setType(Material.AIR);
 				}
+
 			}
 		}
 
