@@ -860,7 +860,7 @@ public class MabListener implements IGameEventListener {
 			Input = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
-			loc.getBlock().getType().createBlockData("age:-9223372036854775808L");
+			loc.getBlock().getType().createBlockData("Age:-9223372036854775808L");
 			event.getPlayer().getServer().broadcastMessage("Test-" + loc.getBlock().getMetadata("Age"));
 			if (loc.getBlock().getBlockData() instanceof Ageable) {
 				Ageable eG = (Ageable) loc.getBlock().getBlockData();
@@ -875,7 +875,7 @@ public class MabListener implements IGameEventListener {
 					.broadcastMessage("ssssAge-" + ((EndGateway) loc.getBlock().getState()).getAge());
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
-			loc.getBlock().getType().createBlockData("age:-9223372036854775808L");
+			loc.getBlock().getType().createBlockData("Age:-9223372036854775808L");
 			if (loc.getBlock().getBlockData() instanceof Ageable) {
 				Ageable eG = (Ageable) loc.getBlock().getBlockData();
 
