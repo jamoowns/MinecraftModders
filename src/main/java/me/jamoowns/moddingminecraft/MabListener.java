@@ -11,7 +11,7 @@ import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.Ageable;
+import org.bukkit.block.EndGateway;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
@@ -860,17 +860,15 @@ public class MabListener implements IGameEventListener {
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
 			sendMabmoMsg("" + loc.getBlock().getBlockData());
-			if (loc.getBlock().getBlockData() instanceof Ageable) {
-				Ageable age = (Ageable) bl.getBlockData();
-				age.setAge(age.getMaximumAge());
-				bl.setBlockData(age);
+			if (loc.getBlock().getBlockData() instanceof EndGateway) {
+				EndGateway eG = (EndGateway) bl;
+				eG.setAge(-9223372036854775808L);
 			}
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
-			if (loc.getBlock().getBlockData() instanceof Ageable) {
-				Ageable age = (Ageable) bl.getBlockData();
-				age.setAge(age.getMaximumAge());
-				bl.setBlockData(age);
+			if (loc.getBlock().getBlockData() instanceof EndGateway) {
+				EndGateway eG = (EndGateway) bl;
+				eG.setAge(-9223372036854775808L);
 			}
 
 			loc = bl.getLocation();
@@ -921,17 +919,15 @@ public class MabListener implements IGameEventListener {
 			Output = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
-			if (loc.getBlock().getBlockData() instanceof Ageable) {
-				Ageable age = (Ageable) bl.getBlockData();
-				age.setAge(age.getMaximumAge());
-				bl.setBlockData(age);
+			if (loc.getBlock().getBlockData() instanceof EndGateway) {
+				EndGateway eG = (EndGateway) bl;
+				eG.setAge(-9223372036854775808L);
 			}
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
-			if (loc.getBlock().getBlockData() instanceof Ageable) {
-				Ageable age = (Ageable) bl.getBlockData();
-				age.setAge(age.getMaximumAge());
-				bl.setBlockData(age);
+			if (loc.getBlock().getBlockData() instanceof EndGateway) {
+				EndGateway eG = (EndGateway) bl;
+				eG.setAge(-9223372036854775808L);
 			}
 			loc = bl.getLocation();
 			loc.add(0, -1, 0);
