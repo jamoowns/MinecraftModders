@@ -601,9 +601,13 @@ public class MabListener implements IGameEventListener {
 						event.getPlayer().teleport(loc);
 					}
 				} else {
-					event.getPlayer().getLocation().getBlock().setType(Material.AIR);
+					Input.getBlock().setType(Material.AIR);
 					Newloc.getBlock().setType(Material.AIR);
 					InputSet = false;
+					Location Otherloc = Output;
+					Output.getBlock().setType(Material.AIR);
+					Otherloc.add(0, 1, 0).getBlock().setType(Material.AIR);
+					OutputSet = false;
 				}
 
 			} else if ((int) event.getPlayer().getLocation().getX() == (int) Output.getX()
@@ -630,6 +634,10 @@ public class MabListener implements IGameEventListener {
 					event.getPlayer().getLocation().getBlock().setType(Material.AIR);
 					Newloc.getBlock().setType(Material.AIR);
 					OutputSet = false;
+					Location Otherloc = Input;
+					Input.getBlock().setType(Material.AIR);
+					Otherloc.add(0, 1, 0).getBlock().setType(Material.AIR);
+					InputSet = false;
 				}
 
 			}
