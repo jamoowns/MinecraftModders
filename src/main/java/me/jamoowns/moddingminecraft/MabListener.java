@@ -11,6 +11,7 @@ import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
@@ -858,8 +859,14 @@ public class MabListener implements IGameEventListener {
 			Input = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
+			BlockData blockData = loc.getBlock().getType().createBlockData("age:0");
+			Ageable ageable = (Ageable) blockData;
+			ageable.setAge(ageable.getMaximumAge());
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
+			blockData = loc.getBlock().getType().createBlockData("age:0");
+			ageable = (Ageable) blockData;
+			ageable.setAge(ageable.getMaximumAge());
 
 			loc = bl.getLocation();
 			loc.add(0, -1, 0);
@@ -909,8 +916,14 @@ public class MabListener implements IGameEventListener {
 			Output = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
+			BlockData blockData = loc.getBlock().getType().createBlockData("age:0");
+			Ageable ageable = (Ageable) blockData;
+			ageable.setAge(ageable.getMaximumAge());
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
+			blockData = loc.getBlock().getType().createBlockData("age:0");
+			ageable = (Ageable) blockData;
+			ageable.setAge(ageable.getMaximumAge());
 
 			loc = bl.getLocation();
 			loc.add(0, -1, 0);
