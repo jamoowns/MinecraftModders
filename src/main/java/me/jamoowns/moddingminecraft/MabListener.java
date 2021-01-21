@@ -592,15 +592,12 @@ public class MabListener implements IGameEventListener {
 						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
-
-						loc.getChunk().load();
 						event.getPlayer().teleport(loc);
 					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
 						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
 
-						loc.getChunk().load();
 						event.getPlayer().teleport(loc);
 					}
 				} else {
@@ -626,14 +623,12 @@ public class MabListener implements IGameEventListener {
 						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
-						loc.getChunk().load();
 						event.getPlayer().teleport(loc);
 					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
 						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
 
-						loc.getChunk().load();
 						event.getPlayer().teleport(loc);
 					}
 				} else {
@@ -861,7 +856,11 @@ public class MabListener implements IGameEventListener {
 
 			Block bl = event.getBlockPlaced();
 			InputSet = true;
+			if (Input != null) {
+				Input.getChunk().setForceLoaded(false);
+			}
 			Input = bl.getLocation();
+			Input.getChunk().setForceLoaded(true);
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
 			loc.add(0, 1, 0);
@@ -912,7 +911,11 @@ public class MabListener implements IGameEventListener {
 
 			Block bl = event.getBlockPlaced();
 			OutputSet = true;
+			if (Output != null) {
+				Output.getChunk().setForceLoaded(false);
+			}
 			Output = bl.getLocation();
+			Output.getChunk().setForceLoaded(false);
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
 			loc.add(0, 1, 0);
