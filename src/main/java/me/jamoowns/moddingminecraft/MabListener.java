@@ -859,6 +859,7 @@ public class MabListener implements IGameEventListener {
 			Input = bl.getLocation();
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
+			sendMabmoMsg("" + loc.getBlock().getState());
 			if (loc.getBlock().getBlockData() instanceof Ageable) {
 				Ageable age = (Ageable) bl.getBlockData();
 				age.setAge(age.getMaximumAge());
