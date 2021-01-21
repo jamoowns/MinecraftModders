@@ -648,6 +648,7 @@ public class MabListener implements IGameEventListener {
 				if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
 					event.getPlayer().teleport(loc);
 				} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
+					loc.setYaw(loc.getYaw() + 180);
 					event.getPlayer().teleport(loc);
 				}
 			}
