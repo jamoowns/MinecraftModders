@@ -140,6 +140,13 @@ public class MabListener implements IGameEventListener {
 	public final void onBlockPlace(BlockPlaceEvent event) {
 		if (event.getBlock().getType().equals(Material.SEA_PICKLE)) {
 			Block bl = event.getBlockPlaced();
+			if (!InputSet) {
+				InputSet = true;
+				Input = bl.getLocation();
+			} else {
+				OutputSet = true;
+				Output = bl.getLocation();
+			}
 			Location loc = bl.getLocation();
 			bl.setType(Material.END_GATEWAY);
 			loc.add(0, 1, 0);
@@ -169,18 +176,18 @@ public class MabListener implements IGameEventListener {
 
 			loc = bl.getLocation();
 			loc.add(0, -1, 1);
-			loc.getBlock().setType(Material.QUARTZ_BLOCK);
-			loc.add(1, 0, 1);
 			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
-			loc.add(-2, 0, 1);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(-2, 0, 0);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
 
 			loc = bl.getLocation();
 			loc.add(0, -1, -1);
-			loc.getBlock().setType(Material.QUARTZ_BLOCK);
-			loc.add(1, 0, -1);
 			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
-			loc.add(-2, 0, -1);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(-2, 0, 0);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
@@ -616,6 +623,25 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onPlayerMoveEvent(PlayerMoveEvent event) {
+		if (InputSet && OutputSet) {
+
+			if (event.getPlayer().getLocation() == Input) {
+				Location loc = Output;
+				if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
+					event.getPlayer().teleport(loc);
+				} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
+					event.getPlayer().teleport(loc);
+				}
+			} else if (event.getPlayer().getLocation() == Output) {
+				Location loc = Input;
+				if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
+					event.getPlayer().teleport(loc);
+				} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
+					event.getPlayer().teleport(loc);
+				}
+			}
+		}
+
 		if (javaPlugin.featureTracker().isFeatureActive(Feature.WINFRED)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Witch) {
