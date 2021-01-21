@@ -625,31 +625,25 @@ public class MabListener implements IGameEventListener {
 	public final void onPlayerMoveEvent(PlayerMoveEvent event) {
 		if (InputSet && OutputSet) {
 
-			sendMabmoMsg("2 x" + (int) event.getPlayer().getLocation().getX() + "2 y"
-					+ (int) event.getPlayer().getLocation().getY() + "2 Z"
-					+ (int) event.getPlayer().getLocation().getZ());
-			sendMabmoMsg("2 x" + (int) Input.getX() + "2 y" + (int) Input.getY() + "2 Z" + (int) Input.getZ());
-			if (event.getPlayer().getLocation() == Input) {
+			if ((int) event.getPlayer().getLocation().getX() == (int) Input.getX()
+					&& (int) event.getPlayer().getLocation().getY() == (int) Input.getY()
+					&& (int) event.getPlayer().getLocation().getZ() == (int) Input.getZ()) {
 
-				sendMabmoMsg("From input");
 				Location loc = Output;
 				if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
 
-					sendMabmoMsg("To output 1");
 					event.getPlayer().teleport(loc);
 				} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
-					sendMabmoMsg("To output 2");
 					event.getPlayer().teleport(loc);
 				}
-			} else if (event.getPlayer().getLocation() == Output) {
+			} else if ((int) event.getPlayer().getLocation().getX() == (int) Output.getX()
+					&& (int) event.getPlayer().getLocation().getY() == (int) Output.getY()
+					&& (int) event.getPlayer().getLocation().getZ() == (int) Output.getZ()) {
 
-				sendMabmoMsg("From output");
 				Location loc = Input;
 				if (loc.add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
-					sendMabmoMsg("To input 1");
 					event.getPlayer().teleport(loc);
 				} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
-					sendMabmoMsg("To input 2");
 					event.getPlayer().teleport(loc);
 				}
 			}
