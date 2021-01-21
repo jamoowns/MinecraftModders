@@ -862,14 +862,14 @@ public class MabListener implements IGameEventListener {
 			event.getPlayer().getServer().broadcastMessage("Test-" + ((EndGateway) loc.getBlock().getState()).getAge());
 			EndGateway eG = (EndGateway) loc.getBlock().getBlockData();
 			eG.setAge(Long.MIN_VALUE);
-			loc.getBlock().setBlockData(eG.getBlockData());
+			eG.update();
 			event.getPlayer().getServer()
 					.broadcastMessage("ssssAge-" + ((EndGateway) loc.getBlock().getState()).getAge());
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
 			eG = (EndGateway) loc.getBlock().getBlockData();
 			eG.setAge(Long.MIN_VALUE);
-			loc.getBlock().setBlockData(eG.getBlockData());
+			eG.update();
 			loc = bl.getLocation();
 			loc.add(0, -1, 0);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
