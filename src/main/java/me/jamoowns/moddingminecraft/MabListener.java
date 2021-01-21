@@ -861,11 +861,10 @@ public class MabListener implements IGameEventListener {
 			bl.setType(Material.END_GATEWAY);
 			if (loc.getBlock().getBlockData() instanceof EndGateway) {
 				EndGateway eG = (EndGateway) bl;
-
-				sendMabmoMsg("" + eG.getAge());
+				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
 				eG.setAge(Long.MIN_VALUE);
 
-				sendMabmoMsg("" + eG.getAge());
+				event.getPlayer().getServer().broadcastMessage("Age-" + eG.getAge());
 			}
 			loc.add(0, 1, 0);
 			loc.getBlock().setType(Material.END_GATEWAY);
