@@ -36,7 +36,6 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Witch;
 import org.bukkit.entity.Zombie;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -49,7 +48,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -267,16 +265,16 @@ public class MabListener implements IGameEventListener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onChunkUnloadE(ChunkUnloadEvent event) {
-		if (InputSet && event.getChunk() == Input.getChunk()) {
-			((Cancellable) event).setCancelled(true);
-		}
-		if (OutputSet && event.getChunk() == Output.getChunk()) {
-			((Cancellable) event).setCancelled(true);
-		}
-
-	}
+//	@EventHandler(priority = EventPriority.HIGHEST)
+//	public void onChunkUnloadE(ChunkUnloadEvent event) {
+//		if (InputSet && event.getChunk() == Input.getChunk()) {
+//			((Cancellable) event).setCancelled(true);
+//		}
+//		if (OutputSet && event.getChunk() == Output.getChunk()) {
+//			((Cancellable) event).setCancelled(true);
+//		}
+//
+//	}
 
 	@EventHandler
 	public final void onEntityDeathEvent(EntityDeathEvent event) {
@@ -605,12 +603,13 @@ public class MabListener implements IGameEventListener {
 						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
+						loc.getWorld().refreshChunk(loc.getChunk().getX(), loc.getChunk().getZ());
 						event.getPlayer().teleport(loc);
 					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
 						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
-
+						loc.getWorld().refreshChunk(loc.getChunk().getX(), loc.getChunk().getZ());
 						event.getPlayer().teleport(loc);
 					}
 				} else {
@@ -636,12 +635,13 @@ public class MabListener implements IGameEventListener {
 						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
+						loc.getWorld().refreshChunk(loc.getChunk().getX(), loc.getChunk().getZ());
 						event.getPlayer().teleport(loc);
 					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.AIR)) {
 						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
-
+						loc.getWorld().refreshChunk(loc.getChunk().getX(), loc.getChunk().getZ());
 						event.getPlayer().teleport(loc);
 					}
 				} else {
