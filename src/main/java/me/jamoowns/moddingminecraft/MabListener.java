@@ -588,14 +588,16 @@ public class MabListener implements IGameEventListener {
 					Location loc = new Location(Output.getWorld(), (int) Output.getX(), (int) Output.getY(),
 							(int) Output.getZ(), event.getPlayer().getLocation().getYaw(),
 							event.getPlayer().getLocation().getPitch());
-					if (loc.add(0, 0, 1).getBlock().getType().equals(Material.END_GATEWAY)) {
+					if (loc.add(0, 0, 1).getBlock().getType().equals(Material.END_GATEWAY)
+							&& loc.clone().add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
 
 						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
 
 						event.getPlayer().teleport(loc);
-					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.END_GATEWAY)) {
+					} else if (loc.add(0, 0, -3).getBlock().getType().equals(Material.END_GATEWAY)
+							&& loc.clone().add(0, 0, -1).getBlock().getType().equals(Material.AIR)) {
 						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
@@ -620,12 +622,14 @@ public class MabListener implements IGameEventListener {
 					Location loc = new Location(Input.getWorld(), (int) Input.getX(), (int) Input.getY(),
 							(int) Input.getZ(), event.getPlayer().getLocation().getYaw(),
 							event.getPlayer().getLocation().getPitch());
-					if (loc.add(0, 0, 1).getBlock().getType().equals(Material.END_GATEWAY)) {
+					if (loc.add(0, 0, 1).getBlock().getType().equals(Material.END_GATEWAY)
+							&& loc.clone().add(0, 0, 1).getBlock().getType().equals(Material.AIR)) {
 						if (loc.getYaw() > 90 && loc.getYaw() < 270 || loc.getYaw() < -90 && loc.getYaw() > -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
 						event.getPlayer().teleport(loc);
-					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.END_GATEWAY)) {
+					} else if (loc.add(0, 0, -2).getBlock().getType().equals(Material.END_GATEWAY)
+							&& loc.clone().add(0, 0, -1).getBlock().getType().equals(Material.AIR)) {
 						if (loc.getYaw() < 90 && loc.getYaw() > 270 || loc.getYaw() > -90 && loc.getYaw() < -270) {
 							loc.setYaw(loc.getYaw() + 180);
 						}
