@@ -66,7 +66,7 @@ import me.jamoowns.moddingminecraft.roominating.StructureBuilder.GridType;
 
 public class MabListener implements IGameEventListener {
 
-	private static final Integer MOB_STICK_RANGE = 50;
+	private static final Integer CHUNK_STICK_RANGE = 100;
 
 	@EventHandler
 	public static void onPortalTravel(PlayerPortalEvent event) {
@@ -962,7 +962,7 @@ public class MabListener implements IGameEventListener {
 			structureBuilder.buildGrid(GridType.STRAIGHT,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getLocation());
-		}, MOB_STICK_RANGE);
+		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(straightChunkItem);
 
 		towerChunkItem = new CustomItem("Tower Chunk", Material.END_STONE_BRICK_WALL);
@@ -975,7 +975,7 @@ public class MabListener implements IGameEventListener {
 			structureBuilder.buildGrid(GridType.TOWER,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getLocation());
-		}, MOB_STICK_RANGE);
+		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(towerChunkItem);
 
 		cornerChunkItem = new CustomItem("Corner Chunk", Material.BRICK_WALL);
@@ -988,7 +988,7 @@ public class MabListener implements IGameEventListener {
 			structureBuilder.buildGrid(GridType.CORNER,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getLocation());
-		}, MOB_STICK_RANGE);
+		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(cornerChunkItem);
 
 		tSectionChunkItem = new CustomItem("T Section Chunk", Material.NETHER_BRICK_WALL);
@@ -1001,7 +1001,7 @@ public class MabListener implements IGameEventListener {
 			structureBuilder.buildGrid(GridType.T_SECTION,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getLocation());
-		}, MOB_STICK_RANGE);
+		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(tSectionChunkItem);
 
 		crossChunkItem = new CustomItem("Cross Chunk", Material.DIORITE_WALL);
@@ -1014,7 +1014,7 @@ public class MabListener implements IGameEventListener {
 			structureBuilder.buildGrid(GridType.CROSS,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getLocation());
-		}, MOB_STICK_RANGE);
+		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(crossChunkItem);
 
 		deadEndChunkItem = new CustomItem("Dead End Chunk", Material.PRISMARINE_WALL);
@@ -1022,7 +1022,7 @@ public class MabListener implements IGameEventListener {
 			structureBuilder.buildGrid(GridType.DEAD_END,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
 					event.getLocation());
-		}, MOB_STICK_RANGE);
+		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(deadEndChunkItem);
 
 		multiShotBowItem = new CustomItem("MultiShot Bow", Material.CROSSBOW);
