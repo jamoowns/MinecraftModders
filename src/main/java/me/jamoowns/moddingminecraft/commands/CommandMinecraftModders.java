@@ -2,7 +2,6 @@ package me.jamoowns.moddingminecraft.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -56,10 +55,22 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		Broadcaster.broadcastInfo("command: " + command);
-		Broadcaster.broadcastInfo("alias: " + alias);
-		Broadcaster.broadcastInfo("args: " + args);
-		return Collections.emptyList();
+		List<ModdersCommand> commandChildren = commands;
+		Optional<ModdersCommand> c = Optional.empty();
+		for (String parent : args) {
+			for (ModdersCommand com : commandChildren) {
+				if (com.command().startsWith(parent)) {
+					c = Optional.of(com);
+					commandChildren = com.subCommands();
+				}
+			}
+		}
+		List<String> results = new ArrayList<>();
+
+		results.add("some sting");
+		results.add("another");
+		results.add("and this one");
+		return results;
 	}
 
 	public final void registerCommand(List<String> parentChain, String command, Consumer<Player> function) {
