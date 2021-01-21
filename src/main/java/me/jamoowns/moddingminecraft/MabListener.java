@@ -581,7 +581,7 @@ public class MabListener implements IGameEventListener {
 			if ((int) event.getPlayer().getLocation().getX() == (int) Input.getX()
 					&& (int) event.getPlayer().getLocation().getY() == (int) Input.getY()
 					&& (int) event.getPlayer().getLocation().getZ() == (int) Input.getZ()
-					&& event.getPlayer().getLocation().getBlock().equals(Material.END_GATEWAY)) {
+					&& event.getPlayer().getLocation().getBlock().getType().equals(Material.END_GATEWAY)) {
 
 				Location loc = new Location(Output.getWorld(), (int) Output.getX(), (int) Output.getY(),
 						(int) Output.getZ(), event.getPlayer().getLocation().getYaw(),
@@ -602,7 +602,7 @@ public class MabListener implements IGameEventListener {
 			} else if ((int) event.getPlayer().getLocation().getX() == (int) Output.getX()
 					&& (int) event.getPlayer().getLocation().getY() == (int) Output.getY()
 					&& (int) event.getPlayer().getLocation().getZ() == (int) Output.getZ()
-					&& event.getPlayer().getLocation().getBlock().equals(Material.END_GATEWAY)) {
+					&& event.getPlayer().getLocation().getBlock().getType().equals(Material.END_GATEWAY)) {
 
 				Location loc = new Location(Input.getWorld(), (int) Input.getX(), (int) Input.getY(),
 						(int) Input.getZ(), event.getPlayer().getLocation().getYaw(),
@@ -878,6 +878,7 @@ public class MabListener implements IGameEventListener {
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
 		});
 		javaPlugin.customItems().register(portalInputItem);
+
 		portalOutputItem = new CustomItem("Portal Output", Material.CRIMSON_DOOR);
 		portalOutputItem.setBlockPlaceEvent(event -> {
 
@@ -928,6 +929,7 @@ public class MabListener implements IGameEventListener {
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
 		});
 		javaPlugin.customItems().register(portalOutputItem);
+
 		straightChunkItem = new CustomItem("Straight Chunk", Material.RED_SANDSTONE_WALL);
 		straightChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.STRAIGHT,
