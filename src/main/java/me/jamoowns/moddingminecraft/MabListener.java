@@ -152,6 +152,20 @@ public class MabListener implements IGameEventListener {
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
 			loc.add(-2, 0, 0);
 			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, 1, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.QUARTZ_BLOCK);
+			loc.add(1, 0, 0);
+			loc.getBlock().setType(Material.CHISELED_QUARTZ_BLOCK);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
+			loc.add(0, -1, 0);
+			loc.getBlock().setType(Material.QUARTZ_PILLAR);
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
