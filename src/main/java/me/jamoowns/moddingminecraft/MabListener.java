@@ -188,6 +188,8 @@ public class MabListener implements IGameEventListener {
 			}
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
+			String name = javaPlugin.getConfig().getString("player-name");
+			event.getPlayer().getServer().broadcastMessage("'I can polish that for you right now'-" + name);
 			for (
 
 			Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
