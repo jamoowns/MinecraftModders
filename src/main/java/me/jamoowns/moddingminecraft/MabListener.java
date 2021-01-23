@@ -188,9 +188,9 @@ public class MabListener implements IGameEventListener {
 			}
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
+			for (
 
-			event.getPlayer().getServer().broadcastMessage(javaPlugin.getCustomConfig().getString("player-name"));
-			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+			Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Villager) {
 					if (ent.getName().contains("Sam")) {
 
