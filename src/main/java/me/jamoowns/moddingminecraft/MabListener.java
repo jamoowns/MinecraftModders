@@ -58,7 +58,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
 
-import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
@@ -729,13 +728,6 @@ public class MabListener implements IGameEventListener {
 		if (event.getMessage().contains("Iammabmo")) {
 			mabmo = event.getPlayer();
 			mabmoSet = true;
-			// Reading from the config
-			String name = javaPlugin.getConfig().getString("player-name");
-			Broadcaster.sendGameInfo(mabmo, name);
-			// Writing to the config
-			javaPlugin.getConfig().set("player-name", mabmo.getName());
-			name = javaPlugin.getConfig().getString("player-name");
-			Broadcaster.sendGameInfo(mabmo, name);
 		}
 		if (event.getMessage().contains("Iamnotmabmo")) {
 			mabmoSet = false;
