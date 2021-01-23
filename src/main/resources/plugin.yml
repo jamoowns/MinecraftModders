@@ -7,7 +7,7 @@ commands:
     mm:
         description: MinecraftModders related commands
         usage: /mm <activate/deactivate> FEATURE
-    items:
+    mm.items:
      description: Get custom items.
      aliases: [custom_items, items]
-     usage: Syntax error! Simply type /&lt;command&gt; to view items.
+     usage: Syntax error! Simply type /mm &lt;command&gt; to view items.
