@@ -1,13 +1,8 @@
 package me.jamoowns.moddingminecraft;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.jamoowns.moddingminecraft.commands.CommandMinecraftModders;
@@ -43,10 +38,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private RandomChestsFeatureListener randomChestsFeatureListener;
 
-	private File customConfigFile;
-
-	private FileConfiguration customConfig;
-
 	public final CommandMinecraftModders commandExecutor() {
 		return commandExecutor;
 	}
@@ -59,35 +50,35 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void featureActivated(Feature feature) {
 		Broadcaster.broadcastInfo("Activated: " + feature.name());
 		switch (feature) {
-		case BATTLE_ROYALE:
-			break;
-		case EGG_WITCH:
-			break;
-		case FUNKY_MOB_DEATH:
-			break;
-		case IRON_GOLEM:
-			break;
-		case PLAYER_TRAIL:
-			break;
-		case RANDOM_BUCKET:
-			break;
-		case RANDOM_CHESTS:
-			randomChestsFeatureListener.start();
-			break;
-		case RANDOM_ENCHANT:
-			break;
-		case STABLE_WEATHER:
-			break;
-		case WINFRED:
-			break;
-		case ZOMBIE_BELL:
-			break;
-		case HEAVY_BLOCKS:
-			break;
-		case LIGHT_BLOCKS:
-			break;
-		default:
-			break;
+			case BATTLE_ROYALE:
+				break;
+			case EGG_WITCH:
+				break;
+			case FUNKY_MOB_DEATH:
+				break;
+			case IRON_GOLEM:
+				break;
+			case PLAYER_TRAIL:
+				break;
+			case RANDOM_BUCKET:
+				break;
+			case RANDOM_CHESTS:
+				randomChestsFeatureListener.start();
+				break;
+			case RANDOM_ENCHANT:
+				break;
+			case STABLE_WEATHER:
+				break;
+			case WINFRED:
+				break;
+			case ZOMBIE_BELL:
+				break;
+			case HEAVY_BLOCKS:
+				break;
+			case LIGHT_BLOCKS:
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -95,45 +86,41 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void featureDeactivated(Feature feature) {
 		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
 		switch (feature) {
-		case BATTLE_ROYALE:
-			break;
-		case EGG_WITCH:
-			break;
-		case FUNKY_MOB_DEATH:
-			break;
-		case IRON_GOLEM:
-			break;
-		case PLAYER_TRAIL:
-			playerTrailFeatureListener.cleanup();
-			break;
-		case RANDOM_BUCKET:
-			break;
-		case RANDOM_CHESTS:
-			randomChestsFeatureListener.stop();
-			break;
-		case RANDOM_ENCHANT:
-			break;
-		case STABLE_WEATHER:
-			break;
-		case WINFRED:
-			break;
-		case ZOMBIE_BELL:
-			break;
-		case HEAVY_BLOCKS:
-			break;
-		case LIGHT_BLOCKS:
-			break;
-		default:
-			break;
+			case BATTLE_ROYALE:
+				break;
+			case EGG_WITCH:
+				break;
+			case FUNKY_MOB_DEATH:
+				break;
+			case IRON_GOLEM:
+				break;
+			case PLAYER_TRAIL:
+				playerTrailFeatureListener.cleanup();
+				break;
+			case RANDOM_BUCKET:
+				break;
+			case RANDOM_CHESTS:
+				randomChestsFeatureListener.stop();
+				break;
+			case RANDOM_ENCHANT:
+				break;
+			case STABLE_WEATHER:
+				break;
+			case WINFRED:
+				break;
+			case ZOMBIE_BELL:
+				break;
+			case HEAVY_BLOCKS:
+				break;
+			case LIGHT_BLOCKS:
+				break;
+			default:
+				break;
 		}
 	}
 
 	public final FeatureTracker featureTracker() {
 		return featureTracker;
-	}
-
-	public FileConfiguration getCustomConfig() {
-		return this.customConfig;
 	}
 
 	// Fired when plug-in is disabled
@@ -145,7 +132,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	// Fired when plug-in is first enabled
 	@Override
 	public final void onEnable() {
-		createCustomConfig();
 		commandExecutor = new CommandMinecraftModders();
 		customItems = new CustomItems();
 		teams = new Teams(this);
@@ -203,20 +189,5 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	private void addGameListener(IGameEventListener listener) {
 		gameListeners.add(listener);
 		getServer().getPluginManager().registerEvents(listener, this);
-	}
-
-	private void createCustomConfig() {
-		customConfigFile = new File(getDataFolder(), "custom.yml");
-		if (!customConfigFile.exists()) {
-			customConfigFile.getParentFile().mkdirs();
-			saveResource("custom.yml", false);
-		}
-
-		customConfig = new YamlConfiguration();
-		try {
-			customConfig.load(customConfigFile);
-		} catch (IOException | InvalidConfigurationException e) {
-			e.printStackTrace();
-		}
 	}
 }
