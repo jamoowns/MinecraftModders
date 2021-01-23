@@ -6,4 +6,3 @@ commands:
     mm:
         description: MinecraftModders related commands
         usage: /mm <activate/deactivate> FEATURE
-	items:
