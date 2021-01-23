@@ -3,6 +3,8 @@ package me.jamoowns.moddingminecraft;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.jamoowns.moddingminecraft.commands.CommandMinecraftModders;
@@ -23,9 +25,7 @@ import me.jamoowns.moddingminecraft.minigames.blockhunter.BlockHunterListener;
 import me.jamoowns.moddingminecraft.teams.Teams;
 
 public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
-
 	private List<IGameEventListener> gameListeners;
-
 	private CustomItems customItems;
 
 	private CommandMinecraftModders commandExecutor;
@@ -50,35 +50,35 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void featureActivated(Feature feature) {
 		Broadcaster.broadcastInfo("Activated: " + feature.name());
 		switch (feature) {
-			case BATTLE_ROYALE:
-				break;
-			case EGG_WITCH:
-				break;
-			case FUNKY_MOB_DEATH:
-				break;
-			case IRON_GOLEM:
-				break;
-			case PLAYER_TRAIL:
-				break;
-			case RANDOM_BUCKET:
-				break;
-			case RANDOM_CHESTS:
-				randomChestsFeatureListener.start();
-				break;
-			case RANDOM_ENCHANT:
-				break;
-			case STABLE_WEATHER:
-				break;
-			case WINFRED:
-				break;
-			case ZOMBIE_BELL:
-				break;
-			case HEAVY_BLOCKS:
-				break;
-			case LIGHT_BLOCKS:
-				break;
-			default:
-				break;
+		case BATTLE_ROYALE:
+			break;
+		case EGG_WITCH:
+			break;
+		case FUNKY_MOB_DEATH:
+			break;
+		case IRON_GOLEM:
+			break;
+		case PLAYER_TRAIL:
+			break;
+		case RANDOM_BUCKET:
+			break;
+		case RANDOM_CHESTS:
+			randomChestsFeatureListener.start();
+			break;
+		case RANDOM_ENCHANT:
+			break;
+		case STABLE_WEATHER:
+			break;
+		case WINFRED:
+			break;
+		case ZOMBIE_BELL:
+			break;
+		case HEAVY_BLOCKS:
+			break;
+		case LIGHT_BLOCKS:
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -86,36 +86,36 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void featureDeactivated(Feature feature) {
 		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
 		switch (feature) {
-			case BATTLE_ROYALE:
-				break;
-			case EGG_WITCH:
-				break;
-			case FUNKY_MOB_DEATH:
-				break;
-			case IRON_GOLEM:
-				break;
-			case PLAYER_TRAIL:
-				playerTrailFeatureListener.cleanup();
-				break;
-			case RANDOM_BUCKET:
-				break;
-			case RANDOM_CHESTS:
-				randomChestsFeatureListener.stop();
-				break;
-			case RANDOM_ENCHANT:
-				break;
-			case STABLE_WEATHER:
-				break;
-			case WINFRED:
-				break;
-			case ZOMBIE_BELL:
-				break;
-			case HEAVY_BLOCKS:
-				break;
-			case LIGHT_BLOCKS:
-				break;
-			default:
-				break;
+		case BATTLE_ROYALE:
+			break;
+		case EGG_WITCH:
+			break;
+		case FUNKY_MOB_DEATH:
+			break;
+		case IRON_GOLEM:
+			break;
+		case PLAYER_TRAIL:
+			playerTrailFeatureListener.cleanup();
+			break;
+		case RANDOM_BUCKET:
+			break;
+		case RANDOM_CHESTS:
+			randomChestsFeatureListener.stop();
+			break;
+		case RANDOM_ENCHANT:
+			break;
+		case STABLE_WEATHER:
+			break;
+		case WINFRED:
+			break;
+		case ZOMBIE_BELL:
+			break;
+		case HEAVY_BLOCKS:
+			break;
+		case LIGHT_BLOCKS:
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -180,6 +180,25 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		this.getCommand("mm").setExecutor(commandExecutor);
 
 		Broadcaster.broadcastInfo("Modding Minecraft has been enabled!");
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+		if (cmd.getName().equalsIgnoreCase("xppickup") && args.length >= 0) {
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+
+				List<String> list = new ArrayList<>();
+				list.add("help");
+
+				if (player.hasPermission(RELOAD)) {
+					list.add("reload");
+				}
+				return list;
+
+			}
+		}
+		return null;
 	}
 
 	public final Teams teams() {
