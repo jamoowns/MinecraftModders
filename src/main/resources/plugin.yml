@@ -1,8 +1,13 @@
 name: ModdingMinecraft
 main: me.jamoowns.moddingminecraft.ModdingMinecraft
+authors: [Jamoowns, Moshy, mabmo]
 version: 0.0.2
 api-version: 1.16
 commands:
     mm:
         description: MinecraftModders related commands
         usage: /mm <activate/deactivate> FEATURE
+    items:
+     description: Get custom items.
+     aliases: [custom_items, items]
+     usage: Syntax error! Simply type /&lt;command&gt; to view items.
