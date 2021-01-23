@@ -1,10 +1,13 @@
 package me.jamoowns.moddingminecraft;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.jamoowns.moddingminecraft.commands.CommandMinecraftModders;
@@ -25,18 +28,23 @@ import me.jamoowns.moddingminecraft.minigames.blockhunter.BlockHunterListener;
 import me.jamoowns.moddingminecraft.teams.Teams;
 
 public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
+
 	private List<IGameEventListener> gameListeners;
+
 	private CustomItems customItems;
 
 	private CommandMinecraftModders commandExecutor;
 
 	private Teams teams;
-
 	private FeatureTracker featureTracker;
 
 	private PlayerTrailFeatureListener playerTrailFeatureListener;
 
 	private RandomChestsFeatureListener randomChestsFeatureListener;
+
+	private File customConfigFile;
+
+	private FileConfiguration customConfig;
 
 	public final CommandMinecraftModders commandExecutor() {
 		return commandExecutor;
@@ -123,6 +131,10 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		return featureTracker;
 	}
 
+	public FileConfiguration getCustomConfig() {
+		return this.customConfig;
+	}
+
 	// Fired when plug-in is disabled
 	@Override
 	public final void onDisable() {
@@ -132,6 +144,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	// Fired when plug-in is first enabled
 	@Override
 	public final void onEnable() {
+
+		createCustomConfig();
 		commandExecutor = new CommandMinecraftModders();
 		customItems = new CustomItems();
 		teams = new Teams(this);
@@ -182,25 +196,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		Broadcaster.broadcastInfo("Modding Minecraft has been enabled!");
 	}
 
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-		if (cmd.getName().equalsIgnoreCase("xppickup") && args.length >= 0) {
-			if (sender instanceof Player) {
-				Player player = (Player) sender;
-
-				List<String> list = new ArrayList<>();
-				list.add("help");
-
-				if (player.hasPermission(RELOAD)) {
-					list.add("reload");
-				}
-				return list;
-
-			}
-		}
-		return null;
-	}
-
 	public final Teams teams() {
 		return teams;
 	}
@@ -208,5 +203,20 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	private void addGameListener(IGameEventListener listener) {
 		gameListeners.add(listener);
 		getServer().getPluginManager().registerEvents(listener, this);
+	}
+
+	private void createCustomConfig() {
+		customConfigFile = new File(getDataFolder(), "custom.yml");
+		if (!customConfigFile.exists()) {
+			customConfigFile.getParentFile().mkdirs();
+			saveResource("custom.yml", false);
+		}
+
+		customConfig = new YamlConfiguration();
+		try {
+			customConfig.load(customConfigFile);
+		} catch (IOException | InvalidConfigurationException e) {
+			e.printStackTrace();
+		}
 	}
 }
