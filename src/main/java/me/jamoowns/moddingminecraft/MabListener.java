@@ -190,11 +190,7 @@ public class MabListener implements IGameEventListener {
 			}
 		}
 		if (event.getBlock().getType().equals(Material.BASALT)) {
-			String name = javaPlugin.getConfig().getString("player-name");
-			event.getPlayer().getServer().broadcastMessage("'I can polish that for you right now'-" + name);
-			for (
-
-			Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Villager) {
 					if (ent.getName().contains("Sam")) {
 
@@ -213,9 +209,7 @@ public class MabListener implements IGameEventListener {
 		}
 
 		if (event.getBlock().getType().equals(Material.POLISHED_BASALT)) {
-			for (
-
-			Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
+			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Villager) {
 					if (ent.getName().contains("Bob")) {
 

@@ -1,11 +1,9 @@
 name: ModdingMinecraft
 main: me.jamoowns.moddingminecraft.ModdingMinecraft
-authors: [Jamoowns, Moshy, mabmo]
+authors: [jamoowns, Moshy, mabmo]
 version: 0.0.2
 api-version: 1.16
 commands:
     mm:
         description: MinecraftModders related commands
-        usage: /mm <activate/deactivate> FEATURE
-
- player-name: Steve
+        usage: /mm help
