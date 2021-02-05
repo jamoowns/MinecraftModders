@@ -519,13 +519,11 @@ public class MabListener implements IGameEventListener {
 		if (event.getEntity() instanceof FallingBlock) {
 			FallingBlock fallingBlock = (FallingBlock) event.getEntity();
 
-			if (event.getBlock().getType() == Material.GRAVEL) {
+			if (event.getBlock().getType() == Material.AIR && fallingBlock.isOnGround()) {
 				new BukkitRunnable() {
-					Location loc = event.getBlock().getLocation();
-
 					@Override
 					public void run() {
-						loc.getBlock().setType(Material.SAND);
+						event.getBlock().setType(Material.SAND);
 					}
 				}.runTaskLater(javaPlugin, 1L);
 			}
