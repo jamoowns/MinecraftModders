@@ -11,6 +11,7 @@ import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.EndGateway;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
@@ -692,6 +693,55 @@ public class MabListener implements IGameEventListener {
 				}
 			}
 		}
+		Location belowPlayer = event.getPlayer().getLocation().add(0, -1, 0);
+
+		if (!belowPlayer.getBlock().isEmpty() && !belowPlayer.getBlock().isLiquid()) {
+
+			BlockFace facing = event.getPlayer().getFacing();
+			int x = 0;
+			int z = 0;
+			if (facing == BlockFace.SOUTH) {
+				x = 0;
+				z = -1;
+			} else if (facing == BlockFace.NORTH) {
+				x = 0;
+				z = 1;
+			} else if (facing == BlockFace.EAST) {
+				x = -1;
+				z = 0;
+			} else if (facing == BlockFace.WEST) {
+				x = 1;
+				z = 0;
+			}
+
+			Location belowBehindPlayer = event.getPlayer().getLocation().add(x, -1, z);
+
+			Block block = event.getPlayer().getWorld().getBlockAt(belowBehindPlayer);
+			BlockData blockData = block.getBlockData();
+			block.setType(Material.AIR);
+			FallingBlock fb = block.getLocation().getWorld().spawnFallingBlock(block.getLocation().add(0.5, 0, 0.5),
+					blockData);
+			if (javaPlugin.featureTracker().isFeatureActive(Feature.LIGHT_BLOCKS)) {
+				fb.setVelocity(new Vector(0, 1, 0));
+				fb.setGravity(false);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+
+					@Override
+					public void run() {
+
+						fb.setGravity(true);
+						Random r = new Random();
+						int low = -50;
+						int high = 50;
+						double x = (r.nextInt(high - low) + low) / 10;
+						double z = (r.nextInt(high - low) + low) / 10;
+						fb.setVelocity(new Vector(x / 10, 0, z / 10));
+					}
+				}, 10);
+
+			}
+		}
+
 	}
 
 	@EventHandler
