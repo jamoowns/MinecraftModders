@@ -122,9 +122,10 @@ public class MabListener implements IGameEventListener {
 
 	private final StructureBuilder structureBuilder;
 
+	boolean mabmoSet;
 	Player mabmo;
 
-	boolean mabmoSet;
+	boolean whoCares = false;
 
 	Location Input;
 	boolean InputSet;
@@ -517,7 +518,7 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public void onFallingBlockLand(final EntityChangeBlockEvent event) {
-		if (event.getEntity() instanceof FallingBlock) {
+		if (whoCares && event.getEntity() instanceof FallingBlock) {
 			FallingBlock fallingBlock = (FallingBlock) event.getEntity();
 
 			if (event.getBlock().getType() == Material.AIR && fallingBlock.isOnGround()) {
@@ -693,48 +694,50 @@ public class MabListener implements IGameEventListener {
 				}
 			}
 		}
-		BlockFace facing = event.getPlayer().getFacing();
-		int x = 0;
-		int z = 0;
-		if (facing == BlockFace.SOUTH) {
-			x = 0;
-			z = -1;
-		} else if (facing == BlockFace.NORTH) {
-			x = 0;
-			z = 1;
-		} else if (facing == BlockFace.EAST) {
-			x = -1;
-			z = 0;
-		} else if (facing == BlockFace.WEST) {
-			x = 1;
-			z = 0;
-		}
-		Location belowBehindPlayer = event.getPlayer().getLocation().add(x, -1, z);
+		if (whoCares) {
+			BlockFace facing = event.getPlayer().getFacing();
+			int x = 0;
+			int z = 0;
+			if (facing == BlockFace.SOUTH) {
+				x = 0;
+				z = -1;
+			} else if (facing == BlockFace.NORTH) {
+				x = 0;
+				z = 1;
+			} else if (facing == BlockFace.EAST) {
+				x = -1;
+				z = 0;
+			} else if (facing == BlockFace.WEST) {
+				x = 1;
+				z = 0;
+			}
+			Location belowBehindPlayer = event.getPlayer().getLocation().add(x, -1, z);
 
-		if (!belowBehindPlayer.getBlock().isEmpty() && !belowBehindPlayer.getBlock().isLiquid()) {
+			if (!belowBehindPlayer.getBlock().isEmpty() && !belowBehindPlayer.getBlock().isLiquid()) {
 
-			Block block = event.getPlayer().getWorld().getBlockAt(belowBehindPlayer);
-			BlockData blockData = block.getBlockData();
-			block.setType(Material.AIR);
-			FallingBlock fb = block.getLocation().getWorld().spawnFallingBlock(block.getLocation().add(0.5, 0, 0.5),
-					blockData);
-			fb.setVelocity(new Vector(0, 1, 0));
-			fb.setGravity(false);
-			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+				Block block = event.getPlayer().getWorld().getBlockAt(belowBehindPlayer);
+				BlockData blockData = block.getBlockData();
+				block.setType(Material.AIR);
+				FallingBlock fb = block.getLocation().getWorld().spawnFallingBlock(block.getLocation().add(0.5, 0, 0.5),
+						blockData);
+				fb.setVelocity(new Vector(0, 1, 0));
+				fb.setGravity(false);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 
-				@Override
-				public void run() {
+					@Override
+					public void run() {
 
-					fb.setGravity(true);
-					Random r = new Random();
-					int low = -50;
-					int high = 50;
-					double x = (r.nextInt(high - low) + low) / 10;
-					double z = (r.nextInt(high - low) + low) / 10;
-					fb.setVelocity(new Vector(x / 10, 0, z / 10));
-				}
-			}, 10);
+						fb.setGravity(true);
+						Random r = new Random();
+						int low = -50;
+						int high = 50;
+						double x = (r.nextInt(high - low) + low) / 10;
+						double z = (r.nextInt(high - low) + low) / 10;
+						fb.setVelocity(new Vector(x / 10, 0, z / 10));
+					}
+				}, 10);
 
+			}
 		}
 
 	}
