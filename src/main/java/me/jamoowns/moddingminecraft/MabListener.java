@@ -693,28 +693,25 @@ public class MabListener implements IGameEventListener {
 				}
 			}
 		}
-		Location belowPlayer = event.getPlayer().getLocation().add(0, -1, 0);
+		BlockFace facing = event.getPlayer().getFacing();
+		int x = 0;
+		int z = 0;
+		if (facing == BlockFace.SOUTH) {
+			x = 0;
+			z = -1;
+		} else if (facing == BlockFace.NORTH) {
+			x = 0;
+			z = 1;
+		} else if (facing == BlockFace.EAST) {
+			x = -1;
+			z = 0;
+		} else if (facing == BlockFace.WEST) {
+			x = 1;
+			z = 0;
+		}
+		Location belowBehindPlayer = event.getPlayer().getLocation().add(x, -1, z);
 
-		if (!belowPlayer.getBlock().isEmpty() && !belowPlayer.getBlock().isLiquid()) {
-
-			BlockFace facing = event.getPlayer().getFacing();
-			int x = 0;
-			int z = 0;
-			if (facing == BlockFace.SOUTH) {
-				x = 0;
-				z = -1;
-			} else if (facing == BlockFace.NORTH) {
-				x = 0;
-				z = 1;
-			} else if (facing == BlockFace.EAST) {
-				x = -1;
-				z = 0;
-			} else if (facing == BlockFace.WEST) {
-				x = 1;
-				z = 0;
-			}
-
-			Location belowBehindPlayer = event.getPlayer().getLocation().add(x, -1, z);
+		if (!belowBehindPlayer.getBlock().isEmpty() && !belowBehindPlayer.getBlock().isLiquid()) {
 
 			Block block = event.getPlayer().getWorld().getBlockAt(belowBehindPlayer);
 			BlockData blockData = block.getBlockData();
