@@ -718,25 +718,23 @@ public class MabListener implements IGameEventListener {
 			block.setType(Material.AIR);
 			FallingBlock fb = block.getLocation().getWorld().spawnFallingBlock(block.getLocation().add(0.5, 0, 0.5),
 					blockData);
-			if (javaPlugin.featureTracker().isFeatureActive(Feature.LIGHT_BLOCKS)) {
-				fb.setVelocity(new Vector(0, 1, 0));
-				fb.setGravity(false);
-				Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
+			fb.setVelocity(new Vector(0, 1, 0));
+			fb.setGravity(false);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
 
-					@Override
-					public void run() {
+				@Override
+				public void run() {
 
-						fb.setGravity(true);
-						Random r = new Random();
-						int low = -50;
-						int high = 50;
-						double x = (r.nextInt(high - low) + low) / 10;
-						double z = (r.nextInt(high - low) + low) / 10;
-						fb.setVelocity(new Vector(x / 10, 0, z / 10));
-					}
-				}, 10);
+					fb.setGravity(true);
+					Random r = new Random();
+					int low = -50;
+					int high = 50;
+					double x = (r.nextInt(high - low) + low) / 10;
+					double z = (r.nextInt(high - low) + low) / 10;
+					fb.setVelocity(new Vector(x / 10, 0, z / 10));
+				}
+			}, 10);
 
-			}
 		}
 
 	}
