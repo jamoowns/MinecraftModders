@@ -40,6 +40,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -56,6 +57,7 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
@@ -512,8 +514,27 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onEntitySpawnEvent(EntitySpawnEvent event) {
+		// TODO: Make lantern a custom item and only remove that
 		if (event.getEntity().getName().contains("Lantern")) {
 			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onFallingBlockLand(final EntityChangeBlockEvent event) {
+		if (event.getEntity() instanceof FallingBlock) {
+			FallingBlock fallingBlock = (FallingBlock) event.getEntity();
+
+			if (event.getBlock().getType() == Material.GRAVEL) {
+				new BukkitRunnable() {
+					Location loc = event.getBlock().getLocation();
+
+					@Override
+					public void run() {
+						loc.getBlock().setType(Material.SAND);
+					}
+				}.runTaskLater(javaPlugin, 1L);
+			}
 		}
 	}
 
