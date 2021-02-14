@@ -125,7 +125,7 @@ public class MabListener implements IGameEventListener {
 	boolean mabmoSet;
 	Player mabmo;
 
-	boolean whoCares = true;
+	boolean whoCares = false;
 
 	Location Input;
 	boolean InputSet;
