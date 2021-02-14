@@ -1029,7 +1029,6 @@ public final class StructureBuilder {
 				} else if (cCount > 1 && cCount < 14) {
 					insert(0 + r, 0 + heightTracker, 0 + c, buildList[2], 0, 0, 0);
 				}
-
 			}
 			if (rCount == 15) {
 				if (WallOne) {
