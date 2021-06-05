@@ -27,7 +27,6 @@ public final class StructureBuilder {
 	private int[][][] cornerGrid;
 
 	boolean WallOne = true;
-
 	boolean WallTwo = true;
 	boolean WallThree = true;
 	boolean WallFour = true;

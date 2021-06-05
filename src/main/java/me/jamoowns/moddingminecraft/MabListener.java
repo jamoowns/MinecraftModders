@@ -65,6 +65,7 @@ import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.roominating.BuildingFoundations;
+import me.jamoowns.moddingminecraft.roominating.LabRoomBuilder;
 import me.jamoowns.moddingminecraft.roominating.StructureBuilder;
 import me.jamoowns.moddingminecraft.roominating.StructureBuilder.GridType;
 
@@ -122,6 +123,7 @@ public class MabListener implements IGameEventListener {
 
 	private final StructureBuilder structureBuilder;
 
+	private final LabRoomBuilder labRoomBuilder;
 	boolean mabmoSet;
 	Player mabmo;
 
@@ -137,6 +139,7 @@ public class MabListener implements IGameEventListener {
 		javaPlugin = aJavaPlugin;
 		setupCustomItems();
 		structureBuilder = new StructureBuilder();
+		labRoomBuilder = new LabRoomBuilder();
 	}
 
 	@Override
@@ -147,6 +150,14 @@ public class MabListener implements IGameEventListener {
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
 
+		if (event.getBlock().getType().equals(Material.LEVER) && event.getBlock().getLocation().clone().add(1, 0, 0)
+				.getBlock().getType().equals(Material.BLACK_GLAZED_TERRACOTTA)) {
+			labRoomBuilder.BuildRoom(21, 21, 11, event.getBlock().getLocation());
+		}
+		if (event.getBlock().getType().equals(Material.LEVER) && event.getBlock().getLocation().clone().add(0, 0, -1)
+				.getBlock().getType().equals(Material.LIGHT_BLUE_GLAZED_TERRACOTTA)) {
+			labRoomBuilder.BuildHall(21, event.getBlock().getLocation().add(0, 0, -1));
+		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Villager) {
