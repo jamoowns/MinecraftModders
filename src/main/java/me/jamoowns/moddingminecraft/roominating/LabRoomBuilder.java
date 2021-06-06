@@ -23,7 +23,8 @@ public final class LabRoomBuilder {
 	int layer = 0;
 
 	public void BuildHall(int width, Location origin) {
-
+		width = width * 24;
+		origin = origin.clone().getChunk().getBlock(5, 61, 8).getLocation();
 		Location tempLoc = origin.clone();
 
 		for (int x = 0; x < 9; x++) {
@@ -38,16 +39,32 @@ public final class LabRoomBuilder {
 						randomBlockPlace(tempLoc.add(x - 4, y - 3, -z), -2);
 					} else if (y == 3 && z % 3 == 2) {
 						randomBlockPlace(tempLoc.add(x - 4, y - 3, -z), -1);
-					} else if ((y == 0 && x == 4) || (y == 0 && x == 5 && z == (width + 6 + 2) / 2)
+					} else if ((y == 0 && x == 4 && z < width + 7) || (y == 0 && x == 5 && z == (width + 6 + 2) / 2)
 							|| (y == 0 && x == 6 && z == (width + 6 + 2) / 2)) {
 						tempLoc.add(x - 4, y - 3, -z).getBlock().setType(Material.RED_STAINED_GLASS);
 						tempLoc.add(0, -1, 0).getBlock().setType(Material.GLOWSTONE);
-					} else if ((y == 6 && x == 4) || (y == 6 && x == 5 && z == (width + 6 + 2) / 2)
+					} else if ((y == 6 && x == 4 && z < width + 7) || (y == 6 && x == 5 && z == (width + 6 + 2) / 2)
 							|| (y == 6 && x == 6 && z == (width + 6 + 2) / 2)) {
 						tempLoc.add(x - 4, y - 3, -z).getBlock().setType(Material.RED_STAINED_GLASS);
 						tempLoc.add(0, 1, 0).getBlock().setType(Material.GLOWSTONE);
 					} else {
 						randomBlockPlace(tempLoc.add(x - 4, y - 3, -z), 0);
+					}
+				}
+			}
+		}
+		for (int x = 0; x < 9; x++) {
+			for (int z = 0; z < 2; z++) {
+				for (int y = 0; y < 7; y++) {
+					tempLoc = origin.clone().add(0, 0, 2);
+					if ((y > 1 && y < 5) && (x > 1 && x < 7)) {
+						randomBlockPlace(tempLoc.add(x - 4, y - 3, -z), -4);
+					} else if (((y > 1 && y < 5) && (x == 1 || x == 2 || x == 7 || x == 6))
+							|| (y == 1 || y == 5) && (x > 1 && x < 7)) {
+						randomBlockPlace(tempLoc.add(x - 4, y - 3, -z), -2);
+					} else if ((y == 0 && x == 4 && z < 2)) {
+						tempLoc.add(x - 4, y - 3, -z).getBlock().setType(Material.RED_STAINED_GLASS);
+						tempLoc.add(0, -1, 0).getBlock().setType(Material.GLOWSTONE);
 					}
 				}
 			}
@@ -59,8 +76,12 @@ public final class LabRoomBuilder {
 	}
 
 	public void BuildRoom(int length, int width, int height, Location origin) {
-		StartBuild(length, width, height, origin.clone().add(length / 2 + 5, -3, 0));
-		EndBuild(origin.clone());
+		length = 24 * length;
+		width = 24 * width;
+		height = 32 * height;
+		StartBuild(length, width, height,
+				origin.clone().getChunk().getBlock(7, 61, 8).getLocation().add(length / 2 + 5, -3, 0));
+		EndBuild(origin.clone().getChunk().getBlock(7, 61, 8).getLocation());
 	}
 
 	public void CenterMass(int fill) {
