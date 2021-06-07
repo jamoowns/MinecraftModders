@@ -11,7 +11,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 
 public final class LabRoomBuilder {
 
@@ -22,8 +24,46 @@ public final class LabRoomBuilder {
 	int length = 0;
 	int layer = 0;
 
+	@EventHandler
+	public void aaaonGlassExplode(BlockExplodeEvent e) {
+		List<Material> mats = new ArrayList<Material>();
+		mats.add(Material.WHITE_STAINED_GLASS);
+		mats.add(Material.LIGHT_BLUE_CONCRETE);
+		mats.add(Material.GLOWSTONE);
+		mats.add(Material.QUARTZ_BLOCK);
+		mats.add(Material.QUARTZ_BRICKS);
+		mats.add(Material.QUARTZ_PILLAR);
+		mats.add(Material.CHISELED_QUARTZ_BLOCK);
+		mats.add(Material.SMOOTH_QUARTZ);
+		mats.add(Material.IRON_BLOCK);
+		mats.add(Material.WHITE_CONCRETE);
+		mats.add(Material.RED_STAINED_GLASS);
+		mats.add(Material.LIGHT_BLUE_GLAZED_TERRACOTTA);
+		mats.add(Material.BLACK_GLAZED_TERRACOTTA);
+		e.blockList().removeIf((block) -> mats.contains(block.getType()));
+	}
+
+	@EventHandler
+	public void aaaonGlassExplode(EntityExplodeEvent e) {
+		List<Material> mats = new ArrayList<Material>();
+		mats.add(Material.WHITE_STAINED_GLASS);
+		mats.add(Material.LIGHT_BLUE_CONCRETE);
+		mats.add(Material.GLOWSTONE);
+		mats.add(Material.QUARTZ_BLOCK);
+		mats.add(Material.QUARTZ_BRICKS);
+		mats.add(Material.QUARTZ_PILLAR);
+		mats.add(Material.CHISELED_QUARTZ_BLOCK);
+		mats.add(Material.SMOOTH_QUARTZ);
+		mats.add(Material.IRON_BLOCK);
+		mats.add(Material.WHITE_CONCRETE);
+		mats.add(Material.RED_STAINED_GLASS);
+		mats.add(Material.LIGHT_BLUE_GLAZED_TERRACOTTA);
+		mats.add(Material.BLACK_GLAZED_TERRACOTTA);
+		e.blockList().removeIf((block) -> mats.contains(block.getType()));
+	}
+
 	public void BuildHall(int width, Location origin) {
-		width = width * 24;
+		width = 16 * width + 8;
 		origin = origin.clone().getChunk().getBlock(5, 61, 8).getLocation();
 		Location tempLoc = origin.clone();
 
@@ -76,12 +116,16 @@ public final class LabRoomBuilder {
 	}
 
 	public void BuildRoom(int length, int width, int height, Location origin) {
-		length = 24 * length;
-		width = 24 * width;
-		height = 32 * height;
-		StartBuild(length, width, height,
-				origin.clone().getChunk().getBlock(7, 61, 8).getLocation().add(length / 2 + 5, -3, 0));
-		EndBuild(origin.clone().getChunk().getBlock(7, 61, 8).getLocation());
+		Location loc = origin.clone().getChunk().getBlock(7, 61, 8).getLocation();
+		if (width % 2 == 0) {
+			loc.add(0, 0, -8);
+		}
+		length = 16 * length + 8;
+		width = 16 * width + 8;
+		height = 24 * height + 8;
+
+		StartBuild(length, width, height, loc.clone().add(length / 2 + 5, -3, 0));
+		EndBuild(loc.clone());
 	}
 
 	public void CenterMass(int fill) {

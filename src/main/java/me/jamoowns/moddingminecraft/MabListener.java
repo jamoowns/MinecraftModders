@@ -66,6 +66,7 @@ import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.roominating.BuildingFoundations;
 import me.jamoowns.moddingminecraft.roominating.LabRoomBuilder;
+import me.jamoowns.moddingminecraft.roominating.SimpleChunks;
 import me.jamoowns.moddingminecraft.roominating.StructureBuilder;
 import me.jamoowns.moddingminecraft.roominating.StructureBuilder.GridType;
 
@@ -124,6 +125,7 @@ public class MabListener implements IGameEventListener {
 	private final StructureBuilder structureBuilder;
 
 	private final LabRoomBuilder labRoomBuilder;
+	private final SimpleChunks simpleChunks;
 	boolean mabmoSet;
 	Player mabmo;
 
@@ -140,6 +142,7 @@ public class MabListener implements IGameEventListener {
 		setupCustomItems();
 		structureBuilder = new StructureBuilder();
 		labRoomBuilder = new LabRoomBuilder();
+		simpleChunks = new SimpleChunks();
 	}
 
 	@Override
@@ -149,10 +152,12 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
-
+		if (event.getBlock().getType().equals(Material.GRASS_BLOCK)) {
+			simpleChunks.createChunk(1, event.getBlock().getLocation());
+		}
 		if (event.getBlock().getType().equals(Material.LEVER) && event.getBlock().getLocation().clone().add(1, 0, 0)
 				.getBlock().getType().equals(Material.BLACK_GLAZED_TERRACOTTA)) {
-			labRoomBuilder.BuildRoom(1, 1, 1, event.getBlock().getLocation());
+			labRoomBuilder.BuildRoom(6, 1, 1, event.getBlock().getLocation());
 		}
 		if (event.getBlock().getType().equals(Material.LEVER) && event.getBlock().getLocation().clone().add(0, 0, -1)
 				.getBlock().getType().equals(Material.LIGHT_BLUE_GLAZED_TERRACOTTA)) {
