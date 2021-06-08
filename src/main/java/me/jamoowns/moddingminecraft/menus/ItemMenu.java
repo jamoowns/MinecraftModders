@@ -35,7 +35,12 @@ public class ItemMenu implements ICustomMenu {
 			for (CustomItem item : itemsInCategory) {
 				inventory.setItem((row * 9) + column, item.asItem());
 				column++;
+				if (column >= 9) {
+					column = 0;
+					row++;
+				}
 			}
+			column = 0;
 			row++;
 		}
 
