@@ -88,8 +88,10 @@ public final class CustomItemListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onProjectileHit(ProjectileHitEvent event) {
+		System.err.println("Are we here?");
 		javaPlugin.customItems().getItem(event.getEntity()).filter(CustomItem::hasProjectileHitEvent)
 				.map(CustomItem::projectileHitEvent).ifPresent(c -> {
+					System.err.println("Pow!");
 					c.accept(event);
 					event.getEntity().remove();
 				});
