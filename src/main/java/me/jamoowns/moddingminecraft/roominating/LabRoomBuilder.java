@@ -59,6 +59,7 @@ public final class LabRoomBuilder {
 		mats.add(Material.RED_STAINED_GLASS);
 		mats.add(Material.LIGHT_BLUE_GLAZED_TERRACOTTA);
 		mats.add(Material.BLACK_GLAZED_TERRACOTTA);
+
 		e.blockList().removeIf((block) -> mats.contains(block.getType()));
 	}
 
