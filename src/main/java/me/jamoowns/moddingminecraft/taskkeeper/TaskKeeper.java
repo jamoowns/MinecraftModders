@@ -149,6 +149,8 @@ public final class TaskKeeper {
 
 	private final List<Task> tasks;
 
+	private final String DEFFAULT_BOARD_TASK_NAME = "tasks";
+
 	public TaskKeeper(JavaPlugin javaPlugin) {
 		boardItems = new ArrayList<>();
 		tasks = new ArrayList<>();
@@ -194,25 +196,24 @@ public final class TaskKeeper {
 		Optional<Task> task = Collections.find(tasks, Task::id, taskName);
 
 		if (task.isPresent() && !task.get().isComplete(player)) {
-			Score score = scoreboard.getObjective("tasks").getScore(task.get().describe(player));
+			Score score = scoreboard.getObjective(DEFFAULT_BOARD_TASK_NAME).getScore(task.get().describe(player));
 			score.getScoreboard().resetScores(task.get().describe(player));
 
 			task.get().incrementTask(player);
-			Score updatedScore = scoreboard.getObjective("tasks").getScore(task.get().describe(player));
+			Score updatedScore = scoreboard.getObjective(DEFFAULT_BOARD_TASK_NAME)
+					.getScore(task.get().describe(player));
 			updatedScore.setScore(tasks.indexOf(task.get()));
 
 			if (task.get().isComplete(player)) {
-				task.get().reward.accept(player);
+				task.get().giveReward(player);
 			}
 		}
 	}
 
 	void register(Player player) {
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective objective = board.registerNewObjective("tasks", "dummy", "-- Your tasks --");
+		Objective objective = board.registerNewObjective(DEFFAULT_BOARD_TASK_NAME, "dummy", "-- Your tasks --");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-		player.setScoreboard(board);
 
 		boardsByPlayer.put(player.getUniqueId(), board);
 
@@ -222,15 +223,18 @@ public final class TaskKeeper {
 		tasks.forEach(task -> {
 			addTask(player.getUniqueId(), task);
 		});
+		setBoardDisplay(player.getUniqueId());
 	}
 
 	private void addBoardItem(UUID player, BoardItem boardItem) {
+		setBoardDisplay(player);
 		Scoreboard scoreboard = boardsByPlayer.get(player);
 		if (!boardItem.hasPlayer(player)) {
 			boardItem.addPlayer(player);
 		}
-		Score score = scoreboard.getObjective("tasks").getScore(boardItem.describe(player));
+		Score score = scoreboard.getObjective(DEFFAULT_BOARD_TASK_NAME).getScore(boardItem.describe(player));
 		score.setScore(boardItems.indexOf(boardItem) + tasks.size());
+		setBoardDisplay(player);
 	}
 
 	private void addTask(UUID player, Task task) {
@@ -238,7 +242,18 @@ public final class TaskKeeper {
 		if (!task.hasPlayer(player)) {
 			task.addPlayer(player);
 		}
-		Score score = scoreboard.getObjective("tasks").getScore(task.describe(player));
+		Score score = scoreboard.getObjective(DEFFAULT_BOARD_TASK_NAME).getScore(task.describe(player));
 		score.setScore(tasks.indexOf(task));
+		setBoardDisplay(player);
+	}
+
+	private void setBoardDisplay(UUID player) {
+		Scoreboard scoreboard = boardsByPlayer.get(player);
+		Player p = Bukkit.getPlayer(player);
+		if (!boardItems.isEmpty() || !tasks.isEmpty()) {
+			p.setScoreboard(scoreboard);
+		} else {
+			p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+		}
 	}
 }

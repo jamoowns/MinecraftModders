@@ -94,8 +94,6 @@ public final class JamoListener implements IGameEventListener {
 
 		setupCustomItems();
 
-		taskKeeper.addBoardItem("Win BLOCKHUNTER");
-
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, () -> {
 			javaPlugin.teams().allTeams().stream().map(Army::teamMembers).flatMap(Collection::stream)
 					.filter(JamoListener::isMob).forEach(uuid -> {
