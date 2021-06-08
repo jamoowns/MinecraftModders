@@ -62,6 +62,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
+import me.jamoowns.moddingminecraft.customitems.ItemCategory;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.roominating.BuildingFoundations;
@@ -946,7 +947,7 @@ public class MabListener implements IGameEventListener {
 	}
 
 	private void setupCustomItems() {
-		portalInputItem = new CustomItem("Portal Input", Material.WARPED_DOOR);
+		portalInputItem = new CustomItem("Portal Input", Material.WARPED_DOOR, ItemCategory.PORTALS);
 		portalInputItem.setBlockPlaceEvent(event -> {
 
 			Block bl = event.getBlockPlaced();
@@ -1068,7 +1069,7 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(portalInputItem);
 
-		portalOutputItem = new CustomItem("Portal Output", Material.CRIMSON_DOOR);
+		portalOutputItem = new CustomItem("Portal Output", Material.CRIMSON_DOOR, ItemCategory.PORTALS);
 		portalOutputItem.setBlockPlaceEvent(event -> {
 
 			Block bl = event.getBlockPlaced();
@@ -1190,7 +1191,7 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(portalOutputItem);
 
-		straightChunkItem = new CustomItem("Straight Chunk", Material.RED_SANDSTONE_WALL);
+		straightChunkItem = new CustomItem("Straight Chunk", Material.RED_SANDSTONE_WALL, ItemCategory.BUILDING);
 		straightChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.STRAIGHT,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
@@ -1203,7 +1204,7 @@ public class MabListener implements IGameEventListener {
 		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(straightChunkItem);
 
-		towerChunkItem = new CustomItem("Tower Chunk", Material.END_STONE_BRICK_WALL);
+		towerChunkItem = new CustomItem("Tower Chunk", Material.END_STONE_BRICK_WALL, ItemCategory.BUILDING);
 		towerChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.TOWER,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
@@ -1216,7 +1217,7 @@ public class MabListener implements IGameEventListener {
 		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(towerChunkItem);
 
-		cornerChunkItem = new CustomItem("Corner Chunk", Material.BRICK_WALL);
+		cornerChunkItem = new CustomItem("Corner Chunk", Material.BRICK_WALL, ItemCategory.BUILDING);
 		cornerChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.CORNER,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
@@ -1229,7 +1230,7 @@ public class MabListener implements IGameEventListener {
 		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(cornerChunkItem);
 
-		tSectionChunkItem = new CustomItem("T Section Chunk", Material.NETHER_BRICK_WALL);
+		tSectionChunkItem = new CustomItem("T Section Chunk", Material.NETHER_BRICK_WALL, ItemCategory.BUILDING);
 		tSectionChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.T_SECTION,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
@@ -1242,7 +1243,7 @@ public class MabListener implements IGameEventListener {
 		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(tSectionChunkItem);
 
-		crossChunkItem = new CustomItem("Cross Chunk", Material.DIORITE_WALL);
+		crossChunkItem = new CustomItem("Cross Chunk", Material.DIORITE_WALL, ItemCategory.BUILDING);
 		crossChunkItem.setBlockPlaceEvent(event -> {
 			structureBuilder.buildGrid(GridType.CROSS,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
@@ -1255,7 +1256,7 @@ public class MabListener implements IGameEventListener {
 		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(crossChunkItem);
 
-		deadEndChunkItem = new CustomItem("Dead End Chunk", Material.PRISMARINE_WALL);
+		deadEndChunkItem = new CustomItem("Dead End Chunk", Material.PRISMARINE_WALL, ItemCategory.BUILDING);
 		deadEndChunkItem.setSpellCastEvent(event -> {
 			structureBuilder.buildGrid(GridType.DEAD_END,
 					BuildingFoundations.standadiseDirection(event.getPlayer().getLocation().getYaw()),
@@ -1269,7 +1270,7 @@ public class MabListener implements IGameEventListener {
 		multiShotBowItem.asItem().setItemMeta(meta);
 		javaPlugin.customItems().register(multiShotBowItem);
 
-		creeperArrowItem = new CustomItem("Creeper Arrow", Material.ARROW);
+		creeperArrowItem = new CustomItem("Creeper Arrow", Material.ARROW, ItemCategory.ARROWS);
 		creeperArrowItem.setProjectileHitEvent(event -> {
 			int result = RANDOM.nextInt(4) + 1;
 			for (int i = 0; i < result; i++) {
@@ -1278,13 +1279,13 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(creeperArrowItem);
 
-		explosiveArrowItem = new CustomItem("Explosive Arrow", Material.ARROW);
+		explosiveArrowItem = new CustomItem("Explosive Arrow", Material.ARROW, ItemCategory.ARROWS);
 		explosiveArrowItem.setProjectileHitEvent(event -> {
 			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
 		});
 		javaPlugin.customItems().register(explosiveArrowItem);
 
-		treeArrowItem = new CustomItem("Tree Arrow", Material.ARROW);
+		treeArrowItem = new CustomItem("Tree Arrow", Material.ARROW, ItemCategory.ARROWS);
 		treeArrowItem.setProjectileHitEvent(event -> {
 			Location loc = event.getEntity().getLocation();
 			if (!event.getEntity().getLocation().getWorld().getBlockAt(loc.add(0, -1, 0)).getType().name()
@@ -1296,7 +1297,7 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(treeArrowItem);
 
-		rotateArrowItem = new CustomItem("Rotate Arrow", Material.ARROW);
+		rotateArrowItem = new CustomItem("Rotate Arrow", Material.ARROW, ItemCategory.ARROWS);
 		rotateArrowItem.setProjectileHitEvent(event -> {
 			Random r = new Random();
 			int low = 1;
@@ -1342,7 +1343,7 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(rotateArrowItem);
 
-		fillArrowItem = new CustomItem("Fill Arrow", Material.ARROW);
+		fillArrowItem = new CustomItem("Fill Arrow", Material.ARROW, ItemCategory.ARROWS);
 		fillArrowItem.setProjectileHitEvent(event -> {
 			for (int i = 0; i < 9; i++) {
 				if (event.getEntity().getLocation().getY() + i < 63) {
@@ -1363,7 +1364,8 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(fillArrowItem);
 
-		swapsiesSplashPotionItem = new CustomItem("Swapsies When Dropsies", Material.SPLASH_POTION);
+		swapsiesSplashPotionItem = new CustomItem("Swapsies When Dropsies", Material.SPLASH_POTION,
+				ItemCategory.POTIONS);
 		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
 			switchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
 		});
@@ -1372,7 +1374,7 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(swapsiesSplashPotionItem);
 
-		medusaSplashPotionItem = new CustomItem("Tears of Medusa", Material.SPLASH_POTION);
+		medusaSplashPotionItem = new CustomItem("Tears of Medusa", Material.SPLASH_POTION, ItemCategory.POTIONS);
 		medusaSplashPotionItem.setPotionSplashEvent(event -> {
 			potionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.SLOW, 100, 200);
 			potionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.JUMP, 100, 100000);
@@ -1382,7 +1384,7 @@ public class MabListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(medusaSplashPotionItem);
 
-		explosiveSnowBallItem = new CustomItem("Ice Creep", Material.SNOWBALL);
+		explosiveSnowBallItem = new CustomItem("Ice Creep", Material.SNOWBALL, ItemCategory.MISC);
 		explosiveSnowBallItem.setProjectileHitEvent(event -> {
 			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
 		});

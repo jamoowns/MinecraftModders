@@ -40,6 +40,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
+import me.jamoowns.moddingminecraft.customitems.ItemCategory;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.roominating.BuildingFoundations;
@@ -217,7 +218,7 @@ public final class JamoListener implements IGameEventListener {
 	}
 
 	private void setupCustomItems() {
-		normalZombieStick = new CustomItem("Normal Zombie", Material.ZOMBIE_HEAD);
+		normalZombieStick = new CustomItem("Normal Zombie", Material.ZOMBIE_HEAD, ItemCategory.MOBS);
 		normalZombieStick.setSpellCastEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Zombie.class);
@@ -226,7 +227,7 @@ public final class JamoListener implements IGameEventListener {
 		javaPlugin.customItems().register(normalZombieStick);
 		mobSpawningItems.add(normalZombieStick);
 
-		normalSkeletonStick = new CustomItem("Normal Skeleton", Material.SKELETON_SKULL);
+		normalSkeletonStick = new CustomItem("Normal Skeleton", Material.SKELETON_SKULL, ItemCategory.MOBS);
 		normalSkeletonStick.setSpellCastEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Skeleton.class);
@@ -235,7 +236,7 @@ public final class JamoListener implements IGameEventListener {
 		javaPlugin.customItems().register(normalSkeletonStick);
 		mobSpawningItems.add(normalSkeletonStick);
 
-		guardSniperStick = new CustomItem("Guard | Sniper", Material.IRON_BARS);
+		guardSniperStick = new CustomItem("Guard | Sniper", Material.IRON_BARS, ItemCategory.MOBS);
 		guardSniperStick.setSpellCastEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Skeleton.class);
@@ -245,7 +246,7 @@ public final class JamoListener implements IGameEventListener {
 		javaPlugin.customItems().register(guardSniperStick);
 		mobSpawningItems.add(guardSniperStick);
 
-		normalCreeperStick = new CustomItem("Normal Creeper", Material.CREEPER_HEAD);
+		normalCreeperStick = new CustomItem("Normal Creeper", Material.CREEPER_HEAD, ItemCategory.MOBS);
 		normalCreeperStick.setSpellCastEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			Mob mob = event.getLocation().getWorld().spawn(spawnLocation, Creeper.class);
@@ -254,7 +255,7 @@ public final class JamoListener implements IGameEventListener {
 		javaPlugin.customItems().register(normalCreeperStick);
 		mobSpawningItems.add(normalCreeperStick);
 
-		normalMobStick = new CustomItem("Unkown Mob", Material.SOUL_TORCH);
+		normalMobStick = new CustomItem("Unkown Mob", Material.SOUL_TORCH, ItemCategory.MOBS);
 		normalMobStick.setSpellCastEvent(event -> {
 			Location spawnLocation = event.getLocation().add(0, 1, 0);
 			List<EntityType> mobList = Arrays.asList(EntityType.ZOMBIE, EntityType.SKELETON,
@@ -275,7 +276,7 @@ public final class JamoListener implements IGameEventListener {
 		javaPlugin.customItems().register(normalMobStick);
 		mobSpawningItems.add(normalMobStick);
 
-		normalRoomItem = new CustomItem("Standard Room", Material.LECTERN);
+		normalRoomItem = new CustomItem("Standard Room", Material.LECTERN, ItemCategory.BUILDING);
 		normalRoomItem.setBlockPlaceEvent(event -> {
 			event.getBlockPlaced().setType(Material.AIR);
 			Location startPoint = event.getBlockPlaced().getLocation().add(0, 0, 0);
@@ -288,13 +289,13 @@ public final class JamoListener implements IGameEventListener {
 		});
 		javaPlugin.customItems().register(normalRoomItem);
 
-		skeletonArrowItem = new CustomItem("Skeleton Arrow", Material.ARROW);
+		skeletonArrowItem = new CustomItem("Skeleton Arrow", Material.ARROW, ItemCategory.ARROWS);
 		skeletonArrowItem.setProjectileHitEvent(event -> {
 			event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Skeleton.class);
 		});
 		javaPlugin.customItems().register(skeletonArrowItem);
 
-		lightningAnusItem = new CustomItem("Lightning Storm", Material.CHAIN);
+		lightningAnusItem = new CustomItem("Lightning Storm", Material.CHAIN, ItemCategory.MISC);
 		lightningAnusItem.setBlockPlaceEvent(event -> {
 			event.getBlockPlaced().setType(Material.AIR);
 			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
