@@ -28,7 +28,7 @@ public class ItemMenu implements ICustomMenu {
 		int row = 0;
 		Map<ItemCategory, List<CustomItem>> itemsByCategory = allItems.stream()
 				.collect(Collectors.groupingBy(CustomItem::getCategory));
-		inventory = Bukkit.createInventory(null, itemsByCategory.size() * 9, "Custom Items");
+		inventory = Bukkit.createInventory(null, Math.max(itemsByCategory.size(), 1) * 9, "Custom Items");
 		for (List<CustomItem> itemsInCategory : itemsByCategory.values()) {
 			for (CustomItem item : itemsInCategory) {
 				inventory.setItem((row * 9) + column, item.asItem());
