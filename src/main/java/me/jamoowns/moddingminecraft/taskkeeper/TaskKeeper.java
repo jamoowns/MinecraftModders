@@ -9,62 +9,22 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
+import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.fated.Collections;
 
+/**
+ * Scoreboard based tasks, and information.
+ */
 public final class TaskKeeper {
-
-	private class BoardItem implements IBoardItem {
-		private String boardItem;
-
-		private Map<UUID, Boolean> statusPerPlayer;
-
-		BoardItem(String aBoardItem) {
-			boardItem = aBoardItem;
-			statusPerPlayer = new HashMap<>();
-		}
-
-		@Override
-		public void addPlayer(UUID player) {
-			statusPerPlayer.put(player, false);
-		}
-
-		@Override
-		public String describe(UUID player) {
-			return ChatColor.YELLOW + boardItem;
-		}
-
-		@Override
-		public boolean hasPlayer(UUID player) {
-			return statusPerPlayer.containsKey(player);
-		}
-
-		@Override
-		public String id() {
-			return boardItem;
-		}
-	}
-
-	private interface IBoardItem {
-
-		public boolean hasPlayer(UUID player);
-
-		void addPlayer(UUID player);
-
-		String describe(UUID player);
-
-		String id();
-	}
 
 	private class PlayerEventListener implements Listener {
 
@@ -80,67 +40,6 @@ public final class TaskKeeper {
 		}
 	}
 
-	private class Task implements IBoardItem {
-		private String taskName;
-
-		private Map<UUID, Integer> statusPerPlayer;
-
-		private Consumer<UUID> reward;
-
-		private Integer goal;
-
-		Task(String aTaskName, Consumer<UUID> aReward, Integer aGoal) {
-			taskName = aTaskName;
-			statusPerPlayer = new HashMap<>();
-			reward = aReward;
-			goal = aGoal;
-		}
-
-		@Override
-		public void addPlayer(UUID player) {
-			statusPerPlayer.put(player, 0);
-		}
-
-		@Override
-		public String describe(UUID player) {
-			return ChatColor.GREEN + taskName + ChatColor.YELLOW + " - " + ChatColor.AQUA
-					+ goalStatusDescription(player) + ChatColor.YELLOW + " - " + ChatColor.AQUA
-					+ completeDescription(player);
-		}
-
-		public void giveReward(UUID player) {
-			reward.accept(player);
-		}
-
-		@Override
-		public boolean hasPlayer(UUID player) {
-			return statusPerPlayer.containsKey(player);
-		}
-
-		@Override
-		public String id() {
-			return taskName;
-		}
-
-		public void incrementTask(UUID player) {
-			if (statusPerPlayer.get(player) < goal) {
-				statusPerPlayer.put(player, statusPerPlayer.get(player) + 1);
-			}
-		}
-
-		public boolean isComplete(UUID player) {
-			return statusPerPlayer.get(player) == goal;
-		}
-
-		private final String completeDescription(UUID player) {
-			return isComplete(player) ? "COMPLETED" : "INCOMPLETE";
-		}
-
-		private final String goalStatusDescription(UUID player) {
-			return statusPerPlayer.get(player) + "/" + goal;
-		}
-	}
-
 	private Map<UUID, Scoreboard> boardsByPlayer;
 
 	private final PlayerEventListener playerEventListener;
@@ -151,7 +50,12 @@ public final class TaskKeeper {
 
 	private final String DEFFAULT_BOARD_TASK_NAME = "tasks";
 
-	public TaskKeeper(JavaPlugin javaPlugin) {
+	/**
+	 * Constructor.
+	 * 
+	 * @param javaPlugin the singleton plugin
+	 */
+	public TaskKeeper(ModdingMinecraft javaPlugin) {
 		boardItems = new ArrayList<>();
 		tasks = new ArrayList<>();
 
@@ -165,6 +69,11 @@ public final class TaskKeeper {
 		javaPlugin.getServer().getPluginManager().registerEvents(playerEventListener, javaPlugin);
 	}
 
+	/**
+	 * Adds a board item for all players to see.
+	 * 
+	 * @param aBoardItem
+	 */
 	public final void addBoardItem(String aBoardItem) {
 		BoardItem boardItem = new BoardItem(aBoardItem);
 		boardItems.add(boardItem);
@@ -174,6 +83,12 @@ public final class TaskKeeper {
 		}
 	}
 
+	/**
+	 * Adds a board item for a specific player to see.
+	 * 
+	 * @param player     player to add board item to
+	 * @param aBoardItem board text to add
+	 */
 	public final void addBoardItem(UUID player, String aBoardItem) {
 		BoardItem boardItem = new BoardItem(aBoardItem);
 		boardItems.add(boardItem);
@@ -181,6 +96,13 @@ public final class TaskKeeper {
 		addBoardItem(player, boardItem);
 	}
 
+	/**
+	 * Adds a task and the reward.
+	 * 
+	 * @param taskName name of the task to add
+	 * @param reward   reward function to give to the player
+	 * @param goal     the goal amount of the task
+	 */
 	public final void addTask(String taskName, Consumer<UUID> reward, Integer goal) {
 		Task task = new Task(taskName, reward, goal);
 		tasks.add(task);
@@ -190,6 +112,12 @@ public final class TaskKeeper {
 		}
 	}
 
+	/**
+	 * Increments a task by one success.
+	 * 
+	 * @param player   player to increment task of
+	 * @param taskName taskname to increment
+	 */
 	public final void incrementTask(UUID player, String taskName) {
 		Scoreboard scoreboard = boardsByPlayer.get(player);
 
