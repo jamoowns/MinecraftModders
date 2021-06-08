@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -88,8 +89,6 @@ public final class CustomItemListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onProjectileHit(ProjectileHitEvent event) {
-		System.err.println("Are we here?");
-		System.err.println(javaPlugin.customItems().getItem(event.getEntity()));
 		javaPlugin.customItems().getItem(event.getEntity()).filter(CustomItem::hasProjectileHitEvent)
 				.map(CustomItem::projectileHitEvent).ifPresent(c -> {
 					c.accept(event);
@@ -105,7 +104,8 @@ public final class CustomItemListener implements IGameEventListener {
 		ProjectileSource shooter = event.getEntity().getShooter();
 		if (shooter instanceof Player) {
 			ItemStack item = ((Player) shooter).getInventory().getItemInMainHand();
-			if (event.getEntity() != null && item != null && item.getItemMeta() != null) {
+			if (event.getEntityType() != EntityType.ARROW && event.getEntity() != null && item != null
+					&& item.getItemMeta() != null) {
 				event.getEntity().setCustomName(item.getItemMeta().getDisplayName());
 			}
 		}

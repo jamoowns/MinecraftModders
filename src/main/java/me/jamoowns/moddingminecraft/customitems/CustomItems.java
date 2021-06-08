@@ -54,12 +54,10 @@ public final class CustomItems {
 	}
 
 	protected final Optional<CustomItem> getItem(Projectile projectile) {
-		System.err.println(projectile.getCustomName());
 		if (projectile.getCustomName() == null) {
 			return Optional.empty();
 		}
 		CustomItem customItem = allCustomItemsByName.get(projectile.getCustomName());
-		System.err.println(customItem);
 		if (customItem == null) {
 			return Optional.empty();
 		}
