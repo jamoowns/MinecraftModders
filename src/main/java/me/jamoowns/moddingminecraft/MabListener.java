@@ -161,7 +161,7 @@ public class MabListener implements IGameEventListener {
 		}
 		if (event.getBlock().getType().equals(Material.LEVER) && event.getBlock().getLocation().clone().add(1, 0, 0)
 				.getBlock().getType().equals(Material.GREEN_GLAZED_TERRACOTTA)) {
-			labRoomBuilder.BuildRoom(6, 3, 1, event.getBlock().getLocation());
+			labRoomBuilder.BuildRoom(6, 3, 3, event.getBlock().getLocation());
 		}
 		if (event.getBlock().getType().equals(Material.LEVER) && event.getBlock().getLocation().clone().add(0, 0, -1)
 				.getBlock().getType().equals(Material.LIGHT_BLUE_GLAZED_TERRACOTTA)) {
