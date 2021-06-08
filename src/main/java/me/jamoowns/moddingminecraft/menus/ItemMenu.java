@@ -25,12 +25,11 @@ public class ItemMenu implements ICustomMenu {
 	public ItemMenu(ModdingMinecraft javaPlugin) {
 		List<CustomItem> allItems = Lists.newArrayList(javaPlugin.customItems().allItems());
 
-		inventory = Bukkit.createInventory(null, (int) (Math.ceil(allItems.size() / 9.0) * 9.0), "Custom Items");
-
 		int column = 0;
 		int row = 0;
 		Map<ItemCategory, List<CustomItem>> itemsByCategory = allItems.stream()
 				.collect(Collectors.groupingBy(CustomItem::getCategory));
+		inventory = Bukkit.createInventory(null, (int) (Math.ceil(itemsByCategory.size() / 9.0) * 9.0), "Custom Items");
 		for (List<CustomItem> itemsInCategory : itemsByCategory.values()) {
 			for (CustomItem item : itemsInCategory) {
 				inventory.setItem((row * 9) + column, item.asItem());
