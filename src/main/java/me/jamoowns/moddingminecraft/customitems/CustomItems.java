@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.customitems;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -18,7 +19,7 @@ public final class CustomItems {
 		allCustomItemsByName = new HashMap<>();
 	}
 
-	public final Iterable<CustomItem> allItems() {
+	public final Collection<CustomItem> allItems() {
 		return publicCustomItemsByName.values();
 	}
 

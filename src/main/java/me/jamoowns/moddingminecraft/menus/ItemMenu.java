@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.menus;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -8,8 +9,6 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import com.google.common.collect.Lists;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.fated.Collections;
@@ -23,13 +22,13 @@ public class ItemMenu implements ICustomMenu {
 	private List<CustomMenuItem> menuItems;
 
 	public ItemMenu(ModdingMinecraft javaPlugin) {
-		List<CustomItem> allItems = Lists.newArrayList(javaPlugin.customItems().allItems());
+		Collection<CustomItem> allItems = javaPlugin.customItems().allItems();
 
 		int column = 0;
 		int row = 0;
 		Map<ItemCategory, List<CustomItem>> itemsByCategory = allItems.stream()
 				.collect(Collectors.groupingBy(CustomItem::getCategory));
-		inventory = Bukkit.createInventory(null, (int) (Math.ceil(itemsByCategory.size() / 9.0) * 9.0), "Custom Items");
+		inventory = Bukkit.createInventory(null, itemsByCategory.size() * 9, "Custom Items");
 		for (List<CustomItem> itemsInCategory : itemsByCategory.values()) {
 			for (CustomItem item : itemsInCategory) {
 				inventory.setItem((row * 9) + column, item.asItem());
