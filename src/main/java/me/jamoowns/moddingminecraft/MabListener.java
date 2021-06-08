@@ -159,9 +159,17 @@ public class MabListener implements IGameEventListener {
 				.getBlock().getType().equals(Material.BLACK_GLAZED_TERRACOTTA)) {
 			labRoomBuilder.BuildRoom(1, 1, 1, event.getBlock().getLocation());
 		}
+		if (event.getBlock().getType().equals(Material.REDSTONE_TORCH) && event.getBlock().getLocation().clone()
+				.add(1, 0, 0).getBlock().getType().equals(Material.BLACK_GLAZED_TERRACOTTA)) {
+			labRoomBuilder.BuildRoom(6, 3, 1, event.getBlock().getLocation());
+		}
 		if (event.getBlock().getType().equals(Material.LEVER) && event.getBlock().getLocation().clone().add(0, 0, -1)
 				.getBlock().getType().equals(Material.LIGHT_BLUE_GLAZED_TERRACOTTA)) {
 			labRoomBuilder.BuildHall(1, event.getBlock().getLocation().add(0, 0, -1));
+		}
+		if (event.getBlock().getType().equals(Material.REDSTONE_TORCH) && event.getBlock().getLocation().clone()
+				.add(0, 0, -1).getBlock().getType().equals(Material.LIGHT_BLUE_GLAZED_TERRACOTTA)) {
+			labRoomBuilder.BuildHall(3, event.getBlock().getLocation().add(0, 0, -1));
 		}
 		if (event.getBlock().getType().equals(Material.HAY_BLOCK)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
