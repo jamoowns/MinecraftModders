@@ -1,6 +1,7 @@
 package me.jamoowns.moddingminecraft.menus;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import com.google.common.collect.Lists;
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.fated.Collections;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
+import me.jamoowns.moddingminecraft.customitems.ItemCategory;
 
 public class ItemMenu implements ICustomMenu {
 
@@ -25,7 +27,17 @@ public class ItemMenu implements ICustomMenu {
 
 		inventory = Bukkit.createInventory(null, (int) (Math.ceil(allItems.size() / 9.0) * 9.0), "Custom Items");
 
-		allItems.stream().map(CustomItem::asItem).forEach(inventory::addItem);
+		int column = 0;
+		int row = 0;
+		Map<ItemCategory, List<CustomItem>> itemsByCategory = allItems.stream()
+				.collect(Collectors.groupingBy(CustomItem::getCategory));
+		for (List<CustomItem> itemsInCategory : itemsByCategory.values()) {
+			for (CustomItem item : itemsInCategory) {
+				inventory.setItem((row * 9) + column, item.asItem());
+				column++;
+			}
+			row++;
+		}
 
 		menuItems = allItems.stream().map(
 				item -> new CustomMenuItem(item.name(), item.material(), p -> p.getInventory().addItem(item.asItem())))

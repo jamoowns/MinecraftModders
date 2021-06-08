@@ -22,7 +22,26 @@ public final class CustomItems {
 		return publicCustomItemsByName.values();
 	}
 
-	public final Optional<CustomItem> getItem(ItemStack item) {
+	/**
+	 * Register a publicly accessible item.
+	 * 
+	 * @param item item to register
+	 */
+	public final void register(CustomItem item) {
+		allCustomItemsByName.put(item.name(), item);
+		publicCustomItemsByName.put(item.name(), item);
+	}
+
+	/**
+	 * Register an item but dont include it in the item list.
+	 * 
+	 * @param item item to register
+	 */
+	public final void silentRegister(CustomItem item) {
+		allCustomItemsByName.put(item.name(), item);
+	}
+
+	protected final Optional<CustomItem> getItem(ItemStack item) {
 		if (item.getItemMeta() == null) {
 			return Optional.empty();
 		}
@@ -33,7 +52,7 @@ public final class CustomItems {
 		return Optional.of(customItem);
 	}
 
-	public final Optional<CustomItem> getItem(Projectile projectile) {
+	protected final Optional<CustomItem> getItem(Projectile projectile) {
 		if (projectile.getCustomName() == null) {
 			return Optional.empty();
 		}
@@ -42,14 +61,5 @@ public final class CustomItems {
 			return Optional.empty();
 		}
 		return Optional.of(customItem);
-	}
-
-	public final void register(CustomItem item) {
-		allCustomItemsByName.put(item.name(), item);
-		publicCustomItemsByName.put(item.name(), item);
-	}
-
-	public final void silentRegister(CustomItem item) {
-		allCustomItemsByName.put(item.name(), item);
 	}
 }

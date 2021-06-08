@@ -31,8 +31,11 @@ public final class CustomItem {
 
 	private Integer maxRange;
 
-	public CustomItem(String aName, ItemStack aItem) {
+	private ItemCategory category;
+
+	public CustomItem(String aName, ItemStack aItem, ItemCategory aCategory) {
 		name = aName;
+		category = aCategory;
 		blockPlaceEvent = empty();
 		projectileHitEvent = empty();
 		potionSplashEvent = empty();
@@ -46,7 +49,11 @@ public final class CustomItem {
 	}
 
 	public CustomItem(String aName, Material aMaterial) {
-		this(aName, new ItemStack(aMaterial));
+		this(aName, new ItemStack(aMaterial), ItemCategory.MISC);
+	}
+
+	public CustomItem(String aName, Material aMaterial, ItemCategory aCategory) {
+		this(aName, new ItemStack(aMaterial), aCategory);
 	}
 
 	public final ItemStack asItem() {
@@ -55,6 +62,10 @@ public final class CustomItem {
 
 	public final Consumer<BlockPlaceEvent> blockPlaceEvent() {
 		return blockPlaceEvent.get();
+	}
+
+	public ItemCategory getCategory() {
+		return category;
 	}
 
 	public final boolean hasBlockPlaceEvent() {
