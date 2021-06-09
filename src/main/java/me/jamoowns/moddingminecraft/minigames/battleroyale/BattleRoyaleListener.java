@@ -62,6 +62,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private HashMap<Player, ItemStack[]> oldInvs;
 
+	private ArrayList<Location> flagBlockLocations;
+
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		currentGameState = GameState.STOPPED;
@@ -81,9 +83,10 @@ public final class BattleRoyaleListener implements IGameEventListener {
 					event.getItemInHand().setAmount(0);
 					event.getBlock().setType(Material.AIR);
 					Integer currentScore = playerScoreById.get(event.getPlayer().getUniqueId());
-					Location scoreLocation = playerHome.clone().add(0, currentScore, 0);
+					Integer updatedScore = currentScore + 1;
+					Location scoreLocation = playerHome.clone().add(0, updatedScore, 0);
 					event.getBlock().getWorld().getBlockAt(scoreLocation).setType(goalBlock.material());
-					playerScoreById.put(event.getPlayer().getUniqueId(), currentScore + 1);
+					playerScoreById.put(event.getPlayer().getUniqueId(), updatedScore);
 					boolean hasWon = checkForVictory(event.getPlayer());
 					if (!hasWon) {
 						for (UUID uuid : playerHomeLocationById.keySet()) {
@@ -120,21 +123,23 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	public final void cleanup() {
 		goalStands.forEach(l -> l.getBlock().setType(Material.AIR));
 		goalStands.clear();
+		flagBlockLocations.forEach(l -> l.getBlock().setType(Material.AIR));
+		flagBlockLocations.clear();
 		playerScoreById.clear();
 		playerHomeItemById.clear();
 		playerHomeLocationById.values().forEach(l -> l.getBlock().setType(Material.AIR));
 		playerHomeLocationById.clear();
-		if (currentGameState != GameState.STOPPED) {
-			currentGameState = GameState.STOPPED;
-			Broadcaster.broadcastGameInfo(GAME_NAME + " has been stopped!");
-		}
-
 		for (Map.Entry<Player, ItemStack[]> entry : oldInvs.entrySet()) {
 			Player player = entry.getKey();
 			ItemStack[] savedInventory = entry.getValue();
 
 			player.getInventory().setContents(savedInventory);
 			player.updateInventory();
+		}
+		oldInvs.clear();
+		if (currentGameState != GameState.STOPPED) {
+			currentGameState = GameState.STOPPED;
+			Broadcaster.broadcastGameInfo(GAME_NAME + " has been stopped!");
 		}
 	}
 
@@ -223,10 +228,13 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		locations.add(baseBlock.getLocation().add(0, 0, -1));
 		locations.add(baseBlock.getLocation().add(0, 0, 1));
 		locations.forEach(location -> baseBlock.getWorld().getBlockAt(location).setType(baseColour));
+		flagBlockLocations.addAll(locations);
 
 		/* Mast. */
 		for (int i = 1; i <= GOAL_SCORE; i++) {
-			baseBlock.getWorld().getBlockAt(baseBlock.getLocation().add(0, i, 0)).setType(Material.WARPED_FENCE);
+			Location location = baseBlock.getLocation().add(0, i, 0);
+			flagBlockLocations.add(location);
+			baseBlock.getWorld().getBlockAt(location).setType(Material.WARPED_FENCE);
 		}
 
 		/* Flag. */
@@ -239,7 +247,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		locations.add(topBlock.clone().add(3, 0, 0));
 		locations.add(topBlock.clone().add(3, -1, 0));
 		locations.forEach(location -> baseBlock.getWorld().getBlockAt(location).setType(flagColour));
-
+		flagBlockLocations.addAll(locations);
 	}
 
 	private boolean checkForVictory(Player player) {
