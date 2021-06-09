@@ -48,7 +48,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private ModdingMinecraft javaPlugin;
 
-	HashMap<Player, Inventory> oldInvs = new HashMap<Player, Inventory>();
+	private HashMap<Player, Inventory> oldInvs = new HashMap<Player, Inventory>();
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -120,6 +120,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			oldInvs.put(p, p.getInventory());
 			p.getInventory().clear();
 			p.updateInventory();
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Hashmap size = " + oldInvs.size());
 			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", Material.GREEN_BED);
 			homeStand.setBlockPlaceEvent(event -> {
 				if (currentGameState == GameState.SETUP) {
