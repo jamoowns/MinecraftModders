@@ -98,11 +98,15 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			currentGameState = GameState.STOPPED;
 			Broadcaster.broadcastGameInfo(GAME_NAME + " has been stopped!");
 		}
+
+		Broadcaster.broadcastGameInfo(GAME_NAME + " Hashmap size = " + oldInvs.size());
 		for (Map.Entry<Player, Inventory> entry : oldInvs.entrySet()) {
 			Player key = entry.getKey();
 			Inventory value = entry.getValue();
 			key.getInventory().setContents(value.getContents());
 			key.updateInventory();
+
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Hashmap size = " + oldInvs.size());
 		}
 
 	}
