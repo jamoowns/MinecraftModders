@@ -99,14 +99,18 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			Broadcaster.broadcastGameInfo(GAME_NAME + " has been stopped!");
 		}
 
-		Broadcaster.broadcastGameInfo(GAME_NAME + " Hashmap size = " + oldInvs.size());
 		for (Map.Entry<Player, Inventory> entry : oldInvs.entrySet()) {
 			Player key = entry.getKey();
 			Inventory value = entry.getValue();
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Player = " + key.getDisplayName());
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Player inv = " + key.getInventory().toString());
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Player old inv = " + value.toString());
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Player old2 inv = " + value.getContents().toString());
 			key.getInventory().setContents(value.getContents());
 			key.updateInventory();
 
-			Broadcaster.broadcastGameInfo(GAME_NAME + " Hashmap size = " + oldInvs.size());
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Player newinv = " + key.getInventory().toString());
+
 		}
 
 	}
