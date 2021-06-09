@@ -307,7 +307,7 @@ public class MabListener implements IGameEventListener {
 					int high = 11;
 					int result = r.nextInt(high - low) + low;
 					if (result > 6) {
-						for (int i = 0; i < 3; i++) {
+						for (int i = 0; i < 1; i++) {
 							Wolf wolf = mcPlayer.getLocation().getWorld().spawn(event.getEntity().getLocation(),
 									Wolf.class);
 							if (mcPlayer != null) {
