@@ -6,14 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
@@ -48,6 +52,12 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private ModdingMinecraft javaPlugin;
 
+	private final Random RANDOM;
+
+	private final Vector ABOVE;
+
+	private Location goalLocation;
+
 	private HashMap<Player, Inventory> oldInvs = new HashMap<Player, Inventory>();
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
@@ -57,17 +67,28 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		playerScoreById = new HashMap<>();
 		playerHomeItemById = new HashMap<>();
 		playerHomeLocationById = new HashMap<>();
+		RANDOM = new Random();
+		ABOVE = new Vector(0, 1, 0);
 
 		goalBlock = new CustomItem("Goal Block", Material.DIAMOND_BLOCK);
 		goalBlock.setBlockPlaceEvent(event -> {
 			if (currentGameState == GameState.PLAYING) {
-				for (Location goalStandLoc : goalStands) {
-					if (event.getBlock().getLocation().distance(goalStandLoc) < 3) {
-						Integer currentScore = playerScoreById.get(event.getPlayer().getUniqueId());
-						playerScoreById.put(event.getPlayer().getUniqueId(), currentScore + 1);
-						checkForVictory(event.getPlayer());
+				Location playerHome = playerHomeLocationById.get(event.getPlayer().getUniqueId());
+				if (event.getBlockPlaced().getLocation().distance(playerHome) < 7) {
+					Integer currentScore = playerScoreById.get(event.getPlayer().getUniqueId());
+					playerScoreById.put(event.getPlayer().getUniqueId(), currentScore + 1);
+					boolean hasWon = checkForVictory(event.getPlayer());
+					if (!hasWon) {
+						for (UUID uuid : playerHomeLocationById.keySet()) {
+							Broadcaster.sendGameInfo(Bukkit.getPlayer(uuid),
+									event.getPlayer().getDisplayName() + " has scored a point!");
+						}
+						resetGoalBlock();
 					}
+				} else {
+					Broadcaster.sendGameInfo(event.getPlayer(), "You must place that closer to your homebase");
 				}
+				event.setCancelled(true);
 			}
 		});
 
@@ -90,9 +111,11 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	@Override
 	public final void cleanup() {
+		goalStands.forEach(l -> l.getBlock().setType(Material.AIR));
 		goalStands.clear();
 		playerScoreById.clear();
 		playerHomeItemById.clear();
+		playerHomeLocationById.values().forEach(l -> l.getBlock().setType(Material.AIR));
 		playerHomeLocationById.clear();
 		if (currentGameState != GameState.STOPPED) {
 			currentGameState = GameState.STOPPED;
@@ -122,6 +145,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			p.getInventory().clear();
 			p.updateInventory();
 			Broadcaster.broadcastGameInfo(GAME_NAME + " Hashmap size = " + oldInvs.size());
+
 			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", Material.GREEN_BED);
 			homeStand.setBlockPlaceEvent(event -> {
 				if (currentGameState == GameState.SETUP) {
@@ -134,6 +158,16 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			playerHomeItemById.put(p.getUniqueId(), homeStand);
 		} else {
 			Broadcaster.sendError(p, "Game must be in the lobby");
+		}
+	}
+
+	@EventHandler
+	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
+		if (currentGameState == GameState.PLAYING) {
+			if (event.getClickedBlock().getLocation().equals(goalLocation)) {
+				event.getClickedBlock().setType(Material.AIR);
+				event.getPlayer().getInventory().addItem(goalBlock.asItem());
+			}
 		}
 	}
 
@@ -160,23 +194,34 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			Broadcaster.broadcastGameInfo(GAME_NAME + " has started!");
 			for (Entry<UUID, Location> entry : playerHomeLocationById.entrySet()) {
 				Player player = Bukkit.getPlayer(entry.getKey());
-				// player.getInventory().clear();
-
 				player.teleport(entry.getValue().add(0, 3, 0));
 			}
 			currentGameState = GameState.PLAYING;
+			resetGoalBlock();
 		} else {
 			Broadcaster.sendError(host, "Must setup first. Not all players have placed their homes yet.");
 		}
 	}
 
-	private void checkForVictory(Player player) {
+	private boolean checkForVictory(Player player) {
 		Integer currentScore = playerScoreById.get(player.getUniqueId());
 		if (currentScore >= GOAL_SCORE) {
 			Broadcaster.broadcastInfo(player.getDisplayName() + " has won " + GAME_NAME + "!");
 			cleanup();
+			return true;
 		} else {
-			Broadcaster.sendGameInfo(player, "Current score: " + currentScore + "/" + GOAL_SCORE);
+			Broadcaster.sendGameInfo(player, "Your current score: " + currentScore + "/" + GOAL_SCORE);
+			return false;
 		}
+	}
+
+	private void resetGoalBlock() {
+		for (UUID uuid : playerHomeLocationById.keySet()) {
+			Broadcaster.sendGameInfo(Bukkit.getPlayer(uuid), "Block has returned to a goal stand.");
+		}
+		/* Places goal block on a random goal stand. */
+		Location goalStandToPlaceOn = goalStands.get(RANDOM.nextInt(goalStands.size())).add(ABOVE);
+		goalStandToPlaceOn.getWorld().getBlockAt(goalStandToPlaceOn).setType(goalBlock.material());
+		goalLocation = goalStandToPlaceOn;
 	}
 }
