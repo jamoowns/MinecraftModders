@@ -75,6 +75,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			if (currentGameState == GameState.PLAYING) {
 				Location playerHome = playerHomeLocationById.get(event.getPlayer().getUniqueId());
 				if (event.getBlockPlaced().getLocation().distance(playerHome) < 7) {
+					event.getItemInHand().setAmount(0);
 					Integer currentScore = playerScoreById.get(event.getPlayer().getUniqueId());
 					playerScoreById.put(event.getPlayer().getUniqueId(), currentScore + 1);
 					boolean hasWon = checkForVictory(event.getPlayer());
@@ -87,8 +88,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 					}
 				} else {
 					Broadcaster.sendGameInfo(event.getPlayer(), "You must place that closer to your homebase");
+					event.setCancelled(true);
 				}
-				event.setCancelled(true);
 			}
 		});
 
@@ -193,7 +194,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			Broadcaster.broadcastGameInfo(GAME_NAME + " has started!");
 			for (Entry<UUID, Location> entry : playerHomeLocationById.entrySet()) {
 				Player player = Bukkit.getPlayer(entry.getKey());
-				player.teleport(entry.getValue().add(0, 3, 0));
+				player.teleport(entry.getValue().clone().add(0, 3, 0));
 			}
 			currentGameState = GameState.PLAYING;
 			resetGoalBlock();
@@ -219,7 +220,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			Broadcaster.sendGameInfo(Bukkit.getPlayer(uuid), "Block has returned to a goal stand.");
 		}
 		/* Places goal block on a random goal stand. */
-		Location goalStandToPlaceOn = goalStands.get(RANDOM.nextInt(goalStands.size())).add(ABOVE);
+		Location goalStandToPlaceOn = goalStands.get(RANDOM.nextInt(goalStands.size())).clone().add(ABOVE);
 		goalStandToPlaceOn.getWorld().getBlockAt(goalStandToPlaceOn).setType(goalBlock.material());
 		goalLocation = goalStandToPlaceOn;
 	}
