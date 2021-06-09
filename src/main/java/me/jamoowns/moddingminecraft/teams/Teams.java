@@ -50,16 +50,26 @@ public final class Teams {
 		RANDOM = new Random();
 
 		availableTeamColours = new ArrayList<>();
-		availableTeamColours.add(new TeamColour(Material.BLACK_WOOL, ChatColor.BLACK, Material.BLACK_CARPET));
-		availableTeamColours.add(new TeamColour(Material.BLUE_WOOL, ChatColor.BLUE, Material.BLUE_CARPET));
-		availableTeamColours.add(new TeamColour(Material.CYAN_WOOL, ChatColor.AQUA, Material.CYAN_CARPET));
-		availableTeamColours.add(new TeamColour(Material.GRAY_WOOL, ChatColor.GRAY, Material.GRAY_CARPET));
-		availableTeamColours.add(new TeamColour(Material.GREEN_WOOL, ChatColor.GREEN, Material.GREEN_CARPET));
-		availableTeamColours.add(new TeamColour(Material.ORANGE_WOOL, ChatColor.GOLD, Material.ORANGE_CARPET));
-		availableTeamColours.add(new TeamColour(Material.PURPLE_WOOL, ChatColor.LIGHT_PURPLE, Material.PURPLE_CARPET));
-		availableTeamColours.add(new TeamColour(Material.RED_WOOL, ChatColor.RED, Material.RED_CARPET));
-		availableTeamColours.add(new TeamColour(Material.WHITE_WOOL, ChatColor.WHITE, Material.WHITE_CARPET));
-		availableTeamColours.add(new TeamColour(Material.YELLOW_WOOL, ChatColor.YELLOW, Material.YELLOW_CARPET));
+		availableTeamColours.add(
+				new TeamColour(Material.BLACK_CONCRETE, Material.BLACK_WOOL, ChatColor.BLACK, Material.BLACK_CARPET));
+		availableTeamColours
+				.add(new TeamColour(Material.BLUE_CONCRETE, Material.BLUE_WOOL, ChatColor.BLUE, Material.BLUE_CARPET));
+		availableTeamColours
+				.add(new TeamColour(Material.CYAN_CONCRETE, Material.CYAN_WOOL, ChatColor.AQUA, Material.CYAN_CARPET));
+		availableTeamColours
+				.add(new TeamColour(Material.GRAY_CONCRETE, Material.GRAY_WOOL, ChatColor.GRAY, Material.GRAY_CARPET));
+		availableTeamColours.add(
+				new TeamColour(Material.GREEN_CONCRETE, Material.GREEN_WOOL, ChatColor.GREEN, Material.GREEN_CARPET));
+		availableTeamColours.add(
+				new TeamColour(Material.ORANGE_CONCRETE, Material.ORANGE_WOOL, ChatColor.GOLD, Material.ORANGE_CARPET));
+		availableTeamColours.add(new TeamColour(Material.PURPLE_CONCRETE, Material.PURPLE_WOOL, ChatColor.LIGHT_PURPLE,
+				Material.PURPLE_CARPET));
+		availableTeamColours
+				.add(new TeamColour(Material.RED_CONCRETE, Material.RED_WOOL, ChatColor.RED, Material.RED_CARPET));
+		availableTeamColours.add(
+				new TeamColour(Material.WHITE_CONCRETE, Material.WHITE_WOOL, ChatColor.WHITE, Material.WHITE_CARPET));
+		availableTeamColours.add(new TeamColour(Material.YELLOW_CONCRETE, Material.YELLOW_WOOL, ChatColor.YELLOW,
+				Material.YELLOW_CARPET));
 
 		cleanup();
 		for (Player online : Bukkit.getOnlinePlayers()) {

@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -23,6 +24,7 @@ import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
+import me.jamoowns.moddingminecraft.teams.TeamColour;
 
 public final class BattleRoyaleListener implements IGameEventListener {
 
@@ -151,11 +153,13 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			p.getInventory().clear();
 			p.updateInventory();
 
-			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", Material.GREEN_BED);
+			TeamColour teamColour = javaPlugin.teams().getTeam(p.getUniqueId()).getTeamColour();
+			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", teamColour.getBase());
 			homeStand.setBlockPlaceEvent(event -> {
 				if (currentGameState == GameState.SETUP) {
 					playerHomeLocationById.put(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
 					Broadcaster.sendGameInfo(event.getPlayer(), "Home sweet home has been set");
+					buildFlag(event.getBlock(), teamColour.getBase(), teamColour.getHead());
 				}
 			});
 			javaPlugin.customItems().silentRegister(homeStand);
@@ -207,6 +211,36 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		} else {
 			Broadcaster.sendError(host, "Must setup first. Not all players have placed their homes yet.");
 		}
+	}
+
+	private void buildFlag(Block baseBlock, Material baseColour, Material flagColour) {
+		ArrayList<Location> locations = new ArrayList<>();
+		locations.add(baseBlock.getLocation().add(-1, 0, 0));
+		locations.add(baseBlock.getLocation().add(1, 0, 0));
+		locations.add(baseBlock.getLocation().add(-1, 0, -1));
+		locations.add(baseBlock.getLocation().add(-1, 0, 1));
+		locations.add(baseBlock.getLocation().add(1, 0, -1));
+		locations.add(baseBlock.getLocation().add(1, 0, 1));
+		locations.add(baseBlock.getLocation().add(0, 0, -1));
+		locations.add(baseBlock.getLocation().add(0, 0, 1));
+		locations.forEach(location -> baseBlock.getWorld().getBlockAt(location).setType(baseColour));
+
+		/* Mast. */
+		for (int i = 1; i <= GOAL_SCORE; i++) {
+			baseBlock.getWorld().getBlockAt(baseBlock.getLocation().add(0, i, 0)).setType(Material.WARPED_FENCE);
+		}
+
+		/* Flag. */
+		Location topBlock = baseBlock.getLocation().add(0, GOAL_SCORE, 0);
+		locations.clear();
+		locations.add(topBlock.clone().add(1, 0, 0));
+		locations.add(topBlock.clone().add(1, -1, 0));
+		locations.add(topBlock.clone().add(2, 0, 0));
+		locations.add(topBlock.clone().add(2, -1, 0));
+		locations.add(topBlock.clone().add(3, 0, 0));
+		locations.add(topBlock.clone().add(3, -1, 0));
+		locations.forEach(location -> baseBlock.getWorld().getBlockAt(location).setType(flagColour));
+
 	}
 
 	private boolean checkForVictory(Player player) {
