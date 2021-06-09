@@ -96,9 +96,9 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		for (Iterator<ModdersCommand> it = children.iterator(); it.hasNext();) {
 			ModdersCommand next = it.next();
 			if (it.hasNext()) {
-				print(next.command(), next.subCommands(), buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
+				print(next.command(), next.subCommands(), buffer, childrenPrefix + "|--- ", childrenPrefix + "|   ");
 			} else {
-				print(next.command(), next.subCommands(), buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
+				print(next.command(), next.subCommands(), buffer, childrenPrefix + "\\--- ", childrenPrefix + "    ");
 			}
 		}
 	}
