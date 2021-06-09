@@ -118,6 +118,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME);
 			playerScoreById.put(p.getUniqueId(), 0);
 			oldInvs.put(p, p.getInventory());
+			p.getInventory().clear();
+			p.updateInventory();
 			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", Material.GREEN_BED);
 			homeStand.setBlockPlaceEvent(event -> {
 				if (currentGameState == GameState.SETUP) {
