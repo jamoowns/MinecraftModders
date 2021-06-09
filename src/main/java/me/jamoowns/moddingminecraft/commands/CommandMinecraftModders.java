@@ -95,6 +95,7 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		String nodeName = node.command();
 		String nodeConnection = isTail ? "\\ " : "|- ";
 		buffer.append(prefix + nodeConnection + nodeName);
+		buffer.append("\n");
 		for (int i = 0; i < children.size(); i++) {
 			String newPrefix = prefix + (isTail ? "    " : "|   ");
 			printTreeRec(buffer, newPrefix, children.get(i), children.get(i).subCommands(), i == children.size() - 1);
