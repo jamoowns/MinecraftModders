@@ -34,7 +34,10 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		}
 		Broadcaster.sendInfo(sender, "Available Commands:");
 		StringBuilder buffer = new StringBuilder();
-		print("", commands, buffer, "", "");
+//		print("", commands, buffer, "", "");
+
+		ModdersCommand root = new ModdersCommand("/mm", p -> System.err.println(p));
+		printTreeRec(buffer, "", root, true);
 		Broadcaster.sendInfo(sender, buffer.toString());
 
 		return true;
@@ -100,6 +103,17 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 			} else {
 				print(next.command(), next.subCommands(), buffer, childrenPrefix + "\\--- ", childrenPrefix + "    ");
 			}
+		}
+	}
+
+	private void printTreeRec(StringBuilder buffer, String prefix, ModdersCommand node, boolean isTail) {
+		String nodeName = node.toString();
+		String nodeConnection = isTail ? "\\ " : "|- ";
+		List<ModdersCommand> children = node.subCommands();
+		buffer.append(prefix + nodeConnection + nodeName);
+		for (int i = 0; i < children.size(); i++) {
+			String newPrefix = prefix + (isTail ? "    " : "|   ");
+			printTreeRec(buffer, newPrefix, children.get(i), i == children.size() - 1);
 		}
 	}
 }
