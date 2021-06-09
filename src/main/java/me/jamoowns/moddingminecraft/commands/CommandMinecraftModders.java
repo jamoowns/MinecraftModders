@@ -2,7 +2,6 @@ package me.jamoowns.moddingminecraft.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -34,7 +33,10 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		}
 		Broadcaster.sendInfo(sender, "Available Commands:");
 		StringBuilder buffer = new StringBuilder();
-		print("", commands, buffer, "", "");
+//		print("", commands, buffer, "", "");
+
+		ModdersCommand root = new ModdersCommand("/mm", p -> System.err.println(p));
+		printTreeRec(buffer, "", root, commands, true);
 		Broadcaster.sendInfo(sender, buffer.toString());
 
 		return true;
@@ -88,18 +90,14 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		return command;
 	}
 
-	private void print(String name, List<ModdersCommand> children, StringBuilder buffer, String prefix,
-			String childrenPrefix) {
-		buffer.append(prefix);
-		buffer.append(name);
-		buffer.append('\n');
-		for (Iterator<ModdersCommand> it = children.iterator(); it.hasNext();) {
-			ModdersCommand next = it.next();
-			if (it.hasNext()) {
-				print(next.command(), next.subCommands(), buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
-			} else {
-				print(next.command(), next.subCommands(), buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
-			}
+	private void printTreeRec(StringBuilder buffer, String prefix, ModdersCommand node, List<ModdersCommand> children,
+			boolean isTail) {
+		String nodeName = node.command();
+		String nodeConnection = isTail ? "\\ " : "|- ";
+		buffer.append(prefix + nodeConnection + nodeName);
+		for (int i = 0; i < children.size(); i++) {
+			String newPrefix = prefix + (isTail ? "    " : "|   ");
+			printTreeRec(buffer, newPrefix, children.get(i), children.get(i).subCommands(), i == children.size() - 1);
 		}
 	}
 }
