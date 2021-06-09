@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -56,6 +57,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	private final Vector ABOVE;
 
 	private Location goalLocation;
+
+	private HashMap<Player, Inventory> oldInvs = new HashMap<Player, Inventory>();
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -118,6 +121,20 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			currentGameState = GameState.STOPPED;
 			Broadcaster.broadcastGameInfo(GAME_NAME + " has been stopped!");
 		}
+
+		for (Map.Entry<Player, Inventory> entry : oldInvs.entrySet()) {
+			Player key = entry.getKey();
+			Inventory value = entry.getValue();
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Player = " + key.getDisplayName());
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Player inv = " + key.getInventory().toString());
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Player old inv = " + value.toString());
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Player old2 inv = " + value.getContents().toString());
+			key.getInventory().setContents(value.getContents());
+			key.updateInventory();
+
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Player newinv = " + key.getInventory().toString());
+
+		}
 	}
 
 	public final void initiate() {
@@ -130,6 +147,10 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		if (currentGameState == GameState.LOBBY && !alreadyPlaying) {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME);
 			playerScoreById.put(p.getUniqueId(), 0);
+			oldInvs.put(p, p.getInventory());
+			p.getInventory().clear();
+			p.updateInventory();
+			Broadcaster.broadcastGameInfo(GAME_NAME + " Hashmap size = " + oldInvs.size());
 
 			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", Material.GREEN_BED);
 			homeStand.setBlockPlaceEvent(event -> {
