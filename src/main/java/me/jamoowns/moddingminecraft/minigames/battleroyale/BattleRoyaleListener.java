@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
@@ -46,6 +47,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	private GameState currentGameState;
 
 	private ModdingMinecraft javaPlugin;
+
+	HashMap<Player, Inventory> oldInvs = new HashMap<Player, Inventory>();
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -95,6 +98,13 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			currentGameState = GameState.STOPPED;
 			Broadcaster.broadcastGameInfo(GAME_NAME + " has been stopped!");
 		}
+		for (Map.Entry<Player, Inventory> entry : oldInvs.entrySet()) {
+			Player key = entry.getKey();
+			Inventory value = entry.getValue();
+			key.getInventory().setContents(value.getContents());
+			key.updateInventory();
+		}
+
 	}
 
 	public final void initiate() {
@@ -107,7 +117,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		if (currentGameState == GameState.LOBBY && !alreadyPlaying) {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME);
 			playerScoreById.put(p.getUniqueId(), 0);
-
+			oldInvs.put(p, p.getInventory());
 			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", Material.GREEN_BED);
 			homeStand.setBlockPlaceEvent(event -> {
 				if (currentGameState == GameState.SETUP) {
