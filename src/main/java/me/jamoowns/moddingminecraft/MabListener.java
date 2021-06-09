@@ -37,6 +37,7 @@ import org.bukkit.entity.Spider;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Witch;
+import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -301,19 +302,21 @@ public class MabListener implements IGameEventListener {
 					return;
 
 				if (sheepEnt.isAdult()) {
-					mcPlayer.sendTitle("You're about to die", "20 secs to live after this", 40, 40, 40);
-					Bukkit.getScheduler().scheduleSyncDelayedTask(javaPlugin, new Runnable() {
-						@Override
-						public void run() {
-							for (int i = 0; i < 3; i++) {
-								Creeper crepper = mcPlayer.getLocation().getWorld().spawn(mcPlayer.getLocation(),
-										Creeper.class);
-								if (mcPlayer != null) {
-									crepper.setTarget(mcPlayer);
-								}
+					Random r = new Random();
+					int low = 1;
+					int high = 11;
+					int result = r.nextInt(high - low) + low;
+					if (result > 6) {
+						for (int i = 0; i < 1; i++) {
+							Wolf wolf = mcPlayer.getLocation().getWorld().spawn(event.getEntity().getLocation(),
+									Wolf.class);
+							if (mcPlayer != null) {
+								wolf.setTarget(mcPlayer);
 							}
 						}
-					}, 180);
+
+					}
+
 				}
 			}
 			if (event.getEntity() instanceof Chicken) {
