@@ -67,6 +67,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		currentGameState = GameState.STOPPED;
+		flagBlockLocations = new ArrayList<>();
 		goalStands = new ArrayList<>();
 		playerScoreById = new HashMap<>();
 		playerHomeItemById = new HashMap<>();
