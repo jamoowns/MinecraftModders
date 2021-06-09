@@ -81,6 +81,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 					event.getItemInHand().setAmount(0);
 					event.getBlock().setType(Material.AIR);
 					Integer currentScore = playerScoreById.get(event.getPlayer().getUniqueId());
+					Location scoreLocation = playerHome.clone().add(0, currentScore, 0);
+					event.getBlock().getWorld().getBlockAt(scoreLocation).setType(goalBlock.material());
 					playerScoreById.put(event.getPlayer().getUniqueId(), currentScore + 1);
 					boolean hasWon = checkForVictory(event.getPlayer());
 					if (!hasWon) {
@@ -120,10 +122,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		goalStands.clear();
 		playerScoreById.clear();
 		playerHomeItemById.clear();
-		playerHomeLocationById.values().forEach(l -> {
-			l.getBlock().getDrops().clear();
-			l.getBlock().setType(Material.AIR);
-		});
+		playerHomeLocationById.values().forEach(l -> l.getBlock().setType(Material.AIR));
 		playerHomeLocationById.clear();
 		if (currentGameState != GameState.STOPPED) {
 			currentGameState = GameState.STOPPED;
