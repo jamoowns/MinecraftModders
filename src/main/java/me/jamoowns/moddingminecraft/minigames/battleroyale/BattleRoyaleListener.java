@@ -1,4 +1,4 @@
-package me.jamoowns.moddingminecraft.minigames.blockhunter;
+package me.jamoowns.moddingminecraft.minigames.battleroyale;
 
 import java.util.ArrayList;
 import java.util.Arrays;

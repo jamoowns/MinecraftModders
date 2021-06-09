@@ -2,6 +2,7 @@ package me.jamoowns.moddingminecraft.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -32,24 +33,10 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 			}
 		}
 		Broadcaster.sendInfo(sender, "Available Commands:");
-		for (ModdersCommand c : commands) {
-			if (c.subCommands().isEmpty()) {
-				Broadcaster.sendInfo(sender, "/mm " + c.command());
-			} else {
-				for (ModdersCommand c1 : c.subCommands()) {
-					if (c1.subCommands().isEmpty()) {
-						Broadcaster.sendInfo(sender, "/mm " + c.command() + " " + c1.command());
-					} else {
-						for (ModdersCommand c2 : c.subCommands()) {
-							if (c2.subCommands().isEmpty()) {
-								Broadcaster.sendInfo(sender,
-										"/mm " + c.command() + " " + c1.command() + " " + c2.command());
-							}
-						}
-					}
-				}
-			}
-		}
+		StringBuilder buffer = new StringBuilder();
+		print("", commands, buffer, "", "");
+		Broadcaster.sendInfo(sender, buffer.toString());
+
 		return true;
 	}
 
@@ -99,5 +86,20 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 			}
 		}
 		return command;
+	}
+
+	private void print(String name, List<ModdersCommand> children, StringBuilder buffer, String prefix,
+			String childrenPrefix) {
+		buffer.append(prefix);
+		buffer.append(name);
+		buffer.append('\n');
+		for (Iterator<ModdersCommand> it = children.iterator(); it.hasNext();) {
+			ModdersCommand next = it.next();
+			if (it.hasNext()) {
+				print(next.command(), next.subCommands(), buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
+			} else {
+				print(next.command(), next.subCommands(), buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
+			}
+		}
 	}
 }
