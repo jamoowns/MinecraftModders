@@ -18,7 +18,7 @@ import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.menus.FeaturesMenu;
 import me.jamoowns.moddingminecraft.menus.ItemMenu;
 import me.jamoowns.moddingminecraft.menus.MenuListener;
-import me.jamoowns.moddingminecraft.minigames.blockhunter.BattleRoyaleListener;
+import me.jamoowns.moddingminecraft.minigames.battleroyale.BattleRoyaleListener;
 import me.jamoowns.moddingminecraft.minigames.blockhunter.BlockHunterListener;
 import me.jamoowns.moddingminecraft.teams.Teams;
 
