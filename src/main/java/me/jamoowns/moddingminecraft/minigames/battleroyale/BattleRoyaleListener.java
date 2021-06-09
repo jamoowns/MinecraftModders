@@ -14,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -76,6 +77,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				Location playerHome = playerHomeLocationById.get(event.getPlayer().getUniqueId());
 				if (event.getBlockPlaced().getLocation().distance(playerHome) < 7) {
 					event.getItemInHand().setAmount(0);
+					event.getBlock().setType(Material.AIR);
 					Integer currentScore = playerScoreById.get(event.getPlayer().getUniqueId());
 					playerScoreById.put(event.getPlayer().getUniqueId(), currentScore + 1);
 					boolean hasWon = checkForVictory(event.getPlayer());
@@ -116,7 +118,10 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		goalStands.clear();
 		playerScoreById.clear();
 		playerHomeItemById.clear();
-		playerHomeLocationById.values().forEach(l -> l.getBlock().setType(Material.AIR));
+		playerHomeLocationById.values().forEach(l -> {
+			l.getBlock().getDrops().clear();
+			l.getBlock().setType(Material.AIR);
+		});
 		playerHomeLocationById.clear();
 		if (currentGameState != GameState.STOPPED) {
 			currentGameState = GameState.STOPPED;
@@ -164,7 +169,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
 		if (currentGameState == GameState.PLAYING) {
-			if (event.getClickedBlock().getLocation().equals(goalLocation)) {
+			if (event.getAction() == Action.LEFT_CLICK_BLOCK
+					&& event.getClickedBlock().getLocation().equals(goalLocation)) {
 				event.getClickedBlock().setType(Material.AIR);
 				event.getPlayer().getInventory().addItem(goalBlock.asItem());
 			}
