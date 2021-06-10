@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -149,13 +150,14 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	public final void join(Player p) {
 		boolean alreadyPlaying = playerScoreById.containsKey(p.getUniqueId());
 		if (currentGameState == GameState.LOBBY && !alreadyPlaying) {
-			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME + "(" + lobby.Size() + "|"
-					+ lobby.MaxSize() + ")");
+
 			playerScoreById.put(p.getUniqueId(), 0);
 			lobby.AddToLobby(p);
 			for (int i = 0; i < armoury.getItems().size(); i++) {
 				p.getInventory().addItem(armoury.getItems().get(i));
 			}
+			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.Size()
+					+ " / " + lobby.MaxSize() + " )");
 
 			TeamColour teamColour = javaPlugin.teams().getTeam(p.getUniqueId()).getTeamColour();
 			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", teamColour.getBase());
@@ -270,6 +272,14 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		} else {
 			Broadcaster.sendGameInfo(player, "Your current score: " + currentScore + "/" + GOAL_SCORE);
 			return false;
+		}
+	}
+
+	@EventHandler
+	private void OnQuitEvent(PlayerQuitEvent event) {
+		// This doesn't work if server crashes
+		if (lobby.PlayerInLobby(event.getPlayer().getUniqueId())) {
+			lobby.RemoveFromLobby(event.getPlayer());
 		}
 	}
 
