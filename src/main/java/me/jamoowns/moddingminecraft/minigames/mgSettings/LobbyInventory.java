@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public final class LobbyInventory {
-
+//TODO:turn this into a full on lobby settings not just inventory
 	private HashMap<Player, ItemStack[]> oldInvs;
 
 	public LobbyInventory() {
