@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class Armoury {
-
+	// TODO:add Premade classes e.g archer, warior
 	private ArrayList<ItemStack[]> Items;
 
 	public Armoury(int AttackLevel, int DefenceLevel, int FoodLevel) {
