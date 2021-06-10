@@ -115,6 +115,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "init", p -> initiate());
 		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "join", this::join);
+		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "unjoin", this::unjoin);
 		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "setup", this::setup);
 		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "start", this::start);
 		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "stop", p -> cleanup());
@@ -206,6 +207,17 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			resetGoalBlock();
 		} else {
 			Broadcaster.sendError(host, "Must setup first. Not all players have placed their homes yet.");
+		}
+	}
+
+	public final void unjoin(Player p) {
+		boolean alreadyPlaying = playerScoreById.containsKey(p.getUniqueId());
+		if (currentGameState == GameState.LOBBY && alreadyPlaying) {
+			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has left the " + GAME_NAME);
+			playerScoreById.remove(p.getUniqueId());
+			lobbyInv.RestoreInventory(p);
+		} else {
+			Broadcaster.sendError(p, "You must be in a lobby");
 		}
 	}
 

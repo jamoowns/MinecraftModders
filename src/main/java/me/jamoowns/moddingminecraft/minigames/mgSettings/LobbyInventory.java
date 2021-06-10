@@ -39,7 +39,7 @@ public final class LobbyInventory {
 	}
 
 	public void RestoreInventory(Player p) {
-		if (!oldInvs.isEmpty()) {
+		if (!oldInvs.isEmpty() && oldInvs.containsKey(p)) {
 			p.getInventory().clear();
 			p.getInventory().setContents(oldInvs.get(p));
 			p.updateInventory();
