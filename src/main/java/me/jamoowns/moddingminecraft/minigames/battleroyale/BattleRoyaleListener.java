@@ -24,6 +24,7 @@ import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
+import me.jamoowns.moddingminecraft.minigames.mgSettings.Armoury;
 import me.jamoowns.moddingminecraft.minigames.mgSettings.Lobby;
 import me.jamoowns.moddingminecraft.teams.TeamColour;
 
@@ -63,6 +64,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private ArrayList<Location> flagBlockLocations;
 	private Lobby lobby;
+	private Armoury armoury;
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -73,6 +75,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		playerHomeItemById = new HashMap<>();
 		playerHomeLocationById = new HashMap<>();
 		lobby = new Lobby();
+		armoury = new Armoury(2, 2, 1);
 		RANDOM = new Random();
 		ABOVE = new Vector(0, 1, 0);
 
@@ -149,6 +152,9 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME);
 			playerScoreById.put(p.getUniqueId(), 0);
 			lobby.AddToLobby(p);
+			for (int i = 0; i < armoury.getItems().size(); i++) {
+				p.getInventory().addItem(armoury.getItems().get(i));
+			}
 
 			TeamColour teamColour = javaPlugin.teams().getTeam(p.getUniqueId()).getTeamColour();
 			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", teamColour.getBase());
