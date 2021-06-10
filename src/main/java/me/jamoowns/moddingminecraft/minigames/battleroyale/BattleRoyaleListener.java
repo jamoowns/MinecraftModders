@@ -24,7 +24,7 @@ import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
-import me.jamoowns.moddingminecraft.minigames.mgSettings.LobbyInventory;
+import me.jamoowns.moddingminecraft.minigames.mgSettings.Lobby;
 import me.jamoowns.moddingminecraft.teams.TeamColour;
 
 public final class BattleRoyaleListener implements IGameEventListener {
@@ -62,7 +62,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	private Location goalLocation;
 
 	private ArrayList<Location> flagBlockLocations;
-	private LobbyInventory lobbyInv;
+	private Lobby lobby;
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -72,7 +72,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		playerScoreById = new HashMap<>();
 		playerHomeItemById = new HashMap<>();
 		playerHomeLocationById = new HashMap<>();
-		lobbyInv = new LobbyInventory();
+		lobby = new Lobby();
 		RANDOM = new Random();
 		ABOVE = new Vector(0, 1, 0);
 
@@ -131,7 +131,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		playerHomeItemById.clear();
 		playerHomeLocationById.values().forEach(l -> l.getBlock().setType(Material.AIR));
 		playerHomeLocationById.clear();
-		lobbyInv.RestoreAllInventory();
+		lobby.RemoveAllFromLobby();
 		if (currentGameState != GameState.STOPPED) {
 			currentGameState = GameState.STOPPED;
 			Broadcaster.broadcastGameInfo(GAME_NAME + " has been stopped!");
@@ -148,7 +148,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		if (currentGameState == GameState.LOBBY && !alreadyPlaying) {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME);
 			playerScoreById.put(p.getUniqueId(), 0);
-			lobbyInv.AddInventory(p);
+			lobby.AddToLobby(p);
 
 			TeamColour teamColour = javaPlugin.teams().getTeam(p.getUniqueId()).getTeamColour();
 			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", teamColour.getBase());
@@ -215,7 +215,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		if (currentGameState == GameState.LOBBY && alreadyPlaying) {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has left the " + GAME_NAME);
 			playerScoreById.remove(p.getUniqueId());
-			lobbyInv.RestoreInventory(p);
+			lobby.RemoveFromLobby(p);
 		} else {
 			Broadcaster.sendError(p, "You must be in a lobby");
 		}
