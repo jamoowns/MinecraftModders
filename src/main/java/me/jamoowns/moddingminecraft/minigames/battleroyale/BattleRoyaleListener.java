@@ -149,7 +149,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	public final void join(Player p) {
 		boolean alreadyPlaying = playerScoreById.containsKey(p.getUniqueId());
 		if (currentGameState == GameState.LOBBY && !alreadyPlaying) {
-			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME);
+			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME + "(" + lobby.Size() + "|"
+					+ lobby.MaxSize() + ")");
 			playerScoreById.put(p.getUniqueId(), 0);
 			lobby.AddToLobby(p);
 			for (int i = 0; i < armoury.getItems().size(); i++) {
