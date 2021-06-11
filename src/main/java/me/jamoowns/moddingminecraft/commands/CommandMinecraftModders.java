@@ -57,7 +57,7 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 			/* Full match. */
 			String prefix;
 			if (allArgs.size() > 0 && allArgs.get(0).equals("")) {
-				prefix = " ";
+				prefix = moddersCommand.get().command() + " ";
 			} else {
 				prefix = "";
 			}
