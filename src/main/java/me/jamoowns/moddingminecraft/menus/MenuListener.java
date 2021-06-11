@@ -43,7 +43,7 @@ public final class MenuListener implements IGameEventListener {
 							itemToSet.setAmount(itemToSet.getType().getMaxStackSize());
 						}
 						menu.getAction(itemToSet).accept(player);
-						event.getClickedInventory().setItem(event.getSlot(), event.getCurrentItem());
+						event.getClickedInventory().setItem(event.getSlot(), customItem.get().asItem());
 					}
 				} else if (event.getClickedInventory().equals(player.getInventory())) {
 					if (customItem.isPresent()) {
