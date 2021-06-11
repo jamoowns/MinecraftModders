@@ -53,7 +53,7 @@ public class BossesListener implements IGameEventListener {
 
 						if (((Witch) ent).getHealth() < ((Witch) ent).getAttribute(Attribute.GENERIC_MAX_HEALTH)
 								.getDefaultValue() * .75) {
-							SpellsListener.switchAllPlayers(event.getPlayer().getWorld());
+							Spells.switchAllPlayers(event.getPlayer().getWorld());
 						}
 					}
 				}

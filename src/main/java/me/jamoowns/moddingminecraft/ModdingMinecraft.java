@@ -13,7 +13,6 @@ import me.jamoowns.moddingminecraft.customitems.CustomItems;
 import me.jamoowns.moddingminecraft.extras.BossesListener;
 import me.jamoowns.moddingminecraft.extras.FunkyDeathsListener;
 import me.jamoowns.moddingminecraft.extras.FunkyFoodListener;
-import me.jamoowns.moddingminecraft.extras.SpellsListener;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.features.FeatureTracker;
 import me.jamoowns.moddingminecraft.features.IFeatureListener;
@@ -59,35 +58,35 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void featureActivated(Feature feature) {
 		Broadcaster.broadcastInfo("Activated: " + feature.name());
 		switch (feature) {
-		case BATTLE_ROYALE:
-			break;
-		case EGG_WITCH:
-			break;
-		case FUNKY_MOB_DEATH:
-			break;
-		case IRON_GOLEM:
-			break;
-		case PLAYER_TRAIL:
-			break;
-		case RANDOM_BUCKET:
-			break;
-		case RANDOM_CHESTS:
-			randomChestsFeatureListener.start();
-			break;
-		case RANDOM_ENCHANT:
-			break;
-		case STABLE_WEATHER:
-			break;
-		case WINFRED:
-			break;
-		case ZOMBIE_BELL:
-			break;
-		case HEAVY_BLOCKS:
-			break;
-		case LIGHT_BLOCKS:
-			break;
-		default:
-			break;
+			case BATTLE_ROYALE:
+				break;
+			case EGG_WITCH:
+				break;
+			case FUNKY_MOB_DEATH:
+				break;
+			case IRON_GOLEM:
+				break;
+			case PLAYER_TRAIL:
+				break;
+			case RANDOM_BUCKET:
+				break;
+			case RANDOM_CHESTS:
+				randomChestsFeatureListener.start();
+				break;
+			case RANDOM_ENCHANT:
+				break;
+			case STABLE_WEATHER:
+				break;
+			case WINFRED:
+				break;
+			case ZOMBIE_BELL:
+				break;
+			case HEAVY_BLOCKS:
+				break;
+			case LIGHT_BLOCKS:
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -95,36 +94,36 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void featureDeactivated(Feature feature) {
 		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
 		switch (feature) {
-		case BATTLE_ROYALE:
-			break;
-		case EGG_WITCH:
-			break;
-		case FUNKY_MOB_DEATH:
-			break;
-		case IRON_GOLEM:
-			break;
-		case PLAYER_TRAIL:
-			playerTrailFeatureListener.cleanup();
-			break;
-		case RANDOM_BUCKET:
-			break;
-		case RANDOM_CHESTS:
-			randomChestsFeatureListener.stop();
-			break;
-		case RANDOM_ENCHANT:
-			break;
-		case STABLE_WEATHER:
-			break;
-		case WINFRED:
-			break;
-		case ZOMBIE_BELL:
-			break;
-		case HEAVY_BLOCKS:
-			break;
-		case LIGHT_BLOCKS:
-			break;
-		default:
-			break;
+			case BATTLE_ROYALE:
+				break;
+			case EGG_WITCH:
+				break;
+			case FUNKY_MOB_DEATH:
+				break;
+			case IRON_GOLEM:
+				break;
+			case PLAYER_TRAIL:
+				playerTrailFeatureListener.cleanup();
+				break;
+			case RANDOM_BUCKET:
+				break;
+			case RANDOM_CHESTS:
+				randomChestsFeatureListener.stop();
+				break;
+			case RANDOM_ENCHANT:
+				break;
+			case STABLE_WEATHER:
+				break;
+			case WINFRED:
+				break;
+			case ZOMBIE_BELL:
+				break;
+			case HEAVY_BLOCKS:
+				break;
+			case LIGHT_BLOCKS:
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -176,7 +175,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		addGameListener(new LabRoomBuilderListener());
 		addGameListener(new LobbyListener());
 		addGameListener(new BossesListener(this));
-		addGameListener(new SpellsListener(this));
 		addGameListener(new FunkyFoodListener(this));
 		addGameListener(new StructureBuilderListener());
 		addGameListener(new WeatherListener(this));

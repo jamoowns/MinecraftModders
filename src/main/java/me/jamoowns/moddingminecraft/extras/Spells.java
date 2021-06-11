@@ -15,10 +15,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
-import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
-public class SpellsListener implements IGameEventListener {
-	public static void getReady(World world) {
+public final class Spells {
+
+	public static void dropAllPlayersIntoRandomLocation(World world, ModdingMinecraft javaPlugin) {
 		List<Player> PlayerArr = new ArrayList<Player>();
 
 		for (Player players : world.getPlayers()) {
@@ -150,16 +150,7 @@ public class SpellsListener implements IGameEventListener {
 		one.teleport(otherLocation);
 	}
 
-	private final ModdingMinecraft javaPlugin;
-
-	public SpellsListener(ModdingMinecraft aJavaPlugin) {
-		javaPlugin = aJavaPlugin;
+	private Spells() {
+		/* Hidden. */
 	}
-
-	@Override
-	public void cleanup() {
-		// TODO Auto-generated method stub
-
-	}
-
 }
