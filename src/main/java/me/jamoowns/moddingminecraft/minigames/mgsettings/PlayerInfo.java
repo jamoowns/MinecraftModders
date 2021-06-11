@@ -1,4 +1,4 @@
-package me.jamoowns.moddingminecraft.minigames.mgSettings;
+package me.jamoowns.moddingminecraft.minigames.mgsettings;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;

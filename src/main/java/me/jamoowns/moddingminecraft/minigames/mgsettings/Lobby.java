@@ -1,4 +1,4 @@
-package me.jamoowns.moddingminecraft.minigames.mgSettings;
+package me.jamoowns.moddingminecraft.minigames.mgsettings;
 
 import java.util.HashMap;
 import java.util.Map;

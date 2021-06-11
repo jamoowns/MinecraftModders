@@ -25,8 +25,8 @@ import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
-import me.jamoowns.moddingminecraft.minigames.mgSettings.Armoury;
-import me.jamoowns.moddingminecraft.minigames.mgSettings.Lobby;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.Armoury;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.Lobby;
 import me.jamoowns.moddingminecraft.teams.TeamColour;
 
 public final class BattleRoyaleListener implements IGameEventListener {
