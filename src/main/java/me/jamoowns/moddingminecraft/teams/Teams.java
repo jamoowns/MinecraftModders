@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.teams;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,26 +51,26 @@ public final class Teams {
 		RANDOM = new Random();
 
 		availableTeamColours = new ArrayList<>();
-		availableTeamColours.add(
-				new TeamColour(Material.BLACK_CONCRETE, Material.BLACK_WOOL, ChatColor.BLACK, Material.BLACK_CARPET));
-		availableTeamColours
-				.add(new TeamColour(Material.BLUE_CONCRETE, Material.BLUE_WOOL, ChatColor.BLUE, Material.BLUE_CARPET));
-		availableTeamColours
-				.add(new TeamColour(Material.CYAN_CONCRETE, Material.CYAN_WOOL, ChatColor.AQUA, Material.CYAN_CARPET));
-		availableTeamColours
-				.add(new TeamColour(Material.GRAY_CONCRETE, Material.GRAY_WOOL, ChatColor.GRAY, Material.GRAY_CARPET));
-		availableTeamColours.add(
-				new TeamColour(Material.GREEN_CONCRETE, Material.GREEN_WOOL, ChatColor.GREEN, Material.GREEN_CARPET));
-		availableTeamColours.add(
-				new TeamColour(Material.ORANGE_CONCRETE, Material.ORANGE_WOOL, ChatColor.GOLD, Material.ORANGE_CARPET));
+		availableTeamColours.add(new TeamColour(Material.BLACK_CONCRETE, Material.BLACK_WOOL, ChatColor.BLACK,
+				Material.BLACK_CARPET, Color.BLACK));
+		availableTeamColours.add(new TeamColour(Material.BLUE_CONCRETE, Material.BLUE_WOOL, ChatColor.BLUE,
+				Material.BLUE_CARPET, Color.BLUE));
+		availableTeamColours.add(new TeamColour(Material.CYAN_CONCRETE, Material.CYAN_WOOL, ChatColor.AQUA,
+				Material.CYAN_CARPET, Color.CYAN));
+		availableTeamColours.add(new TeamColour(Material.GRAY_CONCRETE, Material.GRAY_WOOL, ChatColor.GRAY,
+				Material.GRAY_CARPET, Color.GRAY));
+		availableTeamColours.add(new TeamColour(Material.GREEN_CONCRETE, Material.GREEN_WOOL, ChatColor.GREEN,
+				Material.GREEN_CARPET, Color.GREEN));
+		availableTeamColours.add(new TeamColour(Material.ORANGE_CONCRETE, Material.ORANGE_WOOL, ChatColor.GOLD,
+				Material.ORANGE_CARPET, Color.ORANGE));
 		availableTeamColours.add(new TeamColour(Material.PURPLE_CONCRETE, Material.PURPLE_WOOL, ChatColor.LIGHT_PURPLE,
-				Material.PURPLE_CARPET));
-		availableTeamColours
-				.add(new TeamColour(Material.RED_CONCRETE, Material.RED_WOOL, ChatColor.RED, Material.RED_CARPET));
-		availableTeamColours.add(
-				new TeamColour(Material.WHITE_CONCRETE, Material.WHITE_WOOL, ChatColor.WHITE, Material.WHITE_CARPET));
+				Material.PURPLE_CARPET, Color.MAGENTA));
+		availableTeamColours.add(new TeamColour(Material.RED_CONCRETE, Material.RED_WOOL, ChatColor.RED,
+				Material.RED_CARPET, Color.RED));
+		availableTeamColours.add(new TeamColour(Material.WHITE_CONCRETE, Material.WHITE_WOOL, ChatColor.WHITE,
+				Material.WHITE_CARPET, Color.WHITE));
 		availableTeamColours.add(new TeamColour(Material.YELLOW_CONCRETE, Material.YELLOW_WOOL, ChatColor.YELLOW,
-				Material.YELLOW_CARPET));
+				Material.YELLOW_CARPET, Color.YELLOW));
 
 		cleanup();
 		for (Player online : Bukkit.getOnlinePlayers()) {

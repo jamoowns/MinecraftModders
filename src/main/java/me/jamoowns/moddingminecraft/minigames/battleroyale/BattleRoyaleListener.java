@@ -9,14 +9,20 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
@@ -189,6 +195,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		Integer currentScore = playerScoreById.get(player.getUniqueId());
 		if (currentScore >= GOAL_SCORE) {
 			lobby.sendLobbyMessage(player.getDisplayName() + " has won " + GAME_NAME + "!");
+			playWinningFireworks(javaPlugin.teams().getTeam(player.getUniqueId()).getTeamColour().getFirework(),
+					player);
 			cleanup();
 			return true;
 		} else {
@@ -229,6 +237,59 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		} else {
 			Broadcaster.sendError(p, "Game must be in the lobby");
 		}
+	}
+
+	private void playWinningFireworks(Color color, Player p) {
+		World world = flagBlockLocations.get(0).getWorld();
+
+		Firework fw = (Firework) world.spawnEntity(p.getLocation(), EntityType.FIREWORK);
+		FireworkMeta fwm = fw.getFireworkMeta();
+
+		fwm.setPower(2);
+		fwm.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+
+		FireworkMeta fwm1 = fw.getFireworkMeta();
+		fwm1.setPower(1);
+		fwm1.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+
+		FireworkMeta fwm2 = fw.getFireworkMeta();
+		fwm2.setPower(2);
+		fwm2.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+
+		FireworkMeta fwm3 = fw.getFireworkMeta();
+		fwm3.setPower(3);
+		fwm3.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+
+		fw.setFireworkMeta(fwm);
+		fw.detonate();
+
+		for (int i = 0; i < flagBlockLocations.size(); i++) {
+			Firework fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0),
+					EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm1);
+			fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm2);
+			fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm3);
+		}
+		for (int i = 0; i < goalStands.size(); i++) {
+			Firework fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm1);
+			fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm2);
+			fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm3);
+		}
+		ArrayList<Player> plist = lobby.playerList();
+		for (int i = 0; i < plist.size(); i++) {
+			Firework fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm1);
+			fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm2);
+			fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm3);
+		}
+
 	}
 
 	private void resetGoalBlock() {

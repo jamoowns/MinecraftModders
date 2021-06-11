@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.minigames.mgsettings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -48,6 +49,14 @@ public final class LobbyListener implements IGameEventListener {
 
 	public boolean playerInLobby(UUID uuid) {
 		return lobby.containsKey(uuid);
+	}
+
+	public ArrayList<Player> playerList() {
+		ArrayList<Player> plist = new ArrayList<Player>();
+		for (UUID uuid : lobby.keySet()) {
+			plist.add(Bukkit.getPlayer(uuid));
+		}
+		return plist;
 	}
 
 	public void removeAllFromLobby() {
