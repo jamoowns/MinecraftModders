@@ -235,6 +235,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		} else {
 			Broadcaster.sendError(p, "Game must be in the lobby");
 		}
+
 	}
 
 	private void playWinningFireworks(Color color, Player p) {
