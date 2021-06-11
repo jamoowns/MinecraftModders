@@ -51,8 +51,16 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 				.orElseGet(() -> commands);
 		List<String> results = new ArrayList<>();
 
+		String prefix;
+		/* Full match. */
+		if (moddersCommand(Arrays.asList(args), false).isPresent()) {
+			prefix = "";
+		} else {
+			prefix = moddersCommand.get().command() + " ";
+		}
+		commandChildren.forEach(Broadcaster::broadcastInfo);
 		for (ModdersCommand com : commandChildren) {
-			results.add(com.command());
+			results.add(prefix + com.command());
 		}
 		return results;
 	}
