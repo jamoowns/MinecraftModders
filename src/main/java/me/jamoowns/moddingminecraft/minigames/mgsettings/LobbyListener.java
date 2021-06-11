@@ -6,14 +6,18 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public final class Lobby {
+import me.jamoowns.moddingminecraft.listener.IGameEventListener;
+
+public final class LobbyListener implements IGameEventListener {
 
 	private static final int MAX_LOBBY_SIZE = 16;
 
 	private HashMap<UUID, PlayerInfo> lobby;
 
-	public Lobby() {
+	public LobbyListener() {
 		lobby = new HashMap<UUID, PlayerInfo>();
 	}
 
@@ -24,8 +28,21 @@ public final class Lobby {
 		p.updateInventory();
 	}
 
+	@Override
+	public void cleanup() {
+		removeAllFromLobby();
+	}
+
 	public int maxSize() {
 		return MAX_LOBBY_SIZE;
+	}
+
+	@EventHandler
+	public final void onQuitEvent(PlayerQuitEvent event) {
+		// This doesn't work if server crashes
+		if (playerInLobby(event.getPlayer().getUniqueId())) {
+			removeFromLobby(event.getPlayer());
+		}
 	}
 
 	public boolean playerInLobby(UUID uuid) {

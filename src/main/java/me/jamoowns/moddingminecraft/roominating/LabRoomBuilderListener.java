@@ -15,7 +15,9 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-public final class LabRoomBuilder {
+import me.jamoowns.moddingminecraft.listener.IGameEventListener;
+
+public final class LabRoomBuilderListener implements IGameEventListener {
 
 	private List<Block> blocks = new ArrayList<Block>();
 
@@ -23,6 +25,10 @@ public final class LabRoomBuilder {
 	int width = 0;
 	int length = 0;
 	int layer = 0;
+
+	public LabRoomBuilderListener() {
+		// Empty on purpose
+	}
 
 	@EventHandler
 	public void aaaonGlassExplode(BlockExplodeEvent e) {
@@ -234,6 +240,12 @@ public final class LabRoomBuilder {
 		randomBlockPlace(tempLoc.add(0, 0, -1), placeOne);
 		randomBlockPlace(tempLoc.add(0, 0, -1), placeOne);
 		randomBlockPlace(tempLoc.add(0, 0, -1), placeTwo);
+
+	}
+
+	@Override
+	public void cleanup() {
+		// TODO Auto-generated method stub
 
 	}
 
