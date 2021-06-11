@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.bukkit.command.Command;
@@ -25,7 +26,8 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 
 	@Override
 	public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		Optional<Consumer<Player>> commandToRun = moddersCommand(Arrays.asList(args)).map(ModdersCommand::action);
+		Optional<Consumer<Player>> commandToRun = moddersCommand(Arrays.asList(args), false)
+				.map(ModdersCommand::action);
 		if (commandToRun.isPresent()) {
 			if (sender instanceof Player) {
 				commandToRun.get().accept((Player) sender);
@@ -43,22 +45,20 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 
 	@Override
 	public final List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		List<ModdersCommand> commandChildren = commands;
-		Optional<ModdersCommand> c = Optional.empty();
-		for (String parent : args) {
-			for (ModdersCommand com : commandChildren) {
-				if (com.command().startsWith(parent)) {
-					c = Optional.of(com);
-					commandChildren = com.subCommands();
-				}
-			}
-		}
+		Optional<ModdersCommand> moddersCommand = moddersCommand(Arrays.asList(args), true);
+
+		List<ModdersCommand> commandChildren = moddersCommand.map(ModdersCommand::subCommands)
+				.orElseGet(() -> commands);
 		List<String> results = new ArrayList<>();
 
-		if (c.isPresent()) {
-			for (ModdersCommand com : c.get().subCommands()) {
-				results.add(c.get().command() + " " + com.command());
-			}
+		String prefix;
+		if (moddersCommand.isPresent()) {
+			prefix = moddersCommand.get().command() + " ";
+		} else {
+			prefix = "";
+		}
+		for (ModdersCommand com : commandChildren) {
+			results.add(prefix + com.command());
 		}
 		return results;
 	}
@@ -78,12 +78,13 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		return moddersCommand;
 	}
 
-	private Optional<ModdersCommand> moddersCommand(Iterable<String> commandPath) {
+	private Optional<ModdersCommand> moddersCommand(List<String> commandPath, boolean partial) {
 		List<ModdersCommand> commandChildren = commands;
 		Optional<ModdersCommand> command = Optional.empty();
 		for (String parent : commandPath) {
 			for (ModdersCommand c : commandChildren) {
-				if (c.command().equalsIgnoreCase(parent)) {
+				Predicate<String> comparator = partial ? c.command()::startsWith : c.command()::equalsIgnoreCase;
+				if (comparator.test(parent)) {
 					command = Optional.of(c);
 					commandChildren = c.subCommands();
 				}
