@@ -53,7 +53,7 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		List<String> results = new ArrayList<>();
 
 		String prefix;
-		List<String> tail = Arrays.asList(args);
+		List<String> tail = new ArrayList<>(allArgs);
 		if (tail.size() > 0) {
 			tail.remove(tail.size() - 1);
 		}
