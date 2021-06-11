@@ -1,4 +1,4 @@
-package me.jamoowns.moddingminecraft.features;
+package me.jamoowns.moddingminecraft.extras;
 
 import java.util.Random;
 
@@ -10,6 +10,7 @@ import org.bukkit.entity.Bee;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Phantom;
@@ -25,6 +26,7 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -33,15 +35,16 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
-public final class FunkyMobDeathsListener implements IGameEventListener {
+public final class FunkyDeathsListener implements IGameEventListener {
 
 	private ModdingMinecraft javaPlugin;
 
 	private Random RANDOM;
 
-	public FunkyMobDeathsListener(ModdingMinecraft aJavaPlugin) {
+	public FunkyDeathsListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 	}
 
@@ -77,6 +80,25 @@ public final class FunkyMobDeathsListener implements IGameEventListener {
 				creeperDeathEvent(event);
 			} else if (event.getEntity() instanceof Spider) {
 				spiderDeathEvent(event);
+			}
+		}
+	}
+
+	@EventHandler
+	public final void onPlayerDeath(PlayerDeathEvent event) {
+		if (javaPlugin.featureTracker().isFeatureActive(Feature.IRON_GOLEM)) {
+			Player playerEnt = event.getEntity();
+			Random r = new Random();
+			int low = 0;
+			int high = 3;
+			int result = r.nextInt(high - low) + low;
+			for (int i = 0; i < result; i++) {
+				event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), IronGolem.class);
+				if (playerEnt.getKiller() instanceof Player) {
+					if (playerEnt != playerEnt.getKiller())
+						event.getEntity().getLocation().getWorld().spawnEntity(playerEnt.getKiller().getLocation(),
+								EntityType.FIREWORK);
+				}
 			}
 		}
 	}

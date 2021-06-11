@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -26,7 +25,7 @@ import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory;
-import me.jamoowns.moddingminecraft.minigames.mgsettings.Lobby;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.LobbyListener;
 import me.jamoowns.moddingminecraft.teams.TeamColour;
 
 public final class BattleRoyaleListener implements IGameEventListener {
@@ -64,7 +63,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	private Location goalLocation;
 
 	private ArrayList<Location> flagBlockLocations;
-	private Lobby lobby;
+	private LobbyListener lobby;
 	private Armory armoury;
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
@@ -75,7 +74,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		playerScoreById = new HashMap<>();
 		playerHomeItemById = new HashMap<>();
 		playerHomeLocationById = new HashMap<>();
-		lobby = new Lobby();
+		lobby = new LobbyListener();
 		armoury = new Armory(2, 2, 1);
 		RANDOM = new Random();
 		ABOVE = new Vector(0, 1, 0);
@@ -152,14 +151,6 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				event.getClickedBlock().setType(Material.AIR);
 				event.getPlayer().getInventory().addItem(goalBlock.asItem());
 			}
-		}
-	}
-
-	@EventHandler
-	public final void onQuitEvent(PlayerQuitEvent event) {
-		// This doesn't work if server crashes
-		if (lobby.playerInLobby(event.getPlayer().getUniqueId())) {
-			lobby.removeFromLobby(event.getPlayer());
 		}
 	}
 

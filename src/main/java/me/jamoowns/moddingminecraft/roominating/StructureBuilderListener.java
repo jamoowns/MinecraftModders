@@ -11,8 +11,12 @@ import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.Stairs.Shape;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntitySpawnEvent;
 
-public final class StructureBuilder {
+import me.jamoowns.moddingminecraft.listener.IGameEventListener;
+
+public final class StructureBuilderListener implements IGameEventListener {
 
 	public enum GridType {
 		TOWER, CORNER, T_SECTION, CROSS, DEAD_END, STRAIGHT
@@ -43,6 +47,20 @@ public final class StructureBuilder {
 		case STRAIGHT:
 			buildStraightChunk(direction, loc);
 			break;
+		}
+	}
+
+	@Override
+	public void cleanup() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@EventHandler
+	public final void onEntitySpawnEvent(EntitySpawnEvent event) {
+		// TODO: Make lantern a custom item and only remove that
+		if (event.getEntity().getName().contains("Lantern")) {
+			event.setCancelled(true);
 		}
 	}
 

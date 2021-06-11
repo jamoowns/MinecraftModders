@@ -10,18 +10,25 @@ import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItemListListener;
 import me.jamoowns.moddingminecraft.customitems.CustomItemListener;
 import me.jamoowns.moddingminecraft.customitems.CustomItems;
+import me.jamoowns.moddingminecraft.extras.BossesListener;
+import me.jamoowns.moddingminecraft.extras.FunkyDeathsListener;
+import me.jamoowns.moddingminecraft.extras.FunkyFoodListener;
+import me.jamoowns.moddingminecraft.extras.SpellsListener;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.features.FeatureTracker;
-import me.jamoowns.moddingminecraft.features.FunkyMobDeathsListener;
 import me.jamoowns.moddingminecraft.features.IFeatureListener;
 import me.jamoowns.moddingminecraft.features.PlayerTrailFeatureListener;
 import me.jamoowns.moddingminecraft.features.RandomChestsFeatureListener;
+import me.jamoowns.moddingminecraft.features.WeatherListener;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.menus.FeaturesMenu;
 import me.jamoowns.moddingminecraft.menus.ItemMenu;
 import me.jamoowns.moddingminecraft.menus.MenuListener;
 import me.jamoowns.moddingminecraft.minigames.battleroyale.BattleRoyaleListener;
 import me.jamoowns.moddingminecraft.minigames.blockhunter.BlockHunterListener;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.LobbyListener;
+import me.jamoowns.moddingminecraft.roominating.LabRoomBuilderListener;
+import me.jamoowns.moddingminecraft.roominating.StructureBuilderListener;
 import me.jamoowns.moddingminecraft.teams.Teams;
 
 public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
@@ -52,35 +59,35 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void featureActivated(Feature feature) {
 		Broadcaster.broadcastInfo("Activated: " + feature.name());
 		switch (feature) {
-			case BATTLE_ROYALE:
-				break;
-			case EGG_WITCH:
-				break;
-			case FUNKY_MOB_DEATH:
-				break;
-			case IRON_GOLEM:
-				break;
-			case PLAYER_TRAIL:
-				break;
-			case RANDOM_BUCKET:
-				break;
-			case RANDOM_CHESTS:
-				randomChestsFeatureListener.start();
-				break;
-			case RANDOM_ENCHANT:
-				break;
-			case STABLE_WEATHER:
-				break;
-			case WINFRED:
-				break;
-			case ZOMBIE_BELL:
-				break;
-			case HEAVY_BLOCKS:
-				break;
-			case LIGHT_BLOCKS:
-				break;
-			default:
-				break;
+		case BATTLE_ROYALE:
+			break;
+		case EGG_WITCH:
+			break;
+		case FUNKY_MOB_DEATH:
+			break;
+		case IRON_GOLEM:
+			break;
+		case PLAYER_TRAIL:
+			break;
+		case RANDOM_BUCKET:
+			break;
+		case RANDOM_CHESTS:
+			randomChestsFeatureListener.start();
+			break;
+		case RANDOM_ENCHANT:
+			break;
+		case STABLE_WEATHER:
+			break;
+		case WINFRED:
+			break;
+		case ZOMBIE_BELL:
+			break;
+		case HEAVY_BLOCKS:
+			break;
+		case LIGHT_BLOCKS:
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -88,36 +95,36 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void featureDeactivated(Feature feature) {
 		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
 		switch (feature) {
-			case BATTLE_ROYALE:
-				break;
-			case EGG_WITCH:
-				break;
-			case FUNKY_MOB_DEATH:
-				break;
-			case IRON_GOLEM:
-				break;
-			case PLAYER_TRAIL:
-				playerTrailFeatureListener.cleanup();
-				break;
-			case RANDOM_BUCKET:
-				break;
-			case RANDOM_CHESTS:
-				randomChestsFeatureListener.stop();
-				break;
-			case RANDOM_ENCHANT:
-				break;
-			case STABLE_WEATHER:
-				break;
-			case WINFRED:
-				break;
-			case ZOMBIE_BELL:
-				break;
-			case HEAVY_BLOCKS:
-				break;
-			case LIGHT_BLOCKS:
-				break;
-			default:
-				break;
+		case BATTLE_ROYALE:
+			break;
+		case EGG_WITCH:
+			break;
+		case FUNKY_MOB_DEATH:
+			break;
+		case IRON_GOLEM:
+			break;
+		case PLAYER_TRAIL:
+			playerTrailFeatureListener.cleanup();
+			break;
+		case RANDOM_BUCKET:
+			break;
+		case RANDOM_CHESTS:
+			randomChestsFeatureListener.stop();
+			break;
+		case RANDOM_ENCHANT:
+			break;
+		case STABLE_WEATHER:
+			break;
+		case WINFRED:
+			break;
+		case ZOMBIE_BELL:
+			break;
+		case HEAVY_BLOCKS:
+			break;
+		case LIGHT_BLOCKS:
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -165,7 +172,14 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 		/* Custom mabmo stuff. */
 		addGameListener(new CustomItemListListener(this));
-		addGameListener(new FunkyMobDeathsListener(this));
+		addGameListener(new FunkyDeathsListener(this));
+		addGameListener(new LabRoomBuilderListener());
+		addGameListener(new LobbyListener());
+		addGameListener(new BossesListener(this));
+		addGameListener(new SpellsListener(this));
+		addGameListener(new FunkyFoodListener(this));
+		addGameListener(new StructureBuilderListener());
+		addGameListener(new WeatherListener(this));
 
 		playerTrailFeatureListener = new PlayerTrailFeatureListener(this);
 		addGameListener(playerTrailFeatureListener);
