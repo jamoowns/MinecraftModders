@@ -3,7 +3,6 @@ package me.jamoowns.moddingminecraft.minigames.blockhunter;
 import static com.google.common.base.Predicates.not;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,6 +23,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.google.common.base.Predicates;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.commands.ModdersCommand;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.fated.Collections;
 import me.jamoowns.moddingminecraft.common.time.CountdownTimer;
@@ -65,10 +65,12 @@ public final class BlockHunterListener implements IGameEventListener {
 		meta.setDisplayName("Block stand");
 		blockStand.setItemMeta(meta);
 
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "init", p -> initiateGame());
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "join", this::join);
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "start", this::beginGame);
-		javaPlugin.commandExecutor().registerCommand(Arrays.asList("blockhunter"), "stop", p -> stopGame());
+		ModdersCommand rootCommand = javaPlugin.commandExecutor().registerCommand("blockhunter",
+				p -> Broadcaster.sendGameInfo(p, "Blockhunter!"));
+		javaPlugin.commandExecutor().registerCommand(rootCommand, "init", p -> initiateGame());
+		javaPlugin.commandExecutor().registerCommand(rootCommand, "join", this::join);
+		javaPlugin.commandExecutor().registerCommand(rootCommand, "start", this::beginGame);
+		javaPlugin.commandExecutor().registerCommand(rootCommand, "stop", p -> stopGame());
 	}
 
 	public final void beginGame(Player host) {

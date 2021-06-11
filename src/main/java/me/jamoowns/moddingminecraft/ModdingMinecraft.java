@@ -181,11 +181,9 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		menuListener.register(featureMenu);
 		menuListener.register(itemMenu);
 
-		commandExecutor().registerCommand(java.util.Collections.emptyList(), "features",
-				p -> p.openInventory(featureMenu.asInventory()));
+		commandExecutor().registerCommand("features", p -> p.openInventory(featureMenu.asInventory()));
 
-		commandExecutor().registerCommand(java.util.Collections.emptyList(), "items",
-				p -> p.openInventory(itemMenu.asInventory()));
+		commandExecutor().registerCommand("items", p -> p.openInventory(itemMenu.asInventory()));
 
 		this.getCommand("mm").setExecutor(commandExecutor);
 
