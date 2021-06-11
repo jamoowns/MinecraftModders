@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 import org.bukkit.entity.Player;
 
-final class ModdersCommand {
+public final class ModdersCommand {
 
 	private String command;
 
@@ -14,25 +14,25 @@ final class ModdersCommand {
 
 	private Consumer<Player> action;
 
-	public ModdersCommand(final String theCommand, Consumer<Player> aAction) {
+	ModdersCommand(final String theCommand, Consumer<Player> aAction) {
 		subCommands = new ArrayList<>();
 		command = theCommand;
 		action = aAction;
 	}
 
-	public final Consumer<Player> action() {
+	final Consumer<Player> action() {
 		return action;
 	}
 
-	public final void addSubCommand(ModdersCommand subCommand) {
+	final void addSubCommand(ModdersCommand subCommand) {
 		subCommands.add(subCommand);
 	}
 
-	public final String command() {
+	final String command() {
 		return command;
 	}
 
-	public final List<ModdersCommand> subCommands() {
+	final List<ModdersCommand> subCommands() {
 		return subCommands;
 	}
 }

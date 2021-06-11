@@ -58,22 +58,25 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 
 		if (c.isPresent()) {
 			for (ModdersCommand com : c.get().subCommands()) {
-				results.add(c.get().command() + "" + com.command());
+				results.add(c.get().command() + " " + com.command());
 			}
 		}
 		return results;
 	}
 
-	public final void registerCommand(List<String> parentChain, String command, Consumer<Player> function) {
+	public final ModdersCommand registerCommand(ModdersCommand parentCommand, String command,
+			Consumer<Player> function) {
 		ModdersCommand moddersCommand = new ModdersCommand(command, function);
 
-		Optional<ModdersCommand> parentCommand = moddersCommand(parentChain);
+		parentCommand.addSubCommand(moddersCommand);
+		return moddersCommand;
+	}
 
-		if (parentCommand.isPresent()) {
-			parentCommand.get().addSubCommand(moddersCommand);
-		} else {
-			commands.add(moddersCommand);
-		}
+	public final ModdersCommand registerCommand(String command, Consumer<Player> function) {
+		ModdersCommand moddersCommand = new ModdersCommand(command, function);
+
+		commands.add(moddersCommand);
+		return moddersCommand;
 	}
 
 	private Optional<ModdersCommand> moddersCommand(Iterable<String> commandPath) {

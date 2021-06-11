@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import me.jamoowns.moddingminecraft.extras.SpellsListener;
+import me.jamoowns.moddingminecraft.extras.Spells;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.roominating.SimpleChunks;
 
@@ -122,7 +122,7 @@ public class MabListener implements IGameEventListener {
 	@EventHandler
 	public final void playerChatEvent(PlayerChatEvent event) {
 		if (event.getMessage().contains("Ok let's do this")) {
-			SpellsListener.getReady(event.getPlayer().getLocation().getWorld());
+			Spells.dropAllPlayersIntoRandomLocation(event.getPlayer().getLocation().getWorld(), javaPlugin);
 		}
 		if (event.getMessage().contains("Iammabmo")) {
 			mabmo = event.getPlayer();

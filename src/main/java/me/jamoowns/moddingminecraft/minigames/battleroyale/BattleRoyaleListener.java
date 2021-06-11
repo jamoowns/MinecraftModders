@@ -1,7 +1,6 @@
 package me.jamoowns.moddingminecraft.minigames.battleroyale;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.commands.ModdersCommand;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
@@ -114,12 +114,14 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		aJavaPlugin.customItems().silentRegister(goalBlock);
 		aJavaPlugin.customItems().silentRegister(goalBlockStand);
 
-		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "init", p -> initiate());
-		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "join", this::join);
-		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "unjoin", this::unjoin);
-		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "setup", this::setup);
-		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "start", this::start);
-		aJavaPlugin.commandExecutor().registerCommand(Arrays.asList("royale"), "stop", p -> cleanup());
+		ModdersCommand rootCommand = javaPlugin.commandExecutor().registerCommand("royale",
+				p -> Broadcaster.sendGameInfo(p, "Battle royale!"));
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "init", p -> initiate());
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "join", this::join);
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "unjoin", this::unjoin);
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "setup", this::setup);
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "start", this::start);
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "stop", p -> cleanup());
 	}
 
 	@Override

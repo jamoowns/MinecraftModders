@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
-import me.jamoowns.moddingminecraft.extras.SpellsListener;
+import me.jamoowns.moddingminecraft.extras.Spells;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.roominating.BuildingFoundations;
 import me.jamoowns.moddingminecraft.roominating.LabRoomBuilderListener;
@@ -642,7 +642,7 @@ public final class CustomItemListListener implements IGameEventListener {
 
 		swapsiesSplashPotionItem = new CustomItem("Swapsies When Dropsies", Material.SPLASH_POTION, ItemCategory.MISC);
 		swapsiesSplashPotionItem.setPotionSplashEvent(event -> {
-			SpellsListener.switchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
+			Spells.switchAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20);
 		});
 		swapsiesSplashPotionItem.setProjectileLaunchEvent(event -> {
 			event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(4));
@@ -651,9 +651,9 @@ public final class CustomItemListListener implements IGameEventListener {
 
 		medusaSplashPotionItem = new CustomItem("Tears of Medusa", Material.SPLASH_POTION, ItemCategory.MISC);
 		medusaSplashPotionItem.setPotionSplashEvent(event -> {
-			SpellsListener.potionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.SLOW, 100,
+			Spells.potionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.SLOW, 100,
 					200);
-			SpellsListener.potionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.JUMP, 100,
+			Spells.potionAllPlayersInAnArea(event.getEntity().getLocation(), 20, 5, 20, PotionEffectType.JUMP, 100,
 					100000);
 		});
 		medusaSplashPotionItem.setProjectileLaunchEvent(event -> {

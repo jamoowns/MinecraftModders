@@ -13,7 +13,6 @@ import me.jamoowns.moddingminecraft.customitems.CustomItems;
 import me.jamoowns.moddingminecraft.extras.BossesListener;
 import me.jamoowns.moddingminecraft.extras.FunkyDeathsListener;
 import me.jamoowns.moddingminecraft.extras.FunkyFoodListener;
-import me.jamoowns.moddingminecraft.extras.SpellsListener;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.features.FeatureTracker;
 import me.jamoowns.moddingminecraft.features.IFeatureListener;
@@ -176,7 +175,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		addGameListener(new LabRoomBuilderListener());
 		addGameListener(new LobbyListener());
 		addGameListener(new BossesListener(this));
-		addGameListener(new SpellsListener(this));
 		addGameListener(new FunkyFoodListener(this));
 		addGameListener(new StructureBuilderListener());
 		addGameListener(new WeatherListener(this));
@@ -195,11 +193,9 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		menuListener.register(featureMenu);
 		menuListener.register(itemMenu);
 
-		commandExecutor().registerCommand(java.util.Collections.emptyList(), "features",
-				p -> p.openInventory(featureMenu.asInventory()));
+		commandExecutor().registerCommand("features", p -> p.openInventory(featureMenu.asInventory()));
 
-		commandExecutor().registerCommand(java.util.Collections.emptyList(), "items",
-				p -> p.openInventory(itemMenu.asInventory()));
+		commandExecutor().registerCommand("items", p -> p.openInventory(itemMenu.asInventory()));
 
 		this.getCommand("mm").setExecutor(commandExecutor);
 
