@@ -8,9 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public final class Lobby {
-	// TODO:Expand More
 
 	private HashMap<UUID, PlayerInfo> lobby;
+
 	private int maxSize;
 
 	public Lobby() {
@@ -18,47 +18,46 @@ public final class Lobby {
 		maxSize = 16;
 	}
 
-	public void AddToLobby(Player p) {
+	public void addToLobby(Player p) {
 		PlayerInfo pInfo = new PlayerInfo(p.getInventory().getContents(), p.getBedSpawnLocation());
 		lobby.put(p.getUniqueId(), pInfo);
 		p.getInventory().clear();
 		p.updateInventory();
 	}
 
-	public int MaxSize() {
+	public int maxSize() {
 		return maxSize;
 	}
 
-	public boolean PlayerInLobby(UUID uuid) {
+	public boolean playerInLobby(UUID uuid) {
 		return lobby.containsKey(uuid);
 	}
 
-	public void RemoveAllFromLobby() {
+	public void removeAllFromLobby() {
 		if (!lobby.isEmpty()) {
 			for (Map.Entry<UUID, PlayerInfo> entry : lobby.entrySet()) {
 				UUID pUUID = entry.getKey();
-				RestorePlayerInfo(Bukkit.getPlayer(pUUID));
+				restorePlayerInfo(Bukkit.getPlayer(pUUID));
 			}
 			lobby.clear();
 		}
 	}
 
-	public void RemoveFromLobby(Player p) {
+	public void removeFromLobby(Player p) {
 		if (!lobby.isEmpty() && lobby.containsKey(p.getUniqueId())) {
-			RestorePlayerInfo(p);
+			restorePlayerInfo(p);
 		}
 	}
 
-	public int Size() {
+	public int size() {
 		return lobby.size();
 	}
 
-	private void RestorePlayerInfo(Player p) {
+	private void restorePlayerInfo(Player p) {
 		p.getInventory().clear();
 		p.getInventory().setContents(lobby.get(p.getUniqueId()).getInventory());
 		p.setBedSpawnLocation(lobby.get(p.getUniqueId()).getBedSpawn());
 		p.updateInventory();
 		lobby.remove(p.getUniqueId());
 	}
-
 }

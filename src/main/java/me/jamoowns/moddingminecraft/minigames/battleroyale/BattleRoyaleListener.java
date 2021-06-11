@@ -135,7 +135,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		playerHomeItemById.clear();
 		playerHomeLocationById.values().forEach(l -> l.getBlock().setType(Material.AIR));
 		playerHomeLocationById.clear();
-		lobby.RemoveAllFromLobby();
+		lobby.removeAllFromLobby();
 		if (currentGameState != GameState.STOPPED) {
 			currentGameState = GameState.STOPPED;
 			Broadcaster.broadcastGameInfo(GAME_NAME + " has been stopped!");
@@ -152,12 +152,12 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		if (currentGameState == GameState.LOBBY && !alreadyPlaying) {
 
 			playerScoreById.put(p.getUniqueId(), 0);
-			lobby.AddToLobby(p);
+			lobby.addToLobby(p);
 			for (int i = 0; i < armoury.getItems().size(); i++) {
 				p.getInventory().addItem(armoury.getItems().get(i));
 			}
-			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.Size()
-					+ " / " + lobby.MaxSize() + " )");
+			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size()
+					+ " / " + lobby.maxSize() + " )");
 
 			TeamColour teamColour = javaPlugin.teams().getTeam(p.getUniqueId()).getTeamColour();
 			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", teamColour.getBase());
@@ -224,7 +224,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		if (currentGameState == GameState.LOBBY && alreadyPlaying) {
 			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has left the " + GAME_NAME);
 			playerScoreById.remove(p.getUniqueId());
-			lobby.RemoveFromLobby(p);
+			lobby.removeFromLobby(p);
 		} else {
 			Broadcaster.sendError(p, "You must be in a lobby");
 		}
@@ -278,8 +278,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	@EventHandler
 	private void OnQuitEvent(PlayerQuitEvent event) {
 		// This doesn't work if server crashes
-		if (lobby.PlayerInLobby(event.getPlayer().getUniqueId())) {
-			lobby.RemoveFromLobby(event.getPlayer());
+		if (lobby.playerInLobby(event.getPlayer().getUniqueId())) {
+			lobby.removeFromLobby(event.getPlayer());
 		}
 	}
 
