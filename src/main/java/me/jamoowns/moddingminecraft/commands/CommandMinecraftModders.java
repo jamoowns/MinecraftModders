@@ -47,24 +47,12 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 	public final List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		Optional<ModdersCommand> moddersCommand = moddersCommand(Arrays.asList(args), true);
 
-		if (moddersCommand.isPresent()) {
-			Broadcaster.broadcastError("Here..." + moddersCommand.get().command());
-		} else {
-			Broadcaster.broadcastError("Not here!");
-		}
 		List<ModdersCommand> commandChildren = moddersCommand.map(ModdersCommand::subCommands)
 				.orElseGet(() -> commands);
 		List<String> results = new ArrayList<>();
 
-		String prefix;
-		if (moddersCommand.isPresent()) {
-			prefix = moddersCommand.get().command() + " ";
-		} else {
-			prefix = "";
-		}
-		commandChildren.forEach(Broadcaster::broadcastInfo);
 		for (ModdersCommand com : commandChildren) {
-			results.add(prefix + com.command());
+			results.add(com.command());
 		}
 		return results;
 	}
@@ -87,7 +75,6 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 	private Optional<ModdersCommand> moddersCommand(List<String> commandPath, boolean partial) {
 		List<ModdersCommand> commandChildren = commands;
 		Optional<ModdersCommand> command = Optional.empty();
-		commandPath.forEach(Broadcaster::broadcastError);
 		for (String parent : commandPath) {
 			for (ModdersCommand c : commandChildren) {
 				Predicate<String> comparator = partial ? c.command()::startsWith : c.command()::equalsIgnoreCase;
