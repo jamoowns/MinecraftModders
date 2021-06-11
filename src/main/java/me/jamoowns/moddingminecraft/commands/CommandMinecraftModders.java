@@ -35,8 +35,7 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		Broadcaster.sendInfo(sender, "Available Commands:");
 		List<String> buffer = new ArrayList<>();
 
-		ModdersCommand root = new ModdersCommand("/mm", p -> System.err.println(p));
-		treeRec(buffer, "", root, commands, true);
+		treeRec(buffer, "", commands, true);
 		Broadcaster.sendInfo(sender, buffer.stream().collect(Collectors.joining("\n")));
 
 		return true;
@@ -91,6 +90,13 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 			}
 		}
 		return command;
+	}
+
+	private void treeRec(List<String> buffer, String prefix, List<ModdersCommand> children, boolean isTail) {
+		for (int i = 0; i < children.size(); i++) {
+			String newPrefix = prefix + (isTail ? "    " : "|   ");
+			treeRec(buffer, newPrefix, children.get(i), children.get(i).subCommands(), i == children.size() - 1);
+		}
 	}
 
 	private void treeRec(List<String> buffer, String prefix, ModdersCommand node, List<ModdersCommand> children,
