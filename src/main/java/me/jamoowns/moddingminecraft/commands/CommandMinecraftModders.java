@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,12 +33,11 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 			}
 		}
 		Broadcaster.sendInfo(sender, "Available Commands:");
-		StringBuilder buffer = new StringBuilder();
-//		print("", commands, buffer, "", "");
+		List<String> buffer = new ArrayList<>();
 
 		ModdersCommand root = new ModdersCommand("/mm", p -> System.err.println(p));
-		printTreeRec(buffer, "", root, commands, true);
-		Broadcaster.sendInfo(sender, buffer.toString());
+		treeRec(buffer, "", root, commands, true);
+		Broadcaster.sendInfo(sender, buffer.stream().collect(Collectors.joining("\n")));
 
 		return true;
 	}
@@ -93,15 +93,14 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		return command;
 	}
 
-	private void printTreeRec(StringBuilder buffer, String prefix, ModdersCommand node, List<ModdersCommand> children,
+	private void treeRec(List<String> buffer, String prefix, ModdersCommand node, List<ModdersCommand> children,
 			boolean isTail) {
 		String nodeName = node.command();
 		String nodeConnection = isTail ? "\\ " : "|- ";
-		buffer.append(prefix + nodeConnection + nodeName);
-		buffer.append("\n");
+		buffer.add(prefix + nodeConnection + nodeName);
 		for (int i = 0; i < children.size(); i++) {
 			String newPrefix = prefix + (isTail ? "    " : "|   ");
-			printTreeRec(buffer, newPrefix, children.get(i), children.get(i).subCommands(), i == children.size() - 1);
+			treeRec(buffer, newPrefix, children.get(i), children.get(i).subCommands(), i == children.size() - 1);
 		}
 	}
 }
