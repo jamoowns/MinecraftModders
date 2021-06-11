@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
@@ -32,11 +33,23 @@ public final class MenuListener implements IGameEventListener {
 		if (menus.containsKey(inventory)) {
 			ICustomMenu menu = menus.get(inventory);
 			event.setCancelled(true);
-			if (event.getCurrentItem() != null && event.getClickedInventory().equals(event.getInventory())) {
+			if (event.getCurrentItem() != null) {
+				boolean wholeStack = event.isShiftClick();
 				Optional<CustomMenuItem> customItem = menu.menuItem(event.getCurrentItem());
-				if (customItem.isPresent()) {
-					menu.getAction(event.getCurrentItem()).accept(player);
-					event.getClickedInventory().setItem(event.getSlot(), customItem.get().asItem());
+				if (event.getClickedInventory().equals(event.getInventory())) {
+					if (customItem.isPresent()) {
+						menu.getAction(event.getCurrentItem()).accept(player);
+						ItemStack itemToSet = customItem.get().asItem();
+						if (wholeStack) {
+							customItem.get().asItem().setAmount(itemToSet.getType().getMaxStackSize());
+						}
+						event.getClickedInventory().setItem(event.getSlot(), itemToSet);
+					}
+				} else if (event.getClickedInventory().equals(player.getInventory())) {
+					if (customItem.isPresent()) {
+						event.getCurrentItem().setAmount(wholeStack ? 0 : event.getCurrentItem().getAmount() - 1);
+						event.getClickedInventory().setItem(event.getSlot(), customItem.get().asItem());
+					}
 				}
 			}
 		}
