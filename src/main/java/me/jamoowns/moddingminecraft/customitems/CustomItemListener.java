@@ -3,6 +3,7 @@ package me.jamoowns.moddingminecraft.customitems;
 import java.util.Optional;
 
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -103,10 +104,14 @@ public final class CustomItemListener implements IGameEventListener {
 				.map(CustomItem::projectileLaunchEvent).ifPresent(c -> c.accept(event));
 		ProjectileSource shooter = event.getEntity().getShooter();
 		if (shooter instanceof Player) {
-			ItemStack item = ((Player) shooter).getInventory().getItemInMainHand();
-			if (event.getEntityType() != EntityType.ARROW && event.getEntity() != null && item != null
-					&& item.getItemMeta() != null) {
-				event.getEntity().setCustomName(item.getItemMeta().getDisplayName());
+			ItemStack projectileSource = ((Player) shooter).getInventory().getItemInMainHand();
+			if (projectileSource.getType() == Material.BOW || projectileSource.getType() == Material.CROSSBOW) {
+				javaPlugin.customItems().getItem(projectileSource).filter(CustomItem::hasProjectileLaunchEvent)
+						.map(CustomItem::projectileLaunchEvent).ifPresent(c -> c.accept(event));
+			}
+			if (event.getEntityType() != EntityType.ARROW && projectileSource != null
+					&& projectileSource.getItemMeta() != null) {
+				event.getEntity().setCustomName(projectileSource.getItemMeta().getDisplayName());
 			}
 		}
 	}
