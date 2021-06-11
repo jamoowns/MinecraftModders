@@ -43,7 +43,7 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+	public final List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		List<ModdersCommand> commandChildren = commands;
 		Optional<ModdersCommand> c = Optional.empty();
 		for (String parent : args) {
