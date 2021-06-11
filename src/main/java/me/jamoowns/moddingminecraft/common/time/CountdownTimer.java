@@ -5,17 +5,20 @@ import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CountdownTimer implements Runnable {
+public final class CountdownTimer implements Runnable {
 
 	private JavaPlugin plugin;
 
 	private Integer assignedTaskId;
 
 	private int seconds;
+
 	private int secondsLeft;
 
 	private Consumer<CountdownTimer> everySecond;
+
 	private Runnable beforeTimer;
+
 	private Runnable afterTimer;
 
 	private double delay;
@@ -38,7 +41,7 @@ public class CountdownTimer implements Runnable {
 	 *
 	 * @return Seconds left timer should run
 	 */
-	public int getSecondsLeft() {
+	public final int getSecondsLeft() {
 		return secondsLeft;
 	}
 
@@ -47,11 +50,11 @@ public class CountdownTimer implements Runnable {
 	 *
 	 * @return Total seconds timer should run
 	 */
-	public int getTotalSeconds() {
+	public final int getTotalSeconds() {
 		return seconds;
 	}
 
-	public void kill() {
+	public final void kill() {
 		if (assignedTaskId != null)
 			Bukkit.getScheduler().cancelTask(assignedTaskId);
 	}
@@ -77,14 +80,13 @@ public class CountdownTimer implements Runnable {
 		}
 
 		everySecond.accept(this);
-
 		secondsLeft--;
 	}
 
 	/**
 	 * Schedules this instance to "run" every second
 	 */
-	public void scheduleTimer() {
+	public final void scheduleTimer() {
 		// Initialize our assigned task's id, for later use so we can cancel
 		assignedTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this,
 				(long) (delay * TimeConstants.ONE_SECOND), TimeConstants.ONE_SECOND);
