@@ -76,8 +76,6 @@ public class Armoury {
 			Items.add(temp3);
 			break;
 		default:
-			ItemStack[] tempd = { (new ItemStack(Material.SHIELD, 1)) };
-			Items.add(tempd);
 		}
 
 	}
@@ -97,8 +95,6 @@ public class Armoury {
 			Items.add(temp2);
 			break;
 		default:
-			ItemStack[] tempd = { (new ItemStack(Material.COOKED_BEEF, 32)) };
-			Items.add(tempd);
 		}
 
 	}
