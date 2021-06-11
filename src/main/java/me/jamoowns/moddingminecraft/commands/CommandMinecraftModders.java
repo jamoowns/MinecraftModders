@@ -52,18 +52,25 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 				.orElseGet(() -> commands);
 		List<String> results = new ArrayList<>();
 
-		String prefix;
-		if (allArgs.size() > 0 && allArgs.get(0).isEmpty()) {
+		Optional<ModdersCommand> fullMatch = moddersCommand(allArgs, false);
+		if (fullMatch.isPresent()) {
 			/* Full match. */
-			prefix = " ";
+			String prefix;
+			if (allArgs.size() > 0 && allArgs.get(0).equals("")) {
+				prefix = " ";
+			} else {
+				prefix = "";
+			}
+			for (ModdersCommand com : commandChildren) {
+				results.add(prefix + com.command());
+			}
 		} else if (moddersCommand.isPresent()) {
 			/* Partial match. */
-			prefix = moddersCommand.get().command() + " ";
+			results.add(moddersCommand.get().command());
 		} else {
-			prefix = "";
-		}
-		for (ModdersCommand com : commandChildren) {
-			results.add(prefix + com.command());
+			for (ModdersCommand com : commandChildren) {
+				results.add(com.command());
+			}
 		}
 		return results;
 	}
