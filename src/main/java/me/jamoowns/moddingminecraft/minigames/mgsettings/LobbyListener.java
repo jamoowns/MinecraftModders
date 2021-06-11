@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
 public final class LobbyListener implements IGameEventListener {
@@ -63,6 +64,18 @@ public final class LobbyListener implements IGameEventListener {
 		if (!lobby.isEmpty() && lobby.containsKey(p.getUniqueId())) {
 			restorePlayerInfo(p);
 			lobby.remove(p.getUniqueId());
+		}
+	}
+
+	public void sendLobbyMessage(String msg) {
+		for (UUID uuid : lobby.keySet()) {
+			Broadcaster.sendGameInfo(Bukkit.getPlayer(uuid), msg);
+		}
+	}
+
+	public void sendPlayerMessage(Player p, String msg) {
+		if (playerInLobby(p.getUniqueId())) {
+			Broadcaster.sendGameInfo(p, msg);
 		}
 	}
 

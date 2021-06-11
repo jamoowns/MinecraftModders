@@ -93,14 +93,12 @@ public final class BattleRoyaleListener implements IGameEventListener {
 					playerScoreById.put(event.getPlayer().getUniqueId(), updatedScore);
 					boolean hasWon = checkForVictory(event.getPlayer());
 					if (!hasWon) {
-						for (UUID uuid : playerHomeLocationById.keySet()) {
-							Broadcaster.sendGameInfo(Bukkit.getPlayer(uuid),
-									event.getPlayer().getDisplayName() + " has scored a point!");
-						}
+						lobby.sendLobbyMessage(event.getPlayer().getDisplayName() + " has scored a point!");
 						resetGoalBlock();
 					}
 				} else {
-					Broadcaster.sendGameInfo(event.getPlayer(), "You must place that closer to your homebase");
+					lobby.sendPlayerMessage(event.getPlayer(), "You must place that closer to your homebase");
+
 					event.setCancelled(true);
 				}
 			}
@@ -109,7 +107,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		goalBlockStand = new CustomItem("Goal Block Stand", Material.OBSIDIAN);
 		goalBlockStand.setBlockPlaceEvent(event -> {
 			if (currentGameState == GameState.SETUP) {
-				Broadcaster.sendGameInfo(event.getPlayer(), "Added a goal location to the game");
+				lobby.sendPlayerMessage(event.getPlayer(), "Added a goal location to the game");
 				goalStands.add(event.getBlock().getLocation());
 			}
 		});
@@ -134,11 +132,11 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		playerHomeItemById.clear();
 		playerHomeLocationById.values().forEach(l -> l.getBlock().setType(Material.AIR));
 		playerHomeLocationById.clear();
-		lobby.removeAllFromLobby();
 		if (currentGameState != GameState.STOPPED) {
 			currentGameState = GameState.STOPPED;
-			Broadcaster.broadcastGameInfo(GAME_NAME + " has been stopped!");
+			lobby.sendLobbyMessage(GAME_NAME + " has been stopped!");
 		}
+		lobby.removeAllFromLobby();
 	}
 
 	@EventHandler
@@ -188,11 +186,11 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	private boolean checkForVictory(Player player) {
 		Integer currentScore = playerScoreById.get(player.getUniqueId());
 		if (currentScore >= GOAL_SCORE) {
-			Broadcaster.broadcastInfo(player.getDisplayName() + " has won " + GAME_NAME + "!");
+			lobby.sendLobbyMessage(player.getDisplayName() + " has won " + GAME_NAME + "!");
 			cleanup();
 			return true;
 		} else {
-			Broadcaster.sendGameInfo(player, "Your current score: " + currentScore + "/" + GOAL_SCORE);
+			lobby.sendPlayerMessage(player, "Your current score: " + currentScore + "/" + GOAL_SCORE);
 			return false;
 		}
 	}
@@ -211,15 +209,15 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			for (int i = 0; i < armoury.getItems().size(); i++) {
 				p.getInventory().addItem(armoury.getItems().get(i));
 			}
-			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size()
-					+ " / " + lobby.maxSize() + " )");
+			lobby.sendLobbyMessage(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size() + " / "
+					+ lobby.maxSize() + " )");
 
 			TeamColour teamColour = javaPlugin.teams().getTeam(p.getUniqueId()).getTeamColour();
 			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", teamColour.getBase());
 			homeStand.setBlockPlaceEvent(event -> {
 				if (currentGameState == GameState.SETUP) {
 					playerHomeLocationById.put(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
-					Broadcaster.sendGameInfo(event.getPlayer(), "Home sweet home has been set");
+					lobby.sendPlayerMessage(event.getPlayer(), "Home sweet home has been set");
 					buildFlag(event.getBlock(), teamColour.getBase(), teamColour.getHead());
 				}
 			});
@@ -232,9 +230,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	}
 
 	private void resetGoalBlock() {
-		for (UUID uuid : playerHomeLocationById.keySet()) {
-			Broadcaster.sendGameInfo(Bukkit.getPlayer(uuid), "Block has returned to a goal stand.");
-		}
+		lobby.sendLobbyMessage("Block has returned to a goal stand.");
 		/* Places goal block on a random goal stand. */
 		Location goalStandToPlaceOn = goalStands.get(RANDOM.nextInt(goalStands.size())).clone().add(ABOVE);
 		goalStandToPlaceOn.getWorld().getBlockAt(goalStandToPlaceOn).setType(goalBlock.material());
@@ -243,8 +239,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private final void setup(Player host) {
 		if (currentGameState == GameState.LOBBY && playerScoreById.size() >= 2) {
-			Broadcaster.broadcastGameInfo("Setting up " + GAME_NAME);
-			Broadcaster.sendGameInfo(host, "Place all of the goal stands on the battle field");
+			lobby.sendLobbyMessage("Setting up " + GAME_NAME);
+			lobby.sendPlayerMessage(host, "Place all of the goal stands on the battle field");
 			currentGameState = GameState.SETUP;
 			ItemStack goal = goalBlockStand.asItem();
 			goal.setAmount(GOAL_STAND_LOCATIONS);
@@ -255,7 +251,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				player.getInventory().addItem(playerHomeItem.getValue().asItem());
 			}
 		} else {
-			Broadcaster.sendError(host, "Game must be in the lobby and atleast two players joined");
+			lobby.sendPlayerMessage(host, "Game must be in the lobby and atleast two players joined");
 		}
 	}
 
@@ -269,14 +265,14 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			currentGameState = GameState.PLAYING;
 			resetGoalBlock();
 		} else {
-			Broadcaster.sendError(host, "Must setup first. Not all players have placed their homes yet.");
+			lobby.sendPlayerMessage(host, "Must setup first. Not all players have placed their homes yet.");
 		}
 	}
 
 	private final void unjoin(Player p) {
 		boolean alreadyPlaying = playerScoreById.containsKey(p.getUniqueId());
 		if (currentGameState == GameState.LOBBY && alreadyPlaying) {
-			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has left the " + GAME_NAME);
+			lobby.sendLobbyMessage(p.getDisplayName() + " has left the " + GAME_NAME);
 			playerScoreById.remove(p.getUniqueId());
 			lobby.removeFromLobby(p);
 		} else {
