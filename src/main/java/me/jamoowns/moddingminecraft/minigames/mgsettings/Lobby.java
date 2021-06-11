@@ -46,6 +46,7 @@ public final class Lobby {
 	public void removeFromLobby(Player p) {
 		if (!lobby.isEmpty() && lobby.containsKey(p.getUniqueId())) {
 			restorePlayerInfo(p);
+			lobby.remove(p.getUniqueId());
 		}
 	}
 
@@ -58,6 +59,5 @@ public final class Lobby {
 		p.getInventory().setContents(lobby.get(p.getUniqueId()).getInventory());
 		p.setBedSpawnLocation(lobby.get(p.getUniqueId()).getBedSpawn());
 		p.updateInventory();
-		lobby.remove(p.getUniqueId());
 	}
 }
