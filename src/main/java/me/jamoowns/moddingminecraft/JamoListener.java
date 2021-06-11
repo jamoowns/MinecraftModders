@@ -311,7 +311,7 @@ public final class JamoListener implements IGameEventListener {
 
 		CustomItem fastBow = new CustomItem("Fast bow", Material.BOW, ItemCategory.MISC);
 		fastBow.setProjectileLaunchEvent(event -> {
-			event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(5));
+			event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(50));
 		});
 		javaPlugin.customItems().register(fastBow);
 	}
