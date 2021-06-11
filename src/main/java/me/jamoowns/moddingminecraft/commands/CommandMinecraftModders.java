@@ -57,6 +57,7 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		} else {
 			prefix = "";
 		}
+		commandChildren.forEach(Broadcaster::broadcastInfo);
 		for (ModdersCommand com : commandChildren) {
 			results.add(prefix + com.command());
 		}
