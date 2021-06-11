@@ -1,6 +1,5 @@
 package me.jamoowns.moddingminecraft.teams;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Mob;
@@ -56,7 +56,7 @@ public final class Teams {
 		availableTeamColours.add(new TeamColour(Material.BLUE_CONCRETE, Material.BLUE_WOOL, ChatColor.BLUE,
 				Material.BLUE_CARPET, Color.BLUE));
 		availableTeamColours.add(new TeamColour(Material.CYAN_CONCRETE, Material.CYAN_WOOL, ChatColor.AQUA,
-				Material.CYAN_CARPET, Color.CYAN));
+				Material.CYAN_CARPET, Color.AQUA));
 		availableTeamColours.add(new TeamColour(Material.GRAY_CONCRETE, Material.GRAY_WOOL, ChatColor.GRAY,
 				Material.GRAY_CARPET, Color.GRAY));
 		availableTeamColours.add(new TeamColour(Material.GREEN_CONCRETE, Material.GREEN_WOOL, ChatColor.GREEN,
@@ -64,7 +64,7 @@ public final class Teams {
 		availableTeamColours.add(new TeamColour(Material.ORANGE_CONCRETE, Material.ORANGE_WOOL, ChatColor.GOLD,
 				Material.ORANGE_CARPET, Color.ORANGE));
 		availableTeamColours.add(new TeamColour(Material.PURPLE_CONCRETE, Material.PURPLE_WOOL, ChatColor.LIGHT_PURPLE,
-				Material.PURPLE_CARPET, Color.MAGENTA));
+				Material.PURPLE_CARPET, Color.PURPLE));
 		availableTeamColours.add(new TeamColour(Material.RED_CONCRETE, Material.RED_WOOL, ChatColor.RED,
 				Material.RED_CARPET, Color.RED));
 		availableTeamColours.add(new TeamColour(Material.WHITE_CONCRETE, Material.WHITE_WOOL, ChatColor.WHITE,
