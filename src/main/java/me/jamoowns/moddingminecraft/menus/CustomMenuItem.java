@@ -23,7 +23,7 @@ class CustomMenuItem {
 	public CustomMenuItem(final String aTitle, Material icon, Consumer<HumanEntity> aOnClickAction) {
 		title = aTitle;
 		item = new ItemStack(icon);
-		ItemMeta itemMeta = item.getItemMeta();
+		ItemMeta itemMeta = item.getItemMeta().clone();
 		itemMeta.setDisplayName(title);
 		item.setItemMeta(itemMeta);
 
@@ -40,7 +40,7 @@ class CustomMenuItem {
 			Consumer<HumanEntity> aDisableAction, Supplier<Boolean> aIsEnabled) {
 		title = aTitle;
 		item = new ItemStack(icon);
-		ItemMeta itemMeta = item.getItemMeta();
+		ItemMeta itemMeta = item.getItemMeta().clone();
 		itemMeta.setDisplayName(title);
 		item.setItemMeta(itemMeta);
 

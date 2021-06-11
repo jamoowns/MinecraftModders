@@ -47,7 +47,7 @@ public final class CustomItem {
 		projectileLaunchEvent = empty();
 
 		item = aItem.clone();
-		ItemMeta itemMeta = item.getItemMeta();
+		ItemMeta itemMeta = item.getItemMeta().clone();
 		itemMeta.setDisplayName(aName);
 		item.setItemMeta(itemMeta);
 	}
