@@ -52,13 +52,15 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		List<String> results = new ArrayList<>();
 
 		String prefix;
-		/* Full match. */
 		if (moddersCommand(Arrays.asList(args), false).isPresent()) {
+			/* Full match. */
 			prefix = "";
-		} else {
+		} else if (moddersCommand.isPresent()) {
+			/* Partial match. */
 			prefix = moddersCommand.get().command() + " ";
+		} else {
+			prefix = "";
 		}
-		commandChildren.forEach(Broadcaster::broadcastInfo);
 		for (ModdersCommand com : commandChildren) {
 			results.add(prefix + com.command());
 		}
