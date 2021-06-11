@@ -155,7 +155,7 @@ public class MabListener implements IGameEventListener {
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
 		if (event.getBlock().getType().equals(Material.GRASS_BLOCK)) {
-			simpleChunks.createChunk(1, event.getBlock().getLocation());
+			// simpleChunks.createChunk(1, event.getBlock().getLocation());
 		}
 		if (event.getBlock().getType().equals(Material.LEVER) && event.getBlock().getLocation().clone().add(1, 0, 0)
 				.getBlock().getType().equals(Material.BLACK_GLAZED_TERRACOTTA)) {
