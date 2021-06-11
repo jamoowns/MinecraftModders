@@ -7,10 +7,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.jamoowns.moddingminecraft.commands.CommandMinecraftModders;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
+import me.jamoowns.moddingminecraft.customitems.CustomItemListListener;
 import me.jamoowns.moddingminecraft.customitems.CustomItemListener;
 import me.jamoowns.moddingminecraft.customitems.CustomItems;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.features.FeatureTracker;
+import me.jamoowns.moddingminecraft.features.FunkyMobDeathsListener;
 import me.jamoowns.moddingminecraft.features.IFeatureListener;
 import me.jamoowns.moddingminecraft.features.PlayerTrailFeatureListener;
 import me.jamoowns.moddingminecraft.features.RandomChestsFeatureListener;
@@ -150,12 +152,20 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		featureTracker.addListener(this);
 
 		gameListeners = new ArrayList<>();
+		/* Our game listeners. */
 		addGameListener(new JamoListener(this));
 		addGameListener(new MabListener(this));
 		addGameListener(new MoshyListener());
+
+		addGameListener(new CustomItemListener(this));
+
+		/* Minigames. */
 		addGameListener(new BlockHunterListener(this));
 		addGameListener(new BattleRoyaleListener(this));
-		addGameListener(new CustomItemListener(this));
+
+		/* Custom mabmo stuff. */
+		addGameListener(new CustomItemListListener(this));
+		addGameListener(new FunkyMobDeathsListener(this));
 
 		playerTrailFeatureListener = new PlayerTrailFeatureListener(this);
 		addGameListener(playerTrailFeatureListener);

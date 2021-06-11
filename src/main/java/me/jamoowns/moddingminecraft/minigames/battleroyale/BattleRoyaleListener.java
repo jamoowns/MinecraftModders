@@ -25,7 +25,7 @@ import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
-import me.jamoowns.moddingminecraft.minigames.mgsettings.Armoury;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Lobby;
 import me.jamoowns.moddingminecraft.teams.TeamColour;
 
@@ -65,7 +65,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private ArrayList<Location> flagBlockLocations;
 	private Lobby lobby;
-	private Armoury armoury;
+	private Armory armoury;
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -76,7 +76,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		playerHomeItemById = new HashMap<>();
 		playerHomeLocationById = new HashMap<>();
 		lobby = new Lobby();
-		armoury = new Armoury(2, 2, 1);
+		armoury = new Armory(2, 2, 1);
 		RANDOM = new Random();
 		ABOVE = new Vector(0, 1, 0);
 
@@ -142,40 +142,6 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		}
 	}
 
-	public final void initiate() {
-		Broadcaster.broadcastGameInfo(GAME_NAME + " been initiated!");
-		currentGameState = GameState.LOBBY;
-	}
-
-	public final void join(Player p) {
-		boolean alreadyPlaying = playerScoreById.containsKey(p.getUniqueId());
-		if (currentGameState == GameState.LOBBY && !alreadyPlaying) {
-
-			playerScoreById.put(p.getUniqueId(), 0);
-			lobby.addToLobby(p);
-			for (int i = 0; i < armoury.getItems().size(); i++) {
-				p.getInventory().addItem(armoury.getItems().get(i));
-			}
-			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size()
-					+ " / " + lobby.maxSize() + " )");
-
-			TeamColour teamColour = javaPlugin.teams().getTeam(p.getUniqueId()).getTeamColour();
-			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", teamColour.getBase());
-			homeStand.setBlockPlaceEvent(event -> {
-				if (currentGameState == GameState.SETUP) {
-					playerHomeLocationById.put(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
-					Broadcaster.sendGameInfo(event.getPlayer(), "Home sweet home has been set");
-					buildFlag(event.getBlock(), teamColour.getBase(), teamColour.getHead());
-				}
-			});
-			javaPlugin.customItems().silentRegister(homeStand);
-
-			playerHomeItemById.put(p.getUniqueId(), homeStand);
-		} else {
-			Broadcaster.sendError(p, "Game must be in the lobby");
-		}
-	}
-
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
 		if (currentGameState == GameState.PLAYING) {
@@ -187,46 +153,11 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		}
 	}
 
-	public final void setup(Player host) {
-		if (currentGameState == GameState.LOBBY && playerScoreById.size() >= 2) {
-			Broadcaster.broadcastGameInfo("Setting up " + GAME_NAME);
-			Broadcaster.sendGameInfo(host, "Place all of the goal stands on the battle field");
-			currentGameState = GameState.SETUP;
-			ItemStack goal = goalBlockStand.asItem();
-			goal.setAmount(GOAL_STAND_LOCATIONS);
-			host.getInventory().addItem(goal);
-
-			for (Entry<UUID, CustomItem> playerHomeItem : playerHomeItemById.entrySet()) {
-				Player player = Bukkit.getPlayer(playerHomeItem.getKey());
-				player.getInventory().addItem(playerHomeItem.getValue().asItem());
-			}
-		} else {
-			Broadcaster.sendError(host, "Game must be in the lobby and atleast two players joined");
-		}
-	}
-
-	public final void start(Player host) {
-		if (currentGameState == GameState.SETUP && playerScoreById.size() == playerHomeLocationById.size()) {
-			Broadcaster.broadcastGameInfo(GAME_NAME + " has started!");
-			for (Entry<UUID, Location> entry : playerHomeLocationById.entrySet()) {
-				Player player = Bukkit.getPlayer(entry.getKey());
-				player.teleport(entry.getValue().clone().add(0, 3, 0));
-			}
-			currentGameState = GameState.PLAYING;
-			resetGoalBlock();
-		} else {
-			Broadcaster.sendError(host, "Must setup first. Not all players have placed their homes yet.");
-		}
-	}
-
-	public final void unjoin(Player p) {
-		boolean alreadyPlaying = playerScoreById.containsKey(p.getUniqueId());
-		if (currentGameState == GameState.LOBBY && alreadyPlaying) {
-			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has left the " + GAME_NAME);
-			playerScoreById.remove(p.getUniqueId());
-			lobby.removeFromLobby(p);
-		} else {
-			Broadcaster.sendError(p, "You must be in a lobby");
+	@EventHandler
+	public final void onQuitEvent(PlayerQuitEvent event) {
+		// This doesn't work if server crashes
+		if (lobby.playerInLobby(event.getPlayer().getUniqueId())) {
+			lobby.removeFromLobby(event.getPlayer());
 		}
 	}
 
@@ -275,11 +206,37 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		}
 	}
 
-	@EventHandler
-	private void OnQuitEvent(PlayerQuitEvent event) {
-		// This doesn't work if server crashes
-		if (lobby.playerInLobby(event.getPlayer().getUniqueId())) {
-			lobby.removeFromLobby(event.getPlayer());
+	private final void initiate() {
+		Broadcaster.broadcastGameInfo(GAME_NAME + " been initiated!");
+		currentGameState = GameState.LOBBY;
+	}
+
+	private final void join(Player p) {
+		boolean alreadyPlaying = playerScoreById.containsKey(p.getUniqueId());
+		if (currentGameState == GameState.LOBBY && !alreadyPlaying) {
+
+			playerScoreById.put(p.getUniqueId(), 0);
+			lobby.addToLobby(p);
+			for (int i = 0; i < armoury.getItems().size(); i++) {
+				p.getInventory().addItem(armoury.getItems().get(i));
+			}
+			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size()
+					+ " / " + lobby.maxSize() + " )");
+
+			TeamColour teamColour = javaPlugin.teams().getTeam(p.getUniqueId()).getTeamColour();
+			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", teamColour.getBase());
+			homeStand.setBlockPlaceEvent(event -> {
+				if (currentGameState == GameState.SETUP) {
+					playerHomeLocationById.put(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
+					Broadcaster.sendGameInfo(event.getPlayer(), "Home sweet home has been set");
+					buildFlag(event.getBlock(), teamColour.getBase(), teamColour.getHead());
+				}
+			});
+			javaPlugin.customItems().silentRegister(homeStand);
+
+			playerHomeItemById.put(p.getUniqueId(), homeStand);
+		} else {
+			Broadcaster.sendError(p, "Game must be in the lobby");
 		}
 	}
 
@@ -291,5 +248,48 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		Location goalStandToPlaceOn = goalStands.get(RANDOM.nextInt(goalStands.size())).clone().add(ABOVE);
 		goalStandToPlaceOn.getWorld().getBlockAt(goalStandToPlaceOn).setType(goalBlock.material());
 		goalLocation = goalStandToPlaceOn;
+	}
+
+	private final void setup(Player host) {
+		if (currentGameState == GameState.LOBBY && playerScoreById.size() >= 2) {
+			Broadcaster.broadcastGameInfo("Setting up " + GAME_NAME);
+			Broadcaster.sendGameInfo(host, "Place all of the goal stands on the battle field");
+			currentGameState = GameState.SETUP;
+			ItemStack goal = goalBlockStand.asItem();
+			goal.setAmount(GOAL_STAND_LOCATIONS);
+			host.getInventory().addItem(goal);
+
+			for (Entry<UUID, CustomItem> playerHomeItem : playerHomeItemById.entrySet()) {
+				Player player = Bukkit.getPlayer(playerHomeItem.getKey());
+				player.getInventory().addItem(playerHomeItem.getValue().asItem());
+			}
+		} else {
+			Broadcaster.sendError(host, "Game must be in the lobby and atleast two players joined");
+		}
+	}
+
+	private final void start(Player host) {
+		if (currentGameState == GameState.SETUP && playerScoreById.size() == playerHomeLocationById.size()) {
+			Broadcaster.broadcastGameInfo(GAME_NAME + " has started!");
+			for (Entry<UUID, Location> entry : playerHomeLocationById.entrySet()) {
+				Player player = Bukkit.getPlayer(entry.getKey());
+				player.teleport(entry.getValue().clone().add(0, 3, 0));
+			}
+			currentGameState = GameState.PLAYING;
+			resetGoalBlock();
+		} else {
+			Broadcaster.sendError(host, "Must setup first. Not all players have placed their homes yet.");
+		}
+	}
+
+	private final void unjoin(Player p) {
+		boolean alreadyPlaying = playerScoreById.containsKey(p.getUniqueId());
+		if (currentGameState == GameState.LOBBY && alreadyPlaying) {
+			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has left the " + GAME_NAME);
+			playerScoreById.remove(p.getUniqueId());
+			lobby.removeFromLobby(p);
+		} else {
+			Broadcaster.sendError(p, "You must be in a lobby");
+		}
 	}
 }

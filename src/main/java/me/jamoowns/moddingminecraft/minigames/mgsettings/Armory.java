@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public class Armoury {
+public class Armory {
 	// TODO:add Premade classes e.g archer, warior
 	private ArrayList<ItemStack[]> Items;
 
-	public Armoury(int AttackLevel, int DefenceLevel, int FoodLevel) {
+	public Armory(int AttackLevel, int DefenceLevel, int FoodLevel) {
 		Items = new ArrayList<ItemStack[]>();
 		setAttack(AttackLevel);
 		setDefence(DefenceLevel);

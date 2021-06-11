@@ -9,13 +9,12 @@ import org.bukkit.entity.Player;
 
 public final class Lobby {
 
-	private HashMap<UUID, PlayerInfo> lobby;
+	private static final int MAX_LOBBY_SIZE = 16;
 
-	private int maxSize;
+	private HashMap<UUID, PlayerInfo> lobby;
 
 	public Lobby() {
 		lobby = new HashMap<UUID, PlayerInfo>();
-		maxSize = 16;
 	}
 
 	public void addToLobby(Player p) {
@@ -26,7 +25,7 @@ public final class Lobby {
 	}
 
 	public int maxSize() {
-		return maxSize;
+		return MAX_LOBBY_SIZE;
 	}
 
 	public boolean playerInLobby(UUID uuid) {
