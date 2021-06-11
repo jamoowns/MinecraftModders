@@ -542,7 +542,7 @@ public final class CustomItemListListener implements IGameEventListener {
 
 		multiShotBowItem = new CustomItem("MultiShot Bow", Material.CROSSBOW);
 		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
-		meta.addEnchant(Enchantment.MULTISHOT, 1, true);
+		meta.addEnchant(Enchantment.MULTISHOT, 5, true);
 		multiShotBowItem.asItem().setItemMeta(meta);
 		javaPlugin.customItems().register(multiShotBowItem);
 
