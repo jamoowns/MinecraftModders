@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +26,8 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 
 	@Override
 	public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		Optional<Consumer<Player>> commandToRun = moddersCommand(Arrays.asList(args)).map(ModdersCommand::action);
+		Optional<Consumer<Player>> commandToRun = moddersCommand(Arrays.asList(args), false)
+				.map(ModdersCommand::action);
 		if (commandToRun.isPresent()) {
 			if (sender instanceof Player) {
 				commandToRun.get().accept((Player) sender);
@@ -32,33 +35,41 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 			}
 		}
 		Broadcaster.sendInfo(sender, "Available Commands:");
-		StringBuilder buffer = new StringBuilder();
-//		print("", commands, buffer, "", "");
+		List<String> buffer = new ArrayList<>();
 
-		ModdersCommand root = new ModdersCommand("/mm", p -> System.err.println(p));
-		printTreeRec(buffer, "", root, commands, true);
-		Broadcaster.sendInfo(sender, buffer.toString());
+		treeRec(buffer, "", commands, true);
+		Broadcaster.sendInfo(sender, buffer.stream().collect(Collectors.joining("\n")));
 
 		return true;
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		List<ModdersCommand> commandChildren = commands;
-		Optional<ModdersCommand> c = Optional.empty();
-		for (String parent : args) {
-			for (ModdersCommand com : commandChildren) {
-				if (com.command().startsWith(parent)) {
-					c = Optional.of(com);
-					commandChildren = com.subCommands();
-				}
-			}
-		}
+	public final List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		List<String> allArgs = Arrays.asList(args);
+		Optional<ModdersCommand> moddersCommand = moddersCommand(allArgs, true);
+
+		List<ModdersCommand> commandChildren = moddersCommand.map(ModdersCommand::subCommands)
+				.orElseGet(() -> commands);
 		List<String> results = new ArrayList<>();
 
-		if (c.isPresent()) {
-			for (ModdersCommand com : c.get().subCommands()) {
-				results.add(c.get().command() + " " + com.command());
+		Optional<ModdersCommand> fullMatch = moddersCommand(allArgs, false);
+		if (fullMatch.isPresent()) {
+			/* Full match. */
+			String prefix;
+			if (allArgs.size() > 0 && allArgs.get(0).equals("")) {
+				prefix = moddersCommand.get().command() + " ";
+			} else {
+				prefix = "";
+			}
+			for (ModdersCommand com : commandChildren) {
+				results.add(prefix + com.command());
+			}
+		} else if (moddersCommand.isPresent()) {
+			/* Partial match. */
+			results.add(moddersCommand.get().command());
+		} else {
+			for (ModdersCommand com : commandChildren) {
+				results.add(com.command());
 			}
 		}
 		return results;
@@ -79,12 +90,13 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		return moddersCommand;
 	}
 
-	private Optional<ModdersCommand> moddersCommand(Iterable<String> commandPath) {
+	private Optional<ModdersCommand> moddersCommand(List<String> commandPath, boolean partial) {
 		List<ModdersCommand> commandChildren = commands;
 		Optional<ModdersCommand> command = Optional.empty();
 		for (String parent : commandPath) {
 			for (ModdersCommand c : commandChildren) {
-				if (c.command().equalsIgnoreCase(parent)) {
+				Predicate<String> comparator = partial ? c.command()::startsWith : c.command()::equalsIgnoreCase;
+				if (!parent.isEmpty() && comparator.test(parent)) {
 					command = Optional.of(c);
 					commandChildren = c.subCommands();
 				}
@@ -93,15 +105,21 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		return command;
 	}
 
-	private void printTreeRec(StringBuilder buffer, String prefix, ModdersCommand node, List<ModdersCommand> children,
+	private void treeRec(List<String> buffer, String prefix, List<ModdersCommand> children, boolean isTail) {
+		for (int i = 0; i < children.size(); i++) {
+			String newPrefix = prefix + (isTail ? "    " : "|   ");
+			treeRec(buffer, newPrefix, children.get(i), children.get(i).subCommands(), i == children.size() - 1);
+		}
+	}
+
+	private void treeRec(List<String> buffer, String prefix, ModdersCommand node, List<ModdersCommand> children,
 			boolean isTail) {
 		String nodeName = node.command();
 		String nodeConnection = isTail ? "\\ " : "|- ";
-		buffer.append(prefix + nodeConnection + nodeName);
-		buffer.append("\n");
+		buffer.add(prefix + nodeConnection + nodeName);
 		for (int i = 0; i < children.size(); i++) {
 			String newPrefix = prefix + (isTail ? "    " : "|   ");
-			printTreeRec(buffer, newPrefix, children.get(i), children.get(i).subCommands(), i == children.size() - 1);
+			treeRec(buffer, newPrefix, children.get(i), children.get(i).subCommands(), i == children.size() - 1);
 		}
 	}
 }

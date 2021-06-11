@@ -19,8 +19,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
@@ -148,11 +147,10 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	}
 
 	@EventHandler
-	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
+	public final void onBlockDamageEvent(BlockDamageEvent event) {
 		if (currentGameState == GameState.PLAYING) {
-			if (event.getAction() == Action.LEFT_CLICK_BLOCK
-					&& event.getClickedBlock().getLocation().equals(goalLocation)) {
-				event.getClickedBlock().setType(Material.AIR);
+			if (event.getBlock().getLocation().equals(goalLocation)) {
+				event.getBlock().setType(Material.AIR);
 				event.getPlayer().getInventory().addItem(goalBlock.asItem());
 			}
 		}
