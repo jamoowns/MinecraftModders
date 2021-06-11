@@ -33,15 +33,11 @@ public final class CustomItem {
 
 	private ItemCategory category;
 
-	public CustomItem(String aName, Material aMaterial) {
-		this(aName, new ItemStack(aMaterial), ItemCategory.MISC);
+	public CustomItem(String aName, ItemStack aItem) {
+		this(aName, aItem, ItemCategory.MISC);
 	}
 
-	public CustomItem(String aName, Material aMaterial, ItemCategory aCategory) {
-		this(aName, new ItemStack(aMaterial), aCategory);
-	}
-
-	private CustomItem(String aName, ItemStack aItem, ItemCategory aCategory) {
+	public CustomItem(String aName, ItemStack aItem, ItemCategory aCategory) {
 		name = aName;
 		category = aCategory;
 		blockPlaceEvent = empty();
@@ -54,6 +50,14 @@ public final class CustomItem {
 		ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(aName);
 		item.setItemMeta(itemMeta);
+	}
+
+	public CustomItem(String aName, Material aMaterial) {
+		this(aName, new ItemStack(aMaterial), ItemCategory.MISC);
+	}
+
+	public CustomItem(String aName, Material aMaterial, ItemCategory aCategory) {
+		this(aName, new ItemStack(aMaterial), aCategory);
 	}
 
 	public final ItemStack asItem() {

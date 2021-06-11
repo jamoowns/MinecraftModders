@@ -12,6 +12,7 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
@@ -540,10 +541,11 @@ public final class CustomItemListListener implements IGameEventListener {
 		}, CHUNK_STICK_RANGE);
 		javaPlugin.customItems().register(deadEndChunkItem);
 
-		multiShotBowItem = new CustomItem("MultiShot Bow", Material.CROSSBOW);
-		ItemMeta meta = multiShotBowItem.asItem().getItemMeta();
+		ItemStack crossBow = new ItemStack(Material.CROSSBOW);
+		ItemMeta meta = crossBow.getItemMeta();
 		meta.addEnchant(Enchantment.MULTISHOT, 5, true);
-		multiShotBowItem.asItem().setItemMeta(meta);
+		crossBow.setItemMeta(meta);
+		multiShotBowItem = new CustomItem("MultiShot Bow", crossBow);
 		javaPlugin.customItems().register(multiShotBowItem);
 
 		creeperArrowItem = new CustomItem("Creeper Arrow", Material.ARROW, ItemCategory.ARROWS);
