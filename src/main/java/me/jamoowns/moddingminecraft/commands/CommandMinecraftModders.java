@@ -81,6 +81,7 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 	private Optional<ModdersCommand> moddersCommand(List<String> commandPath, boolean partial) {
 		List<ModdersCommand> commandChildren = commands;
 		Optional<ModdersCommand> command = Optional.empty();
+		commandPath.forEach(Broadcaster::broadcastError);
 		for (String parent : commandPath) {
 			for (ModdersCommand c : commandChildren) {
 				Predicate<String> comparator = partial ? c.command()::startsWith : c.command()::equalsIgnoreCase;
