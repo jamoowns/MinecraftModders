@@ -23,7 +23,7 @@ public final class LobbyListener implements IGameEventListener {
 		lobby = new HashMap<UUID, PlayerInfo>();
 	}
 
-	public void addToLobby(Player p) {
+	public final void addToLobby(Player p) {
 		PlayerInfo pInfo = new PlayerInfo(p.getInventory().getContents(), p.getBedSpawnLocation());
 		lobby.put(p.getUniqueId(), pInfo);
 		p.getInventory().clear();
@@ -31,11 +31,11 @@ public final class LobbyListener implements IGameEventListener {
 	}
 
 	@Override
-	public void cleanup() {
+	public final void cleanup() {
 		removeAllFromLobby();
 	}
 
-	public int maxSize() {
+	public final int maxSize() {
 		return MAX_LOBBY_SIZE;
 	}
 
@@ -47,11 +47,11 @@ public final class LobbyListener implements IGameEventListener {
 		}
 	}
 
-	public boolean playerInLobby(UUID uuid) {
+	public final boolean playerInLobby(UUID uuid) {
 		return lobby.containsKey(uuid);
 	}
 
-	public ArrayList<Player> playerList() {
+	public final ArrayList<Player> playerList() {
 		ArrayList<Player> plist = new ArrayList<Player>();
 		for (UUID uuid : lobby.keySet()) {
 			plist.add(Bukkit.getPlayer(uuid));
@@ -59,7 +59,7 @@ public final class LobbyListener implements IGameEventListener {
 		return plist;
 	}
 
-	public void removeAllFromLobby() {
+	public final void removeAllFromLobby() {
 		if (!lobby.isEmpty()) {
 			for (Map.Entry<UUID, PlayerInfo> entry : lobby.entrySet()) {
 				UUID pUUID = entry.getKey();
@@ -69,26 +69,26 @@ public final class LobbyListener implements IGameEventListener {
 		}
 	}
 
-	public void removeFromLobby(Player p) {
+	public final void removeFromLobby(Player p) {
 		if (!lobby.isEmpty() && lobby.containsKey(p.getUniqueId())) {
 			restorePlayerInfo(p);
 			lobby.remove(p.getUniqueId());
 		}
 	}
 
-	public void sendLobbyMessage(String msg) {
+	public final void sendLobbyMessage(String msg) {
 		for (UUID uuid : lobby.keySet()) {
 			Broadcaster.sendGameInfo(Bukkit.getPlayer(uuid), msg);
 		}
 	}
 
-	public void sendPlayerMessage(Player p, String msg) {
+	public final void sendPlayerMessage(Player p, String msg) {
 		if (playerInLobby(p.getUniqueId())) {
 			Broadcaster.sendGameInfo(p, msg);
 		}
 	}
 
-	public int size() {
+	public final int size() {
 		return lobby.size();
 	}
 

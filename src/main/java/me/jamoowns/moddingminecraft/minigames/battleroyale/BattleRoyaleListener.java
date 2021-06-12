@@ -30,6 +30,8 @@ import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory.KitLevel;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.GameKit;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.LobbyListener;
 import me.jamoowns.moddingminecraft.teams.TeamColour;
 
@@ -69,7 +71,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private ArrayList<Location> flagBlockLocations;
 	private LobbyListener lobby;
-	private Armory armoury;
+	private GameKit gameKit;
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
@@ -80,7 +82,9 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		playerHomeItemById = new HashMap<>();
 		playerHomeLocationById = new HashMap<>();
 		lobby = new LobbyListener();
-		armoury = new Armory(2, 2, 1);
+		gameKit = Armory.offense(KitLevel.AVERAGE).combine(Armory.defence(KitLevel.AVERAGE))
+				.combine(Armory.food(KitLevel.LOW));
+
 		RANDOM = new Random();
 		ABOVE = new Vector(0, 1, 0);
 
@@ -214,8 +218,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 			playerScoreById.put(p.getUniqueId(), 0);
 			lobby.addToLobby(p);
-			for (int i = 0; i < armoury.getItems().size(); i++) {
-				p.getInventory().addItem(armoury.getItems().get(i));
+			for (ItemStack item : gameKit.items()) {
+				p.getInventory().addItem(item);
 			}
 			lobby.sendLobbyMessage(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size() + " / "
 					+ lobby.maxSize() + " )");

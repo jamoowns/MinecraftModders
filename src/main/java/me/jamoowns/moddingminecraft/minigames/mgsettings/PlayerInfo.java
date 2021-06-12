@@ -3,30 +3,25 @@ package me.jamoowns.moddingminecraft.minigames.mgsettings;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerInfo {
-	// TODO:turn this into a full on lobby settings not just inventory
-	private ItemStack[] Inventory = null;
-	private Location BedSpawn = null;
+/**
+ * Stores information about a player at a given time.
+ */
+public final class PlayerInfo {
 
-	public PlayerInfo(ItemStack[] inventory, Location bedSpawn) {
-		setInventory(inventory);
-		setBedSpawn(bedSpawn);
+	private ItemStack[] inventory;
+
+	private Location bedSpawn;
+
+	public PlayerInfo(ItemStack[] aInventory, Location aBedSpawn) {
+		inventory = aInventory;
+		bedSpawn = aBedSpawn;
 	}
 
-	public Location getBedSpawn() {
-		return BedSpawn;
+	public final Location getBedSpawn() {
+		return bedSpawn;
 	}
 
 	public ItemStack[] getInventory() {
-		return Inventory;
+		return inventory;
 	}
-
-	public void setBedSpawn(Location bedSpawn) {
-		BedSpawn = bedSpawn;
-	}
-
-	public void setInventory(ItemStack[] inventory) {
-		Inventory = inventory;
-	}
-
 }

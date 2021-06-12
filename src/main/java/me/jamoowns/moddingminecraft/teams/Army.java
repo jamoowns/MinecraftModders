@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public final class Army {
+
 	private final String teamName;
 
 	private final TeamColour teamColour;
