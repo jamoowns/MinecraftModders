@@ -49,7 +49,6 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		ArrayList<String> results = new ArrayList<>();
 		List<String> allArgs = new ArrayList<>(Arrays.asList(args));
 		List<String> subSetArgs = new ArrayList<>(Arrays.asList(args));
-		Broadcaster.broadcastError("Vals: '" + allArgs.stream().collect(Collectors.joining(".")) + "'");
 
 		List<ModdersCommand> commandChildren;
 		if (allArgs.size() == 0) {
@@ -66,8 +65,6 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 
 		for (ModdersCommand com : commandChildren) {
 			if (allArgs.size() > 0) {
-				Broadcaster.broadcastError("'" + com.command() + "'");
-				Broadcaster.broadcastError("'" + allArgs.get(allArgs.size() - 1) + "'");
 				if (com.command().startsWith(allArgs.get(allArgs.size() - 1))) {
 					results.add(com.command());
 				}
