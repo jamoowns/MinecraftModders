@@ -62,15 +62,18 @@ public final class Armory {
 			case WEAKEST:
 				ItemStack[] items = { (new ItemStack(Material.POTATO, 32)) };
 				return new GameKit(items);
-			case AVERAGE:
-				ItemStack[] items1 = { (new ItemStack(Material.COOKED_BEEF, 32)) };
+			case LOW:
+				ItemStack[] items1 = { (new ItemStack(Material.BAKED_POTATO, 32)) };
 				return new GameKit(items1);
-			case GOOD:
-				ItemStack[] items2 = { (new ItemStack(Material.GOLDEN_CARROT, 32)) };
+			case AVERAGE:
+				ItemStack[] items2 = { (new ItemStack(Material.COOKED_BEEF, 32)) };
 				return new GameKit(items2);
-			case STRONGEST:
-				ItemStack[] items3 = { (new ItemStack(Material.GOLDEN_APPLE, 32)) };
+			case GOOD:
+				ItemStack[] items3 = { (new ItemStack(Material.GOLDEN_CARROT, 32)) };
 				return new GameKit(items3);
+			case STRONGEST:
+				ItemStack[] items4 = { (new ItemStack(Material.GOLDEN_APPLE, 32)) };
+				return new GameKit(items4);
 			default:
 				return new GameKit(Arrays.asList(new ItemStack(Material.DIRT)));
 		}
