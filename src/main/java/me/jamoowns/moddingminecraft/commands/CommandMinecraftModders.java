@@ -62,6 +62,8 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 
 		for (ModdersCommand com : commandChildren) {
 			if (allArgs.size() > 0) {
+				Broadcaster.broadcastError("'" + com.command() + "'");
+				Broadcaster.broadcastError("'" + allArgs.get(allArgs.size() - 1) + "'");
 				if (com.command().startsWith(allArgs.get(allArgs.size() - 1))) {
 					results.add(com.command());
 				}
