@@ -2,6 +2,7 @@ package me.jamoowns.moddingminecraft.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -47,6 +48,7 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 	public final List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		ArrayList<String> results = new ArrayList<>();
 		List<String> allArgs = Arrays.asList(args);
+		Broadcaster.broadcastError("Vals: '" + allArgs.stream().collect(Collectors.joining(".")) + "'");
 		Optional<ModdersCommand> moddersCommand = moddersCommand(allArgs, true);
 
 		List<ModdersCommand> commandChildren;
@@ -61,6 +63,7 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		for (ModdersCommand com : commandChildren) {
 			results.add(com.command());
 		}
+		Collections.sort(results);
 		return results;
 	}
 
