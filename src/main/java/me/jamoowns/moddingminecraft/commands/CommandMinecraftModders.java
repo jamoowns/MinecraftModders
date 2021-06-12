@@ -49,15 +49,18 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		ArrayList<String> results = new ArrayList<>();
 		List<String> allArgs = Arrays.asList(args);
 		Broadcaster.broadcastError("Vals: '" + allArgs.stream().collect(Collectors.joining(".")) + "'");
-		Optional<ModdersCommand> moddersCommand = moddersCommand(allArgs, true);
 
 		List<ModdersCommand> commandChildren;
-		if (allArgs.size() <= 1) {
+		if (allArgs.size() == 0) {
 			commandChildren = commands;
-		} else if (moddersCommand.isPresent()) {
-			commandChildren = moddersCommand.get().subCommands();
 		} else {
-			commandChildren = new ArrayList<>();
+			allArgs.remove(allArgs.size() - 1);
+			Optional<ModdersCommand> moddersCommand = moddersCommand(allArgs, false);
+			if (!moddersCommand.isPresent()) {
+				commandChildren = commands;
+			} else {
+				commandChildren = moddersCommand.get().subCommands();
+			}
 		}
 
 		for (ModdersCommand com : commandChildren) {
