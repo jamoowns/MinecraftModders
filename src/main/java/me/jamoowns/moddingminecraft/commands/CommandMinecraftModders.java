@@ -38,7 +38,7 @@ public final class CommandMinecraftModders implements CommandExecutor, TabComple
 		buffer.append("Available Commands:\n");
 
 		for (ModdersCommand moddersCommand : commands) {
-			buffer.append("    - " + moddersCommand.command() + "\n");
+			buffer.append("    - //mm " + moddersCommand.command() + "\n");
 		}
 		Broadcaster.sendInfo(sender, buffer.toString());
 		return true;
