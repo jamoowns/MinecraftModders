@@ -2,7 +2,6 @@ package me.jamoowns.moddingminecraft;
 
 import static me.jamoowns.moddingminecraft.common.itemcollections.ItemCollections.BUCKET_TYPES;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,12 +26,9 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -46,7 +42,6 @@ import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.roominating.BuildingFoundations;
 import me.jamoowns.moddingminecraft.roominating.PlannedBlock;
 import me.jamoowns.moddingminecraft.roominating.Roominator;
-import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
 import me.jamoowns.moddingminecraft.teams.Army;
 
 public final class JamoListener implements IGameEventListener {
@@ -62,8 +57,6 @@ public final class JamoListener implements IGameEventListener {
 	private final Random RANDOM;
 
 	private final List<Enchantment> enchantments;
-
-	private final TaskKeeper taskKeeper;
 
 	private List<CustomItem> mobSpawningItems;
 
@@ -90,8 +83,6 @@ public final class JamoListener implements IGameEventListener {
 		mobSpawningItems = new ArrayList<>();
 
 		enchantments = Arrays.asList(Enchantment.values());
-
-		taskKeeper = new TaskKeeper(javaPlugin);
 
 		setupCustomItems();
 
@@ -125,16 +116,6 @@ public final class JamoListener implements IGameEventListener {
 						}
 					});
 		}, 4 * TimeConstants.ONE_SECOND, 4 * TimeConstants.ONE_SECOND);
-
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, () -> {
-			if (javaPlugin.featureTracker().isFeatureActive(Feature.BATTLE_ROYALE)) {
-				Bukkit.getOnlinePlayers().forEach(player -> {
-					ItemStack item = mobSpawningItems.get(RANDOM.nextInt(mobSpawningItems.size())).asItem();
-					item.setAmount(RANDOM.nextInt(15) + 10);
-					player.getInventory().addItem(item);
-				});
-			}
-		}, TimeConstants.ONE_MINUTE / 2, TimeConstants.ONE_MINUTE / 2);
 	}
 
 	@EventHandler
@@ -168,11 +149,11 @@ public final class JamoListener implements IGameEventListener {
 		UUID entityUuid = event.getEntity().getUniqueId();
 		if (event.getEntity().getType() == EntityType.PIG) {
 			if (event.getEntity().getKiller() != null) {
-				taskKeeper.incrementTask(entityUuid, "Kill pigs");
+				javaPlugin.taskKeeper().incrementTask(entityUuid, "Kill pigs");
 			}
 		} else if (event.getEntity().getType() == EntityType.COW) {
 			if (event.getEntity().getKiller() != null) {
-				taskKeeper.incrementTask(entityUuid, "Kill cows");
+				javaPlugin.taskKeeper().incrementTask(entityUuid, "Kill cows");
 			}
 		}
 		if (isMob(entityUuid) && javaPlugin.teams().hasTeam(entityUuid)) {
@@ -182,23 +163,9 @@ public final class JamoListener implements IGameEventListener {
 	}
 
 	@EventHandler
-	public final void onEntitySpawnEvent(EntitySpawnEvent event) {
-		if (event.getEntity().getName().contains("Carpet")) {
-			event.setCancelled(true);
-		}
-	}
-
-	@EventHandler
 	public final void onPlayerBucketFillEvent(PlayerBucketFillEvent event) {
 		if (javaPlugin.featureTracker().isFeatureActive(Feature.RANDOM_BUCKET)) {
 			event.setItemStack(new ItemStack(BUCKET_TYPES.get(RANDOM.nextInt(BUCKET_TYPES.size()))));
-		}
-	}
-
-	@EventHandler
-	public final void onPlayerEggThrowEvent(PlayerEggThrowEvent event) {
-		if (javaPlugin.featureTracker().isFeatureActive(Feature.EGG_WITCH)) {
-			event.setHatchingType(EntityType.WITCH);
 		}
 	}
 
@@ -214,12 +181,6 @@ public final class JamoListener implements IGameEventListener {
 				zombie.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 1));
 			}
 		}
-	}
-
-	@EventHandler
-	public final void onPlayerJoin(PlayerJoinEvent event) {
-		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
-				event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
 	}
 
 	@Override
