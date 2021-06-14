@@ -14,7 +14,6 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -33,6 +32,7 @@ import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory.KitLevel;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.GameKit;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.LobbyListener;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.MarkerPoints;
 import me.jamoowns.moddingminecraft.teams.TeamColour;
 
 public final class BattleRoyaleListener implements IGameEventListener {
@@ -68,19 +68,18 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	private final Vector ABOVE;
 
 	private Location goalLocation;
-
-	private ArrayList<Location> flagBlockLocations;
+	private MarkerPoints flags;
 	private LobbyListener lobby;
 	private GameKit gameKit;
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		currentGameState = GameState.STOPPED;
-		flagBlockLocations = new ArrayList<>();
 		goalStands = new ArrayList<>();
 		playerScoreById = new HashMap<>();
 		playerHomeItemById = new HashMap<>();
 		playerHomeLocationById = new HashMap<>();
+		flags = new MarkerPoints(GOAL_SCORE);
 		lobby = new LobbyListener();
 		gameKit = Armory.offense(KitLevel.AVERAGE).combine(Armory.defence(KitLevel.AVERAGE))
 				.combine(Armory.food(KitLevel.LOW));
@@ -137,8 +136,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	public final void cleanup() {
 		goalStands.forEach(l -> l.getBlock().setType(Material.AIR));
 		goalStands.clear();
-		flagBlockLocations.forEach(l -> l.getBlock().setType(Material.AIR));
-		flagBlockLocations.clear();
+		flags.RemoveFlags();
 		playerScoreById.clear();
 		playerHomeItemById.clear();
 		playerHomeLocationById.values().forEach(l -> l.getBlock().setType(Material.AIR));
@@ -158,39 +156,6 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				event.getPlayer().getInventory().addItem(goalBlock.asItem());
 			}
 		}
-	}
-
-	private void buildFlag(Block baseBlock, Material baseColour, Material flagColour) {
-		ArrayList<Location> locations = new ArrayList<>();
-		locations.add(baseBlock.getLocation().add(-1, 0, 0));
-		locations.add(baseBlock.getLocation().add(1, 0, 0));
-		locations.add(baseBlock.getLocation().add(-1, 0, -1));
-		locations.add(baseBlock.getLocation().add(-1, 0, 1));
-		locations.add(baseBlock.getLocation().add(1, 0, -1));
-		locations.add(baseBlock.getLocation().add(1, 0, 1));
-		locations.add(baseBlock.getLocation().add(0, 0, -1));
-		locations.add(baseBlock.getLocation().add(0, 0, 1));
-		locations.forEach(location -> baseBlock.getWorld().getBlockAt(location).setType(baseColour));
-		flagBlockLocations.addAll(locations);
-
-		/* Mast. */
-		for (int i = 1; i <= GOAL_SCORE; i++) {
-			Location location = baseBlock.getLocation().add(0, i, 0);
-			flagBlockLocations.add(location);
-			baseBlock.getWorld().getBlockAt(location).setType(Material.WARPED_FENCE);
-		}
-
-		/* Flag. */
-		Location topBlock = baseBlock.getLocation().add(0, GOAL_SCORE, 0);
-		locations.clear();
-		locations.add(topBlock.clone().add(1, 0, 0));
-		locations.add(topBlock.clone().add(1, -1, 0));
-		locations.add(topBlock.clone().add(2, 0, 0));
-		locations.add(topBlock.clone().add(2, -1, 0));
-		locations.add(topBlock.clone().add(3, 0, 0));
-		locations.add(topBlock.clone().add(3, -1, 0));
-		locations.forEach(location -> baseBlock.getWorld().getBlockAt(location).setType(flagColour));
-		flagBlockLocations.addAll(locations);
 	}
 
 	private boolean checkForVictory(Player player) {
@@ -230,7 +195,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				if (currentGameState == GameState.SETUP) {
 					playerHomeLocationById.put(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
 					lobby.sendPlayerMessage(event.getPlayer(), "Home sweet home has been set");
-					buildFlag(event.getBlock(), teamColour.getBase(), teamColour.getHead());
+					flags.buildFlag(event.getBlock(), teamColour.getBase(), teamColour.getHead());
 				}
 			});
 			javaPlugin.customItems().silentRegister(homeStand);
@@ -243,7 +208,9 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	}
 
 	private void playWinningFireworks(Color color, Player p) {
-		World world = flagBlockLocations.get(0).getWorld();
+		// TODO: fix this as flagBlockLocations is all blocks
+		World world = p.getWorld();
+		ArrayList<FireworkMeta> fireworks = new ArrayList<FireworkMeta>();
 
 		Firework fw = (Firework) world.spawnEntity(p.getLocation(), EntityType.FIREWORK);
 		FireworkMeta fwm = fw.getFireworkMeta();
@@ -254,45 +221,30 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		FireworkMeta fwm1 = fw.getFireworkMeta();
 		fwm1.setPower(1);
 		fwm1.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+		fireworks.add(fwm1);
 
 		FireworkMeta fwm2 = fw.getFireworkMeta();
 		fwm2.setPower(2);
 		fwm2.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+		fireworks.add(fwm2);
 
 		FireworkMeta fwm3 = fw.getFireworkMeta();
 		fwm3.setPower(3);
 		fwm3.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+		fireworks.add(fwm3);
 
 		fw.setFireworkMeta(fwm);
 		fw.detonate();
 
-		for (int i = 0; i < flagBlockLocations.size(); i++) {
-			Firework fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0),
-					EntityType.FIREWORK);
-			fw2.setFireworkMeta(fwm1);
-			fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0), EntityType.FIREWORK);
-			fw2.setFireworkMeta(fwm2);
-			fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0), EntityType.FIREWORK);
-			fw2.setFireworkMeta(fwm3);
-		}
 		for (int i = 0; i < goalStands.size(); i++) {
-			Firework fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
-			fw2.setFireworkMeta(fwm1);
-			fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
-			fw2.setFireworkMeta(fwm2);
-			fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
-			fw2.setFireworkMeta(fwm3);
-		}
-		ArrayList<Player> plist = lobby.playerList();
-		for (int i = 0; i < plist.size(); i++) {
-			Firework fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
-			fw2.setFireworkMeta(fwm1);
-			fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
-			fw2.setFireworkMeta(fwm2);
-			fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
-			fw2.setFireworkMeta(fwm3);
+			for (int j = 0; i < fireworks.size(); i++) {
+				Firework fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
+				fw2.setFireworkMeta(fireworks.get(j));
+			}
 		}
 
+		flags.celebrateFireworks(fireworks, world);
+		lobby.celebrateFireworks(fireworks, world);
 	}
 
 	private void resetGoalBlock() {

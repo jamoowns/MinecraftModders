@@ -6,9 +6,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
@@ -28,6 +32,16 @@ public final class LobbyListener implements IGameEventListener {
 		lobby.put(p.getUniqueId(), pInfo);
 		p.getInventory().clear();
 		p.updateInventory();
+	}
+
+	public void celebrateFireworks(ArrayList<FireworkMeta> fireworks, World world) {
+		for (UUID uuid : lobby.keySet()) {
+			for (int j = 0; j < fireworks.size(); j++) {
+				Firework fw2 = (Firework) world.spawnEntity(Bukkit.getPlayer(uuid).getLocation().clone(),
+						EntityType.FIREWORK);
+				fw2.setFireworkMeta(fireworks.get(j));
+			}
+		}
 	}
 
 	@Override
