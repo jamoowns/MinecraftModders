@@ -84,9 +84,9 @@ public class SheepSheerListener implements IGameEventListener {
 			sheep.add(shee);
 		}
 		Sheep shee = location.getWorld().spawn(location, Sheep.class);
-		sheep.add(shee);
 		shee.setCustomName("_jeb");
 		shee.setCustomNameVisible(false);
+		sheep.add(shee);
 	}
 
 	private void createGoalItem() {
