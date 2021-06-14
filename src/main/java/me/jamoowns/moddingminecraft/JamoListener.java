@@ -137,11 +137,6 @@ public final class JamoListener implements IGameEventListener {
 		}, TimeConstants.ONE_MINUTE / 2, TimeConstants.ONE_MINUTE / 2);
 	}
 
-	@Override
-	public final void cleanup() {
-		javaPlugin.teams().cleanup();
-	}
-
 	@EventHandler
 	public final void onCraftItemEvent(CraftItemEvent event) {
 		if (javaPlugin.featureTracker().isFeatureActive(Feature.RANDOM_ENCHANT)) {
@@ -156,6 +151,16 @@ public final class JamoListener implements IGameEventListener {
 			result.setItemMeta(meta);
 			event.getInventory().setResult(result);
 		}
+	}
+
+	@Override
+	public final void onDisabled() {
+		/* Empty. */
+	}
+
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
 	}
 
 	@EventHandler
@@ -215,6 +220,11 @@ public final class JamoListener implements IGameEventListener {
 	public final void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
 				event.getPlayer().getName(), javaPlugin.getDescription().getVersion()));
+	}
+
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
 	}
 
 	private void setupCustomItems() {

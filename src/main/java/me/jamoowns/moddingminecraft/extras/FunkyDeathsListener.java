@@ -49,7 +49,12 @@ public final class FunkyDeathsListener implements IGameEventListener {
 	}
 
 	@Override
-	public final void cleanup() {
+	public final void onDisabled() {
+		/* Empty. */
+	}
+
+	@Override
+	public final void onEnabled() {
 		/* Empty. */
 	}
 
@@ -101,6 +106,11 @@ public final class FunkyDeathsListener implements IGameEventListener {
 				}
 			}
 		}
+	}
+
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
 	}
 
 	private void beeDeathEvent(EntityDeathEvent event) {
@@ -348,5 +358,4 @@ public final class FunkyDeathsListener implements IGameEventListener {
 			}
 		}
 	}
-
 }

@@ -136,4 +136,8 @@ public final class Armory {
 				(new ItemStack(Material.DIAMOND_HELMET, 1)), (new ItemStack(Material.COOKED_BEEF, 32)) };
 		return new GameKit(items);
 	}
+
+	private Armory() {
+		/* Empty. */
+	}
 }

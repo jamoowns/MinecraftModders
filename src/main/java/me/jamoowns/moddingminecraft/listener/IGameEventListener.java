@@ -4,5 +4,9 @@ import org.bukkit.event.Listener;
 
 public interface IGameEventListener extends Listener {
 
-	public void cleanup();
+	public void onDisabled();
+
+	public void onEnabled();
+
+	public void onServerStop();
 }

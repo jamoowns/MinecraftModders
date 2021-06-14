@@ -71,7 +71,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 			case RANDOM_BUCKET:
 				break;
 			case RANDOM_CHESTS:
-				randomChestsFeatureListener.start();
+				randomChestsFeatureListener.onEnabled();
 				break;
 			case RANDOM_ENCHANT:
 				break;
@@ -103,12 +103,12 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 			case IRON_GOLEM:
 				break;
 			case PLAYER_TRAIL:
-				playerTrailFeatureListener.cleanup();
+				playerTrailFeatureListener.onDisabled();
 				break;
 			case RANDOM_BUCKET:
 				break;
 			case RANDOM_CHESTS:
-				randomChestsFeatureListener.stop();
+				randomChestsFeatureListener.onDisabled();
 				break;
 			case RANDOM_ENCHANT:
 				break;
@@ -134,7 +134,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	// Fired when plug-in is disabled
 	@Override
 	public final void onDisable() {
-		gameListeners.forEach(IGameEventListener::cleanup);
+		teams().cleanup();
+		gameListeners.forEach(IGameEventListener::onServerStop);
 	}
 
 	// Fired when plug-in is first enabled

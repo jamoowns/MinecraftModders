@@ -29,15 +29,13 @@ public final class PlayerTrailFeatureListener implements IGameEventListener {
 	}
 
 	@Override
-	public final void cleanup() {
-		trailByPlayer.values().forEach(blocks -> {
-			blocks.forEach(block -> {
-				if (block.getType().name().contains("CARPET")) {
-					block.setType(Material.AIR);
-				}
-			});
-		});
-		trailByPlayer.clear();
+	public final void onDisabled() {
+		onServerStop();
+	}
+
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
 	}
 
 	@EventHandler
@@ -100,5 +98,17 @@ public final class PlayerTrailFeatureListener implements IGameEventListener {
 			}
 		});
 		trailByPlayer.remove(event.getPlayer().getUniqueId());
+	}
+
+	@Override
+	public final void onServerStop() {
+		trailByPlayer.values().forEach(blocks -> {
+			blocks.forEach(block -> {
+				if (block.getType().name().contains("CARPET")) {
+					block.setType(Material.AIR);
+				}
+			});
+		});
+		trailByPlayer.clear();
 	}
 }

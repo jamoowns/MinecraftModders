@@ -106,8 +106,13 @@ public final class CustomItemListListener implements IGameEventListener {
 	}
 
 	@Override
-	public final void cleanup() {
-		/* Do nothing. */
+	public final void onDisabled() {
+		/* Empty. */
+	}
+
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
 	}
 
 	@EventHandler
@@ -192,6 +197,11 @@ public final class CustomItemListListener implements IGameEventListener {
 		event.setTo(event.getPlayer().getLocation().add(0, 20, 0));
 	}
 
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
+	}
+
 	private Material[][] rotateShapeSquareGrid(Material[][] shape, int rotate) {
 		if (rotate == 90) {
 			Material[][] newShape = new Material[shape[0].length][shape.length];
@@ -226,7 +236,6 @@ public final class CustomItemListListener implements IGameEventListener {
 	private void setupCustomItems() {
 		portalInputItem = new CustomItem("Portal Input", Material.WARPED_DOOR, ItemCategory.MISC);
 		portalInputItem.setBlockPlaceEvent(event -> {
-
 			Block bl = event.getBlockPlaced();
 			inputSet = true;
 			input = bl.getLocation();
@@ -677,14 +686,14 @@ public final class CustomItemListListener implements IGameEventListener {
 		roomKeydim1x1x1Item.setBlockPlaceEvent(event -> {
 			if (event.getBlock().getLocation().clone().add(1, 0, 0).getBlock().getType()
 					.equals(Material.BLACK_GLAZED_TERRACOTTA)) {
-				labRoomBuilder.BuildRoom(1, 1, 1, event.getBlock().getLocation());
+				labRoomBuilder.buildRoom(1, 1, 1, event.getBlock().getLocation());
 			}
 		});
 		roomKeydim1x2x1Item = new CustomItem("Room Key 1x2x1", Material.LEVER, ItemCategory.ROOMKEYS);
 		roomKeydim1x2x1Item.setBlockPlaceEvent(event -> {
 			if (event.getBlock().getLocation().clone().add(1, 0, 0).getBlock().getType()
 					.equals(Material.BLACK_GLAZED_TERRACOTTA)) {
-				labRoomBuilder.BuildRoom(1, 2, 1, event.getBlock().getLocation());
+				labRoomBuilder.buildRoom(1, 2, 1, event.getBlock().getLocation());
 			}
 		});
 
@@ -694,7 +703,7 @@ public final class CustomItemListListener implements IGameEventListener {
 		roomKeydim2x1x1Item.setBlockPlaceEvent(event -> {
 			if (event.getBlock().getLocation().clone().add(1, 0, 0).getBlock().getType()
 					.equals(Material.BLACK_GLAZED_TERRACOTTA)) {
-				labRoomBuilder.BuildRoom(2, 1, 1, event.getBlock().getLocation());
+				labRoomBuilder.buildRoom(2, 1, 1, event.getBlock().getLocation());
 			}
 		});
 
@@ -704,7 +713,7 @@ public final class CustomItemListListener implements IGameEventListener {
 		roomKeydim2x2x1Item.setBlockPlaceEvent(event -> {
 			if (event.getBlock().getLocation().clone().add(1, 0, 0).getBlock().getType()
 					.equals(Material.BLACK_GLAZED_TERRACOTTA)) {
-				labRoomBuilder.BuildRoom(2, 2, 1, event.getBlock().getLocation());
+				labRoomBuilder.buildRoom(2, 2, 1, event.getBlock().getLocation());
 			}
 		});
 
@@ -714,7 +723,7 @@ public final class CustomItemListListener implements IGameEventListener {
 		roomKeydim3x1x1Item.setBlockPlaceEvent(event -> {
 			if (event.getBlock().getLocation().clone().add(1, 0, 0).getBlock().getType()
 					.equals(Material.BLACK_GLAZED_TERRACOTTA)) {
-				labRoomBuilder.BuildRoom(3, 1, 1, event.getBlock().getLocation());
+				labRoomBuilder.buildRoom(3, 1, 1, event.getBlock().getLocation());
 			}
 		});
 
@@ -724,7 +733,7 @@ public final class CustomItemListListener implements IGameEventListener {
 		roomKeydim1x3x1Item.setBlockPlaceEvent(event -> {
 			if (event.getBlock().getLocation().clone().add(1, 0, 0).getBlock().getType()
 					.equals(Material.BLACK_GLAZED_TERRACOTTA)) {
-				labRoomBuilder.BuildRoom(1, 3, 1, event.getBlock().getLocation());
+				labRoomBuilder.buildRoom(1, 3, 1, event.getBlock().getLocation());
 			}
 		});
 
@@ -734,7 +743,7 @@ public final class CustomItemListListener implements IGameEventListener {
 		roomKeydim3x3x1Item.setBlockPlaceEvent(event -> {
 			if (event.getBlock().getLocation().clone().add(1, 0, 0).getBlock().getType()
 					.equals(Material.BLACK_GLAZED_TERRACOTTA)) {
-				labRoomBuilder.BuildRoom(3, 3, 1, event.getBlock().getLocation());
+				labRoomBuilder.buildRoom(3, 3, 1, event.getBlock().getLocation());
 			}
 		});
 
@@ -744,7 +753,7 @@ public final class CustomItemListListener implements IGameEventListener {
 		hallKeydim1Item.setBlockPlaceEvent(event -> {
 			if (event.getBlock().getLocation().clone().add(0, 0, -1).getBlock().getType()
 					.equals(Material.LIGHT_BLUE_GLAZED_TERRACOTTA)) {
-				labRoomBuilder.BuildHall(1, event.getBlock().getLocation().add(0, 0, -1));
+				labRoomBuilder.buildHall(1, event.getBlock().getLocation().add(0, 0, -1));
 			}
 		});
 
@@ -754,7 +763,7 @@ public final class CustomItemListListener implements IGameEventListener {
 		hallKeydim2Item.setBlockPlaceEvent(event -> {
 			if (event.getBlock().getLocation().clone().add(0, 0, -1).getBlock().getType()
 					.equals(Material.LIGHT_BLUE_GLAZED_TERRACOTTA)) {
-				labRoomBuilder.BuildHall(2, event.getBlock().getLocation().add(0, 0, -1));
+				labRoomBuilder.buildHall(2, event.getBlock().getLocation().add(0, 0, -1));
 			}
 		});
 
@@ -764,7 +773,7 @@ public final class CustomItemListListener implements IGameEventListener {
 		hallKeydim3Item.setBlockPlaceEvent(event -> {
 			if (event.getBlock().getLocation().clone().add(0, 0, -1).getBlock().getType()
 					.equals(Material.LIGHT_BLUE_GLAZED_TERRACOTTA)) {
-				labRoomBuilder.BuildHall(3, event.getBlock().getLocation().add(0, 0, -1));
+				labRoomBuilder.buildHall(3, event.getBlock().getLocation().add(0, 0, -1));
 			}
 		});
 

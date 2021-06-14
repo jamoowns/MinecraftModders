@@ -37,23 +37,27 @@ public final class StructureBuilderListener implements IGameEventListener {
 
 	public final void buildGrid(GridType grid, BlockFace direction, Location loc) {
 		switch (grid) {
-		case TOWER:
-		case CORNER:
-		case T_SECTION:
-		case CROSS:
-		case DEAD_END:
-			buildNotStraightChunk(direction, grid, loc);
-			break;
-		case STRAIGHT:
-			buildStraightChunk(direction, loc);
-			break;
+			case TOWER:
+			case CORNER:
+			case T_SECTION:
+			case CROSS:
+			case DEAD_END:
+				buildNotStraightChunk(direction, grid, loc);
+				break;
+			case STRAIGHT:
+				buildStraightChunk(direction, loc);
+				break;
 		}
 	}
 
 	@Override
-	public void cleanup() {
-		// TODO Auto-generated method stub
+	public final void onDisabled() {
+		/* Empty. */
+	}
 
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
 	}
 
 	@EventHandler
@@ -64,41 +68,55 @@ public final class StructureBuilderListener implements IGameEventListener {
 		}
 	}
 
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
+	}
+
 	private void buildNotStraightChunk(BlockFace direction, GridType grid, Location loc) {
 		Material[] buildList = new Material[] { Material.AIR, Material.STONE_BRICKS, Material.OAK_SLAB,
 				Material.STONE_BRICK_STAIRS, Material.IRON_BARS, Material.STONE_BRICK_SLAB, Material.LANTERN };
 		createGrids(16, 30, 16);
 		switch (grid) {
-		case TOWER:
-			WallOne = true;
-			WallTwo = true;
-			WallThree = true;
-			WallFour = true;
-			break;
-		case DEAD_END:
-			WallThree = !(direction == BlockFace.NORTH);
-			WallOne = !(direction == BlockFace.EAST);
-			WallFour = !(direction == BlockFace.SOUTH);
-			WallTwo = !(direction == BlockFace.WEST);
-			break;
-		case CORNER:
-			WallThree = !(direction == BlockFace.NORTH || direction == BlockFace.WEST);
-			WallOne = !(direction == BlockFace.EAST || direction == BlockFace.NORTH);
-			WallFour = !(direction == BlockFace.SOUTH || direction == BlockFace.EAST);
-			WallTwo = !(direction == BlockFace.WEST || direction == BlockFace.SOUTH);
-			break;
-		case T_SECTION:
-			WallThree = !(direction == BlockFace.NORTH || direction == BlockFace.WEST || direction == BlockFace.EAST);
-			WallOne = !(direction == BlockFace.EAST || direction == BlockFace.NORTH || direction == BlockFace.SOUTH);
-			WallFour = !(direction == BlockFace.SOUTH || direction == BlockFace.EAST || direction == BlockFace.WEST);
-			WallTwo = !(direction == BlockFace.WEST || direction == BlockFace.SOUTH || direction == BlockFace.NORTH);
-			break;
-		case CROSS:
-			WallOne = false;
-			WallTwo = false;
-			WallThree = false;
-			WallFour = false;
-			break;
+			case TOWER:
+				WallOne = true;
+				WallTwo = true;
+				WallThree = true;
+				WallFour = true;
+				break;
+			case DEAD_END:
+				WallThree = !(direction == BlockFace.NORTH);
+				WallOne = !(direction == BlockFace.EAST);
+				WallFour = !(direction == BlockFace.SOUTH);
+				WallTwo = !(direction == BlockFace.WEST);
+				break;
+			case CORNER:
+				WallThree = !(direction == BlockFace.NORTH || direction == BlockFace.WEST);
+				WallOne = !(direction == BlockFace.EAST || direction == BlockFace.NORTH);
+				WallFour = !(direction == BlockFace.SOUTH || direction == BlockFace.EAST);
+				WallTwo = !(direction == BlockFace.WEST || direction == BlockFace.SOUTH);
+				break;
+			case T_SECTION:
+				WallThree = !(direction == BlockFace.NORTH || direction == BlockFace.WEST
+						|| direction == BlockFace.EAST);
+				WallOne = !(direction == BlockFace.EAST || direction == BlockFace.NORTH
+						|| direction == BlockFace.SOUTH);
+				WallFour = !(direction == BlockFace.SOUTH || direction == BlockFace.EAST
+						|| direction == BlockFace.WEST);
+				WallTwo = !(direction == BlockFace.WEST || direction == BlockFace.SOUTH
+						|| direction == BlockFace.NORTH);
+				break;
+			case CROSS:
+				WallOne = false;
+				WallTwo = false;
+				WallThree = false;
+				WallFour = false;
+				break;
+			case STRAIGHT:
+				/* Nothing to do here. */
+				break;
+			default:
+				break;
 		}
 		for (int l = 0; l < buildGrid[0].length; l++) {
 			for (int c = 0; c < buildGrid[0][0].length; c++) {
@@ -1535,5 +1553,4 @@ public final class StructureBuilderListener implements IGameEventListener {
 			}
 		}
 	}
-
 }

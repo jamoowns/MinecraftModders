@@ -21,7 +21,12 @@ public final class MenuListener implements IGameEventListener {
 	}
 
 	@Override
-	public final void cleanup() {
+	public final void onDisabled() {
+		/* Empty. */
+	}
+
+	@Override
+	public final void onEnabled() {
 		/* Empty. */
 	}
 
@@ -52,6 +57,11 @@ public final class MenuListener implements IGameEventListener {
 				}
 			}
 		}
+	}
+
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
 	}
 
 	public final void register(ICustomMenu menu) {

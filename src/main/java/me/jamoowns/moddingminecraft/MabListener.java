@@ -46,11 +46,6 @@ public class MabListener implements IGameEventListener {
 
 	}
 
-	@Override
-	public final void cleanup() {
-		/* Empty. */
-	}
-
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
 
@@ -61,6 +56,16 @@ public class MabListener implements IGameEventListener {
 
 			gameCore = new GameCore(javaPlugin, "test", "Test", 5, 5, gameKit, 1);
 		}
+	}
+
+	@Override
+	public final void onDisabled() {
+		/* Empty. */
+	}
+
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
 	}
 
 	@EventHandler
@@ -81,7 +86,6 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onPlayerMoveEvent(PlayerMoveEvent event) {
-
 		if (whoCares) {
 			BlockFace facing = event.getPlayer().getFacing();
 			int x = 0;
@@ -127,7 +131,11 @@ public class MabListener implements IGameEventListener {
 
 			}
 		}
+	}
 
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
 	}
 
 	@EventHandler
@@ -151,5 +159,4 @@ public class MabListener implements IGameEventListener {
 			}
 		}
 	}
-
 }

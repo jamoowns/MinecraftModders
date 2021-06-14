@@ -31,15 +31,20 @@ public final class CustomItemListener implements IGameEventListener {
 		javaPlugin = aJavaPlugin;
 	}
 
-	@Override
-	public final void cleanup() {
-		/* Empty. */
-	}
-
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
 		javaPlugin.customItems().getItem(event.getItemInHand()).filter(CustomItem::hasBlockPlaceEvent)
 				.map(CustomItem::blockPlaceEvent).ifPresent(c -> c.accept(event));
+	}
+
+	@Override
+	public final void onDisabled() {
+		/* Empty. */
+	}
+
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
 	}
 
 	@EventHandler
@@ -114,6 +119,11 @@ public final class CustomItemListener implements IGameEventListener {
 				event.getEntity().setCustomName(projectileSource.getItemMeta().getDisplayName());
 			}
 		}
+	}
+
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
 	}
 
 	private final boolean isLeftClick(Action action) {

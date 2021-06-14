@@ -7,7 +7,8 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
-public class WeatherListener implements IGameEventListener {
+public final class WeatherListener implements IGameEventListener {
+
 	private final ModdingMinecraft javaPlugin;
 
 	public WeatherListener(ModdingMinecraft aJavaPlugin) {
@@ -15,9 +16,18 @@ public class WeatherListener implements IGameEventListener {
 	}
 
 	@Override
-	public void cleanup() {
-		// TODO Auto-generated method stub
+	public final void onDisabled() {
+		/* Empty. */
+	}
 
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
+	}
+
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
 	}
 
 	@EventHandler

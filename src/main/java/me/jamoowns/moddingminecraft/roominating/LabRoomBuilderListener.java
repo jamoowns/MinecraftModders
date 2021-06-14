@@ -21,17 +21,20 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 
 	private List<Block> blocks = new ArrayList<Block>();
 
-	Location origin = null;
-	int width = 0;
-	int length = 0;
-	int layer = 0;
+	private Location origin = null;
+
+	private int width = 0;
+
+	private int length = 0;
+
+	private int layer = 0;
 
 	public LabRoomBuilderListener() {
-		// Empty on purpose
+		/* Empty. */
 	}
 
 	@EventHandler
-	public void aaaonGlassExplode(BlockExplodeEvent e) {
+	public final void aaaonGlassExplode(BlockExplodeEvent e) {
 		List<Material> mats = new ArrayList<Material>();
 		mats.add(Material.WHITE_STAINED_GLASS);
 		mats.add(Material.LIGHT_BLUE_CONCRETE);
@@ -50,7 +53,7 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 	}
 
 	@EventHandler
-	public void aaaonGlassExplode(EntityExplodeEvent e) {
+	public final void aaaonGlassExplode(EntityExplodeEvent e) {
 		List<Material> mats = new ArrayList<Material>();
 		mats.add(Material.WHITE_STAINED_GLASS);
 		mats.add(Material.LIGHT_BLUE_CONCRETE);
@@ -68,7 +71,7 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 		e.blockList().removeIf((block) -> mats.contains(block.getType()));
 	}
 
-	public void BuildHall(int width, Location origin) {
+	public final void buildHall(int width, Location origin) {
 		width = 16 * width + 8;
 		origin = origin.clone().getChunk().getBlock(5, 61, 8).getLocation();
 		Location tempLoc = origin.clone();
@@ -121,7 +124,7 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 		tempLoc.add(0, 0, -width - 6).getBlock().setType(Material.LIGHT_BLUE_GLAZED_TERRACOTTA);
 	}
 
-	public void BuildRoom(int length, int width, int height, Location origin) {
+	public final void buildRoom(int length, int width, int height, Location origin) {
 		Location loc = origin.clone().getChunk().getBlock(7, 61, 8).getLocation();
 		if (width % 2 == 0) {
 			loc.add(0, 0, -8);
@@ -130,12 +133,36 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 		width = 16 * width + 8;
 		height = 24 * height + 8;
 
-		StartBuild(length, width, height, loc.clone().add(length / 2 + 5, -3, 0));
-		EndBuild(loc.clone());
+		startBuild(length, width, height, loc.clone().add(length / 2 + 5, -3, 0));
+		endBuild(loc.clone());
 	}
 
-	public void CenterMass(int fill) {
+	@Override
+	public final void onDisabled() {
+		/* Empty. */
+	}
 
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
+	}
+
+	@EventHandler
+	public void onRedstoneEvent(BlockRedstoneEvent e) {
+		if (!blocks.contains(e.getBlock()))
+			return;
+
+		e.setNewCurrent(1);
+
+		blocks.remove(e.getBlock());
+	}
+
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
+	}
+
+	private void centerMass(int fill) {
 		Location newStartZ = origin.clone().add(-length / 2 + 5, 0, -width / 2);
 		Location newStartX = origin.clone().add(-length / 2, 0, -width / 2 + 5);
 		int placeOne = 0;
@@ -243,13 +270,7 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 
 	}
 
-	@Override
-	public void cleanup() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void EndBuild(Location location) {
+	private final void endBuild(Location location) {
 		for (int x = 0; x < 5; x++) {
 			for (int z = 0; z < 7; z++) {
 				for (int y = 0; y < 7; y++) {
@@ -281,12 +302,10 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 
 	}
 
-	public void InnerRing(int fill) {
+	private void innerRing(int fill) {
 		int placeOne = 0;
-		int placeTwo = -1;
 		if (fill != 1) {
 			placeOne = fill;
-			placeTwo = fill;
 		}
 		Location tempLoc = origin.clone().add(-length / 2 + 5, 0, -width / 2 - 1);
 		for (int x = 0; x < length - 10; x++) {
@@ -338,7 +357,7 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 		randomBlockPlace(tempLoc.add(0, 0, -1), placeOne);
 	}
 
-	public void OuterRing(int fill) {
+	private void outerRing(int fill) {
 		int placeOne = 0;
 		if (fill != 1) {
 			placeOne = fill;
@@ -442,7 +461,7 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 		randomBlockPlace(tempLoc.add(0, 0, -1), placeOne);
 	}
 
-	public void randomBlockPlace(Location loc, int result) {
+	private void randomBlockPlace(Location loc, int result) {
 		if (result == -4) {
 			loc.getWorld().getBlockAt(loc).setType(Material.AIR);
 		} else if (result == -3) {
@@ -500,52 +519,40 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 		}
 	}
 
-	@EventHandler
-	public void RedstoneEvent(BlockRedstoneEvent e) {
-
-		if (!blocks.contains(e.getBlock()))
-			return;
-
-		e.setNewCurrent(1);
-
-		blocks.remove(e.getBlock());
-
-	}
-
-	public void StartBuild(int length, int width, int height, Location origin) {
+	private void startBuild(int length, int width, int height, Location origin) {
 		this.width = width;
 		this.length = length;
 		this.origin = origin.clone();
-		CenterMass(1);
+		centerMass(1);
 		this.origin = origin.clone();
 		this.origin.add(0, 1, 0);
-		CenterMass(-2);
-		InnerRing(1);
+		centerMass(-2);
+		innerRing(1);
 
 		for (int x = 0; x < 4; x++) {
 			this.origin = origin.clone();
 			this.origin.add(0, x + 2, 0);
 			layer = x + 2;
-			InnerRing(-2);
-			OuterRing(1);
-			CenterMass(-4);
+			innerRing(-2);
+			outerRing(1);
+			centerMass(-4);
 		}
 		for (int x = 3; x < height; x++) {
 			this.origin = origin.clone();
 			this.origin.add(0, x + 2, 0);
 			layer = x + 2;
-			InnerRing(-2);
-			OuterRing(-3);
-			CenterMass(-4);
+			innerRing(-2);
+			outerRing(-3);
+			centerMass(-4);
 		}
 
 		this.origin = origin.clone();
 		this.origin.add(0, height + 1, 0);
-		CenterMass(-2);
-		InnerRing(-3);
+		centerMass(-2);
+		innerRing(-3);
 		this.origin = origin.clone();
 		this.origin.add(0, height + 2, 0);
-		CenterMass(-3);
+		centerMass(-3);
 	}
 
 }
