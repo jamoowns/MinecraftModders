@@ -69,7 +69,7 @@ public class SheepSheerListener implements IGameEventListener {
 		if (event.getEntity() instanceof Sheep) {
 			Sheep sheepEnt = (Sheep) event.getEntity();
 
-			Broadcaster.broadcastGameInfo(sheepEnt.toString());
+			Broadcaster.broadcastGameInfo("" + sheepEnt.getName());
 		}
 
 	}
