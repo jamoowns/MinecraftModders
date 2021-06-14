@@ -7,9 +7,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Sheep;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -63,16 +61,6 @@ public class SheepSheerListener implements IGameEventListener {
 	@Override
 	public final void onEnabled() {
 		/* Empty. */
-	}
-
-	@EventHandler
-	public final void onEntityDeathEvent(EntityDeathEvent event) {
-		if (event.getEntity() instanceof Sheep) {
-			Sheep sheepEnt = (Sheep) event.getEntity();
-
-			Broadcaster.broadcastGameInfo("" + Boolean.toString(sheerablesheep.equals(sheepEnt)));
-		}
-
 	}
 
 	@Override
@@ -173,8 +161,14 @@ public class SheepSheerListener implements IGameEventListener {
 	}
 
 	private void shearevent(PlayerShearEntityEvent event) {
-		if (sheerablesheep.equals(event.getEntity())) {
-			gameCore.GivePlayerGoalBlock(event.getPlayer());
+		if (event.getEntity() instanceof Sheep) {
+			Sheep sheepEnt = (Sheep) event.getEntity();
+
+			Broadcaster.broadcastGameInfo("" + Boolean.toString(sheerablesheep.equals(sheepEnt)));
+			if (sheerablesheep.equals(sheepEnt)) {
+				gameCore.GivePlayerGoalBlock(event.getPlayer());
+			}
 		}
+
 	}
 }
