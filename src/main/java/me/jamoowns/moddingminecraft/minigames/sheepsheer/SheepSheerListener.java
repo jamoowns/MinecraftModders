@@ -3,11 +3,18 @@ package me.jamoowns.moddingminecraft.minigames.sheepsheer;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Sheep;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
@@ -46,6 +53,11 @@ public class SheepSheerListener implements IGameEventListener {
 	}
 
 	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
+	}
+
+	@Override
 	public final void onDisabled() {
 		gameCore.cleanup();
 	}
@@ -58,6 +70,36 @@ public class SheepSheerListener implements IGameEventListener {
 	@Override
 	public final void onServerStop() {
 		gameCore.cleanup();
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onSpawn(ChunkLoadEvent e) {
+		Chunk chunk = e.getChunk();
+		Entity[] entityArray = chunk.getEntities();
+		for (Entity entity : entityArray) {
+			if (!(entity instanceof Sheep))
+				continue;
+			Sheep sheep = (Sheep) entity;
+			rename(sheep);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onSpawn(CreatureSpawnEvent e) {
+		Entity entity = e.getEntity();
+		if (!(entity instanceof Sheep))
+			return;
+		Sheep sheep = (Sheep) entity;
+		rename(sheep);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onSpawn(EntitySpawnEvent e) {
+		Entity entity = e.getEntity();
+		if (!(entity instanceof Sheep))
+			return;
+		Sheep sheep = (Sheep) entity;
+		rename(sheep);
 	}
 
 	private void buildPen(Location location) {
@@ -159,14 +201,14 @@ public class SheepSheerListener implements IGameEventListener {
 		newjeb.setCustomNameVisible(false);
 	}
 
+	private void rename(Sheep sheep) {
+		sheep.setCustomName("jeb_");
+		sheep.setCustomNameVisible(false);
+	}
+
 	private void shearevent(PlayerShearEntityEvent event) {
 		if (sheep.contains(event.getEntity()) && event.getEntity().getCustomName().equals("jeb_")) {
 			gameCore.GivePlayerGoalBlock(event.getPlayer());
 		}
-	}
-
-	@Override
-	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
-		return IGameEventListener.ALWAYS_ENABLED;
 	}
 }
