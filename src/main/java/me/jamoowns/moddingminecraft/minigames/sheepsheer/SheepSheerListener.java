@@ -3,14 +3,18 @@ package me.jamoowns.moddingminecraft.minigames.sheepsheer;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Sheep;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.observable.ObservableProperty;
 import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
@@ -46,6 +50,11 @@ public class SheepSheerListener implements IGameEventListener {
 	}
 
 	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return gameEnabled;
+	}
+
+	@Override
 	public final void onDisabled() {
 		gameCore.cleanup();
 	}
@@ -53,6 +62,16 @@ public class SheepSheerListener implements IGameEventListener {
 	@Override
 	public final void onEnabled() {
 		/* Empty. */
+	}
+
+	@EventHandler
+	public final void onEntityDeathEvent(EntityDeathEvent event) {
+		if (event.getEntity() instanceof Sheep) {
+			Sheep sheepEnt = (Sheep) event.getEntity();
+
+			Broadcaster.broadcastGameInfo(sheepEnt.toString());
+		}
+
 	}
 
 	@Override
@@ -86,13 +105,16 @@ public class SheepSheerListener implements IGameEventListener {
 
 		for (int j = 0; j < 8; j++) {
 			Sheep shee = location.getWorld().spawn(location, Sheep.class);
+			shee.setColor(DyeColor.WHITE);
 			shee.setCustomName("");
 			shee.setCustomNameVisible(false);
 			sheep.add(shee);
 		}
 		Sheep shee = location.getWorld().spawn(location, Sheep.class);
-		shee.setCustomName("jeb_");
-		shee.setCustomNameVisible(false);
+
+		shee.setColor(DyeColor.WHITE);
+		shee.setCustomName("§dSwagg");
+		shee.setCustomNameVisible(true);
 		sheep.add(shee);
 	}
 
@@ -155,6 +177,7 @@ public class SheepSheerListener implements IGameEventListener {
 		}
 
 		Sheep newjeb = sheep.get(RANDOM.nextInt(sheep.size()));
+		newjeb.setColor(DyeColor.WHITE);
 		newjeb.setCustomName("jeb_");
 		newjeb.setCustomNameVisible(false);
 	}
@@ -163,10 +186,5 @@ public class SheepSheerListener implements IGameEventListener {
 		if (sheep.contains(event.getEntity()) && event.getEntity().getCustomName().equals("jeb_")) {
 			gameCore.GivePlayerGoalBlock(event.getPlayer());
 		}
-	}
-
-	@Override
-	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
-		return gameEnabled;
 	}
 }
