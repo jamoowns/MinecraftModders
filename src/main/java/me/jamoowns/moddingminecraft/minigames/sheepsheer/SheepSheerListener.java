@@ -135,7 +135,7 @@ public class SheepSheerListener implements IGameEventListener {
 
 		goalStandItem.setBlockPlaceEvent(event -> {
 			if (gameCore.isSetup()) {
-				gameCore.AddGoal(event.getPlayer(), event.getBlock().getLocation());
+				gameCore.addGoal(event.getPlayer(), event.getBlock().getLocation());
 				buildPen(event.getBlock().getLocation());
 			}
 		});
