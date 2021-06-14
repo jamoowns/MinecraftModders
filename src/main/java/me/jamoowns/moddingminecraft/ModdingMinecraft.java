@@ -30,6 +30,7 @@ import me.jamoowns.moddingminecraft.menus.MenuListener;
 import me.jamoowns.moddingminecraft.minigames.battleroyale.BattleRoyaleListener;
 import me.jamoowns.moddingminecraft.minigames.blockhunter.BlockHunterListener;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.LobbyListener;
+import me.jamoowns.moddingminecraft.minigames.sheepsheer.SheepSheerListener;
 import me.jamoowns.moddingminecraft.roominating.LabRoomBuilderListener;
 import me.jamoowns.moddingminecraft.roominating.StructureBuilderListener;
 import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
@@ -170,6 +171,7 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener, Li
 		/* Minigames. */
 		addGameListener(new BlockHunterListener(this));
 		addGameListener(new BattleRoyaleListener(this));
+		addGameListener(new SheepSheerListener(this));
 		addGameListener(new LobbyListener());
 
 		/* Custom mabmo stuff. */

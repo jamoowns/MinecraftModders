@@ -13,7 +13,6 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
@@ -58,8 +57,21 @@ public class GameCore {
 		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "setup", this::setup);
 		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "start", this::start);
 		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "stop", p -> cleanup());
-		createGoalItem();
 
+	}
+
+	public boolean checkForVictory(Player player) {
+		Integer currentScore = playerScoreById.get(player.getUniqueId());
+		if (currentScore >= goal.getGoalScore()) {
+			lobby.sendLobbyMessage(player.getDisplayName() + " has won " + GAME_NAME + "!");
+			playWinningFireworks(javaPlugin.teams().getTeam(player.getUniqueId()).getTeamColour().getFirework(),
+					player);
+			cleanup();
+			return true;
+		} else {
+			lobby.sendPlayerMessage(player, "Your current score: " + currentScore + "/" + goal.getGoalScore());
+			return false;
+		}
 	}
 
 	public void cleanup() {
@@ -74,6 +86,19 @@ public class GameCore {
 
 	}
 
+	public Material getGoalMat() {
+		return goal.getGoalBlock().material();
+	}
+
+	public Location getPlayerHomeLoc(UUID uniqueId) {
+
+		return flags.playerHomeLocation(uniqueId);
+	}
+
+	public Integer getPlayerScoreId(UUID uniqueId) {
+		return playerScoreById.get(uniqueId);
+	}
+
 	public void GoalBlockTouched(Player p, Location touch) {
 		if (currentGameState == GameState.PLAYING) {
 			if (touch.equals(goal.getGoalLocation())) {
@@ -83,30 +108,31 @@ public class GameCore {
 		}
 	}
 
-	private boolean checkForVictory(Player player) {
-		Integer currentScore = playerScoreById.get(player.getUniqueId());
-		if (currentScore >= goal.getGoalScore()) {
-			lobby.sendLobbyMessage(player.getDisplayName() + " has won " + GAME_NAME + "!");
-			playWinningFireworks(javaPlugin.teams().getTeam(player.getUniqueId()).getTeamColour().getFirework(),
-					player);
-			cleanup();
-			return true;
-		} else {
-			lobby.sendPlayerMessage(player, "Your current score: " + currentScore + "/" + goal.getGoalScore());
-			return false;
-		}
+	public boolean isPlaying() {
+		return currentGameState == GameState.PLAYING;
 	}
 
-	private void createGoalItem() {
-		CustomItem goalItem = new CustomItem("Goal Block", Material.DIAMOND_BLOCK);
+	public void resetGoalBlock() {
+		lobby.sendLobbyMessage("Block has returned to a goal stand.");
+		/* Places goal block on a random goal stand. */
+		goal.resetGoal();
+	}
 
-		goalItem.setBlockPlaceEvent(event -> {
-			GoalCheck(event);
-		});
+	public void sendLobbyMsg(String string) {
 
-		goal.setGoalBlock(goalItem);
-		javaPlugin.customItems().silentRegister(goalItem);
+		lobby.sendLobbyMessage(string);
+	}
 
+	public void sendPlayerMsg(Player player, String string) {
+		lobby.sendPlayerMessage(player, string);
+	}
+
+	public void setGoalBlock(CustomItem goalBlockItem) {
+		goal.setGoalBlock(goalBlockItem);
+	}
+
+	public void setPlayerScoreId(UUID uniqueId, Integer updatedScore) {
+		playerScoreById.put(uniqueId, updatedScore);
 	}
 
 	private void createHomeItem(Player p) {
@@ -125,30 +151,6 @@ public class GameCore {
 
 		flags.playerHomeItemAdd(p.getUniqueId(), homeStand);
 
-	}
-
-	private void GoalCheck(BlockPlaceEvent event) {
-		if (currentGameState == GameState.PLAYING) {
-			Location playerHome = flags.playerHomeLocation(event.getPlayer().getUniqueId());
-			if (event.getBlockPlaced().getLocation().distance(playerHome) < 7) {
-				event.getItemInHand().setAmount(0);
-				event.getBlock().setType(Material.AIR);
-				Integer currentScore = playerScoreById.get(event.getPlayer().getUniqueId());
-				Integer updatedScore = currentScore + 1;
-				Location scoreLocation = playerHome.clone().add(0, updatedScore, 0);
-				event.getBlock().getWorld().getBlockAt(scoreLocation).setType(goal.getGoalBlockStand().material());
-				playerScoreById.put(event.getPlayer().getUniqueId(), updatedScore);
-				boolean hasWon = checkForVictory(event.getPlayer());
-				if (!hasWon) {
-					lobby.sendLobbyMessage(event.getPlayer().getDisplayName() + " has scored a point!");
-					resetGoalBlock();
-				}
-			} else {
-				lobby.sendPlayerMessage(event.getPlayer(), "You must place that closer to your homebase");
-
-				event.setCancelled(true);
-			}
-		}
 	}
 
 	private final void initiate() {
@@ -209,12 +211,6 @@ public class GameCore {
 		goal.celebrateFireworks(fireworks, world);
 		flags.celebrateFireworks(fireworks, world);
 		lobby.celebrateFireworks(fireworks, world);
-	}
-
-	private void resetGoalBlock() {
-		lobby.sendLobbyMessage("Block has returned to a goal stand.");
-		/* Places goal block on a random goal stand. */
-		goal.resetGoal();
 	}
 
 	private final void setup(Player host) {
