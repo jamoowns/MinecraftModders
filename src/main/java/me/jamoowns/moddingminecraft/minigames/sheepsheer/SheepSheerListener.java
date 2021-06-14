@@ -7,6 +7,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Sheep;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -163,6 +164,7 @@ public class SheepSheerListener implements IGameEventListener {
 
 	}
 
+	@EventHandler
 	private void shearevent(PlayerShearEntityEvent event) {
 		Broadcaster.broadcastGameInfo("Sheer");
 		if (event.getEntity() instanceof Sheep) {
