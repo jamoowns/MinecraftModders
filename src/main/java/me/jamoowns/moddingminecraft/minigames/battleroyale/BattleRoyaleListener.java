@@ -7,6 +7,8 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.observable.ObservableProperty;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory;
@@ -17,16 +19,25 @@ import me.jamoowns.moddingminecraft.minigames.mgsettings.GameKit;
 public final class BattleRoyaleListener implements IGameEventListener {
 
 	private ModdingMinecraft javaPlugin;
+
 	private GameCore gameCore;
+
+	private ObservableProperty<Boolean> gameEnabled;
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
+		gameEnabled = new ObservableProperty<Boolean>(false);
 		GameKit gameKit = Armory.offense(KitLevel.AVERAGE).combine(Armory.defence(KitLevel.AVERAGE))
 				.combine(Armory.food(KitLevel.LOW));
 
 		gameCore = new GameCore(javaPlugin, "royale", "Battle Royale", 5, 5, gameKit, 2, true);
 		createGoalItem();
 		createGoalStand();
+	}
+
+	@Override
+	public ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return gameEnabled;
 	}
 
 	@EventHandler
@@ -58,7 +69,6 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 		gameCore.setGoalBlock(goalItem);
 		javaPlugin.customItems().silentRegister(goalItem);
-
 	}
 
 	private void createGoalStand() {

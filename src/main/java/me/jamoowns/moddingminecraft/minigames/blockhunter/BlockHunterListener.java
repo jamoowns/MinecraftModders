@@ -26,6 +26,8 @@ import me.jamoowns.moddingminecraft.ModdingMinecraft;
 import me.jamoowns.moddingminecraft.commands.ModdersCommand;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.fated.Collections;
+import me.jamoowns.moddingminecraft.common.observable.ObservableProperty;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.common.time.CountdownTimer;
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
@@ -54,11 +56,14 @@ public final class BlockHunterListener implements IGameEventListener {
 
 	private List<Integer> timers;
 
+	private ObservableProperty<Boolean> gameEnabled;
+
 	public BlockHunterListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
 		gameplayers = new ArrayList<>();
 		countdownTimers = new ArrayList<>();
 		timers = new ArrayList<>();
+		gameEnabled = new ObservableProperty<>(false);
 
 		blockStand = new ItemStack(Material.BEDROCK);
 		ItemMeta meta = blockStand.getItemMeta();
@@ -73,34 +78,9 @@ public final class BlockHunterListener implements IGameEventListener {
 		javaPlugin.commandExecutor().registerCommand(rootCommand, "stop", p -> stopGame());
 	}
 
-	public final void beginGame(Player host) {
-		if (currentGameState == GameState.SETUP) {
-			if (gameplayers.size() >= 2) {
-				Broadcaster.broadcastInfo("Blockhunt has STARTED!");
-				setChoosingPhase();
-			} else {
-				Broadcaster.sendError(host, "Unable to start game. Requires 2+ players.");
-			}
-		} else {
-			Broadcaster.sendError(host, "Please initiate the game first");
-		}
-	}
-
-	public final void initiateGame() {
-		Broadcaster.broadcastGameInfo("Blockhunt has been initiated!");
-		currentGameState = GameState.SETUP;
-	}
-
-	public final void join(Player p) {
-		boolean alreadyPlaying = gameplayers.stream().map(GamePlayer::playerId).anyMatch(p.getUniqueId()::equals);
-		if (currentGameState == GameState.SETUP && !alreadyPlaying) {
-			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the Blockhunt");
-
-			GamePlayer gamePlayer = new GamePlayer(p.getUniqueId());
-			gameplayers.add(gamePlayer);
-		} else {
-			Broadcaster.sendError(p, "Please initiate the game first");
-		}
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return gameEnabled;
 	}
 
 	@EventHandler
@@ -199,6 +179,7 @@ public final class BlockHunterListener implements IGameEventListener {
 	@Override
 	public final void onDisabled() {
 		stopGame();
+		gameEnabled.set(false);
 	}
 
 	@Override
@@ -221,6 +202,19 @@ public final class BlockHunterListener implements IGameEventListener {
 	@Override
 	public final void onServerStop() {
 		stopGame();
+	}
+
+	private final void beginGame(Player host) {
+		if (currentGameState == GameState.SETUP) {
+			if (gameplayers.size() >= 2) {
+				Broadcaster.broadcastInfo("Blockhunt has STARTED!");
+				setChoosingPhase();
+			} else {
+				Broadcaster.sendError(host, "Unable to start game. Requires 2+ players.");
+			}
+		} else {
+			Broadcaster.sendError(host, "Please initiate the game first");
+		}
 	}
 
 	private Location blockAbove(Location loc) {
@@ -264,6 +258,24 @@ public final class BlockHunterListener implements IGameEventListener {
 
 	private Optional<GamePlayer> gamePlayer(UUID player) {
 		return Collections.find(gameplayers, GamePlayer::playerId, player);
+	}
+
+	private final void initiateGame() {
+		Broadcaster.broadcastGameInfo("Blockhunt has been initiated!");
+		currentGameState = GameState.SETUP;
+		gameEnabled.set(true);
+	}
+
+	private final void join(Player p) {
+		boolean alreadyPlaying = gameplayers.stream().map(GamePlayer::playerId).anyMatch(p.getUniqueId()::equals);
+		if (currentGameState == GameState.SETUP && !alreadyPlaying) {
+			Broadcaster.broadcastGameInfo(p.getDisplayName() + " has joined the Blockhunt");
+
+			GamePlayer gamePlayer = new GamePlayer(p.getUniqueId());
+			gameplayers.add(gamePlayer);
+		} else {
+			Broadcaster.sendError(p, "Please initiate the game first");
+		}
 	}
 
 	private String pretty(Location loc) {

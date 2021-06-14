@@ -11,6 +11,8 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.observable.ObservableProperty;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory;
@@ -21,12 +23,17 @@ import me.jamoowns.moddingminecraft.minigames.mgsettings.GameKit;
 public class SheepSheerListener implements IGameEventListener {
 
 	private ModdingMinecraft javaPlugin;
+
 	private GameCore gameCore;
 	private ArrayList<Sheep> sheep;
 	private final Random RANDOM;
 
+	private ObservableProperty<Boolean> gameEnabled;
+
 	public SheepSheerListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
+		gameEnabled = new ObservableProperty<Boolean>(false);
+
 		sheep = new ArrayList<Sheep>();
 		RANDOM = new Random();
 		GameKit gameKit = Armory.offense(KitLevel.AVERAGE).combine(Armory.defence(KitLevel.AVERAGE))
@@ -158,4 +165,8 @@ public class SheepSheerListener implements IGameEventListener {
 		}
 	}
 
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return gameEnabled;
+	}
 }

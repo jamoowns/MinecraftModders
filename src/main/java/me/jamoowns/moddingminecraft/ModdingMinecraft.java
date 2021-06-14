@@ -1,8 +1,13 @@
 package me.jamoowns.moddingminecraft;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.jamoowns.moddingminecraft.commands.CommandMinecraftModders;
@@ -29,9 +34,10 @@ import me.jamoowns.moddingminecraft.minigames.mgsettings.LobbyListener;
 import me.jamoowns.moddingminecraft.minigames.sheepsheer.SheepSheerListener;
 import me.jamoowns.moddingminecraft.roominating.LabRoomBuilderListener;
 import me.jamoowns.moddingminecraft.roominating.StructureBuilderListener;
+import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
 import me.jamoowns.moddingminecraft.teams.Teams;
 
-public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
+public final class ModdingMinecraft extends JavaPlugin implements IFeatureListener, Listener {
 
 	private List<IGameEventListener> gameListeners;
 
@@ -47,6 +53,8 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 
 	private RandomChestsFeatureListener randomChestsFeatureListener;
 
+	private TaskKeeper taskKeeper;
+
 	public final CommandMinecraftModders commandExecutor() {
 		return commandExecutor;
 	}
@@ -59,10 +67,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void featureActivated(Feature feature) {
 		Broadcaster.broadcastInfo("Activated: " + feature.name());
 		switch (feature) {
-			case BATTLE_ROYALE:
-				break;
-			case EGG_WITCH:
-				break;
 			case FUNKY_MOB_DEATH:
 				break;
 			case IRON_GOLEM:
@@ -95,10 +99,6 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	public final void featureDeactivated(Feature feature) {
 		Broadcaster.broadcastInfo("Deactivated: " + feature.name());
 		switch (feature) {
-			case BATTLE_ROYALE:
-				break;
-			case EGG_WITCH:
-				break;
 			case FUNKY_MOB_DEATH:
 				break;
 			case IRON_GOLEM:
@@ -142,15 +142,17 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	// Fired when plug-in is first enabled
 	@Override
 	public final void onEnable() {
+		getServer().getPluginManager().registerEvents(this, this);
 		commandExecutor = new CommandMinecraftModders();
 		customItems = new CustomItems();
 		teams = new Teams(this);
+
+		taskKeeper = new TaskKeeper(this);
 
 		featureTracker = new FeatureTracker();
 
 		featureTracker().enable(Feature.RANDOM_ENCHANT);
 		featureTracker().enable(Feature.ZOMBIE_BELL);
-		featureTracker().enable(Feature.EGG_WITCH);
 		featureTracker().enable(Feature.RANDOM_BUCKET);
 		featureTracker().enable(Feature.FUNKY_MOB_DEATH);
 		featureTracker().enable(Feature.IRON_GOLEM);
@@ -196,13 +198,22 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		menuListener.register(featureMenu);
 		menuListener.register(itemMenu);
 
-		commandExecutor().registerCommand("features", p -> p.openInventory(featureMenu.asInventory()));
+		commandExecutor().registerCommand("features", featureMenu.displayMenu());
+		commandExecutor().registerCommand("items", itemMenu.displayMenu());
 
-		commandExecutor().registerCommand("items", p -> p.openInventory(itemMenu.asInventory()));
-
-		this.getCommand("mm").setExecutor(commandExecutor);
+		getCommand("mm").setExecutor(commandExecutor);
 
 		Broadcaster.broadcastInfo("Modding Minecraft has been enabled!");
+	}
+
+	@EventHandler
+	public final void onPlayerJoin(PlayerJoinEvent event) {
+		event.setJoinMessage(MessageFormat.format("Welcome, {0}! This server is running MinecraftModders V{1}",
+				event.getPlayer().getName(), getDescription().getVersion()));
+	}
+
+	public final TaskKeeper taskKeeper() {
+		return taskKeeper;
 	}
 
 	public final Teams teams() {
@@ -210,7 +221,19 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 	}
 
 	private void addGameListener(IGameEventListener listener) {
+		listener.gameEnabled().addObserver(state -> listenerEnabledStateChanged(state, listener));
+
 		gameListeners.add(listener);
 		getServer().getPluginManager().registerEvents(listener, this);
+	}
+
+	private void listenerEnabledStateChanged(boolean enabledState, IGameEventListener listener) {
+		if (enabledState && !gameListeners.contains(listener)) {
+			gameListeners.add(listener);
+			getServer().getPluginManager().registerEvents(listener, this);
+		} else if (gameListeners.contains(listener)) {
+			HandlerList.unregisterAll(listener);
+			gameListeners.remove(listener);
+		}
 	}
 }

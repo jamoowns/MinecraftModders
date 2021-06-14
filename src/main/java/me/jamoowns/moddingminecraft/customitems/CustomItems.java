@@ -24,7 +24,7 @@ public final class CustomItems {
 	}
 
 	/**
-	 * Register a publicly accessible item.
+	 * Register a publicly visibly item, is included in the item list.
 	 * 
 	 * @param item item to register
 	 */
@@ -34,7 +34,7 @@ public final class CustomItems {
 	}
 
 	/**
-	 * Register an item but dont include it in the item list.
+	 * Register an item but don't include it in the item list.
 	 * 
 	 * @param item item to register
 	 */

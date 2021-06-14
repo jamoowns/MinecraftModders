@@ -18,6 +18,7 @@ import me.jamoowns.moddingminecraft.features.Feature;
 public final class FeaturesMenu implements ICustomMenu {
 
 	private List<CustomMenuItem> featureMenuItems;
+
 	private Inventory inventory;
 
 	public FeaturesMenu(ModdingMinecraft javaPlugin) {
@@ -26,18 +27,6 @@ public final class FeaturesMenu implements ICustomMenu {
 
 		for (Feature feature : features) {
 			switch (feature) {
-				case BATTLE_ROYALE:
-					featureMenuItems.add(new CustomMenuItem("Battle Royale", Material.DIAMOND_SWORD,
-							p -> javaPlugin.featureTracker().enable(feature),
-							p -> javaPlugin.featureTracker().disable(feature),
-							() -> javaPlugin.featureTracker().isFeatureActive(feature)));
-					break;
-				case EGG_WITCH:
-					featureMenuItems.add(new CustomMenuItem("Egg Witch", Material.EGG,
-							p -> javaPlugin.featureTracker().enable(feature),
-							p -> javaPlugin.featureTracker().disable(feature),
-							() -> javaPlugin.featureTracker().isFeatureActive(feature)));
-					break;
 				case FUNKY_MOB_DEATH:
 					featureMenuItems.add(new CustomMenuItem("Random mob deaths", Material.REDSTONE,
 							p -> javaPlugin.featureTracker().enable(feature),

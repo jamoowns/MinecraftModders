@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
 public final class LobbyListener implements IGameEventListener {
@@ -44,6 +45,11 @@ public final class LobbyListener implements IGameEventListener {
 				fw2.setFireworkMeta(fireworks.get(j));
 			}
 		}
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	public int getMIN_LOBBY_SIZE() {

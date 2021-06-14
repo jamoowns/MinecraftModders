@@ -15,6 +15,7 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
 public final class LabRoomBuilderListener implements IGameEventListener {
@@ -135,6 +136,11 @@ public final class LabRoomBuilderListener implements IGameEventListener {
 
 		startBuild(length, width, height, loc.clone().add(length / 2 + 5, -3, 0));
 		endBuild(loc.clone());
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	@Override

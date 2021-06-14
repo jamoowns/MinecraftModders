@@ -14,6 +14,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
@@ -23,6 +24,11 @@ public class BossesListener implements IGameEventListener {
 
 	public BossesListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	@Override
@@ -37,7 +43,6 @@ public class BossesListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onPlayerMoveEvent(PlayerMoveEvent event) {
-
 		if (javaPlugin.featureTracker().isFeatureActive(Feature.WINFRED)) {
 			for (Entity ent : event.getPlayer().getNearbyEntities(5.0D, 4.0D, 5.0D)) {
 				if (ent instanceof Witch) {
