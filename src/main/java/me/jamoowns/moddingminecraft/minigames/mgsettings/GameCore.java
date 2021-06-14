@@ -38,13 +38,13 @@ public class GameCore {
 	private Goal goal;
 
 	public GameCore(ModdingMinecraft aJavaPlugin, String CommandStr, String GameName, int GameScore, int GoalLocs,
-			GameKit gameKit, int minSize) {
+			GameKit gameKit, int minSize, boolean placeableGoals) {
 		javaPlugin = aJavaPlugin;
 		GAME_NAME = GameName;
 
 		playerScoreById = new HashMap<>();
 		currentGameState = GameState.STOPPED;
-		goal = new Goal(aJavaPlugin, GameScore, GoalLocs);
+		goal = new Goal(aJavaPlugin, GameScore, GoalLocs, placeableGoals);
 		flags = new MarkerPoints(goal.getGoalScore());
 		lobby = new LobbyListener();
 		lobby.setMIN_LOBBY_SIZE(minSize);
@@ -58,6 +58,15 @@ public class GameCore {
 		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "start", this::start);
 		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "stop", p -> cleanup());
 
+	}
+
+	public void AddGoal(Player p, Location location) {
+		lobby.sendPlayerMessage(p, "Added a goal location to the game");
+		goal.getGoalStands().add(location);
+	}
+
+	public void AddPlayerHomeItem(UUID uniqueId, CustomItem homeStand) {
+		flags.playerHomeItemAdd(uniqueId, homeStand);
 	}
 
 	public boolean checkForVictory(Player player) {
@@ -99,6 +108,12 @@ public class GameCore {
 		return playerScoreById.get(uniqueId);
 	}
 
+	public void GivePlayerGoalBlock(Player p) {
+		if (currentGameState == GameState.PLAYING) {
+			p.getInventory().addItem(goal.goalItem());
+		}
+	}
+
 	public void GoalBlockTouched(Player p, Location touch) {
 		if (currentGameState == GameState.PLAYING) {
 			if (touch.equals(goal.getGoalLocation())) {
@@ -110,6 +125,10 @@ public class GameCore {
 
 	public boolean isPlaying() {
 		return currentGameState == GameState.PLAYING;
+	}
+
+	public boolean isSetup() {
+		return currentGameState == GameState.SETUP;
 	}
 
 	public void resetGoalBlock() {
@@ -131,6 +150,16 @@ public class GameCore {
 		goal.setGoalBlock(goalBlockItem);
 	}
 
+	public void setGoalBlockStand(CustomItem goalStandItem) {
+		goal.setGoalBlockStand(goalStandItem);
+	}
+
+	public void SetHome(Player player, Location location, TeamColour teamColour) {
+		flags.playerHomeAdd(player.getUniqueId(), location);
+		lobby.sendPlayerMessage(player, "Home sweet home has been set");
+		flags.buildFlag(location.getBlock(), teamColour.getBase(), teamColour.getHead());
+	}
+
 	public void setPlayerScoreId(UUID uniqueId, Integer updatedScore) {
 		playerScoreById.put(uniqueId, updatedScore);
 	}
@@ -140,16 +169,13 @@ public class GameCore {
 		CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", teamColour.getBase());
 
 		homeStand.setBlockPlaceEvent(event -> {
-			if (currentGameState == GameState.SETUP) {
-				flags.playerHomeAdd(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
-				lobby.sendPlayerMessage(event.getPlayer(), "Home sweet home has been set");
-				flags.buildFlag(event.getBlock(), teamColour.getBase(), teamColour.getHead());
+			if (isSetup()) {
+				SetHome(event.getPlayer(), event.getBlock().getLocation(), teamColour);
 			}
 		});
 
 		javaPlugin.customItems().silentRegister(homeStand);
-
-		flags.playerHomeItemAdd(p.getUniqueId(), homeStand);
+		AddPlayerHomeItem(p.getUniqueId(), homeStand);
 
 	}
 
@@ -165,11 +191,9 @@ public class GameCore {
 
 			playerScoreById.put(p.getUniqueId(), 0);
 			lobby.addToLobby(p);
-
-			for (ItemStack item : gameKit.items()) {
-				p.getInventory().addItem(item);
-			}
-
+			/*
+			 * for (ItemStack item : gameKit.items()) { p.getInventory().addItem(item); }
+			 */
 			lobby.sendLobbyMessage(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size() + " / "
 					+ lobby.maxSize() + " )");
 
@@ -218,14 +242,7 @@ public class GameCore {
 			lobby.sendLobbyMessage("Setting up " + GAME_NAME);
 			lobby.sendPlayerMessage(host, "Place all of the goal stands on the field");
 			currentGameState = GameState.SETUP;
-			goal.setGoalBlockStand(new CustomItem("Goal Block Stand", Material.OBSIDIAN));
-			goal.getGoalBlockStand().setBlockPlaceEvent(event -> {
-				if (currentGameState == GameState.SETUP) {
-					lobby.sendPlayerMessage(event.getPlayer(), "Added a goal location to the game");
-					goal.getGoalStands().add(event.getBlock().getLocation());
-				}
-			});
-			javaPlugin.customItems().silentRegister(goal.getGoalBlockStand());
+
 			ItemStack goalitem = goal.getGoalBlockStand().asItem();
 			goalitem.setAmount(goal.goalLocMaxCount());
 			host.getInventory().addItem(goalitem);

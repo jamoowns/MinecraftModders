@@ -21,7 +21,7 @@ public class Goal {
 	private static Integer GOAL_SCORE = 5;
 	private static Integer GOAL_STAND_LOCATIONS = 5;
 	private static Location goalLocation;
-
+	private static boolean placedGoals;
 	private final Random RANDOM;
 
 	private final Vector ABOVE;
@@ -29,8 +29,8 @@ public class Goal {
 	private CustomItem goalBlockStand;
 	private CustomItem goalBlock;
 
-	public Goal(ModdingMinecraft aJavaPlugin, int GameScore, int GoalLocs) {
-
+	public Goal(ModdingMinecraft aJavaPlugin, int GameScore, int GoalLocs, boolean placeableGoals) {
+		placedGoals = placeableGoals;
 		RANDOM = new Random();
 		ABOVE = new Vector(0, 1, 0);
 		GOAL_SCORE = GameScore;
@@ -82,8 +82,10 @@ public class Goal {
 	}
 
 	public void resetGoal() {
-		goalLocation = getGoalStands().get(RANDOM.nextInt(getGoalStands().size())).clone().add(ABOVE);
-		goalLocation.getWorld().getBlockAt(goalLocation).setType(getGoalBlock().material());
+		if (placedGoals) {
+			goalLocation = getGoalStands().get(RANDOM.nextInt(getGoalStands().size())).clone().add(ABOVE);
+			goalLocation.getWorld().getBlockAt(goalLocation).setType(getGoalBlock().material());
+		}
 	}
 
 	public void setGoalBlock(CustomItem customItem) {

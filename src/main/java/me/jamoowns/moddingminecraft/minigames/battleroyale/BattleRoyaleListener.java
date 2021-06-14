@@ -30,7 +30,9 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		GameKit gameKit = Armory.offense(KitLevel.AVERAGE).combine(Armory.defence(KitLevel.AVERAGE))
 				.combine(Armory.food(KitLevel.LOW));
 
-		gameCore = new GameCore(javaPlugin, "royale", "Battle Royale", 5, 5, gameKit, 2);
+		gameCore = new GameCore(javaPlugin, "royale", "Battle Royale", 5, 5, gameKit, 2, true);
+		createGoalItem();
+		createGoalStand();
 	}
 
 	@Override
@@ -67,6 +69,19 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 		gameCore.setGoalBlock(goalItem);
 		javaPlugin.customItems().silentRegister(goalItem);
+	}
+
+	private void createGoalStand() {
+		CustomItem goalStandItem = new CustomItem("Goal Block Stand", Material.OBSIDIAN);
+
+		goalStandItem.setBlockPlaceEvent(event -> {
+			if (gameCore.isSetup()) {
+				gameCore.AddGoal(event.getPlayer(), event.getBlock().getLocation());
+			}
+		});
+
+		gameCore.setGoalBlockStand(goalStandItem);
+		javaPlugin.customItems().silentRegister(goalStandItem);
 	}
 
 	private void GoalCheck(BlockPlaceEvent event) {

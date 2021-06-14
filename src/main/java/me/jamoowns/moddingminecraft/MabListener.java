@@ -60,7 +60,7 @@ public class MabListener implements IGameEventListener {
 			GameKit gameKit = Armory.offense(KitLevel.AVERAGE).combine(Armory.defence(KitLevel.AVERAGE))
 					.combine(Armory.food(KitLevel.LOW));
 
-			gameCore = new GameCore(javaPlugin, "test", "Test", 5, 5, gameKit, 1);
+			gameCore = new GameCore(javaPlugin, "test", "Test", 5, 5, gameKit, 1, true);
 		}
 	}
 
