@@ -27,6 +27,7 @@ import me.jamoowns.moddingminecraft.commands.ModdersCommand;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.fated.Collections;
 import me.jamoowns.moddingminecraft.common.observable.ObservableProperty;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.common.time.CountdownTimer;
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
@@ -77,7 +78,8 @@ public final class BlockHunterListener implements IGameEventListener {
 		javaPlugin.commandExecutor().registerCommand(rootCommand, "stop", p -> stopGame());
 	}
 
-	public final ObservableProperty<Boolean> gameEnabled() {
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
 		return gameEnabled;
 	}
 
@@ -177,6 +179,7 @@ public final class BlockHunterListener implements IGameEventListener {
 	@Override
 	public final void onDisabled() {
 		stopGame();
+		gameEnabled.set(false);
 	}
 
 	@Override
@@ -260,6 +263,7 @@ public final class BlockHunterListener implements IGameEventListener {
 	private final void initiateGame() {
 		Broadcaster.broadcastGameInfo("Blockhunt has been initiated!");
 		currentGameState = GameState.SETUP;
+		gameEnabled.set(true);
 	}
 
 	private final void join(Player p) {

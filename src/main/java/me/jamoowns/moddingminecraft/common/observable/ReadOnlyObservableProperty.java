@@ -17,11 +17,14 @@ public abstract class ReadOnlyObservableProperty<T> {
 		obs.add(consumer);
 	}
 
-	void notifyValueChanged() {
-		obs.forEach(c -> c.accept(value));
+	void setValue(T aValue) {
+		if (value != aValue) {
+			value = aValue;
+			notifyValueChanged();
+		}
 	}
 
-	void setValue(T aValue) {
-		value = aValue;
+	private void notifyValueChanged() {
+		obs.forEach(c -> c.accept(value));
 	}
 }
