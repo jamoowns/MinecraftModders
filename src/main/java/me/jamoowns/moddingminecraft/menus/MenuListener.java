@@ -42,27 +42,27 @@ public final class MenuListener implements IGameEventListener {
 		Inventory inventory = event.getInventory();
 
 		if (menus.containsKey(inventory)) {
-			ICustomMenu menu = menus.get(inventory);
 			event.setCancelled(true);
+			ICustomMenu menu = menus.get(inventory);
 			if (event.getCurrentItem() != null) {
+				Optional<CustomMenuItem> customMenuItem = menu.menuItem(event.getCurrentItem());
+				if (!customMenuItem.isPresent()) {
+					return;
+				}
 				boolean wholeStack = event.isShiftClick();
-				Optional<CustomMenuItem> customItem = menu.menuItem(event.getCurrentItem());
 				if (event.getClickedInventory().equals(event.getInventory())) {
-					if (customItem.isPresent()) {
-						ItemStack itemToSet = customItem.get().asItem();
-						if (wholeStack) {
-							itemToSet.setAmount(itemToSet.getType().getMaxStackSize());
-						}
-						menu.getAction(itemToSet).accept(player);
-						event.getClickedInventory().setItem(event.getSlot(), customItem.get().asItem());
+					ItemStack itemToSet = customMenuItem.get().asItem();
+					if (wholeStack) {
+						itemToSet.setAmount(itemToSet.getType().getMaxStackSize());
 					}
+					menu.getAction(itemToSet).accept(player);
+					event.getClickedInventory().setItem(event.getSlot(), customMenuItem.get().asItem());
 				} else if (event.getClickedInventory().equals(player.getInventory())) {
-					if (customItem.isPresent()) {
-						event.getCurrentItem().setAmount(wholeStack ? 0 : event.getCurrentItem().getAmount() - 1);
-					}
+					event.getCurrentItem().setAmount(wholeStack ? 0 : event.getCurrentItem().getAmount() - 1);
 				}
 			}
 		}
+
 	}
 
 	@Override
