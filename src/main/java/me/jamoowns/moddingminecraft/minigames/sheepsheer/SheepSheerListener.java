@@ -30,6 +30,7 @@ public class SheepSheerListener implements IGameEventListener {
 
 	private GameCore gameCore;
 	private ArrayList<Sheep> sheep;
+	private Sheep sheerablesheep;
 	private final Random RANDOM;
 
 	private ObservableProperty<Boolean> gameEnabled;
@@ -69,7 +70,7 @@ public class SheepSheerListener implements IGameEventListener {
 		if (event.getEntity() instanceof Sheep) {
 			Sheep sheepEnt = (Sheep) event.getEntity();
 
-			Broadcaster.broadcastGameInfo("" + sheepEnt.getName());
+			Broadcaster.broadcastGameInfo("" + Boolean.toString(sheerablesheep.equals(sheepEnt)));
 		}
 
 	}
@@ -106,15 +107,12 @@ public class SheepSheerListener implements IGameEventListener {
 		for (int j = 0; j < 8; j++) {
 			Sheep shee = location.getWorld().spawn(location, Sheep.class);
 			shee.setColor(DyeColor.WHITE);
-			shee.setCustomName("");
-			shee.setCustomNameVisible(false);
 			sheep.add(shee);
 		}
 		Sheep shee = location.getWorld().spawn(location, Sheep.class);
 
 		shee.setColor(DyeColor.WHITE);
-		shee.setCustomName("�dSwagg");
-		shee.setCustomNameVisible(true);
+		sheerablesheep = shee;
 		sheep.add(shee);
 	}
 
@@ -170,20 +168,12 @@ public class SheepSheerListener implements IGameEventListener {
 	}
 
 	private void makeNewJeb() {
-		for (int i = 0; i < sheep.size(); i++) {
-			if (sheep.get(i).getName() == "jeb_") {
-				sheep.get(i).setCustomName("");
-			}
-		}
-
 		Sheep newjeb = sheep.get(RANDOM.nextInt(sheep.size()));
-		newjeb.setColor(DyeColor.WHITE);
-		newjeb.setCustomName("jeb_");
-		newjeb.setCustomNameVisible(false);
+		sheerablesheep = newjeb;
 	}
 
 	private void shearevent(PlayerShearEntityEvent event) {
-		if (sheep.contains(event.getEntity()) && event.getEntity().getCustomName().equals("jeb_")) {
+		if (sheerablesheep.equals(event.getEntity())) {
 			gameCore.GivePlayerGoalBlock(event.getPlayer());
 		}
 	}
