@@ -27,7 +27,7 @@ public class SheepSheerListener implements IGameEventListener {
 
 	public SheepSheerListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
-
+		sheep = new ArrayList<Sheep>();
 		RANDOM = new Random();
 		GameKit gameKit = Armory.offense(KitLevel.AVERAGE).combine(Armory.defence(KitLevel.AVERAGE))
 				.combine(Armory.food(KitLevel.LOW).addContraband(new ItemStack(Material.SHEARS, 1)));
@@ -71,7 +71,7 @@ public class SheepSheerListener implements IGameEventListener {
 		}
 		for (int i = -8; i < 8; i++) {
 			for (int j = -8; j < 8; j++) {
-				if ((i == -8 || i == 7) && (j == -8 || j == 7)) {
+				if ((i == -8 || i == 7) || (j == -8 || j == 7)) {
 					pencentre.clone().add(i, 0, j).getBlock().setType(Material.BIRCH_FENCE);
 				}
 			}
