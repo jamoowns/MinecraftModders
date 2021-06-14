@@ -21,6 +21,18 @@ public final class GameKit {
 	/**
 	 * Combine with another {@link GameKit}.
 	 * 
+	 * @param other other Items not in kits to combine
+	 * @return the combined {@link GameKit}
+	 */
+	public final GameKit addContraband(ItemStack other) {
+		ArrayList<ItemStack> asArray = new ArrayList<>(Arrays.asList(items));
+		asArray.add(other);
+		return new GameKit(asArray);
+	}
+
+	/**
+	 * Combine with another {@link GameKit}.
+	 * 
 	 * @param other other kit to combine
 	 * @return the combined {@link GameKit}
 	 */
