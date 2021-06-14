@@ -167,6 +167,6 @@ public class SheepSheerListener implements IGameEventListener {
 
 	@Override
 	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
-		return gameEnabled;
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 }

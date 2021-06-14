@@ -223,8 +223,10 @@ public final class ModdingMinecraft extends JavaPlugin implements IFeatureListen
 	private void addGameListener(IGameEventListener listener) {
 		listener.gameEnabled().addObserver(state -> listenerEnabledStateChanged(state, listener));
 
-		gameListeners.add(listener);
-		getServer().getPluginManager().registerEvents(listener, this);
+		if (listener.gameEnabled().getValue()) {
+			gameListeners.add(listener);
+			getServer().getPluginManager().registerEvents(listener, this);
+		}
 	}
 
 	private void listenerEnabledStateChanged(boolean enabledState, IGameEventListener listener) {
