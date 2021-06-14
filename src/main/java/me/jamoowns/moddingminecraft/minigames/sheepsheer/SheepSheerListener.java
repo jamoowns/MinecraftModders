@@ -91,9 +91,9 @@ public class SheepSheerListener implements IGameEventListener {
 			sheep.add(shee);
 		}
 		Sheep shee = location.getWorld().spawn(location, Sheep.class);
-		sheep.add(shee);
-		shee.setCustomName("_jeb");
+		shee.setCustomName("jeb_");
 		shee.setCustomNameVisible(false);
+		sheep.add(shee);
 	}
 
 	private void createGoalItem() {
@@ -149,18 +149,18 @@ public class SheepSheerListener implements IGameEventListener {
 
 	private void makeNewJeb() {
 		for (int i = 0; i < sheep.size(); i++) {
-			if (sheep.get(i).getName() == "_jeb") {
+			if (sheep.get(i).getName() == "jeb_") {
 				sheep.get(i).setCustomName("");
 			}
 		}
 
 		Sheep newjeb = sheep.get(RANDOM.nextInt(sheep.size()));
-		newjeb.setCustomName("_jeb");
+		newjeb.setCustomName("jeb_");
 		newjeb.setCustomNameVisible(false);
 	}
 
 	private void shearevent(PlayerShearEntityEvent event) {
-		if (sheep.contains(event.getEntity()) && event.getEntity().getCustomName().equals("_jeb")) {
+		if (sheep.contains(event.getEntity()) && event.getEntity().getCustomName().equals("jeb_")) {
 			gameCore.GivePlayerGoalBlock(event.getPlayer());
 		}
 	}
