@@ -51,7 +51,7 @@ public class SheepSheerListener implements IGameEventListener {
 
 	@Override
 	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
-		return gameEnabled;
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	@Override
@@ -186,10 +186,5 @@ public class SheepSheerListener implements IGameEventListener {
 		if (sheep.contains(event.getEntity()) && event.getEntity().getCustomName().equals("jeb_")) {
 			gameCore.GivePlayerGoalBlock(event.getPlayer());
 		}
-	}
-
-	@Override
-	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
-		return IGameEventListener.ALWAYS_ENABLED;
 	}
 }
