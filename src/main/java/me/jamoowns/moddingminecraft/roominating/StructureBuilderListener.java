@@ -14,6 +14,7 @@ import org.bukkit.block.data.type.Stairs.Shape;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
 public final class StructureBuilderListener implements IGameEventListener {
@@ -48,6 +49,11 @@ public final class StructureBuilderListener implements IGameEventListener {
 				buildStraightChunk(direction, loc);
 				break;
 		}
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	@Override

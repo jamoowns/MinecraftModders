@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.extras.Spells;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.roominating.BuildingFoundations;
@@ -103,6 +104,11 @@ public final class CustomItemListListener implements IGameEventListener {
 		structureBuilder = new StructureBuilderListener();
 		labRoomBuilder = new LabRoomBuilderListener();
 		setupCustomItems();
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	@Override

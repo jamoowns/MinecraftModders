@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.common.time.TimeConstants;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
@@ -32,6 +33,11 @@ public final class RandomChestsFeatureListener implements IGameEventListener {
 		RANDOM = new Random();
 		timerTaskId = null;
 		onEnabled();
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	@Override

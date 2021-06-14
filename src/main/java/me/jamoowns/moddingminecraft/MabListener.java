@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.extras.Spells;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory;
@@ -44,6 +45,11 @@ public class MabListener implements IGameEventListener {
 		javaPlugin = aJavaPlugin;
 		simpleChunks = new SimpleChunks();
 
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	@EventHandler

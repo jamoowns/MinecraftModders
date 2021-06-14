@@ -35,6 +35,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.features.Feature;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
@@ -46,6 +47,11 @@ public final class FunkyDeathsListener implements IGameEventListener {
 
 	public FunkyDeathsListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,7 +37,7 @@ import me.jamoowns.moddingminecraft.roominating.StructureBuilderListener;
 import me.jamoowns.moddingminecraft.taskkeeper.TaskKeeper;
 import me.jamoowns.moddingminecraft.teams.Teams;
 
-public class ModdingMinecraft extends JavaPlugin implements IFeatureListener, Listener {
+public final class ModdingMinecraft extends JavaPlugin implements IFeatureListener, Listener {
 
 	private List<IGameEventListener> gameListeners;
 
@@ -220,7 +221,19 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener, Li
 	}
 
 	private void addGameListener(IGameEventListener listener) {
+		listener.gameEnabled().addObserver(state -> listenerEnabledStateChanged(state, listener));
+
 		gameListeners.add(listener);
 		getServer().getPluginManager().registerEvents(listener, this);
+	}
+
+	private void listenerEnabledStateChanged(boolean enabledState, IGameEventListener listener) {
+		if (enabledState && !gameListeners.contains(listener)) {
+			gameListeners.add(listener);
+			getServer().getPluginManager().registerEvents(listener, this);
+		} else if (gameListeners.contains(listener)) {
+			HandlerList.unregisterAll(listener);
+			gameListeners.remove(listener);
+		}
 	}
 }

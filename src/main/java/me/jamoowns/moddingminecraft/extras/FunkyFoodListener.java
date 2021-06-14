@@ -6,11 +6,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Husk;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
 public class FunkyFoodListener implements IGameEventListener {
@@ -19,6 +19,11 @@ public class FunkyFoodListener implements IGameEventListener {
 
 	public FunkyFoodListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	@Override
@@ -31,7 +36,7 @@ public class FunkyFoodListener implements IGameEventListener {
 		/* Empty. */
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler
 	public final void onPlayerInteractEvent(PlayerItemConsumeEvent e) {
 		// get all the relative values for comparation
 		final Player p = e.getPlayer();

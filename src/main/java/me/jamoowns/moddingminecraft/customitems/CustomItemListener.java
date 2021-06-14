@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 
 public final class CustomItemListener implements IGameEventListener {
@@ -29,6 +30,11 @@ public final class CustomItemListener implements IGameEventListener {
 
 	public CustomItemListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 
 	@EventHandler
