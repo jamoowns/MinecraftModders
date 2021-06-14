@@ -223,8 +223,7 @@ public final class ModdingMinecraft extends JavaPlugin implements IFeatureListen
 	private void addGameListener(IGameEventListener listener) {
 		listener.gameEnabled().addObserver(state -> listenerEnabledStateChanged(state, listener));
 
-		gameListeners.add(listener);
-		getServer().getPluginManager().registerEvents(listener, this);
+		listenerEnabledStateChanged(listener.gameEnabled().getValue(), listener);
 	}
 
 	private void listenerEnabledStateChanged(boolean enabledState, IGameEventListener listener) {
@@ -232,8 +231,8 @@ public final class ModdingMinecraft extends JavaPlugin implements IFeatureListen
 			gameListeners.add(listener);
 			getServer().getPluginManager().registerEvents(listener, this);
 		} else if (gameListeners.contains(listener)) {
-			HandlerList.unregisterAll(listener);
 			gameListeners.remove(listener);
+			HandlerList.unregisterAll(listener);
 		}
 	}
 }

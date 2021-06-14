@@ -179,7 +179,6 @@ public final class BlockHunterListener implements IGameEventListener {
 	@Override
 	public final void onDisabled() {
 		stopGame();
-		gameEnabled.set(false);
 	}
 
 	@Override
@@ -379,5 +378,6 @@ public final class BlockHunterListener implements IGameEventListener {
 			currentGameState = GameState.STOPPED;
 			Broadcaster.broadcastGameInfo("Blockhunt has been stopped!");
 		}
+		gameEnabled.set(false);
 	}
 }

@@ -17,6 +17,10 @@ public abstract class ReadOnlyObservableProperty<T> {
 		obs.add(consumer);
 	}
 
+	public final T getValue() {
+		return value;
+	}
+
 	void setValue(T aValue) {
 		if (value != aValue) {
 			value = aValue;

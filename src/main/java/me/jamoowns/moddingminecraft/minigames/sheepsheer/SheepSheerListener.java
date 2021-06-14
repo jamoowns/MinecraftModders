@@ -113,7 +113,7 @@ public class SheepSheerListener implements IGameEventListener {
 		Sheep shee = location.getWorld().spawn(location, Sheep.class);
 
 		shee.setColor(DyeColor.WHITE);
-		shee.setCustomName("§dSwagg");
+		shee.setCustomName("ï¿½dSwagg");
 		shee.setCustomNameVisible(true);
 		sheep.add(shee);
 	}
@@ -186,5 +186,10 @@ public class SheepSheerListener implements IGameEventListener {
 		if (sheep.contains(event.getEntity()) && event.getEntity().getCustomName().equals("jeb_")) {
 			gameCore.GivePlayerGoalBlock(event.getPlayer());
 		}
+	}
+
+	@Override
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
+		return IGameEventListener.ALWAYS_ENABLED;
 	}
 }

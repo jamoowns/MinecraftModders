@@ -19,14 +19,14 @@ public final class GameKit {
 	}
 
 	/**
-	 * Combine with another {@link GameKit}.
+	 * Add some contraband to the {@link GameKit}.
 	 * 
-	 * @param other other Items not in kits to combine
+	 * @param contraband contraband to add to the kit
 	 * @return the combined {@link GameKit}
 	 */
-	public final GameKit addContraband(ItemStack other) {
+	public final GameKit addContraband(ItemStack contraband) {
 		ArrayList<ItemStack> asArray = new ArrayList<>(Arrays.asList(items));
-		asArray.add(other);
+		asArray.add(contraband);
 		return new GameKit(asArray);
 	}
 
