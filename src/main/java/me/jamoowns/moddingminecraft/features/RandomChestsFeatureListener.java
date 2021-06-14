@@ -31,15 +31,18 @@ public final class RandomChestsFeatureListener implements IGameEventListener {
 		javaPlugin = aJavaPlugin;
 		RANDOM = new Random();
 		timerTaskId = null;
-		start();
+		onEnabled();
 	}
 
 	@Override
-	public final void cleanup() {
-		/* Empty. */
+	public final void onDisabled() {
+		if (timerTaskId != null) {
+			Bukkit.getScheduler().cancelTask(timerTaskId);
+		}
 	}
 
-	public final void start() {
+	@Override
+	public final void onEnabled() {
 		if (timerTaskId == null) {
 			timerTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, this::randomChestSpawn,
 					RANDOM.nextInt((int) (TimeConstants.ONE_MINUTE * 2)) + TimeConstants.ONE_MINUTE,
@@ -47,10 +50,9 @@ public final class RandomChestsFeatureListener implements IGameEventListener {
 		}
 	}
 
-	public final void stop() {
-		if (timerTaskId != null) {
-			Bukkit.getScheduler().cancelTask(timerTaskId);
-		}
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
 	}
 
 	private void randomChestSpawn() {
@@ -88,7 +90,7 @@ public final class RandomChestsFeatureListener implements IGameEventListener {
 				attempts++;
 			}
 		} else {
-			stop();
+			onDisabled();
 		}
 	}
 }

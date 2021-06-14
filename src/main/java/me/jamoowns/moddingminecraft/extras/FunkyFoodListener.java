@@ -22,7 +22,12 @@ public class FunkyFoodListener implements IGameEventListener {
 	}
 
 	@Override
-	public final void cleanup() {
+	public final void onDisabled() {
+		/* Empty. */
+	}
+
+	@Override
+	public final void onEnabled() {
 		/* Empty. */
 	}
 
@@ -66,5 +71,10 @@ public class FunkyFoodListener implements IGameEventListener {
 				}, 230);
 			}
 		}
+	}
+
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
 	}
 }

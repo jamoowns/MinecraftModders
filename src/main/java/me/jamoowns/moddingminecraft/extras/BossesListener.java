@@ -26,9 +26,13 @@ public class BossesListener implements IGameEventListener {
 	}
 
 	@Override
-	public void cleanup() {
-		// TODO Auto-generated method stub
+	public final void onDisabled() {
+		/* Empty. */
+	}
 
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
 	}
 
 	@EventHandler
@@ -59,6 +63,11 @@ public class BossesListener implements IGameEventListener {
 				}
 			}
 		}
+	}
+
+	@Override
+	public final void onServerStop() {
+		/* Empty. */
 	}
 
 	@EventHandler

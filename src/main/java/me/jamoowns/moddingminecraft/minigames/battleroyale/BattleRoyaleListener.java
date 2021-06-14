@@ -27,14 +27,19 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		gameCore = new GameCore(javaPlugin, "royale", "Battle Royale", 5, 5, gameKit, 2);
 	}
 
-	@Override
-	public final void cleanup() {
-		gameCore.cleanup();
-	}
-
 	@EventHandler
 	public final void onBlockDamageEvent(BlockDamageEvent event) {
 		gameCore.GoalBlockTouched(event.getPlayer(), event.getBlock().getLocation());
+	}
+
+	@Override
+	public final void onDisabled() {
+		gameCore.cleanup();
+	}
+
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
 	}
 
 	private void createGoalItem() {
@@ -74,4 +79,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		}
 	}
 
+	@Override
+	public final void onServerStop() {
+		gameCore.cleanup();
+	}
 }

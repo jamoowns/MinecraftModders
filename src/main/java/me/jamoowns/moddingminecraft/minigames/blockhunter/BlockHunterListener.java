@@ -86,20 +86,6 @@ public final class BlockHunterListener implements IGameEventListener {
 		}
 	}
 
-	@Override
-	public final void cleanup() {
-		for (GamePlayer gp : gameplayers) {
-			removeStand(gp);
-			gp.clearStand();
-		}
-		gameplayers.clear();
-		stopAllTimers();
-		if (currentGameState != GameState.STOPPED) {
-			currentGameState = GameState.STOPPED;
-			Broadcaster.broadcastGameInfo("Blockhunt has been stopped!");
-		}
-	}
-
 	public final void initiateGame() {
 		Broadcaster.broadcastGameInfo("Blockhunt has been initiated!");
 		currentGameState = GameState.SETUP;
@@ -210,6 +196,16 @@ public final class BlockHunterListener implements IGameEventListener {
 		}
 	}
 
+	@Override
+	public final void onDisabled() {
+		stopGame();
+	}
+
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
+	}
+
 	@EventHandler
 	public final void onPlayerDeathEvent(PlayerDeathEvent event) {
 		Player player = event.getEntity();
@@ -222,8 +218,9 @@ public final class BlockHunterListener implements IGameEventListener {
 		}
 	}
 
-	public final void stopGame() {
-		cleanup();
+	@Override
+	public final void onServerStop() {
+		stopGame();
 	}
 
 	private Location blockAbove(Location loc) {
@@ -357,5 +354,18 @@ public final class BlockHunterListener implements IGameEventListener {
 		timers.clear();
 		countdownTimers.forEach(CountdownTimer::kill);
 		countdownTimers.clear();
+	}
+
+	private final void stopGame() {
+		for (GamePlayer gp : gameplayers) {
+			removeStand(gp);
+			gp.clearStand();
+		}
+		gameplayers.clear();
+		stopAllTimers();
+		if (currentGameState != GameState.STOPPED) {
+			currentGameState = GameState.STOPPED;
+			Broadcaster.broadcastGameInfo("Blockhunt has been stopped!");
+		}
 	}
 }

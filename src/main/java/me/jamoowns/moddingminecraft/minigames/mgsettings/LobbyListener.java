@@ -20,6 +20,7 @@ import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 public final class LobbyListener implements IGameEventListener {
 
 	private static final int MAX_LOBBY_SIZE = 16;
+
 	private int MIN_LOBBY_SIZE = 2;
 
 	private HashMap<UUID, PlayerInfo> lobby;
@@ -45,21 +46,34 @@ public final class LobbyListener implements IGameEventListener {
 		}
 	}
 
-	@Override
-	public final void cleanup() {
-		removeAllFromLobby();
+	public int getMIN_LOBBY_SIZE() {
+		return MIN_LOBBY_SIZE;
 	}
 
 	public final int maxSize() {
 		return MAX_LOBBY_SIZE;
 	}
 
+	@Override
+	public final void onDisabled() {
+		removeAllFromLobby();
+	}
+
+	@Override
+	public final void onEnabled() {
+		/* Empty. */
+	}
+
 	@EventHandler
 	public final void onQuitEvent(PlayerQuitEvent event) {
-		// This doesn't work if server crashes
 		if (playerInLobby(event.getPlayer().getUniqueId())) {
 			removeFromLobby(event.getPlayer());
 		}
+	}
+
+	@Override
+	public final void onServerStop() {
+		removeAllFromLobby();
 	}
 
 	public final boolean playerInLobby(UUID uuid) {
@@ -103,6 +117,10 @@ public final class LobbyListener implements IGameEventListener {
 		}
 	}
 
+	public void setMIN_LOBBY_SIZE(int mIN_LOBBY_SIZE) {
+		MIN_LOBBY_SIZE = mIN_LOBBY_SIZE;
+	}
+
 	public final int size() {
 		return lobby.size();
 	}
@@ -112,13 +130,5 @@ public final class LobbyListener implements IGameEventListener {
 		p.getInventory().setContents(lobby.get(p.getUniqueId()).getInventory());
 		p.setBedSpawnLocation(lobby.get(p.getUniqueId()).getBedSpawn());
 		p.updateInventory();
-	}
-
-	public int getMIN_LOBBY_SIZE() {
-		return MIN_LOBBY_SIZE;
-	}
-
-	public void setMIN_LOBBY_SIZE(int mIN_LOBBY_SIZE) {
-		MIN_LOBBY_SIZE = mIN_LOBBY_SIZE;
 	}
 }
