@@ -161,7 +161,6 @@ public class SheepSheerListener implements IGameEventListener {
 
 		newjeb.setColor(DyeColor.PINK);
 		sheerablesheep = newjeb;
-
 	}
 
 	@EventHandler
