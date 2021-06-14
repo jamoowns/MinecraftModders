@@ -102,7 +102,7 @@ public class SheepSheerListener implements IGameEventListener {
 	}
 
 	private void createGoalStand() {
-		CustomItem goalStandItem = new CustomItem("SHEER ME", Material.SHEEP_SPAWN_EGG);
+		CustomItem goalStandItem = new CustomItem("SHEER ME", Material.WHITE_WOOL);
 
 		goalStandItem.setBlockPlaceEvent(event -> {
 			if (gameCore.isSetup()) {
