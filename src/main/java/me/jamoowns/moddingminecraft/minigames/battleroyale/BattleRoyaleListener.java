@@ -64,7 +64,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		CustomItem goalItem = new CustomItem("Goal Block", Material.DIAMOND_BLOCK);
 
 		goalItem.setBlockPlaceEvent(event -> {
-			GoalCheck(event);
+			goalCheck(event);
 		});
 
 		gameCore.setGoalBlock(goalItem);
@@ -84,7 +84,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		javaPlugin.customItems().silentRegister(goalStandItem);
 	}
 
-	private void GoalCheck(BlockPlaceEvent event) {
+	private void goalCheck(BlockPlaceEvent event) {
 		if (gameCore.isPlaying()) {
 			Location playerHome = gameCore.getPlayerHomeLoc(event.getPlayer().getUniqueId());
 			if (event.getBlockPlaced().getLocation().distance(playerHome) < 7) {
