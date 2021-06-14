@@ -20,6 +20,7 @@ import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 public final class LobbyListener implements IGameEventListener {
 
 	private static final int MAX_LOBBY_SIZE = 16;
+	private int MIN_LOBBY_SIZE = 2;
 
 	private HashMap<UUID, PlayerInfo> lobby;
 
@@ -111,5 +112,13 @@ public final class LobbyListener implements IGameEventListener {
 		p.getInventory().setContents(lobby.get(p.getUniqueId()).getInventory());
 		p.setBedSpawnLocation(lobby.get(p.getUniqueId()).getBedSpawn());
 		p.updateInventory();
+	}
+
+	public int getMIN_LOBBY_SIZE() {
+		return MIN_LOBBY_SIZE;
+	}
+
+	public void setMIN_LOBBY_SIZE(int mIN_LOBBY_SIZE) {
+		MIN_LOBBY_SIZE = mIN_LOBBY_SIZE;
 	}
 }

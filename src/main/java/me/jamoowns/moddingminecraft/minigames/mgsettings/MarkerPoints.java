@@ -1,24 +1,36 @@
 package me.jamoowns.moddingminecraft.minigames.mgsettings;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+
+import me.jamoowns.moddingminecraft.customitems.CustomItem;
 
 public class MarkerPoints {
 
 	private ArrayList<Location> flagBlockLocations;
 	private ArrayList<Location> celebrateBlocks;
+	private Map<UUID, Location> playerHomeLocationById;
+	private Map<UUID, CustomItem> playerHomeItemById;
 	private int maxScore;
 
 	public MarkerPoints(int maxScore) {
 		flagBlockLocations = new ArrayList<>();
+		playerHomeLocationById = new HashMap<>();
 		celebrateBlocks = new ArrayList<>();
+		playerHomeItemById = new HashMap<>();
 		this.maxScore = maxScore;
 	}
 
@@ -70,8 +82,41 @@ public class MarkerPoints {
 		}
 	}
 
+	public void givePlayHomeItemToAll() {
+		for (Entry<UUID, CustomItem> playerHomeItem : playerHomeItemById.entrySet()) {
+			Player player = Bukkit.getPlayer(playerHomeItem.getKey());
+			player.getInventory().addItem(playerHomeItem.getValue().asItem());
+		}
+	}
+
+	public void playerHomeAdd(UUID uniqueId, Location location) {
+		playerHomeLocationById.put(uniqueId, location);
+	}
+
+	public void playerHomeItemAdd(UUID uuid, CustomItem c) {
+		playerHomeItemById.put(uuid, c);
+	}
+
+	public Location playerHomeLocation(UUID uuid) {
+		return playerHomeLocationById.get(uuid);
+	}
+
+	public int playerHomeSize() {
+		return playerHomeLocationById.size();
+	}
+
 	public void RemoveFlags() {
 		flagBlockLocations.forEach(l -> l.getBlock().setType(Material.AIR));
 		flagBlockLocations.clear();
+		playerHomeLocationById.values().forEach(l -> l.getBlock().setType(Material.AIR));
+		playerHomeLocationById.clear();
+		playerHomeItemById.clear();
+	}
+
+	public void teleportAllPlayersHome() {
+		for (Entry<UUID, Location> entry : playerHomeLocationById.entrySet()) {
+			Player player = Bukkit.getPlayer(entry.getKey());
+			player.teleport(entry.getValue().clone().add(0, 3, 0));
+		}
 	}
 }

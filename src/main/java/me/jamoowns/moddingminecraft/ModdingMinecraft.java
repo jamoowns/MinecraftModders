@@ -168,12 +168,12 @@ public class ModdingMinecraft extends JavaPlugin implements IFeatureListener {
 		/* Minigames. */
 		addGameListener(new BlockHunterListener(this));
 		addGameListener(new BattleRoyaleListener(this));
+		addGameListener(new LobbyListener());
 
 		/* Custom mabmo stuff. */
 		addGameListener(new CustomItemListListener(this));
 		addGameListener(new FunkyDeathsListener(this));
 		addGameListener(new LabRoomBuilderListener());
-		addGameListener(new LobbyListener());
 		addGameListener(new BossesListener(this));
 		addGameListener(new FunkyFoodListener(this));
 		addGameListener(new StructureBuilderListener());

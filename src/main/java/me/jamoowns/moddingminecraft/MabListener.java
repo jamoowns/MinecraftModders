@@ -20,6 +20,10 @@ import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.extras.Spells;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory.KitLevel;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.GameCore;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.GameKit;
 import me.jamoowns.moddingminecraft.roominating.SimpleChunks;
 
 public class MabListener implements IGameEventListener {
@@ -28,6 +32,7 @@ public class MabListener implements IGameEventListener {
 
 	private final Random RANDOM;
 	private final SimpleChunks simpleChunks;
+	private GameCore gameCore;
 
 	boolean mabmoSet;
 	Player mabmo;
@@ -38,6 +43,7 @@ public class MabListener implements IGameEventListener {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
 		simpleChunks = new SimpleChunks();
+
 	}
 
 	@Override
@@ -47,8 +53,13 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onBlockPlace(BlockPlaceEvent event) {
+
 		if (event.getBlock().getType().equals(Material.GRASS_BLOCK)) {
 			// simpleChunks.createChunk(1, event.getBlock().getLocation());
+			GameKit gameKit = Armory.offense(KitLevel.AVERAGE).combine(Armory.defence(KitLevel.AVERAGE))
+					.combine(Armory.food(KitLevel.LOW));
+
+			gameCore = new GameCore(javaPlugin, "test", "Test", 5, 5, gameKit, 1);
 		}
 	}
 
