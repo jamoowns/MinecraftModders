@@ -99,7 +99,7 @@ public class SheepSheerListener implements IGameEventListener {
 		}
 		Sheep shee = location.getWorld().spawn(location, Sheep.class);
 
-		shee.setColor(DyeColor.WHITE);
+		shee.setColor(DyeColor.BLACK);
 		sheerablesheep = shee;
 		sheep.add(shee);
 	}
@@ -157,10 +157,14 @@ public class SheepSheerListener implements IGameEventListener {
 
 	private void makeNewJeb() {
 		Sheep newjeb = sheep.get(RANDOM.nextInt(sheep.size()));
+
+		newjeb.setColor(DyeColor.PINK);
 		sheerablesheep = newjeb;
+
 	}
 
 	private void shearevent(PlayerShearEntityEvent event) {
+		Broadcaster.broadcastGameInfo("Sheer");
 		if (event.getEntity() instanceof Sheep) {
 			Sheep sheepEnt = (Sheep) event.getEntity();
 
