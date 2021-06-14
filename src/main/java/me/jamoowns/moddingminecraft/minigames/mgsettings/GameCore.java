@@ -191,11 +191,9 @@ public class GameCore {
 
 			playerScoreById.put(p.getUniqueId(), 0);
 			lobby.addToLobby(p);
-
-			for (ItemStack item : gameKit.items()) {
-				p.getInventory().addItem(item);
-			}
-
+			/*
+			 * for (ItemStack item : gameKit.items()) { p.getInventory().addItem(item); }
+			 */
 			lobby.sendLobbyMessage(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size() + " / "
 					+ lobby.maxSize() + " )");
 
