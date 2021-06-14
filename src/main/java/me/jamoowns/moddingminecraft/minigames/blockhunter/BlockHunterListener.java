@@ -120,6 +120,7 @@ public final class BlockHunterListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onBlockPlaceEvent(BlockPlaceEvent event) {
+		Broadcaster.sendError(event.getPlayer(), "I placed a block! ");
 		UUID playerUuid = event.getPlayer().getUniqueId();
 		Optional<GamePlayer> gp = gamePlayer(playerUuid);
 		switch (currentGameState) {
