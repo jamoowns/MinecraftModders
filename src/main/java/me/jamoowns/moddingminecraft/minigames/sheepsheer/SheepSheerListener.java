@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -30,6 +29,7 @@ public class SheepSheerListener implements IGameEventListener {
 
 	private GameCore gameCore;
 	private ArrayList<Sheep> sheep;
+	private Sheep sheerablesheep;
 	private final Random RANDOM;
 
 	private ObservableProperty<Boolean> gameEnabled;
@@ -64,16 +64,6 @@ public class SheepSheerListener implements IGameEventListener {
 		/* Empty. */
 	}
 
-	@EventHandler
-	public final void onEntityDeathEvent(EntityDeathEvent event) {
-		if (event.getEntity() instanceof Sheep) {
-			Sheep sheepEnt = (Sheep) event.getEntity();
-
-			Broadcaster.broadcastGameInfo("" + sheepEnt.getName());
-		}
-
-	}
-
 	@Override
 	public final void onServerStop() {
 		gameCore.cleanup();
@@ -106,15 +96,12 @@ public class SheepSheerListener implements IGameEventListener {
 		for (int j = 0; j < 8; j++) {
 			Sheep shee = location.getWorld().spawn(location, Sheep.class);
 			shee.setColor(DyeColor.WHITE);
-			shee.setCustomName("");
-			shee.setCustomNameVisible(false);
 			sheep.add(shee);
 		}
 		Sheep shee = location.getWorld().spawn(location, Sheep.class);
 
-		shee.setColor(DyeColor.WHITE);
-		shee.setCustomName("�dSwagg");
-		shee.setCustomNameVisible(true);
+		shee.setColor(DyeColor.BLACK);
+		sheerablesheep = shee;
 		sheep.add(shee);
 	}
 
@@ -170,21 +157,23 @@ public class SheepSheerListener implements IGameEventListener {
 	}
 
 	private void makeNewJeb() {
-		for (int i = 0; i < sheep.size(); i++) {
-			if (sheep.get(i).getName() == "jeb_") {
-				sheep.get(i).setCustomName("");
+		Sheep newjeb = sheep.get(RANDOM.nextInt(sheep.size()));
+
+		newjeb.setColor(DyeColor.PINK);
+		sheerablesheep = newjeb;
+	}
+
+	@EventHandler
+	private void shearevent(PlayerShearEntityEvent event) {
+		Broadcaster.broadcastGameInfo("Sheer");
+		if (event.getEntity() instanceof Sheep) {
+			Sheep sheepEnt = (Sheep) event.getEntity();
+
+			Broadcaster.broadcastGameInfo("" + Boolean.toString(sheerablesheep.equals(sheepEnt)));
+			if (sheerablesheep.equals(sheepEnt)) {
+				gameCore.GivePlayerGoalBlock(event.getPlayer());
 			}
 		}
 
-		Sheep newjeb = sheep.get(RANDOM.nextInt(sheep.size()));
-		newjeb.setColor(DyeColor.WHITE);
-		newjeb.setCustomName("jeb_");
-		newjeb.setCustomNameVisible(false);
-	}
-
-	private void shearevent(PlayerShearEntityEvent event) {
-		if (sheep.contains(event.getEntity()) && event.getEntity().getCustomName().equals("jeb_")) {
-			gameCore.GivePlayerGoalBlock(event.getPlayer());
-		}
 	}
 }
