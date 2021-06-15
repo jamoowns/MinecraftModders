@@ -36,8 +36,8 @@ public final class ItemMenu implements ICustomMenu {
 	}
 
 	@Override
-	public final Inventory asInventory() {
-		return menu.asInventory();
+	public final List<Inventory> asInventories() {
+		return menu.asInventories();
 	}
 
 	@Override

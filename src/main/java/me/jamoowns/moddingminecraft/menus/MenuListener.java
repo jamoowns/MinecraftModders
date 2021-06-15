@@ -71,6 +71,6 @@ public final class MenuListener implements IGameEventListener {
 	}
 
 	public final void register(ICustomMenu menu) {
-		menus.put(menu.asInventory(), menu);
+		menu.asInventories().forEach(inventory -> menus.put(inventory, menu));
 	}
 }
