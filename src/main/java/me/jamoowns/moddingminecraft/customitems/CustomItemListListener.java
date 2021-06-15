@@ -694,10 +694,10 @@ public final class CustomItemListListener implements IGameEventListener {
 		explosiveMultiSnowBallItem = new CustomItem("Multi Ice Creep", Material.SNOWBALL, ItemCategory.MISC);
 		explosiveMultiSnowBallItem.setProjectileHitEvent(event -> {
 
-			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 10.0F);
+			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 15.0F);
 			for (int i = 0; i < 19; i++) {
 				event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation()
-						.add(-5 + RANDOM.nextInt(10), -5 + RANDOM.nextInt(10), -5 + RANDOM.nextInt(10)), 10.0F);
+						.add(-5 + RANDOM.nextInt(10), -5 + RANDOM.nextInt(10), -5 + RANDOM.nextInt(10)), 15.0F);
 			}
 
 		});
@@ -709,14 +709,13 @@ public final class CustomItemListListener implements IGameEventListener {
 
 		explosiveBigSnowBallItem = new CustomItem("Big Ice Creep", Material.SNOWBALL, ItemCategory.MISC);
 		explosiveBigSnowBallItem.setProjectileHitEvent(event -> {
-			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 100.0F);
-		});
-		explosiveBigSnowBallItem.setProjectileLaunchEvent(event -> {
-			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 15.0F);
 			for (int i = 0; i < 30; i++) {
 				event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation()
 						.add(-5 + RANDOM.nextInt(10), -5 + RANDOM.nextInt(10), -5 + RANDOM.nextInt(10)), 15.0F);
 			}
+		});
+		explosiveBigSnowBallItem.setProjectileLaunchEvent(event -> {
+			event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(8));
 		});
 
 		javaPlugin.customItems().register(explosiveBigSnowBallItem);
