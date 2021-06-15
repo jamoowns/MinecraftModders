@@ -63,7 +63,7 @@ public final class Menu {
 		}
 		List<Row<CustomMenuItem>> firstRows = aRows.subList(0, Math.min(aRows.size() - 1, MAX_ROWS - 1));
 		if (aRows.size() > MAX_ROWS) {
-			List<Row<CustomMenuItem>> lastRows = aRows.subList(MAX_ROWS - 1, rows.size() - 1);
+			List<Row<CustomMenuItem>> lastRows = aRows.subList(MAX_ROWS - 1, aRows.size() - 1);
 			Menu nextMenu = new Menu(aMenuTitle, lastRows);
 			nextButton = new CustomMenuItem("Next", Material.GREEN_WOOL, nextMenu.displayMenu());
 		}
