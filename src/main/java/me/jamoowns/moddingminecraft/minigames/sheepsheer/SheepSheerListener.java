@@ -35,7 +35,6 @@ public class SheepSheerListener implements IGameEventListener {
 	private Sheep sheerablesheep;
 	private final Random RANDOM;
 	private int first = 0;
-	private boolean pickedup = false;
 
 	private ObservableProperty<Boolean> gameEnabled;
 
@@ -92,11 +91,7 @@ public class SheepSheerListener implements IGameEventListener {
 	public void onSheepEatGrass(EntityChangeBlockEvent event) {
 		if (event.getEntity() instanceof Sheep && sheep.contains(event.getEntity())) {
 			event.setCancelled(true);
-			if (!pickedup) {
-				sheep.forEach(l -> l.setSheared(false));
-			} else {
-				sheep.forEach(l -> l.setSheared(true));
-			}
+			sheep.forEach(l -> l.setSheared(false));
 		}
 	}
 
@@ -231,7 +226,13 @@ public class SheepSheerListener implements IGameEventListener {
 			Sheep sheepEnt = (Sheep) event.getEntity();
 			if (sheerablesheep.equals(sheepEnt) && first == 1) {
 				gameCore.GivePlayerGoalBlock(event.getPlayer());
-				pickedup = true;
+				for (int i = 0; i < sheep.size(); i++) {
+					Sheep shee = sheep.get(i);
+					shee.setColor(DyeColor.WHITE);
+					shee.setSheared(true);
+					shee.setHealth(8);
+					sheerablesheep = null;
+				}
 			} else {
 				makeNewJeb();
 				first = 1;
