@@ -15,8 +15,11 @@ import me.jamoowns.moddingminecraft.common.fated.Collections;
 
 public final class Menu {
 
+	/** Max rows of an inventory. */
+	private static final Integer INVENTORY_MAX_ROWS = 9;
+
 	/** Max rows. One space reserved for buttons. */
-	private static final Integer MAX_ROWS = 8;
+	private static final Integer MAX_ROWS = INVENTORY_MAX_ROWS - 1;
 
 	public static Menu menu(String aMenuTitle, List<List<CustomMenuItem>> aItemsByGroup) {
 		List<Row<CustomMenuItem>> theRows = new ArrayList<>();
@@ -63,7 +66,21 @@ public final class Menu {
 			menuItems.addAll(r.getItems());
 		}
 		inventory = Bukkit.createInventory(null, (rows.size() + 1) * 9, aMenuTitle);
-		menuItems.stream().map(CustomMenuItem::asItem).forEach(inventory::addItem);
+
+		int column = 0;
+		int row = 0;
+		for (Row<CustomMenuItem> itemRow : rows) {
+			for (CustomMenuItem item : itemRow.getItems()) {
+				inventory.setItem((row * INVENTORY_MAX_ROWS) + column, item.asItem());
+				column++;
+				if (column >= INVENTORY_MAX_ROWS) {
+					column = 0;
+					row++;
+				}
+			}
+			column = 0;
+			row++;
+		}
 	}
 
 	public final Inventory asInventory() {
