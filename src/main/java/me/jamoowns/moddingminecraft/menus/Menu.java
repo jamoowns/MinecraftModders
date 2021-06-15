@@ -66,7 +66,7 @@ public final class Menu {
 		List<Row<CustomMenuItem>> firstRows = aRows;
 		if (!lastRows.isEmpty()) {
 			firstRows = aRows.subList(0, MAX_ROWS);
-			Menu nextMenu = new Menu(aMenuTitle, lastRows);
+			Menu nextMenu = new Menu(aMenuTitle, lastRows, this);
 			nextButton = new CustomMenuItem("Next", Material.GREEN_WOOL, nextMenu.displayMenu());
 		}
 		rows = firstRows;
