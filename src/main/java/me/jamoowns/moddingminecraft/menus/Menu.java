@@ -80,12 +80,12 @@ public final class Menu {
 		int rowNumber = 0;
 		for (Row<CustomMenuItem> itemRow : rows) {
 			for (CustomMenuItem item : itemRow.getItems()) {
-				inventory.setItem((rowNumber * INVENTORY_MAX_COLUMNS) + columnNumber, item.asItem());
-				columnNumber++;
 				if (columnNumber >= INVENTORY_MAX_COLUMNS) {
 					columnNumber = 0;
 					rowNumber++;
 				}
+				inventory.setItem((rowNumber * INVENTORY_MAX_COLUMNS) + columnNumber, item.asItem());
+				columnNumber++;
 			}
 			columnNumber = 0;
 			rowNumber++;
