@@ -62,7 +62,7 @@ public final class Menu {
 		for (Row<CustomMenuItem> r : rows) {
 			menuItems.addAll(r.getItems());
 		}
-		inventory = Bukkit.createInventory(null, Math.max(rows.size(), 1) * 9, aMenuTitle);
+		inventory = Bukkit.createInventory(null, (rows.size() + 1) * 9, aMenuTitle);
 		menuItems.stream().map(CustomMenuItem::asItem).forEach(inventory::addItem);
 	}
 
