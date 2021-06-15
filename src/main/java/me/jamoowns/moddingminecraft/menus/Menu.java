@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -61,10 +62,11 @@ public final class Menu {
 		if (previousMenu != null) {
 			backButton = new CustomMenuItem("Back", Material.RED_WOOL, previousMenu.displayMenu());
 		}
-		List<Row<CustomMenuItem>> firstRows = aRows.subList(0, Math.min(aRows.size() - 1, MAX_ROWS - 1));
-		if (aRows.size() > MAX_ROWS) {
-			List<Row<CustomMenuItem>> lastRows = aRows.subList(MAX_ROWS - 1, aRows.size() - 1);
-			Menu nextMenu = new Menu(aMenuTitle, lastRows);
+		List<Row<CustomMenuItem>> lastRows = aRows.stream().skip(MAX_ROWS).collect(Collectors.toList());
+		List<Row<CustomMenuItem>> firstRows = aRows;
+		if (!lastRows.isEmpty()) {
+			firstRows = aRows.subList(0, MAX_ROWS);
+			Menu nextMenu = new Menu(aMenuTitle, lastRows, this);
 			nextButton = new CustomMenuItem("Next", Material.GREEN_WOOL, nextMenu.displayMenu());
 		}
 		rows = firstRows;
@@ -74,19 +76,19 @@ public final class Menu {
 		}
 		inventory = Bukkit.createInventory(null, (rows.size() + 1) * 9, aMenuTitle);
 
-		int column = 0;
-		int row = 0;
+		int columnNumber = 0;
+		int rowNumber = 0;
 		for (Row<CustomMenuItem> itemRow : rows) {
 			for (CustomMenuItem item : itemRow.getItems()) {
-				inventory.setItem((row * INVENTORY_MAX_COLUMNS) + column, item.asItem());
-				column++;
-				if (column >= INVENTORY_MAX_COLUMNS) {
-					column = 0;
-					row++;
+				if (columnNumber >= INVENTORY_MAX_COLUMNS) {
+					columnNumber = 0;
+					rowNumber++;
 				}
+				inventory.setItem((rowNumber * INVENTORY_MAX_COLUMNS) + columnNumber, item.asItem());
+				columnNumber++;
 			}
-			column = 0;
-			row++;
+			columnNumber = 0;
+			rowNumber++;
 		}
 
 		if (backButton != null) {
