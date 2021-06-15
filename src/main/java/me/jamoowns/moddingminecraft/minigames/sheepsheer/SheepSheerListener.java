@@ -94,6 +94,8 @@ public class SheepSheerListener implements IGameEventListener {
 			event.setCancelled(true);
 			if (!pickedup) {
 				sheep.forEach(l -> l.setSheared(false));
+			} else {
+				sheep.forEach(l -> l.setSheared(true));
 			}
 		}
 	}
