@@ -1,5 +1,6 @@
 package me.jamoowns.moddingminecraft.menus;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -9,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 interface ICustomMenu {
 
-	Inventory asInventory();
+	List<Inventory> asInventories();
 
 	Consumer<Player> displayMenu();
 

@@ -54,6 +54,8 @@ public final class Menu {
 
 	private CustomMenuItem backButton;
 
+	private Menu nextMenu;
+
 	private Menu(String aMenuTitle, List<Row<CustomMenuItem>> aRows) {
 		this(aMenuTitle, aRows, null);
 	}
@@ -66,7 +68,7 @@ public final class Menu {
 		List<Row<CustomMenuItem>> firstRows = aRows;
 		if (!lastRows.isEmpty()) {
 			firstRows = aRows.subList(0, MAX_ROWS);
-			Menu nextMenu = new Menu(aMenuTitle, lastRows, this);
+			nextMenu = new Menu(aMenuTitle, lastRows, this);
 			nextButton = new CustomMenuItem("Next", Material.GREEN_WOOL, nextMenu.displayMenu());
 		}
 		rows = firstRows;
@@ -99,12 +101,19 @@ public final class Menu {
 		}
 	}
 
-	public final Inventory asInventory() {
-		return inventory;
+	public final List<Inventory> asInventories() {
+		List<Inventory> inventories = new ArrayList<>();
+		inventories.add(getInventory());
+		Optional<Menu> next = nextMenu();
+		while (next.isPresent()) {
+			inventories.add(next.get().getInventory());
+			next = next.get().nextMenu();
+		}
+		return inventories;
 	}
 
 	public final Consumer<Player> displayMenu() {
-		return p -> p.openInventory(asInventory());
+		return p -> p.openInventory(getInventory());
 	}
 
 	public final Consumer<Player> getAction(ItemStack item) {
@@ -123,5 +132,13 @@ public final class Menu {
 		} else {
 			return Collections.find(menuItems, CustomMenuItem::displayName, displayName);
 		}
+	}
+
+	private Inventory getInventory() {
+		return inventory;
+	}
+
+	private Optional<Menu> nextMenu() {
+		return Optional.ofNullable(nextMenu);
 	}
 }
