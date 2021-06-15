@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -13,14 +13,14 @@ class CustomMenuItem {
 	private String title;
 
 	private boolean isToggle;
-	private Consumer<HumanEntity> enableAction;
-	private Consumer<HumanEntity> disableAction;
+	private Consumer<Player> enableAction;
+	private Consumer<Player> disableAction;
 	private Supplier<Boolean> isEnabled;
 	private ItemStack item;
 	private ItemStack disabledItem;
-	private Consumer<HumanEntity> onClickAction;
+	private Consumer<Player> onClickAction;
 
-	public CustomMenuItem(final String aTitle, Material icon, Consumer<HumanEntity> aOnClickAction) {
+	public CustomMenuItem(final String aTitle, Material icon, Consumer<Player> aOnClickAction) {
 		title = aTitle;
 		item = new ItemStack(icon);
 		ItemMeta itemMeta = item.getItemMeta().clone();
@@ -36,8 +36,8 @@ class CustomMenuItem {
 		isToggle = false;
 	}
 
-	public CustomMenuItem(final String aTitle, Material icon, Consumer<HumanEntity> aEnableAction,
-			Consumer<HumanEntity> aDisableAction, Supplier<Boolean> aIsEnabled) {
+	public CustomMenuItem(final String aTitle, Material icon, Consumer<Player> aEnableAction,
+			Consumer<Player> aDisableAction, Supplier<Boolean> aIsEnabled) {
 		title = aTitle;
 		item = new ItemStack(icon);
 		ItemMeta itemMeta = item.getItemMeta().clone();
@@ -67,15 +67,10 @@ class CustomMenuItem {
 		return title;
 	}
 
-	public final void onClick(HumanEntity p) {
+	public final Consumer<Player> itemAction() {
 		if (isToggle) {
-			if (isEnabled.get()) {
-				disableAction.accept(p);
-			} else {
-				enableAction.accept(p);
-			}
-		} else {
-			onClickAction.accept(p);
+			return isEnabled.get() ? disableAction : enableAction;
 		}
+		return onClickAction;
 	}
 }

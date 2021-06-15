@@ -31,12 +31,17 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				.combine(Armory.food(KitLevel.LOW));
 
 		gameCore = new GameCore(javaPlugin, "royale", "Battle Royale", 5, 5, gameKit, 2, true);
-		createGoalItem();
-		createGoalStand();
+		CustomItem goalItem = goalItem();
+		gameCore.setGoalBlock(goalItem);
+		javaPlugin.customItems().silentRegister(goalItem);
+
+		CustomItem goalStandItem = goalStandItem();
+		gameCore.setGoalBlockStand(goalStandItem);
+		javaPlugin.customItems().silentRegister(goalStandItem);
 	}
 
 	@Override
-	public ReadOnlyObservableProperty<Boolean> gameEnabled() {
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
 		return gameEnabled;
 	}
 
@@ -60,30 +65,6 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		gameCore.cleanup();
 	}
 
-	private void createGoalItem() {
-		CustomItem goalItem = new CustomItem("Goal Block", Material.DIAMOND_BLOCK);
-
-		goalItem.setBlockPlaceEvent(event -> {
-			goalCheck(event);
-		});
-
-		gameCore.setGoalBlock(goalItem);
-		javaPlugin.customItems().silentRegister(goalItem);
-	}
-
-	private void createGoalStand() {
-		CustomItem goalStandItem = new CustomItem("Goal Block Stand", Material.OBSIDIAN);
-
-		goalStandItem.setBlockPlaceEvent(event -> {
-			if (gameCore.isSetup()) {
-				gameCore.AddGoal(event.getPlayer(), event.getBlock().getLocation());
-			}
-		});
-
-		gameCore.setGoalBlockStand(goalStandItem);
-		javaPlugin.customItems().silentRegister(goalStandItem);
-	}
-
 	private void goalCheck(BlockPlaceEvent event) {
 		if (gameCore.isPlaying()) {
 			Location playerHome = gameCore.getPlayerHomeLoc(event.getPlayer().getUniqueId());
@@ -103,9 +84,28 @@ public final class BattleRoyaleListener implements IGameEventListener {
 				}
 			} else {
 				gameCore.sendPlayerMsg(event.getPlayer(), "You must place that closer to your homebase");
-
 				event.setCancelled(true);
 			}
 		}
+	}
+
+	private CustomItem goalItem() {
+		CustomItem goalItem = new CustomItem("Goal Block", Material.DIAMOND_BLOCK);
+
+		goalItem.setBlockPlaceEvent(event -> {
+			goalCheck(event);
+		});
+		return goalItem;
+	}
+
+	private CustomItem goalStandItem() {
+		CustomItem goalStandItem = new CustomItem("Goal Block Stand", Material.OBSIDIAN);
+
+		goalStandItem.setBlockPlaceEvent(event -> {
+			if (gameCore.isSetup()) {
+				gameCore.addGoal(event.getPlayer(), event.getBlock().getLocation());
+			}
+		});
+		return goalStandItem;
 	}
 }

@@ -5,24 +5,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
-import me.jamoowns.moddingminecraft.common.fated.Collections;
 import me.jamoowns.moddingminecraft.features.Feature;
 
 public final class FeaturesMenu implements ICustomMenu {
 
-	private List<CustomMenuItem> featureMenuItems;
-
-	private Inventory inventory;
+	private Menu menu;
 
 	public FeaturesMenu(ModdingMinecraft javaPlugin) {
-		featureMenuItems = new ArrayList<>();
+		List<CustomMenuItem> featureMenuItems = new ArrayList<>();
 		Feature[] features = Feature.values();
 
 		for (Feature feature : features) {
@@ -101,27 +97,27 @@ public final class FeaturesMenu implements ICustomMenu {
 					break;
 			}
 		}
-		inventory = Bukkit.createInventory(null, (int) (Math.ceil(featureMenuItems.size() / 9.0) * 9.0 + 9),
-				"Features Menu");
+		List<List<CustomMenuItem>> groupedFeatureMenuItems = new ArrayList<>();
+		menu = Menu.menu("Features Menu", groupedFeatureMenuItems);
 	}
 
 	@Override
 	public final Inventory asInventory() {
-		inventory.clear();
-		featureMenuItems.stream().map(CustomMenuItem::asItem).forEach(inventory::addItem);
-		return inventory;
+		return menu.asInventory();
 	}
 
 	@Override
-	public final Consumer<HumanEntity> getAction(ItemStack item) {
-		return p -> menuItem(item).get().onClick(p);
+	public final Consumer<Player> displayMenu() {
+		return menu.displayMenu();
+	}
+
+	@Override
+	public final Consumer<Player> getAction(ItemStack item) {
+		return menu.getAction(item);
 	}
 
 	@Override
 	public final Optional<CustomMenuItem> menuItem(ItemStack item) {
-		if (item.getItemMeta() == null) {
-			return Optional.empty();
-		}
-		return Collections.find(featureMenuItems, CustomMenuItem::displayName, item.getItemMeta().getDisplayName());
+		return menu.menuItem(item);
 	}
 }

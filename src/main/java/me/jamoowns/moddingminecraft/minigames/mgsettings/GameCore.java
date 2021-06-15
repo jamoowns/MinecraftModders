@@ -60,12 +60,12 @@ public class GameCore {
 
 	}
 
-	public void AddGoal(Player p, Location location) {
+	public void addGoal(Player p, Location location) {
 		lobby.sendPlayerMessage(p, "Added a goal location to the game");
 		goal.getGoalStands().add(location);
 	}
 
-	public void AddPlayerHomeItem(UUID uniqueId, CustomItem homeStand) {
+	public void addPlayerHomeItem(UUID uniqueId, CustomItem homeStand) {
 		flags.playerHomeItemAdd(uniqueId, homeStand);
 	}
 
@@ -174,7 +174,7 @@ public class GameCore {
 		});
 
 		javaPlugin.customItems().silentRegister(homeStand);
-		AddPlayerHomeItem(p.getUniqueId(), homeStand);
+		addPlayerHomeItem(p.getUniqueId(), homeStand);
 
 	}
 
