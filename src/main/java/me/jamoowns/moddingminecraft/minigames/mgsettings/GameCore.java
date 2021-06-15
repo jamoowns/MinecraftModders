@@ -92,7 +92,6 @@ public class GameCore {
 			lobby.sendLobbyMessage(GAME_NAME + " has been stopped!");
 		}
 		lobby.removeAllFromLobby();
-
 	}
 
 	public Material getGoalMat() {
