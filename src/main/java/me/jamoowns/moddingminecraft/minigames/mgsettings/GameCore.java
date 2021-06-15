@@ -38,10 +38,10 @@ public class GameCore {
 	private Goal goal;
 
 	public GameCore(ModdingMinecraft aJavaPlugin, String CommandStr, String GameName, int GameScore, int GoalLocs,
-			GameKit gameKit, int minSize, boolean placeableGoals) {
+			GameKit agameKit, int minSize, boolean placeableGoals) {
 		javaPlugin = aJavaPlugin;
 		GAME_NAME = GameName;
-
+		gameKit = agameKit;
 		playerScoreById = new HashMap<>();
 		currentGameState = GameState.STOPPED;
 		goal = new Goal(aJavaPlugin, GameScore, GoalLocs, placeableGoals);
@@ -92,7 +92,6 @@ public class GameCore {
 			lobby.sendLobbyMessage(GAME_NAME + " has been stopped!");
 		}
 		lobby.removeAllFromLobby();
-
 	}
 
 	public Material getGoalMat() {
@@ -191,9 +190,9 @@ public class GameCore {
 
 			playerScoreById.put(p.getUniqueId(), 0);
 			lobby.addToLobby(p);
-			/*
-			 * for (ItemStack item : gameKit.items()) { p.getInventory().addItem(item); }
-			 */
+			for (ItemStack item : gameKit.items()) {
+				p.getInventory().addItem(item);
+			}
 			lobby.sendLobbyMessage(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size() + " / "
 					+ lobby.maxSize() + " )");
 

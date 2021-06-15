@@ -65,6 +65,8 @@ public final class CustomItemListListener implements IGameEventListener {
 
 	private CustomItem explosiveSnowBallItem;
 
+	private CustomItem explosiveBigSnowBallItem;
+
 	private CustomItem roomKeydim1x1x1Item;
 
 	private CustomItem roomKeydim2x1x1Item;
@@ -687,6 +689,16 @@ public final class CustomItemListListener implements IGameEventListener {
 		});
 
 		javaPlugin.customItems().register(explosiveSnowBallItem);
+
+		explosiveBigSnowBallItem = new CustomItem("Big Ice Creep", Material.SNOWBALL, ItemCategory.MISC);
+		explosiveBigSnowBallItem.setProjectileHitEvent(event -> {
+			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 100.0F);
+		});
+		explosiveBigSnowBallItem.setProjectileLaunchEvent(event -> {
+			event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(8));
+		});
+
+		javaPlugin.customItems().register(explosiveBigSnowBallItem);
 
 		roomKeydim1x1x1Item = new CustomItem("Room Key 1x1x1", Material.LEVER, ItemCategory.ROOMKEYS);
 		roomKeydim1x1x1Item.setBlockPlaceEvent(event -> {
