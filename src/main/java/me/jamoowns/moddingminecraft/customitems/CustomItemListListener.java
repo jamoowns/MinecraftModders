@@ -694,10 +694,10 @@ public final class CustomItemListListener implements IGameEventListener {
 		explosiveMultiSnowBallItem = new CustomItem("Multi Ice Creep", Material.SNOWBALL, ItemCategory.MISC);
 		explosiveMultiSnowBallItem.setProjectileHitEvent(event -> {
 
-			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 5.0F);
+			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 10.0F);
 			for (int i = 0; i < 19; i++) {
 				event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation()
-						.add(-5 + RANDOM.nextInt(10), -5 + RANDOM.nextInt(10), -5 + RANDOM.nextInt(10)), 5.0F);
+						.add(-5 + RANDOM.nextInt(10), -5 + RANDOM.nextInt(10), -5 + RANDOM.nextInt(10)), 10.0F);
 			}
 
 		});
