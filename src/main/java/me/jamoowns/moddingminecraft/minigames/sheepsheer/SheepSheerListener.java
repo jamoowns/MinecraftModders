@@ -90,9 +90,11 @@ public class SheepSheerListener implements IGameEventListener {
 
 	@EventHandler
 	public void onSheepEatGrass(EntityChangeBlockEvent event) {
-		if (!pickedup && event.getEntity() instanceof Sheep && sheep.contains(event.getEntity())) {
+		if (event.getEntity() instanceof Sheep && sheep.contains(event.getEntity())) {
 			event.setCancelled(true);
-			sheep.forEach(l -> l.setSheared(false));
+			if (!pickedup) {
+				sheep.forEach(l -> l.setSheared(false));
+			}
 		}
 	}
 
