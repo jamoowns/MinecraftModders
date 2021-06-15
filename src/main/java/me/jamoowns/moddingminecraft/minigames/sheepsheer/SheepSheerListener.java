@@ -187,7 +187,6 @@ public class SheepSheerListener implements IGameEventListener {
 				boolean hasWon = gameCore.checkForVictory(event.getPlayer());
 				if (!hasWon) {
 					gameCore.sendLobbyMsg(event.getPlayer().getDisplayName() + " has scored a point!");
-					pickedup = false;
 					makeNewJeb();
 				}
 			} else {
