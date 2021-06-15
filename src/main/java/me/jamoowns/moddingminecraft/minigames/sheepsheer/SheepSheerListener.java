@@ -55,6 +55,16 @@ public class SheepSheerListener implements IGameEventListener {
 
 	}
 
+	public void cleanup() {
+		for (int i = 0; i < oldBlocks.size(); i++) {
+			oldBlockLocs.get(i).getBlock().setType(oldBlocks.get(i));
+		}
+		sheep.forEach(l -> l.remove());
+		sheep.clear();
+		oldBlockLocs.clear();
+		oldBlocks.clear();
+	}
+
 	@Override
 	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
 		return IGameEventListener.ALWAYS_ENABLED;
@@ -62,11 +72,7 @@ public class SheepSheerListener implements IGameEventListener {
 
 	@Override
 	public final void onDisabled() {
-		for (int i = 0; i < oldBlocks.size(); i++) {
-			oldBlockLocs.get(i).getBlock().setType(oldBlocks.get(i));
-		}
-		sheep.forEach(l -> l.remove());
-		sheep.clear();
+		cleanup();
 		gameCore.cleanup();
 	}
 
@@ -77,11 +83,7 @@ public class SheepSheerListener implements IGameEventListener {
 
 	@Override
 	public final void onServerStop() {
-		for (int i = 0; i < oldBlocks.size(); i++) {
-			oldBlockLocs.get(i).getBlock().setType(oldBlocks.get(i));
-		}
-		sheep.forEach(l -> l.remove());
-		sheep.clear();
+		cleanup();
 		gameCore.cleanup();
 	}
 

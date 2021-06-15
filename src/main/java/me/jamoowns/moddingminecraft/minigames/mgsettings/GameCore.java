@@ -38,10 +38,10 @@ public class GameCore {
 	private Goal goal;
 
 	public GameCore(ModdingMinecraft aJavaPlugin, String CommandStr, String GameName, int GameScore, int GoalLocs,
-			GameKit gameKit, int minSize, boolean placeableGoals) {
+			GameKit agameKit, int minSize, boolean placeableGoals) {
 		javaPlugin = aJavaPlugin;
 		GAME_NAME = GameName;
-		this.gameKit = gameKit;
+		gameKit = agameKit;
 		playerScoreById = new HashMap<>();
 		currentGameState = GameState.STOPPED;
 		goal = new Goal(aJavaPlugin, GameScore, GoalLocs, placeableGoals);
