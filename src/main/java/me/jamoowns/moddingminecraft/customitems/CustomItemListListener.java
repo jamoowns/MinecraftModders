@@ -692,7 +692,7 @@ public final class CustomItemListListener implements IGameEventListener {
 
 		explosiveBigSnowBallItem = new CustomItem("Big Ice Creep", Material.SNOWBALL, ItemCategory.MISC);
 		explosiveBigSnowBallItem.setProjectileHitEvent(event -> {
-			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 30.0F);
+			event.getEntity().getLocation().getWorld().createExplosion(event.getEntity().getLocation(), 200.0F);
 		});
 		explosiveBigSnowBallItem.setProjectileLaunchEvent(event -> {
 			event.getEntity().setVelocity(event.getEntity().getVelocity().multiply(8));
