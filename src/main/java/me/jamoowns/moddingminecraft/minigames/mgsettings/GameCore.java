@@ -41,7 +41,7 @@ public class GameCore {
 			GameKit gameKit, int minSize, boolean placeableGoals) {
 		javaPlugin = aJavaPlugin;
 		GAME_NAME = GameName;
-
+		this.gameKit = gameKit;
 		playerScoreById = new HashMap<>();
 		currentGameState = GameState.STOPPED;
 		goal = new Goal(aJavaPlugin, GameScore, GoalLocs, placeableGoals);
@@ -191,9 +191,9 @@ public class GameCore {
 
 			playerScoreById.put(p.getUniqueId(), 0);
 			lobby.addToLobby(p);
-			/*
-			 * for (ItemStack item : gameKit.items()) { p.getInventory().addItem(item); }
-			 */
+			for (ItemStack item : gameKit.items()) {
+				p.getInventory().addItem(item);
+			}
 			lobby.sendLobbyMessage(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size() + " / "
 					+ lobby.maxSize() + " )");
 
