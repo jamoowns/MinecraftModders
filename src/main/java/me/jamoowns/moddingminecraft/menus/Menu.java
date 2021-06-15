@@ -16,7 +16,10 @@ import me.jamoowns.moddingminecraft.common.fated.Collections;
 public final class Menu {
 
 	/** Max rows of an inventory. */
-	private static final Integer INVENTORY_MAX_ROWS = 9;
+	private static final Integer INVENTORY_MAX_COLUMNS = 9;
+
+	/** Max rows of an inventory. */
+	private static final Integer INVENTORY_MAX_ROWS = 6;
 
 	/** Max rows. One space reserved for buttons. */
 	private static final Integer MAX_ROWS = INVENTORY_MAX_ROWS - 1;
@@ -46,19 +49,23 @@ public final class Menu {
 
 	private Inventory inventory;
 
-	private Menu previousMenu;
-
 	private CustomMenuItem nextButton;
 
 	private CustomMenuItem backButton;
 
 	private Menu(String aMenuTitle, List<Row<CustomMenuItem>> aRows) {
+		this(aMenuTitle, aRows, null);
+	}
+
+	private Menu(String aMenuTitle, List<Row<CustomMenuItem>> aRows, Menu previousMenu) {
+		if (previousMenu != null) {
+			backButton = new CustomMenuItem("Back", Material.RED_WOOL, previousMenu.displayMenu());
+		}
 		List<Row<CustomMenuItem>> firstRows = aRows.subList(0, Math.min(aRows.size() - 1, MAX_ROWS - 1));
 		if (aRows.size() > MAX_ROWS) {
 			List<Row<CustomMenuItem>> lastRows = aRows.subList(MAX_ROWS - 1, rows.size() - 1);
 			Menu nextMenu = new Menu(aMenuTitle, lastRows);
 			nextButton = new CustomMenuItem("Next", Material.GREEN_WOOL, nextMenu.displayMenu());
-			nextMenu.setPreviousMenu(this);
 		}
 		rows = firstRows;
 		menuItems = new ArrayList<>();
@@ -71,15 +78,23 @@ public final class Menu {
 		int row = 0;
 		for (Row<CustomMenuItem> itemRow : rows) {
 			for (CustomMenuItem item : itemRow.getItems()) {
-				inventory.setItem((row * INVENTORY_MAX_ROWS) + column, item.asItem());
+				inventory.setItem((row * INVENTORY_MAX_COLUMNS) + column, item.asItem());
 				column++;
-				if (column >= INVENTORY_MAX_ROWS) {
+				if (column >= INVENTORY_MAX_COLUMNS) {
 					column = 0;
 					row++;
 				}
 			}
 			column = 0;
 			row++;
+		}
+
+		if (backButton != null) {
+			inventory.setItem((rows.size() - 1) * INVENTORY_MAX_COLUMNS, backButton.asItem());
+		}
+		if (nextButton != null) {
+			inventory.setItem(((rows.size() - 1) * INVENTORY_MAX_COLUMNS) + INVENTORY_MAX_COLUMNS - 1,
+					nextButton.asItem());
 		}
 	}
 
@@ -107,10 +122,5 @@ public final class Menu {
 		} else {
 			return Collections.find(menuItems, CustomMenuItem::displayName, displayName);
 		}
-	}
-
-	final void setPreviousMenu(Menu aPreviousMenu) {
-		previousMenu = aPreviousMenu;
-		backButton = new CustomMenuItem("Back", Material.RED_WOOL, previousMenu.displayMenu());
 	}
 }
