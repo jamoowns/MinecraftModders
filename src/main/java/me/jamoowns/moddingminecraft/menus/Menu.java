@@ -61,7 +61,7 @@ public final class Menu {
 		if (previousMenu != null) {
 			backButton = new CustomMenuItem("Back", Material.RED_WOOL, previousMenu.displayMenu());
 		}
-		List<Row<CustomMenuItem>> firstRows = aRows.subList(0, Math.min(aRows.size() - 1, MAX_ROWS - 1));
+		List<Row<CustomMenuItem>> firstRows = aRows.subList(0, Math.min(aRows.size() - 1, MAX_ROWS));
 		if (aRows.size() > MAX_ROWS) {
 			List<Row<CustomMenuItem>> lastRows = aRows.subList(MAX_ROWS - 1, aRows.size() - 1);
 			Menu nextMenu = new Menu(aMenuTitle, lastRows);
