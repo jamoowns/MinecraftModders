@@ -104,10 +104,8 @@ public final class Menu {
 	public final List<Inventory> asInventories() {
 		List<Inventory> inventories = new ArrayList<>();
 		inventories.add(getInventory());
-		Optional<Menu> next = nextMenu();
-		while (next.isPresent()) {
-			inventories.add(next.get().getInventory());
-			next = next.get().nextMenu();
+		for (Menu child : childrenMenus()) {
+			inventories.add(child.getInventory());
 		}
 		return inventories;
 	}
@@ -130,8 +128,31 @@ public final class Menu {
 		} else if (backButton != null && backButton.displayName().equals(displayName)) {
 			return Optional.of(backButton);
 		} else {
-			return Collections.find(menuItems, CustomMenuItem::displayName, displayName);
+			List<CustomMenuItem> allItems = new ArrayList<>();
+			allItems.addAll(menuItems);
+
+			Optional<CustomMenuItem> menuItem = Collections.find(menuItems, CustomMenuItem::displayName, displayName);
+			if (menuItem.isPresent()) {
+				return menuItem;
+			}
+			for (Menu child : childrenMenus()) {
+				menuItem = child.menuItem(item);
+				if (menuItem.isPresent()) {
+					return menuItem;
+				}
+			}
+			return menuItem;
 		}
+	}
+
+	private Iterable<Menu> childrenMenus() {
+		List<Menu> children = new ArrayList<>();
+		Optional<Menu> next = nextMenu();
+		while (next.isPresent()) {
+			children.add(next.get());
+			next = next.get().nextMenu();
+		}
+		return children;
 	}
 
 	private Inventory getInventory() {
