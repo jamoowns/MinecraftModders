@@ -90,11 +90,10 @@ public final class Menu {
 		}
 
 		if (backButton != null) {
-			inventory.setItem((rows.size() - 1) * INVENTORY_MAX_COLUMNS, backButton.asItem());
+			inventory.setItem((rows.size()) * INVENTORY_MAX_COLUMNS, backButton.asItem());
 		}
 		if (nextButton != null) {
-			inventory.setItem(((rows.size() - 1) * INVENTORY_MAX_COLUMNS) + INVENTORY_MAX_COLUMNS - 1,
-					nextButton.asItem());
+			inventory.setItem(((rows.size()) * INVENTORY_MAX_COLUMNS) + INVENTORY_MAX_COLUMNS - 1, nextButton.asItem());
 		}
 	}
 
