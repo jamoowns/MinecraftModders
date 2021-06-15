@@ -41,7 +41,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	}
 
 	@Override
-	public ReadOnlyObservableProperty<Boolean> gameEnabled() {
+	public final ReadOnlyObservableProperty<Boolean> gameEnabled() {
 		return gameEnabled;
 	}
 
