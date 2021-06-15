@@ -98,6 +98,7 @@ public final class FeaturesMenu implements ICustomMenu {
 			}
 		}
 		List<List<CustomMenuItem>> groupedFeatureMenuItems = new ArrayList<>();
+		groupedFeatureMenuItems.add(featureMenuItems);
 		menu = Menu.menu("Features Menu", groupedFeatureMenuItems);
 	}
 
