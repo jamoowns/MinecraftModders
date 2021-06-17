@@ -18,23 +18,25 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
-import me.jamoowns.moddingminecraft.extras.Spells;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory.KitLevel;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.GameCore;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.GameKit;
+import me.jamoowns.moddingminecraft.minigames.newminigames.MiniGame;
+import me.jamoowns.moddingminecraft.minigames.newminigames.MiniGameList;
 import me.jamoowns.moddingminecraft.roominating.SimpleChunks;
 
 public class MabListener implements IGameEventListener {
 
-	private final ModdingMinecraft javaPlugin;
+	private static MiniGameList mgList;
 
+	private final ModdingMinecraft javaPlugin;
 	private final Random RANDOM;
 	private final SimpleChunks simpleChunks;
 	private GameCore gameCore;
-
 	boolean mabmoSet;
 	Player mabmo;
 
@@ -44,7 +46,8 @@ public class MabListener implements IGameEventListener {
 		RANDOM = new Random();
 		javaPlugin = aJavaPlugin;
 		simpleChunks = new SimpleChunks();
-
+		mgList = new MiniGameList();
+		Broadcaster.broadcastGameInfo("mgList has been initiated!");
 	}
 
 	@Override
@@ -146,23 +149,21 @@ public class MabListener implements IGameEventListener {
 
 	@EventHandler
 	public final void playerChatEvent(PlayerChatEvent event) {
-		if (event.getMessage().contains("Ok let's do this")) {
-			Spells.dropAllPlayersIntoRandomLocation(event.getPlayer().getLocation().getWorld(), javaPlugin);
-		}
-		if (event.getMessage().contains("Iammabmo")) {
-			mabmo = event.getPlayer();
-			mabmoSet = true;
-		}
-		if (event.getMessage().contains("Iamnotmabmo")) {
-			mabmoSet = false;
+
+		if (event.getMessage().contains("mgList size")) {
+			Broadcaster.broadcastGameInfo("mgList size is " + mgList.size());
+		} else if (event.getMessage().contains("mgList add 1")) {
+			MiniGame mg = new MiniGame(mgList.getNewID(), "One", event.getPlayer().getUniqueId());
+			mgList.addMiniGame(mg);
+		} else if (event.getMessage().contains("mgList add 2")) {
+			MiniGame mg = new MiniGame(mgList.getNewID(), "Two", event.getPlayer().getUniqueId());
+			mgList.addMiniGame(mg);
+		} else if (event.getMessage().contains("mgList add 3")) {
+			MiniGame mg = new MiniGame(mgList.getNewID(), "Three", event.getPlayer().getUniqueId());
+			mgList.addMiniGame(mg);
+		} else if (event.getMessage().contains("mgList Show")) {
+			mgList.getGameList(event.getPlayer());
 		}
 	}
 
-	private void sendMabmoMsg(String str) {
-		if (mabmoSet) {
-			if (mabmo.isOnline()) {
-				mabmo.sendMessage(str);
-			}
-		}
-	}
 }
