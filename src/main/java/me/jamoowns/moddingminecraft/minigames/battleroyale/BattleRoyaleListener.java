@@ -1,43 +1,142 @@
 package me.jamoowns.moddingminecraft.minigames.battleroyale;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
+import me.jamoowns.moddingminecraft.commands.ModdersCommand;
+import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.observable.ObservableProperty;
 import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.customitems.CustomItem;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.Armory.KitLevel;
-import me.jamoowns.moddingminecraft.minigames.mgsettings.GameCore;
 import me.jamoowns.moddingminecraft.minigames.mgsettings.GameKit;
+import me.jamoowns.moddingminecraft.minigames.mgsettings.LobbyListener;
+import me.jamoowns.moddingminecraft.teams.TeamColour;
 
 public final class BattleRoyaleListener implements IGameEventListener {
 
+	private enum GameState {
+		LOBBY, SETUP, PLAYING, STOPPED
+	}
+
+	private static final String GAME_NAME = "Battle Royale";
+
+	private static final Integer GOAL_SCORE = 5;
+
+	private static final Integer GOAL_STAND_LOCATIONS = 4;
+
+	private static final Random RANDOM = new Random();
+
+	private static final Vector ABOVE = new Vector(0, 1, 0);
+
+	/** All the goal stand locations. */
+	private List<Location> goalStands;
+
+	/** The stand where the goal block is spawned. */
+	private CustomItem goalBlockStand;
+
+	/** The goal block item. */
+	private CustomItem goalBlock;
+
+	private Map<UUID, Integer> playerScoreById;
+
+	private Map<UUID, Location> playerHomeLocationById;
+
+	private Map<UUID, CustomItem> playerHomeItemById;
+
+	private GameState currentGameState;
+
 	private ModdingMinecraft javaPlugin;
 
-	private GameCore gameCore;
+	private Location goalLocation;
 
-	private ObservableProperty<Boolean> gameEnabled;
+	private ArrayList<Location> flagBlockLocations;
+
+	private LobbyListener lobby;
+
+	private GameKit gameKit;
+
+	private final ObservableProperty<Boolean> gameEnabled;
+
+	private Player host;
 
 	public BattleRoyaleListener(ModdingMinecraft aJavaPlugin) {
 		javaPlugin = aJavaPlugin;
+		currentGameState = GameState.STOPPED;
 		gameEnabled = new ObservableProperty<Boolean>(false);
-		GameKit gameKit = Armory.offense(KitLevel.AVERAGE).combine(Armory.defence(KitLevel.AVERAGE))
+		flagBlockLocations = new ArrayList<>();
+		goalStands = new ArrayList<>();
+		playerScoreById = new HashMap<>();
+		playerHomeItemById = new HashMap<>();
+		playerHomeLocationById = new HashMap<>();
+		lobby = new LobbyListener();
+		gameKit = Armory.offense(KitLevel.AVERAGE).combine(Armory.defence(KitLevel.AVERAGE))
 				.combine(Armory.food(KitLevel.LOW));
-
-		gameCore = new GameCore(javaPlugin, "royale", "Battle Royale", 5, 5, gameKit, 2, true);
-		CustomItem goalItem = goalItem();
-		gameCore.setGoalBlock(goalItem);
-		javaPlugin.customItems().silentRegister(goalItem);
-
-		CustomItem goalStandItem = goalStandItem();
-		gameCore.setGoalBlockStand(goalStandItem);
-		javaPlugin.customItems().silentRegister(goalStandItem);
+		goalBlock = new CustomItem("Goal Block", Material.DIAMOND_BLOCK);
+		goalBlock.setBlockPlaceEvent(event -> {
+			if (currentGameState == GameState.PLAYING) {
+				Location playerHome = playerHomeLocationById.get(event.getPlayer().getUniqueId());
+				if (event.getBlockPlaced().getLocation().distance(playerHome) < 7) {
+					event.getItemInHand().setAmount(0);
+					event.getBlock().setType(Material.AIR);
+					Integer currentScore = playerScoreById.get(event.getPlayer().getUniqueId());
+					Integer updatedScore = currentScore + 1;
+					Location scoreLocation = playerHome.clone().add(0, updatedScore, 0);
+					event.getBlock().getWorld().getBlockAt(scoreLocation).setType(goalBlock.material());
+					playerScoreById.put(event.getPlayer().getUniqueId(), updatedScore);
+					boolean hasWon = checkForVictory(event.getPlayer());
+					if (!hasWon) {
+						lobby.sendLobbyMessage(event.getPlayer().getDisplayName() + " has scored a point!");
+						resetGoalBlock();
+					}
+				} else {
+					lobby.sendPlayerMessage(event.getPlayer(), "You must place that closer to your homebase");
+					event.setCancelled(true);
+				}
+			}
+		});
+		goalBlockStand = new CustomItem("Goal Block Stand", Material.OBSIDIAN);
+		goalBlockStand.setBlockPlaceEvent(event -> {
+			lobby.sendPlayerMessage(event.getPlayer(), "Added a goal location to the game");
+			goalStands.add(event.getBlock().getLocation());
+			event.setCancelled(true);
+			event.getBlock().getWorld().getBlockAt(event.getBlock().getLocation()).setType(goalBlockStand.material());
+		});
+		aJavaPlugin.customItems().silentRegister(goalBlock);
+		aJavaPlugin.customItems().silentRegister(goalBlockStand);
+		ModdersCommand rootCommand = javaPlugin.commandExecutor().registerCommand("royale",
+				p -> Broadcaster.sendGameInfo(p, "Battle royale!"));
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "init", this::initiate);
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "join", this::join);
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "unjoin", this::unjoin);
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "setup", this::setup);
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "start", this::start);
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "stop", this::stop);
 	}
 
 	@Override
@@ -45,67 +144,255 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		return gameEnabled;
 	}
 
-	@EventHandler
-	public final void onBlockDamageEvent(BlockDamageEvent event) {
-		gameCore.GoalBlockTouched(event.getPlayer(), event.getBlock().getLocation());
-	}
-
 	@Override
 	public final void onDisabled() {
-		gameCore.cleanup();
+		cleanup();
 	}
 
 	@Override
 	public final void onEnabled() {
-		/* Empty. */
+		/* Nothing to do here. */
 	}
 
-	@Override
-	public final void onServerStop() {
-		gameCore.cleanup();
-	}
-
-	private void goalCheck(BlockPlaceEvent event) {
-		if (gameCore.isPlaying()) {
-			Location playerHome = gameCore.getPlayerHomeLoc(event.getPlayer().getUniqueId());
-			if (event.getBlockPlaced().getLocation().distance(playerHome) < 7) {
-				event.getItemInHand().setAmount(0);
-				event.getBlock().setType(Material.AIR);
-				Integer currentScore = gameCore.getPlayerScoreId(event.getPlayer().getUniqueId());
-				Integer updatedScore = currentScore + 1;
-				Location scoreLocation = playerHome.clone().add(0, updatedScore, 0);
-				event.getBlock().getWorld().getBlockAt(scoreLocation).setType(gameCore.getGoalMat());
-				gameCore.setPlayerScoreId(event.getPlayer().getUniqueId(), updatedScore);
-
-				boolean hasWon = gameCore.checkForVictory(event.getPlayer());
-				if (!hasWon) {
-					gameCore.sendLobbyMsg(event.getPlayer().getDisplayName() + " has scored a point!");
-					gameCore.resetGoalBlock();
-				}
-			} else {
-				gameCore.sendPlayerMsg(event.getPlayer(), "You must place that closer to your homebase");
+	@EventHandler
+	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
+		if (currentGameState == GameState.PLAYING && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if (event.getClickedBlock().getLocation().equals(goalLocation)) {
+				event.getClickedBlock().setType(Material.AIR);
+				event.getPlayer().getInventory().addItem(goalBlock.asItem());
 				event.setCancelled(true);
 			}
 		}
 	}
 
-	private CustomItem goalItem() {
-		CustomItem goalItem = new CustomItem("Goal Block", Material.DIAMOND_BLOCK);
-
-		goalItem.setBlockPlaceEvent(event -> {
-			goalCheck(event);
-		});
-		return goalItem;
+	@Override
+	public final void onServerStop() {
+		cleanup();
 	}
 
-	private CustomItem goalStandItem() {
-		CustomItem goalStandItem = new CustomItem("Goal Block Stand", Material.OBSIDIAN);
+	private void buildFlag(Block baseBlock, Material baseColour, Material flagColour) {
+		ArrayList<Location> locations = new ArrayList<>();
+		locations.add(baseBlock.getLocation().add(-1, 0, 0));
+		locations.add(baseBlock.getLocation().add(1, 0, 0));
+		locations.add(baseBlock.getLocation().add(-1, 0, -1));
+		locations.add(baseBlock.getLocation().add(-1, 0, 1));
+		locations.add(baseBlock.getLocation().add(1, 0, -1));
+		locations.add(baseBlock.getLocation().add(1, 0, 1));
+		locations.add(baseBlock.getLocation().add(0, 0, -1));
+		locations.add(baseBlock.getLocation().add(0, 0, 1));
+		locations.forEach(location -> baseBlock.getWorld().getBlockAt(location).setType(baseColour));
+		flagBlockLocations.addAll(locations);
+		/* Mast. */
+		for (int i = 1; i <= GOAL_SCORE; i++) {
+			Location location = baseBlock.getLocation().add(0, i, 0);
+			flagBlockLocations.add(location);
+			baseBlock.getWorld().getBlockAt(location).setType(Material.WARPED_FENCE);
+		}
+		/* Flag. */
+		Location topBlock = baseBlock.getLocation().add(0, GOAL_SCORE, 0);
+		locations.clear();
+		locations.add(topBlock.clone().add(1, 0, 0));
+		locations.add(topBlock.clone().add(1, -1, 0));
+		locations.add(topBlock.clone().add(2, 0, 0));
+		locations.add(topBlock.clone().add(2, -1, 0));
+		locations.add(topBlock.clone().add(3, 0, 0));
+		locations.add(topBlock.clone().add(3, -1, 0));
+		locations.forEach(location -> baseBlock.getWorld().getBlockAt(location).setType(flagColour));
+		flagBlockLocations.addAll(locations);
+	}
 
-		goalStandItem.setBlockPlaceEvent(event -> {
-			if (gameCore.isSetup()) {
-				gameCore.addGoal(event.getPlayer(), event.getBlock().getLocation());
+	private boolean checkForVictory(Player player) {
+		Integer currentScore = playerScoreById.get(player.getUniqueId());
+		if (currentScore >= GOAL_SCORE) {
+			lobby.sendLobbyMessage(player.getDisplayName() + " has won " + GAME_NAME + "!");
+			playWinningFireworks(javaPlugin.teams().getTeam(player.getUniqueId()).getTeamColour().getFirework(),
+					player);
+			cleanup();
+			return true;
+		} else {
+			lobby.sendPlayerMessage(player, "Your current score: " + currentScore + "/" + GOAL_SCORE);
+			return false;
+		}
+	}
+
+	private void cleanup() {
+		gameEnabled.set(false);
+		goalStands.forEach(l -> l.getBlock().setType(Material.AIR));
+		goalStands.clear();
+		flagBlockLocations.forEach(l -> l.getBlock().setType(Material.AIR));
+		flagBlockLocations.clear();
+		playerScoreById.clear();
+		playerHomeItemById.clear();
+		playerHomeLocationById.values().forEach(l -> l.getBlock().setType(Material.AIR));
+		playerHomeLocationById.clear();
+		if (currentGameState != GameState.STOPPED) {
+			currentGameState = GameState.STOPPED;
+			lobby.sendLobbyMessage(GAME_NAME + " has been stopped!");
+		}
+		lobby.removeAllFromLobby();
+	}
+
+	private final void initiate(Player aHost) {
+		host = aHost;
+		Broadcaster.broadcastGameInfo(GAME_NAME + " been initiated!");
+		currentGameState = GameState.LOBBY;
+		gameEnabled.set(true);
+	}
+
+	private boolean isHost(Player p) {
+		return host != null && host.equals(p);
+	}
+
+	private final boolean isPlaying(Player p) {
+		return playerScoreById.containsKey(p.getUniqueId());
+	}
+
+	private final void join(Player p) {
+		if (currentGameState == GameState.LOBBY && !isPlaying(p)) {
+			playerScoreById.put(p.getUniqueId(), 0);
+			lobby.addToLobby(p);
+			for (ItemStack item : gameKit.items()) {
+				p.getInventory().addItem(item);
 			}
-		});
-		return goalStandItem;
+			lobby.sendLobbyMessage(p.getDisplayName() + " has joined the " + GAME_NAME + " ( " + lobby.size() + " / "
+					+ lobby.maxSize() + " )");
+			TeamColour teamColour = javaPlugin.teams().getTeam(p.getUniqueId()).getTeamColour();
+			CustomItem homeStand = new CustomItem(p.getDisplayName() + "'s Home", teamColour.getBase());
+			homeStand.setBlockPlaceEvent(event -> {
+				if (currentGameState == GameState.SETUP) {
+					playerHomeLocationById.put(event.getPlayer().getUniqueId(), event.getBlock().getLocation());
+					lobby.sendPlayerMessage(event.getPlayer(), "Home sweet home has been set");
+					buildFlag(event.getBlock(), teamColour.getBase(), teamColour.getHead());
+				}
+			});
+			javaPlugin.customItems().silentRegister(homeStand);
+			playerHomeItemById.put(p.getUniqueId(), homeStand);
+		} else {
+			Broadcaster.sendError(p, "Game must be in the lobby");
+		}
+	}
+
+	private void playWinningFireworks(Color color, Player p) {
+		World world = p.getWorld();
+		ArrayList<FireworkMeta> fireworks = new ArrayList<FireworkMeta>();
+
+		Firework fw = (Firework) world.spawnEntity(p.getLocation(), EntityType.FIREWORK);
+		FireworkMeta fwm = fw.getFireworkMeta();
+
+		fwm.setPower(2);
+		fwm.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+
+		FireworkMeta fwm1 = fw.getFireworkMeta();
+		fwm1.setPower(1);
+		fwm1.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+		fireworks.add(fwm1);
+
+		FireworkMeta fwm2 = fw.getFireworkMeta();
+		fwm2.setPower(2);
+		fwm2.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+		fireworks.add(fwm2);
+
+		FireworkMeta fwm3 = fw.getFireworkMeta();
+		fwm3.setPower(3);
+		fwm3.addEffect(FireworkEffect.builder().withColor(color).flicker(true).build());
+		fireworks.add(fwm3);
+
+		fw.setFireworkMeta(fwm);
+		fw.detonate();
+		for (int i = 0; i < flagBlockLocations.size(); i++) {
+			Firework fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0),
+					EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm1);
+			fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm2);
+			fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm3);
+		}
+		for (int i = 0; i < goalStands.size(); i++) {
+			Firework fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm1);
+			fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm2);
+			fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm3);
+		}
+		ArrayList<Player> plist = lobby.playerList();
+		for (int i = 0; i < plist.size(); i++) {
+			Firework fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm1);
+			fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm2);
+			fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
+			fw2.setFireworkMeta(fwm3);
+		}
+	}
+
+	private void resetGoalBlock() {
+		lobby.sendLobbyMessage("Block has returned to a goal stand.");
+		/* Places goal block on a random goal stand. */
+		Location goalStandToPlaceOn = goalStands.get(RANDOM.nextInt(goalStands.size())).clone().add(ABOVE);
+		goalStandToPlaceOn.getWorld().getBlockAt(goalStandToPlaceOn).setType(goalBlock.material());
+		goalLocation = goalStandToPlaceOn;
+	}
+
+	private final void setup(Player p) {
+		if (!isHost(p)) {
+			lobby.sendPlayerMessage(host, "Only the host may setup the game");
+			return;
+		}
+		if (currentGameState == GameState.LOBBY && playerScoreById.size() >= 2) {
+			lobby.sendLobbyMessage("Setting up " + GAME_NAME);
+			lobby.sendPlayerMessage(host, "Place all of the goal stands on the battle field");
+			currentGameState = GameState.SETUP;
+			ItemStack goalItems = goalBlockStand.asItem();
+			goalItems.setAmount(GOAL_STAND_LOCATIONS);
+			host.getInventory().addItem(goalItems);
+			for (Entry<UUID, CustomItem> playerHomeItem : playerHomeItemById.entrySet()) {
+				Player player = Bukkit.getPlayer(playerHomeItem.getKey());
+				player.getInventory().addItem(playerHomeItem.getValue().asItem());
+			}
+		} else {
+			lobby.sendPlayerMessage(host, "Game must be in the lobby and atleast two players joined");
+		}
+	}
+
+	private final void start(Player p) {
+		if (!isHost(p)) {
+			lobby.sendPlayerMessage(host, "Only the host may start the game");
+			return;
+		}
+		if (currentGameState == GameState.SETUP && playerScoreById.size() == playerHomeLocationById.size()) {
+			Broadcaster.broadcastGameInfo(GAME_NAME + " has started!");
+			for (Entry<UUID, Location> entry : playerHomeLocationById.entrySet()) {
+				Player player = Bukkit.getPlayer(entry.getKey());
+				player.teleport(entry.getValue().clone().add(0, 3, 0));
+			}
+			currentGameState = GameState.PLAYING;
+			resetGoalBlock();
+		} else {
+			lobby.sendPlayerMessage(host, "Must setup first. Not all players have placed their homes yet.");
+		}
+	}
+
+	private void stop(Player p) {
+		if (currentGameState != GameState.STOPPED) {
+			if (isHost(p)) {
+				cleanup();
+			} else {
+				lobby.sendPlayerMessage(host, "Only the host may stop the game");
+			}
+		} else {
+			lobby.sendPlayerMessage(host, "Game has not been started");
+		}
+	}
+
+	private final void unjoin(Player p) {
+		if (currentGameState == GameState.LOBBY && isPlaying(p)) {
+			lobby.sendLobbyMessage(p.getDisplayName() + " has left the " + GAME_NAME);
+			playerScoreById.remove(p.getUniqueId());
+			lobby.removeFromLobby(p);
+		} else {
+			Broadcaster.sendError(p, "You must be in a lobby");
+		}
 	}
 }
