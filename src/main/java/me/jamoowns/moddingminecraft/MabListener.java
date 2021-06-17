@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import me.jamoowns.moddingminecraft.commands.ModdersCommand;
 import me.jamoowns.moddingminecraft.common.chat.Broadcaster;
 import me.jamoowns.moddingminecraft.common.observable.ReadOnlyObservableProperty;
 import me.jamoowns.moddingminecraft.listener.IGameEventListener;
@@ -48,6 +49,27 @@ public class MabListener implements IGameEventListener {
 		simpleChunks = new SimpleChunks();
 		mgList = new MiniGameList();
 		Broadcaster.broadcastGameInfo("mgList has been initiated!");
+		ModdersCommand rootCommand = javaPlugin.commandExecutor().registerCommand("mg",
+				p -> Broadcaster.sendGameInfo(p, "mg Stuff"));
+
+		ModdersCommand addCommand = aJavaPlugin.commandExecutor().registerCommand(rootCommand, "add", p -> {
+		});
+		aJavaPlugin.commandExecutor().registerCommand(addCommand, "One", p -> {
+			MiniGame mg = new MiniGame(mgList.getNewID(), "One", p.getPlayer().getUniqueId());
+			mgList.addMiniGame(mg);
+		});
+		aJavaPlugin.commandExecutor().registerCommand(addCommand, "Two", p -> {
+			MiniGame mg = new MiniGame(mgList.getNewID(), "Two", p.getPlayer().getUniqueId());
+			mgList.addMiniGame(mg);
+		});
+		aJavaPlugin.commandExecutor().registerCommand(addCommand, "Three", p -> {
+			MiniGame mg = new MiniGame(mgList.getNewID(), "Three", p.getPlayer().getUniqueId());
+			mgList.addMiniGame(mg);
+		});
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "size",
+				p -> Broadcaster.broadcastGameInfo("mgList size is " + mgList.size()));
+		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "list", p -> mgList.getGameList(p.getPlayer()));
+
 	}
 
 	@Override
@@ -150,20 +172,6 @@ public class MabListener implements IGameEventListener {
 	@EventHandler
 	public final void playerChatEvent(PlayerChatEvent event) {
 
-		if (event.getMessage().contains("mgList size")) {
-			Broadcaster.broadcastGameInfo("mgList size is " + mgList.size());
-		} else if (event.getMessage().contains("mgList add 1")) {
-			MiniGame mg = new MiniGame(mgList.getNewID(), "One", event.getPlayer().getUniqueId());
-			mgList.addMiniGame(mg);
-		} else if (event.getMessage().contains("mgList add 2")) {
-			MiniGame mg = new MiniGame(mgList.getNewID(), "Two", event.getPlayer().getUniqueId());
-			mgList.addMiniGame(mg);
-		} else if (event.getMessage().contains("mgList add 3")) {
-			MiniGame mg = new MiniGame(mgList.getNewID(), "Three", event.getPlayer().getUniqueId());
-			mgList.addMiniGame(mg);
-		} else if (event.getMessage().contains("mgList Show")) {
-			mgList.getGameList(event.getPlayer());
-		}
 	}
 
 }
