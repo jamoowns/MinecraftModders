@@ -132,11 +132,14 @@ public final class BattleRoyaleListener implements IGameEventListener {
 					if (!hasWon) {
 						lobby.sendLobbyMessage(event.getPlayer().getDisplayName() + " has scored a point!");
 						resetGoalBlock();
+						lobby.sendLobbyMessage("Block has returned to a goal stand.");
 					}
 				} else {
 					lobby.sendPlayerMessage(event.getPlayer(), "You must place that closer to your homebase");
 					event.setCancelled(true);
 				}
+			} else {
+				Broadcaster.sendInfo(event.getPlayer(), "Current game state: " + currentGameState);
 			}
 		});
 		goalBlockStand = new CustomItem("Goal Block Stand", Material.OBSIDIAN);
@@ -361,7 +364,6 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	}
 
 	private void resetGoalBlock() {
-		lobby.sendLobbyMessage("Block has returned to a goal stand.");
 		/* Places goal block on a random goal stand. */
 		Location goalStandToPlaceOn = goalStands.get(RANDOM.nextInt(goalStands.size())).clone().add(ABOVE);
 		goalStandToPlaceOn.getWorld().getBlockAt(goalStandToPlaceOn).setType(goalBlock.material());
