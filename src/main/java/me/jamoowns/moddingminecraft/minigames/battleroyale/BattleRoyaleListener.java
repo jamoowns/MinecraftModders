@@ -52,7 +52,9 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private static final Integer GOAL_SCORE = 5;
 
-	private static final Integer GOAL_STAND_LOCATIONS = 4;
+	private static final Integer GOAL_STAND_AMOUNT = 4;
+
+	private static final Integer POWERUP_STAND_AMOUNT = 4;
 
 	private static final Integer MINIMUM_PLAYERS = 1;
 
@@ -153,8 +155,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			event.getBlock().getWorld().getBlockAt(event.getBlock().getLocation())
 					.setType(powerUpBlockStand.material());
 		});
-		aJavaPlugin.customItems().silentRegister(goalBlock);
-		aJavaPlugin.customItems().silentRegister(goalBlockStand);
+		aJavaPlugin.customItems().silentRegister(powerUpBlock);
+		aJavaPlugin.customItems().silentRegister(powerUpBlockStand);
 		ModdersCommand rootCommand = javaPlugin.commandExecutor().registerCommand("royale",
 				p -> Broadcaster.sendGameInfo(p, "Battle royale!"));
 		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "init", this::initiate);
@@ -379,22 +381,27 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private final void setup(Player p) {
 		if (!isHost(p)) {
-			lobby.sendPlayerMessage(host, "Only the host may setup the game");
+			lobby.sendPlayerMessage(p, "Only the host may setup the game");
 			return;
 		}
 		if (currentGameState == GameState.LOBBY && playerScoreById.size() >= MINIMUM_PLAYERS) {
 			lobby.sendLobbyMessage("Setting up " + GAME_NAME);
-			lobby.sendPlayerMessage(host, "Place all of the goal stands on the battle field");
+			lobby.sendPlayerMessage(p, "Place all of the goal stands on the battle field");
 			currentGameState = GameState.SETUP;
 			ItemStack goalItems = goalBlockStand.asItem();
-			goalItems.setAmount(GOAL_STAND_LOCATIONS);
-			host.getInventory().addItem(goalItems);
+			goalItems.setAmount(GOAL_STAND_AMOUNT);
+			p.getInventory().addItem(goalItems);
+
+			lobby.sendPlayerMessage(p, "Place all of the powerup stands on the battle field");
+			ItemStack powerUpStands = powerUpBlockStand.asItem();
+			powerUpStands.setAmount(POWERUP_STAND_AMOUNT);
+			p.getInventory().addItem(powerUpStands);
 			for (Entry<UUID, CustomItem> playerHomeItem : playerHomeItemById.entrySet()) {
 				Player player = Bukkit.getPlayer(playerHomeItem.getKey());
 				player.getInventory().addItem(playerHomeItem.getValue().asItem());
 			}
 		} else {
-			lobby.sendPlayerMessage(host, "Game must be in the lobby and atleast two players joined");
+			lobby.sendPlayerMessage(p, "Game must be in the lobby and atleast two players joined");
 		}
 	}
 
