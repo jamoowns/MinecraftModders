@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -142,8 +143,6 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		goalBlockStand.setBlockPlaceEvent(event -> {
 			lobby.sendPlayerMessage(event.getPlayer(), "Added a goal location to the game");
 			goalStands.add(event.getBlock().getLocation());
-			event.setCancelled(true);
-			event.getBlock().getWorld().getBlockAt(event.getBlock().getLocation()).setType(goalBlockStand.material());
 		});
 		aJavaPlugin.customItems().silentRegister(goalBlock);
 		aJavaPlugin.customItems().silentRegister(goalBlockStand);
@@ -152,9 +151,6 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		powerUpBlockStand.setBlockPlaceEvent(event -> {
 			lobby.sendPlayerMessage(event.getPlayer(), "Added a powerup location to the game");
 			powerUpBlockStands.add(event.getBlock().getLocation());
-			event.setCancelled(true);
-			event.getBlock().getWorld().getBlockAt(event.getBlock().getLocation())
-					.setType(powerUpBlockStand.material());
 		});
 		aJavaPlugin.customItems().silentRegister(powerUpBlock);
 		aJavaPlugin.customItems().silentRegister(powerUpBlockStand);
@@ -187,7 +183,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
 		if (currentGameState == GameState.PLAYING && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			List<MetadataValue> meta = event.getClickedBlock().getMetadata(CUSTOM_ITEM_METADATA_KEY);
-			meta.removeIf(m -> !m.getOwningPlugin().equals(javaPlugin));
+			meta = meta.stream().filter(m -> !m.getOwningPlugin().equals(javaPlugin)).collect(Collectors.toList());
 			if (event.getClickedBlock().getLocation().equals(goalLocation)) {
 				event.getClickedBlock().setType(Material.AIR);
 				event.getPlayer().getInventory().addItem(goalBlock.asItem());
