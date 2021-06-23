@@ -181,9 +181,9 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
-		if (currentGameState == GameState.PLAYING && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+		if (currentGameState == GameState.PLAYING && event.getAction() == Action.LEFT_CLICK_BLOCK) {
 			List<MetadataValue> meta = event.getClickedBlock().getMetadata(CUSTOM_ITEM_METADATA_KEY);
-			meta = meta.stream().filter(m -> !m.getOwningPlugin().equals(javaPlugin)).collect(Collectors.toList());
+			meta = meta.stream().filter(m -> m.getOwningPlugin().equals(javaPlugin)).collect(Collectors.toList());
 			if (event.getClickedBlock().getLocation().equals(goalLocation)) {
 				event.getClickedBlock().setType(Material.AIR);
 				event.getPlayer().getInventory().addItem(goalBlock.asItem());
