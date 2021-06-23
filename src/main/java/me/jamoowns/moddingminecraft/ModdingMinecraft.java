@@ -55,6 +55,8 @@ public final class ModdingMinecraft extends JavaPlugin implements IFeatureListen
 
 	private TaskKeeper taskKeeper;
 
+	private JamoListener jamoListener;
+
 	public final CommandMinecraftModders commandExecutor() {
 		return commandExecutor;
 	}
@@ -132,6 +134,10 @@ public final class ModdingMinecraft extends JavaPlugin implements IFeatureListen
 		return featureTracker;
 	}
 
+	public final JamoListener jamoListener() {
+		return jamoListener;
+	}
+
 	// Fired when plug-in is disabled
 	@Override
 	public final void onDisable() {
@@ -163,7 +169,8 @@ public final class ModdingMinecraft extends JavaPlugin implements IFeatureListen
 
 		gameListeners = new ArrayList<>();
 		/* Our game listeners. */
-		addGameListener(new JamoListener(this));
+		jamoListener = new JamoListener(this);
+		addGameListener(jamoListener);
 		addGameListener(new MabListener(this));
 		addGameListener(new MoshyListener());
 

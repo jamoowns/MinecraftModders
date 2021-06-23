@@ -23,6 +23,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.Vector;
 
 import me.jamoowns.moddingminecraft.ModdingMinecraft;
@@ -44,6 +46,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		LOBBY, SETUP, PLAYING, STOPPED
 	}
 
+	private static final String CUSTOM_ITEM_METADATA_KEY = "CUSTOM_ITEM";
+
 	private static final String GAME_NAME = "Battle Royale";
 
 	private static final Integer GOAL_SCORE = 5;
@@ -62,6 +66,15 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	/** The goal block item. */
 	private CustomItem goalBlock;
+
+	/** All the power-up stand locations. */
+	private List<Location> powerUpBlockStands;
+
+	/** The stand where the power-up block is spawned. */
+	private CustomItem powerUpBlockStand;
+
+	/** The power-up block item. */
+	private CustomItem powerUpBlock;
 
 	private Map<UUID, Integer> playerScoreById;
 
@@ -129,6 +142,17 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		});
 		aJavaPlugin.customItems().silentRegister(goalBlock);
 		aJavaPlugin.customItems().silentRegister(goalBlockStand);
+		powerUpBlock = new CustomItem("Powerup Block", Material.DIORITE);
+		powerUpBlockStand = new CustomItem("Powerup Block Stand", Material.GOLD_BLOCK);
+		powerUpBlockStand.setBlockPlaceEvent(event -> {
+			lobby.sendPlayerMessage(event.getPlayer(), "Added a powerup location to the game");
+			powerUpBlockStands.add(event.getBlock().getLocation());
+			event.setCancelled(true);
+			event.getBlock().getWorld().getBlockAt(event.getBlock().getLocation())
+					.setType(powerUpBlockStand.material());
+		});
+		aJavaPlugin.customItems().silentRegister(goalBlock);
+		aJavaPlugin.customItems().silentRegister(goalBlockStand);
 		ModdersCommand rootCommand = javaPlugin.commandExecutor().registerCommand("royale",
 				p -> Broadcaster.sendGameInfo(p, "Battle royale!"));
 		aJavaPlugin.commandExecutor().registerCommand(rootCommand, "init", this::initiate);
@@ -157,10 +181,19 @@ public final class BattleRoyaleListener implements IGameEventListener {
 	@EventHandler
 	public final void onPlayerInteractEvent(PlayerInteractEvent event) {
 		if (currentGameState == GameState.PLAYING && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			List<MetadataValue> meta = event.getClickedBlock().getMetadata(CUSTOM_ITEM_METADATA_KEY);
+			meta.removeIf(m -> !m.getOwningPlugin().equals(javaPlugin));
 			if (event.getClickedBlock().getLocation().equals(goalLocation)) {
 				event.getClickedBlock().setType(Material.AIR);
 				event.getPlayer().getInventory().addItem(goalBlock.asItem());
 				event.setCancelled(true);
+			} else if (!meta.isEmpty()) {
+				String blockName = meta.get(0).asString();
+				if (blockName.equals(powerUpBlock.name())) {
+					event.getPlayer().getInventory().addItem(javaPlugin.jamoListener().skeletonArrowItem().asItem());
+					event.getClickedBlock().setType(Material.AIR);
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
@@ -172,6 +205,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private void buildFlag(Block baseBlock, Material baseColour, Material flagColour) {
 		ArrayList<Location> locations = new ArrayList<>();
+		/* Base. */
 		locations.add(baseBlock.getLocation().add(-1, 0, 0));
 		locations.add(baseBlock.getLocation().add(1, 0, 0));
 		locations.add(baseBlock.getLocation().add(-1, 0, -1));
@@ -274,7 +308,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private void playWinningFireworks(Color color, Player p) {
 		World world = p.getWorld();
-		ArrayList<FireworkMeta> fireworks = new ArrayList<FireworkMeta>();
+		ArrayList<FireworkMeta> fireworks = new ArrayList<>();
 
 		Firework fw = (Firework) world.spawnEntity(p.getLocation(), EntityType.FIREWORK);
 		FireworkMeta fwm = fw.getFireworkMeta();
@@ -299,30 +333,28 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 		fw.setFireworkMeta(fwm);
 		fw.detonate();
-		for (int i = 0; i < flagBlockLocations.size(); i++) {
-			Firework fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0),
-					EntityType.FIREWORK);
+		for (Location flagLocation : flagBlockLocations) {
+			Firework fw2 = (Firework) world.spawnEntity(flagLocation.clone().add(0, 5, 0), EntityType.FIREWORK);
 			fw2.setFireworkMeta(fwm1);
-			fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0), EntityType.FIREWORK);
+			fw2 = (Firework) world.spawnEntity(flagLocation.clone().add(0, 5, 0), EntityType.FIREWORK);
 			fw2.setFireworkMeta(fwm2);
-			fw2 = (Firework) world.spawnEntity(flagBlockLocations.get(i).clone().add(0, 5, 0), EntityType.FIREWORK);
+			fw2 = (Firework) world.spawnEntity(flagLocation.clone().add(0, 5, 0), EntityType.FIREWORK);
 			fw2.setFireworkMeta(fwm3);
 		}
-		for (int i = 0; i < goalStands.size(); i++) {
-			Firework fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
+		for (Location goalStand : goalStands) {
+			Firework fw2 = (Firework) world.spawnEntity(goalStand, EntityType.FIREWORK);
 			fw2.setFireworkMeta(fwm1);
-			fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
+			fw2 = (Firework) world.spawnEntity(goalStand, EntityType.FIREWORK);
 			fw2.setFireworkMeta(fwm2);
-			fw2 = (Firework) world.spawnEntity(goalStands.get(i).clone(), EntityType.FIREWORK);
+			fw2 = (Firework) world.spawnEntity(goalStand, EntityType.FIREWORK);
 			fw2.setFireworkMeta(fwm3);
 		}
-		ArrayList<Player> plist = lobby.playerList();
-		for (int i = 0; i < plist.size(); i++) {
-			Firework fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
+		for (Player gamePlayer : lobby.playerList()) {
+			Firework fw2 = (Firework) world.spawnEntity(gamePlayer.getLocation(), EntityType.FIREWORK);
 			fw2.setFireworkMeta(fwm1);
-			fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
+			fw2 = (Firework) world.spawnEntity(gamePlayer.getLocation(), EntityType.FIREWORK);
 			fw2.setFireworkMeta(fwm2);
-			fw2 = (Firework) world.spawnEntity(plist.get(i).getLocation().clone(), EntityType.FIREWORK);
+			fw2 = (Firework) world.spawnEntity(gamePlayer.getLocation(), EntityType.FIREWORK);
 			fw2.setFireworkMeta(fwm3);
 		}
 	}
@@ -333,6 +365,14 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		Location goalStandToPlaceOn = goalStands.get(RANDOM.nextInt(goalStands.size())).clone().add(ABOVE);
 		goalStandToPlaceOn.getWorld().getBlockAt(goalStandToPlaceOn).setType(goalBlock.material());
 		goalLocation = goalStandToPlaceOn;
+
+		/* Places a powerup on a random stand. */
+		Location powerUpLocationToPlace = powerUpBlockStands.get(RANDOM.nextInt(powerUpBlockStands.size())).clone()
+				.add(ABOVE);
+		Block powerUpLocationBlock = powerUpLocationToPlace.getWorld().getBlockAt(powerUpLocationToPlace);
+		powerUpLocationBlock.setType(powerUpBlock.material());
+		powerUpLocationBlock.setMetadata(CUSTOM_ITEM_METADATA_KEY,
+				new FixedMetadataValue(javaPlugin, powerUpBlock.name()));
 	}
 
 	private final void setup(Player p) {

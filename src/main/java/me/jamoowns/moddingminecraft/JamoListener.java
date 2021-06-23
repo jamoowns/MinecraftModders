@@ -61,8 +61,6 @@ public final class JamoListener implements IGameEventListener {
 
 	private List<CustomItem> mobSpawningItems;
 
-	private CustomItem lightningAnusItem;
-
 	private CustomItem skeletonArrowItem;
 
 	private CustomItem normalZombieStick;
@@ -194,6 +192,10 @@ public final class JamoListener implements IGameEventListener {
 		/* Empty. */
 	}
 
+	public CustomItem skeletonArrowItem() {
+		return skeletonArrowItem;
+	}
+
 	private void setupCustomItems() {
 		normalZombieStick = new CustomItem("Normal Zombie", Material.ZOMBIE_HEAD, ItemCategory.MOBS);
 		normalZombieStick.setSpellCastEvent(event -> {
@@ -271,19 +273,5 @@ public final class JamoListener implements IGameEventListener {
 			event.getEntity().getLocation().getWorld().spawn(event.getEntity().getLocation(), Skeleton.class);
 		});
 		javaPlugin.customItems().register(skeletonArrowItem);
-
-		lightningAnusItem = new CustomItem("Lightning Storm", Material.CHAIN, ItemCategory.MISC);
-		lightningAnusItem.setBlockPlaceEvent(event -> {
-			event.getBlockPlaced().setType(Material.AIR);
-			Location spawnLocation = event.getBlock().getLocation().add(0, 1, 0);
-
-			Bukkit.getScheduler().scheduleSyncRepeatingTask(javaPlugin, new Runnable() {
-				@Override
-				public void run() {
-					spawnLocation.getWorld().strikeLightningEffect(spawnLocation);
-				}
-			}, TimeConstants.ONE_SECOND * 5, TimeConstants.ONE_SECOND * 5);
-		});
-		javaPlugin.customItems().register(lightningAnusItem);
 	}
 }
