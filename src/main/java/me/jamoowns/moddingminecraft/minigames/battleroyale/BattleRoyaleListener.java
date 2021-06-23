@@ -54,6 +54,8 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private static final Integer GOAL_STAND_LOCATIONS = 4;
 
+	private static final Integer MINIMUM_PLAYERS = 1;
+
 	private static final Random RANDOM = new Random();
 
 	private static final Vector ABOVE = new Vector(0, 1, 0);
@@ -380,7 +382,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 			lobby.sendPlayerMessage(host, "Only the host may setup the game");
 			return;
 		}
-		if (currentGameState == GameState.LOBBY && playerScoreById.size() >= 2) {
+		if (currentGameState == GameState.LOBBY && playerScoreById.size() >= MINIMUM_PLAYERS) {
 			lobby.sendLobbyMessage("Setting up " + GAME_NAME);
 			lobby.sendPlayerMessage(host, "Place all of the goal stands on the battle field");
 			currentGameState = GameState.SETUP;
