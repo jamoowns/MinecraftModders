@@ -108,6 +108,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 		gameEnabled = new ObservableProperty<Boolean>(false);
 		flagBlockLocations = new ArrayList<>();
 		goalStands = new ArrayList<>();
+		powerUpBlockStands = new ArrayList<>();
 		playerScoreById = new HashMap<>();
 		playerHomeItemById = new HashMap<>();
 		playerHomeLocationById = new HashMap<>();
@@ -381,7 +382,7 @@ public final class BattleRoyaleListener implements IGameEventListener {
 
 	private final void setup(Player p) {
 		if (!isHost(p)) {
-			lobby.sendPlayerMessage(p, "Only the host may setup the game");
+			Broadcaster.sendGameInfo(p, "Only the host may setup the game");
 			return;
 		}
 		if (currentGameState == GameState.LOBBY && playerScoreById.size() >= MINIMUM_PLAYERS) {
